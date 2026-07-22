@@ -394,6 +394,7 @@ div.related-docs a::after {
 .markdown-body .book-meta dd { margin: 0; padding: 0; }
 .book-meta-note { margin: .7em 0 0; font-size: 84%; opacity: .72; font-style: italic; }
 html[data-theme-active="dark"] .markdown-body .book-meta dt { color: #9aa4af; }
+.get-book { margin: 1.3em 0 0; }
 
 /* Gallery landing (the Calendar): a responsive grid of thumbnail previews. */
 .gallery-grid {

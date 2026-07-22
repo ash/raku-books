@@ -750,6 +750,8 @@ def emit(book, cfg):
         book_entry["meta"] = cfg["meta"]
     if cfg.get("banner"):
         book_entry["banner"] = cfg["banner"]
+    if cfg.get("get_url"):
+        book_entry["get_url"] = cfg["get_url"]
     if cfg.get("gallery"):
         book_entry["gallery"] = True
     book_entry["items"] = toc_items

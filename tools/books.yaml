@@ -33,6 +33,7 @@ books:
   using-raku:
     pdf: "Using Raku/Using Raku.pdf"
     slug: using-raku
+    get_url: https://andrewshitov.com/2019/10/13/using-raku-the-free-book/
     title: Using Raku
     date: "2019-10-14"          # for reverse-chronological ordering on the home page
     long_title: "Using Raku: 100 Programming Challenges Solved with the Brand-New Raku Programming Language"
@@ -68,6 +69,7 @@ books:
     pdf: "/Users/ash/Books/Compiler in Perl 6/Compiler in Raku (updated).docx"
     cover_image: "/Users/ash/Books/Compiler in Perl 6/cover-web.jpg"
     slug: creating-a-compiler-in-raku
+    get_url: https://andrewshitov.com/creating-a-compiler-with-raku/
     title: Creating a Compiler in Raku
     date: "2018-11-02"
     long_title: "Creating a Compiler in Raku"
@@ -111,6 +113,7 @@ books:
     pdf: "/Users/ash/Books/Perl 6 at a Glance/Perl 6 at a glance.docx"
     cover_pdf: "Perl 6 at a Glance/Perl 6 at a Glance.pdf"
     slug: perl-6-at-a-glance
+    get_url: https://andrewshitov.com/perl6-at-a-glance/
     title: Perl 6 at a Glance
     date: "2017-01-15"
     long_title: Perl 6 at a Glance
@@ -130,6 +133,7 @@ books:
   raku-one-liners:
     pdf: "Raku One-Liners/Raku One Liners.pdf"
     slug: raku-one-liners
+    get_url: https://andrewshitov.com/2019/10/18/raku-one-liners-a-free-book/
     title: Raku One-Liners
     date: "2019-10-18"
     long_title: Raku One-Liners

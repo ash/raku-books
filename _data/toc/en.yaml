@@ -32,6 +32,7 @@
     "covers": 
       - "raku-one-liners"
     "description": "Short, powerful Raku programs — command-line one-liners for files, numbers, strings, and dates, a tour of the language’s most expressive syntax, a round of Raku golf, and a look behind floating-point arithmetic."
+    "get_url": "https://andrewshitov.com/2019/10/18/raku-one-liners-a-free-book/"
     "items": 
       - 
         "title": "Preface"
@@ -178,6 +179,7 @@
       - "using-raku"
       - "using-perl-6"
     "description": "100 programming challenges solved in Raku — string handling, numbers, aggregate data, regexes and grammars, dates, and parallel computing — each with a runnable solution."
+    "get_url": "https://andrewshitov.com/2019/10/13/using-raku-the-free-book/"
     "items": 
       - 
         "items": 
@@ -594,6 +596,7 @@
     "covers": 
       - "creating-a-compiler-in-raku"
     "description": "A step-by-step coding essay that builds a working compiler in Raku — from a tiny translator through grammars, actions, and an abstract syntax tree to a full calculator and interpreter."
+    "get_url": "https://andrewshitov.com/creating-a-compiler-with-raku/"
     "items": 
       - 
         "items": 
@@ -998,6 +1001,7 @@
     "covers": 
       - "perl-6-at-a-glance"
     "description": "A quick dive into Perl 6 (now Raku): the essentials, operators, subroutines and types, object orientation, regexes and grammars, and a practical appendix — the initial knowledge to start working with the language."
+    "get_url": "https://andrewshitov.com/perl6-at-a-glance/"
     "items": 
       - 
         "title": "Foreword"

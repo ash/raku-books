@@ -106,7 +106,11 @@ sub MAIN() {
         my $slug = $p.value<slug>;
         my $frag = "$ROOT/tools/toc-$slug.yaml".IO;
         if $frag.e {
-            @toc.push: $_ for @(load-yamls($frag.slurp)[0]);
+            my @entries = @(load-yamls($frag.slurp)[0]);
+            # Inject the "get the book" link from books.yaml (kept out of the
+            # committed fragments so it can change without re-extracting).
+            @entries[0]<get_url> = $p.value<get_url> if $p.value<get_url>;
+            @toc.push: $_ for @entries;
             say "  + $slug";
         } else {
             say "  (skip {$p.key}: no fragment yet)";

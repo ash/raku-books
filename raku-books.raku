@@ -68,6 +68,7 @@ sub get-toc($lang, $is-silent) returns Hash {
                 meta => $part<meta>,
                 gallery => $part<gallery>,
                 banner => $part<banner>,
+                get-url => $part<get_url>,
             };
             $prev-url = $part-url;
 
@@ -930,6 +931,11 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
                     $toc ~= "{$part<description>}\n\n" if $part<description>;
                     my $meta-html = book-meta-html($part<meta>);
                     $toc ~= "\n$meta-html\n\n" if $meta-html;
+                    # A link to the book's page on andrewshitov.com (buy / download
+                    # / read more) — from the `get_url` config.
+                    $toc ~= "\n<p class=\"get-book\"><a class=\"btn-primary\" href=\"{$part<get-url>}\""
+                          ~ " target=\"_blank\" rel=\"noopener noreferrer\">Get the book →</a></p>\n\n"
+                        if $part<get-url>;
                     $toc ~= "</div>\n\n</div>\n\n";
                 }
                 else {
