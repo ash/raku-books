@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>100. Brainfuck interpreter — Raku Books</title>
+    <meta property="og:title" content="100. Brainfuck interpreter — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku" selected>Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/using-raku">Using Raku</a> /
+<a href="/raku-books/using-raku/miscellaneous">Miscellaneous</a></p>
+<h1 id="brainfuck-interpreter">100. Brainfuck interpreter</h1>
+<p><em>Create the interpreter for the Brainfuck language.</em></p>
+<p>Brainfuck is an esoteric programming language that has a small set of
+instructions, each of them a single punctuation character.</p>
+<p>It is assumed that the Brainfuck program has built-in data memory,
+which is an array of integers, and a pointer to the currently selected
+item. The two instructions, <code>+</code> and <code>-</code>, increment
+and decrement the current element. The <code>&lt;</code> and
+<code>&gt;</code> instructions move the data pointer one position to the
+left or to the right.</p>
+<p>Another two instructions, <code>.</code> and <code>,</code>, either
+print the current element using its values as the ASCII codepoint (in
+theory, it can be Unicode) or read a character from the standard input
+and put its numeric value to the current element of the data array.</p>
+<p>Finally, <code>[</code> and <code>]</code> create loops. If when the
+program reads the closing bracket character, the current data element is
+not zero, the program returns to the corresponding opening bracket. In
+the case the program reads an opening bracket and the current data
+element is zero, the whole block between the two matching brackets is
+skipped. This option can also be used for embedding comments.</p>
+<p>All other characters are ignored. This gives the ability to separate
+the program instructions with spaces or newlines, as well as to add
+comments just next to the main code. The comments should simply not
+include the main characters used as the code instructions.</p>
+<p>Online, you can find many examples of the Brainfuck code. We’ll test
+our program on the following ‘Hello World!’ program:</p>
+<div class="highlight"><pre>++++++++[&gt;++++[&gt;++&gt;+++&gt;+++&gt;+&lt;&lt;&lt;&lt;-]&gt;+&gt;+&gt;-&gt;&gt;+[&lt;]&lt;-]&gt;&gt;.&gt;---
+.+++++++..+++.&gt;&gt;.&lt;-.&lt;.+++.------.--------.&gt;&gt;+.&gt;++.</pre></div>
+<p>Now, we are ready to create the interpreter of Brainfuck in Raku.</p>
+<p>First, read the source code to the <code>$program</code> variable,
+and pass it to the main interpreter subroutine:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$program</span> = <span class="nv">$*IN</span>.<span class="nb">slurp</span>;
+<span class="n">brainfuck</span>(<span class="nv">$program</span>);</pre></div>
+
+<p>The parser first creates the containers it needs for the process:
+<code>@program</code> holds the program as an array of characters; the
+<code>$program_pointer</code> is set to the beginning of it;
+<code>@data_memory</code> keeps the data, and its current position is
+also set to 0 via <code>$data_pointer</code>.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">brainfuck</span>(<span class="nv">$program</span>) {
+    <span class="k">my</span> <span class="nv">@program</span> = <span class="nv">$program</span>.<span class="nb">comb</span>(<span class="s">''</span>);
+    <span class="k">my</span> <span class="nv">$program_pointer</span> = <span class="mi">0</span>;
+    <span class="k">my</span> <span class="nv">@data_memory</span>;
+    <span class="k">my</span> <span class="nv">$data_pointer</span> = <span class="mi">0</span>;</pre></div>
+
+<p>Now, iterate over the program instructions.</p>
+<div class="highlight raku no-run"><pre><span></span>    <span class="k">while</span> <span class="nv">$program_pointer</span> &lt; <span class="nv">@program</span>.<span class="nb">elems</span> {</pre></div>
+
+<p>At this point of the main loop, the
+<code>@program[$program_pointer]</code> element contains the current
+program instruction. We are using the
+<code>given</code>—<code>when</code> block to understand the meaning of
+it and make an action. The first four commands are straightforward:</p>
+<div class="highlight raku no-run"><pre><span></span>        <span class="k">given</span> <span class="nv">@program</span>[<span class="nv">$program_pointer</span>] {
+            <span class="k">when</span> <span class="s">'&gt;'</span> {<span class="nv">$data_pointer</span>++}
+            <span class="k">when</span> <span class="s">'&lt;'</span> {<span class="nv">$data_pointer</span>--}
+            <span class="k">when</span> <span class="s">'+'</span> {<span class="nv">@data_memory</span>[<span class="nv">$data_pointer</span>]++}
+            <span class="k">when</span> <span class="s">'-'</span> {<span class="nv">@data_memory</span>[<span class="nv">$data_pointer</span>]--}</pre></div>
+
+<p>Let’s skip the comma command for now and move on to the input dot.
+The input command is using the <code>@data_memory</code> array and the
+<code>chr</code> method to translate codepoints to characters.</p>
+<div class="highlight raku no-run"><pre><span></span>            <span class="k">when</span> <span class="s">'.'</span> {
+                <span class="nb">print</span> <span class="nv">@data_memory</span>[<span class="nv">$data_pointer</span>].<span class="nb">chr</span>
+            }</pre></div>
+
+<p>Finally, the loop commands <code>[</code> and <code>]</code>. Their
+behaviour depends on the value of the current data element
+<code>@data_memory[$data_pointer]</code>. If the condition is met (i.
+e., if the current element is zero for <code>[</code> and non-zero for
+<code>]</code>), the <code>$program_pointer</code> must be moved to the
+position of the matching bracket.</p>
+<p>To simplify the program, the code to find balancing brackets is
+placed to separate functions, <code>_move_forward</code>, and
+<code>_move_back</code>. They modify the value of the program pointer,
+which is passed as an argument.</p>
+<div class="highlight raku no-run"><pre><span></span>            <span class="k">when</span> <span class="s">'['</span> {
+                <span class="nv">$program_pointer</span> =
+                    <span class="n">_move_forward</span>(<span class="nv">@program</span>, <span class="nv">$program_pointer</span>)
+                <span class="k">unless</span> <span class="nv">@data_memory</span>[<span class="nv">$data_pointer</span>];
+            }
+            <span class="k">when</span> <span class="s">']'</span> {
+                <span class="nv">$program_pointer</span> =
+                    <span class="n">_move_back</span>(<span class="nv">@program</span>, <span class="nv">$program_pointer</span>)
+                <span class="k">if</span> <span class="nv">@data_memory</span>[<span class="nv">$data_pointer</span>];
+            }
+        }</pre></div>
+
+<p>All other instructions, which are not listed in the <code>when</code>
+clauses, are simply ignored. After the current instruction has been
+processed, the program pointer is moved to the next position:</p>
+<div class="highlight raku no-run"><pre><span></span>        <span class="nv">$program_pointer</span>++;
+    }
+}</pre></div>
+
+<p>Finally, here is the code for the functions searching balancing
+brackets. They move either forward or backwards and count the opening
+and closing brackets. The <code>$level</code> variable is increased if
+the program finds the bracket, which is not the correct pair.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">_move_back</span>(<span class="nv">@program</span>, <span class="nv">$program_pointer</span> <span class="k">is</span> <span class="n">copy</span>) {
+    <span class="k">my</span> <span class="nv">$level</span> = <span class="mi">1</span>;
+    <span class="k">while</span> <span class="nv">$level</span> &amp;&amp; <span class="nv">$program_pointer</span> &gt;= <span class="mi">0</span> {
+        <span class="nv">$program_pointer</span>--;
+        <span class="k">given</span> <span class="nv">@program</span>[<span class="nv">$program_pointer</span>] {
+            <span class="k">when</span> <span class="s">'['</span> {<span class="nv">$level</span>--}
+            <span class="k">when</span> <span class="s">']'</span> {<span class="nv">$level</span>++}
+        }
+    }
+    <span class="k">return</span> <span class="nv">$program_pointer</span> - <span class="mi">1</span>;
+}
+
+<span class="k">sub</span> <span class="n">_move_forward</span>(<span class="nv">@program</span>, <span class="nv">$program_pointer</span> <span class="k">is</span> <span class="n">copy</span>) {
+    <span class="k">my</span> <span class="nv">$level</span> = <span class="mi">1</span>;
+    <span class="k">while</span> <span class="nv">$level</span> &amp;&amp; <span class="nv">$program_pointer</span> &lt; <span class="nv">@program</span>.<span class="nb">elems</span> {
+        <span class="nv">$program_pointer</span>++;
+        <span class="k">given</span> <span class="nv">@program</span>[<span class="nv">$program_pointer</span>] {
+            <span class="k">when</span> <span class="s">'['</span> {<span class="nv">$level</span>++}
+            <span class="k">when</span> <span class="s">']'</span> {<span class="nv">$level</span>--}
+        }
+    }
+    <span class="k">return</span> <span class="nv">$program_pointer</span> - <span class="mi">1</span>;
+}</pre></div>
+
+<p>The subroutines use the same approach with the
+<code>given</code>—<code>when</code> keywords for dealing with command
+characters as in the main loop.</p>
+<p>To prevent infinite loops in case of the incorrect program, both subs
+check if the <code>$program_pointer</code> reaches the beginning or end
+of the program. Notice that because the <code>$program_pointer</code> is
+modified inside the subs, it is declared as <code>is</code>
+<code>copy</code> in the signatures of the subs. The return value is
+intentionally decremented by one to compensate the subsequent increment
+of it in the main loop: <code>$program_pointer++</code>.</p>
+<p>The interpreter is complete. Save the ‘Hello World!’ program in a
+file and pass it in the command line:</p>
+<div class="highlight"><pre>$ raku brainfuck.rk &lt; helloworld.bf
+Hello World!</pre></div>
+<p>As an exercise, modify the interpreter so that it understands the
+<code>,</code> command. You need to update the
+<code>given</code>—<code>when</code> list in the main loop with the code
+that reads the character from the input:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">when</span> <span class="s">','</span> {<span class="nv">@data_memory</span>[<span class="nv">$data_pointer</span>] = <span class="nv">$*IN</span>.<span class="n">getc</span>.?<span class="nb">ord</span>}</pre></div>
+
+<p>The <code>$*IN.getc</code> returns <code>Nil</code> when there are no
+more characters in the input. Try to catch this situation to avoid
+filling the data memory with empty data. Here is a test program that
+copies the input to the output:</p>
+<div class="highlight"><pre>&gt;+[[&gt;],.-------------[+++++ +++++ +++[&lt;]]&gt;]&lt;&lt;[&lt;]&gt;&gt;[.&gt;]</pre></div>
+<p>Another useful modification would be error handling. There are a few
+places in the program where increments or decrements in one of the
+pointers may go out of the array ranges. Add the code that checks that
+to display an error message. To make the process easier, use some simple
+debugging code like the one below to visualise the position of the
+program pointer and data state at each iteration of the main loop:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">$program</span>;
+<span class="nb">say</span> <span class="s">' '</span> <span class="n">x</span> <span class="nv">$program_pointer</span> ~ <span class="s">'^'</span>;
+<span class="nb">say</span> <span class="nv">@data_memory</span>[<span class="mi">0</span>..<span class="nv">$data_pointer</span> - <span class="mi">1</span>] ~ <span class="s">' ['</span> ~
+    <span class="nv">@data_memory</span>[<span class="nv">$data_pointer</span>] ~ <span class="s">'] '</span> ~
+    <span class="nv">@data_memory</span>[<span class="nv">$data_pointer</span> + <span class="mi">1</span>..*];</pre></div>
+
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/using-raku/morse-to-text">99. Morse to text</a>   |   <a
+href="/raku-books/using-raku/whats-next">What’s next?</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

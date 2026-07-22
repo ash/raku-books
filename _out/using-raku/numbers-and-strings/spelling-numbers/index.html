@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>47. Spelling numbers — Raku Books</title>
+    <meta property="og:title" content="47. Spelling numbers — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku" selected>Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/using-raku">Using Raku</a> /
+<a href="/raku-books/using-raku/numbers">Numbers</a> / <a
+href="/raku-books/using-raku/numbers-and-strings">Numbers and strings</a></p>
+<h1 id="spelling-numbers">47. Spelling numbers</h1>
+<p><em>Write an integer number below one million in words.</em></p>
+<p>Human languages have many inconsistencies, especially in the most
+frequent constructs. Spelling numbers seems to be a simple task, but due
+to a number of small differences, the resulting program is quite
+big.</p>
+<p>The program is listed on the next page. Let’s discuss the algorithm
+first.</p>
+<p>Take a number; for example, 987,654. The rules for spelling out the
+groups of three digits, 987 and 654, are the same. For the first group,
+the word thousand must be added.</p>
+<p>Now, examine a group of three digits. The first digit is the number
+of hundreds, and it has to be spelled only if it is not zero. If it is
+not zero, then we spell the digit and add the word hundred.</p>
+<p>Now, remove the leftmost digit, and we’ve got two digits left. If the
+remaining two digits form the number from 1 to 20, then it can be
+directly converted to the corresponding name. The names for the numbers
+from 0 to 10 are obviously different. The names for the numbers from 11
+to 19 have some commonalities, but is it still easier to directly
+prepare the names for all of them.</p>
+<p>For the larger numbers (21 to 99), there are two cases. If the number
+is dividable by 10 then a name for 20, 30, 40, etc. is taken. If not,
+then the name is built of the name of tens and the name for units,
+joined with a hyphen, such as forty-five.</p>
+<p>The zero name appears only in the case when the given number is
+zero.</p>
+<p>In the program, the names are listed in the <code>@names</code>
+array. The <code>if</code>—<code>elsif</code>— <code>else</code> chain
+implements the above-described procedure.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@names</span> = &lt;<span class="n">zero</span> <span class="n">one</span> <span class="n">two</span> <span class="n">three</span> <span class="n">four</span> <span class="n">five</span> <span class="n">six</span> <span class="n">seven</span> <span class="n">eight</span>
+             <span class="n">nine</span> <span class="n">ten</span> <span class="n">eleven</span> <span class="n">twelve</span> <span class="n">thirteen</span> <span class="n">fourteen</span> <span class="n">fifteen</span>
+             <span class="n">sixteen</span> <span class="n">seventeen</span> <span class="n">eighteen</span> <span class="n">nineteen</span> <span class="n">twenty</span>
+             <span class="n">thirty</span> <span class="n">forty</span> <span class="n">fifty</span> <span class="n">sixty</span> <span class="n">seventy</span> <span class="n">eighty</span> <span class="n">ninety</span>&gt;;
+
+<span class="k">sub</span> <span class="n">spell-number</span>(<span class="nv">$number</span>) {
+    <span class="k">my</span> <span class="nv">$n</span> = <span class="nv">$number</span>.<span class="nb">Int</span>;
+
+    <span class="k">my</span> <span class="nv">$r</span>;
+    <span class="k">if</span> <span class="nv">$n</span> &lt; <span class="mi">20</span> {
+        <span class="nv">$r</span> = <span class="nv">@names</span>[<span class="nv">$n</span>];
+    }
+    <span class="k">elsif</span> <span class="nv">$n</span> &lt; <span class="mi">100</span> {
+        <span class="nv">$r</span> = <span class="nv">@names</span>[<span class="nv">$n</span> / <span class="mi">10</span> + <span class="mi">18</span>];
+        <span class="nv">$r</span> ~= <span class="s">'-'</span> ~ <span class="nv">@names</span>[<span class="nv">$n</span> % <span class="mi">10</span>] <span class="k">if</span> <span class="nv">$n</span> % <span class="mi">10</span>;
+    }
+    <span class="k">elsif</span> <span class="nv">$n</span> &lt; <span class="mi">1000</span> {
+        <span class="nv">$r</span> = <span class="nv">@names</span>[<span class="nv">$n</span> / <span class="mi">100</span>] ~ <span class="s">' hundred'</span>;
+        <span class="nv">$r</span> ~= <span class="s">' '</span> ~ <span class="n">spell-number</span>(<span class="nv">$n</span> % <span class="mi">100</span>) <span class="k">if</span> <span class="nv">$n</span> % <span class="mi">100</span>;
+    }
+    <span class="k">else</span> {
+        <span class="nv">$r</span> = <span class="n">spell-number</span>(<span class="nv">$n</span> / <span class="mi">1000</span>) ~ <span class="s">' thousand'</span>;
+        <span class="nv">$r</span> ~= <span class="s">' '</span> ~ <span class="n">spell-number</span>(<span class="nv">$n</span> % <span class="mi">1000</span>) <span class="k">if</span> <span class="nv">$n</span> % <span class="mi">1000</span>;
+    }
+
+    <span class="k">return</span> <span class="nv">$r</span>;
+}</pre></div>
+
+<p>Try running the program with a few different numbers:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="n">spell-number</span>(<span class="mi">987654</span>);  <span class="c1"># nine hundred eighty-seven</span>
+                           <span class="c1"># thousand six hundred fifty-four</span>
+<span class="nb">say</span> <span class="n">spell-number</span>(<span class="mi">0</span>);       <span class="c1"># zero</span>
+<span class="nb">say</span> <span class="n">spell-number</span>(<span class="mi">17</span>);      <span class="c1"># seventeen</span>
+<span class="nb">say</span> <span class="n">spell-number</span>(<span class="mi">100_001</span>); <span class="c1"># one hundred thousand one</span></pre></div>
+
+<p>All work well, but you can do it differently with the help of
+multi-subs. In the next version of the program, the chain of the checks
+is replaced with the same number of subroutines that know with what
+numbers they can work best. The common part is extracted to a separate
+sub <code>spell-part</code>.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@names</span> = &lt;<span class="n">zero</span> <span class="n">one</span> <span class="n">two</span> <span class="n">three</span> <span class="n">four</span> <span class="n">five</span> <span class="n">six</span> <span class="n">seven</span> <span class="n">eight</span>
+             <span class="n">nine</span> <span class="n">ten</span> <span class="n">eleven</span> <span class="n">twelve</span> <span class="n">thirteen</span> <span class="n">fourteen</span> <span class="n">fifteen</span>
+             <span class="n">sixteen</span> <span class="n">seventeen</span> <span class="n">eighteen</span> <span class="n">nineteen</span> <span class="n">twenty</span>
+             <span class="n">thirty</span> <span class="n">forty</span> <span class="n">fifty</span> <span class="n">sixty</span> <span class="n">seventy</span> <span class="n">eighty</span> <span class="n">ninety</span>&gt;;
+
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">spell-number</span>(<span class="nb">Int</span> <span class="nv">$n</span> <span class="k">where</span> {<span class="nv">$n</span> &lt; <span class="mi">20</span>}) {
+    <span class="k">return</span> <span class="nv">@names</span>[<span class="nv">$n</span>];
+}
+
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">spell-number</span>(<span class="nb">Int</span> <span class="nv">$n</span> <span class="k">where</span> {<span class="nv">$n</span> &lt; <span class="mi">100</span>}) {
+    <span class="k">my</span> <span class="nv">$r</span> = <span class="nv">@names</span>[<span class="nv">$n</span> / <span class="mi">10</span> + <span class="mi">18</span>];
+    <span class="nv">$r</span> ~= <span class="s">'-'</span> ~ <span class="nv">@names</span>[<span class="nv">$n</span> % <span class="mi">10</span>] <span class="k">if</span> <span class="nv">$n</span> % <span class="mi">10</span>;
+    <span class="k">return</span> <span class="nv">$r</span>;
+}
+
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">spell-number</span>(<span class="nb">Int</span> <span class="nv">$n</span> <span class="k">where</span> {<span class="nv">$n</span> &lt; <span class="mi">1000</span>}) {
+    <span class="k">return</span> <span class="n">spell-part</span>(<span class="nv">$n</span>, <span class="mi">100</span>, <span class="s">'hundred'</span>);
+}
+
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">spell-number</span>(<span class="nb">Int</span> <span class="nv">$n</span> <span class="k">where</span> {<span class="nv">$n</span> &lt; <span class="mi">1_000_000</span>}) {
+    <span class="k">return</span> <span class="n">spell-part</span>(<span class="nv">$n</span>, <span class="mi">1000</span>, <span class="s">'thousand'</span>);
+}
+
+<span class="k">sub</span> <span class="n">spell-part</span>(<span class="nb">Int</span> <span class="nv">$n</span>, <span class="nb">Int</span> <span class="nv">$base</span>, <span class="nb">Str</span> <span class="nv">$name</span>) {
+    <span class="k">my</span> <span class="nv">$r</span> = <span class="n">spell-number</span>((<span class="nv">$n</span> / <span class="nv">$base</span>).<span class="nb">Int</span>) ~ <span class="s">' '</span> ~ <span class="nv">$name</span>;
+    <span class="nv">$r</span> ~= <span class="s">' '</span> ~ <span class="n">spell-number</span>(<span class="nv">$n</span> % <span class="nv">$base</span>) <span class="k">if</span> <span class="nv">$n</span> % <span class="nv">$base</span>;
+    <span class="k">return</span> <span class="nv">$r</span>;
+}</pre></div>
+
+<p>Modify the program to process numbers greater than a million.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a
+href="/raku-books/using-raku/numbers-and-strings/convert-to-roman-numerals">46.
+Convert to Roman numerals</a>   |   <a
+href="/raku-books/using-raku/aggregate-data-types">Aggregate Data Types</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

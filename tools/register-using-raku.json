@@ -1,0 +1,2253 @@
+{
+ "book": "Using Raku",
+ "slug": "using-raku",
+ "verdicts": [
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "How to debug programs",
+   "url": "/using-raku/how-to-debug-programs",
+   "first": "say $x;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "How to debug programs",
+   "url": "/using-raku/how-to-debug-programs",
+   "first": "my Int $x;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "How to debug programs",
+   "url": "/using-raku/how-to-debug-programs",
+   "first": "my @a = 1..5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "1. Hello, World!",
+   "url": "/using-raku/using-strings/hello-world",
+   "first": "say 'Hello, World!'"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "1. Hello, World!",
+   "url": "/using-raku/using-strings/hello-world",
+   "first": "print \"Hello, World!\\n\""
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "2. Greet a person",
+   "url": "/using-raku/using-strings/greet-a-person",
+   "first": "say 'Hello, ' ~ prompt('Enter your name: ') ~ '!';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "2. Greet a person",
+   "url": "/using-raku/using-strings/greet-a-person",
+   "first": "my $name = prompt('Enter your name: ');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "2. Greet a person",
+   "url": "/using-raku/using-strings/greet-a-person",
+   "first": "print 'Enter your name: ';"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "2. Greet a person",
+   "url": "/using-raku/using-strings/greet-a-person",
+   "first": "my $name = $*IN.get();"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "3. String length",
+   "url": "/using-raku/using-strings/string-length",
+   "first": "say 'hello'.chars;  # 5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "3. String length",
+   "url": "/using-raku/using-strings/string-length",
+   "first": "say 'hello'.codes;  # 5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "3. String length",
+   "url": "/using-raku/using-strings/string-length",
+   "first": "say 'x'.chars; # 1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "3. String length",
+   "url": "/using-raku/using-strings/string-length",
+   "first": "say \"x\\x[0328]\".chars; # 1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "3. String length",
+   "url": "/using-raku/using-strings/string-length",
+   "first": "say '\u0119'.chars; # 1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "3. String length",
+   "url": "/using-raku/using-strings/string-length",
+   "first": "say \"e\\x[0328]\".chars; # 1"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "4. Unique digits",
+   "url": "/using-raku/using-strings/unique-digits",
+   "first": "my $number = prompt('Enter number> ');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "4. Unique digits",
+   "url": "/using-raku/using-strings/unique-digits",
+   "first": "$number.Str.comb"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "4. Unique digits",
+   "url": "/using-raku/using-strings/unique-digits",
+   "first": "$number.comb.unique"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "4. Unique digits",
+   "url": "/using-raku/using-strings/unique-digits",
+   "first": "$number.comb.unique.sort.join(', ')"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "4. Unique digits",
+   "url": "/using-raku/using-strings/unique-digits",
+   "first": "$number.comb.unique.sort.join(', ').say;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "5. Reverse a string",
+   "url": "/using-raku/modifying-string-data/reverse-a-string",
+   "first": "my $string = 'Hello, World!';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "5. Reverse a string",
+   "url": "/using-raku/modifying-string-data/reverse-a-string",
+   "first": "say flip 'Abcdef'; # fedcbA"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "5. Reverse a string",
+   "url": "/using-raku/modifying-string-data/reverse-a-string",
+   "first": "'Magic'.flip.say; # cigaM"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "5. Reverse a string",
+   "url": "/using-raku/modifying-string-data/reverse-a-string",
+   "first": "my $string = 'Hello, World!';"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "6. Removing blanks from a string",
+   "url": "/using-raku/modifying-string-data/removing-blanks-from-a-string",
+   "first": "my $string = 'Hello,     World!';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "6. Removing blanks from a string",
+   "url": "/using-raku/modifying-string-data/removing-blanks-from-a-string",
+   "first": "my $string = ' Hello, World! ';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "6. Removing blanks from a string",
+   "url": "/using-raku/modifying-string-data/removing-blanks-from-a-string",
+   "first": "say $string.trim;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "6. Removing blanks from a string",
+   "url": "/using-raku/modifying-string-data/removing-blanks-from-a-string",
+   "first": "say '\u00a1' ~ '  Hi  '.trim-leading;  # \u00a1Hi"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "7. Camel case",
+   "url": "/using-raku/modifying-string-data/camel-case",
+   "first": "my $text = prompt('Enter short text > ');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "8. Incrementing filenames",
+   "url": "/using-raku/modifying-string-data/incrementing-filenames",
+   "first": "my $filename = 'file0.txt';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "8. Incrementing filenames",
+   "url": "/using-raku/modifying-string-data/incrementing-filenames",
+   "first": "my $filename = 'file000.txt';"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "9. Random passwords",
+   "url": "/using-raku/modifying-string-data/random-passwords",
+   "first": "say ('0' .. 'z').pick(15).join('');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "9. Random passwords",
+   "url": "/using-raku/modifying-string-data/random-passwords",
+   "first": "say ('0' .. 'z').pick(1000).sort.join('');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "9. Random passwords",
+   "url": "/using-raku/modifying-string-data/random-passwords",
+   "first": "0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "9. Random passwords",
+   "url": "/using-raku/modifying-string-data/random-passwords",
+   "first": "my @chars = '0' ... '9', 'A' ... 'Z', 'a' ... 'z';"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "9. Random passwords",
+   "url": "/using-raku/modifying-string-data/random-passwords",
+   "first": "my $password = '';"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "9. Random passwords",
+   "url": "/using-raku/modifying-string-data/random-passwords",
+   "first": "my $password = '';"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "10. DNA-to-RNA transcription",
+   "url": "/using-raku/modifying-string-data/dna-to-rna-transcription",
+   "first": "my %transcription ="
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "10. DNA-to-RNA transcription",
+   "url": "/using-raku/modifying-string-data/dna-to-rna-transcription",
+   "first": "say $dna.trans(%transcription, :squash); # UGUAGUCAG"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "10. DNA-to-RNA transcription",
+   "url": "/using-raku/modifying-string-data/dna-to-rna-transcription",
+   "first": "say $dna.trans('ACCA' => 'UGGU', 'TCA' => 'AGU',"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "11. Caesar cipher",
+   "url": "/using-raku/modifying-string-data/caesar-cipher",
+   "first": "my $message = 'hello, world!';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "11. Caesar cipher",
+   "url": "/using-raku/modifying-string-data/caesar-cipher",
+   "first": "say $secret.trans("
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "12. Plural endings",
+   "url": "/using-raku/text-analysis/plural-endings",
+   "first": "for 1, 2, 3 -> $n {                     # Program output:"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "12. Plural endings",
+   "url": "/using-raku/text-analysis/plural-endings",
+   "first": "for 1, 2, 3 -> $n {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "13. The most frequent word",
+   "url": "/using-raku/text-analysis/the-most-frequent-word",
+   "first": "my $text = prompt('Text> ');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "13. The most frequent word",
+   "url": "/using-raku/text-analysis/the-most-frequent-word",
+   "first": "my $max = %count{(sort {%count{$^b} <=> %count{$^a}},"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "14. The longest common substring",
+   "url": "/using-raku/text-analysis/the-longest-common-substring",
+   "first": "my $a = 'the quick brown fox jumps over the lazy dog';"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "15. Anagram test",
+   "url": "/using-raku/text-analysis/anagram-test",
+   "first": "my $a = prompt('First word > ');"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "15. Anagram test",
+   "url": "/using-raku/text-analysis/anagram-test",
+   "first": "sub normalize($word) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "16. Palindrome test",
+   "url": "/using-raku/text-analysis/palindrome-test",
+   "first": "my $string = prompt('Enter a string: ');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "16. Palindrome test",
+   "url": "/using-raku/text-analysis/palindrome-test",
+   "first": "$string ~~ s:g/\\W+//;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "16. Palindrome test",
+   "url": "/using-raku/text-analysis/palindrome-test",
+   "first": "$string .= lc;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "16. Palindrome test",
+   "url": "/using-raku/text-analysis/palindrome-test",
+   "first": "$string = $string.lc;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "16. Palindrome test",
+   "url": "/using-raku/text-analysis/palindrome-test",
+   "first": "my $string = prompt('Enter a string: ');"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "16. Palindrome test",
+   "url": "/using-raku/text-analysis/palindrome-test",
+   "first": "my $string = prompt('Enter a string: ');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "17. The longest palindrome",
+   "url": "/using-raku/text-analysis/the-longest-palindrome",
+   "first": "for 0 .. $length -> $start {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "17. The longest palindrome",
+   "url": "/using-raku/text-analysis/the-longest-palindrome",
+   "first": "my $substring = $string.substr($start, $length - $end);"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "17. The longest palindrome",
+   "url": "/using-raku/text-analysis/the-longest-palindrome",
+   "first": "my $string = prompt('Enter string> ');"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "18. Finding duplicate texts",
+   "url": "/using-raku/text-analysis/finding-duplicate-texts",
+   "first": "my $text = $*IN.slurp;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "18. Finding duplicate texts",
+   "url": "/using-raku/text-analysis/finding-duplicate-texts",
+   "first": "m:c($start)/(<< [\\w+] ** 5 %% \\s >>) .+ $0/"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "18. Finding duplicate texts",
+   "url": "/using-raku/text-analysis/finding-duplicate-texts",
+   "first": "$start = $0.from + 1."
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "19. \u03c0",
+   "url": "/using-raku/using-numbers/page",
+   "first": "say \u03c0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "19. \u03c0",
+   "url": "/using-raku/using-numbers/page",
+   "first": "say pi;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "19. \u03c0",
+   "url": "/using-raku/using-numbers/page",
+   "first": "say \u03c4;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "19. \u03c0",
+   "url": "/using-raku/using-numbers/page",
+   "first": "say 1E120 < \u221e; # Prints True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "my $n = 5;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "1 * 2 * 3 * 4 * ... * ($n \u2013 1) * $n"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "multi sub factorial(Int $x where {$x < 2}) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "multi sub factorial(Int $x) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "say factorial(5);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "(Int $x where {$x < 2})"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "sub postfix:<!>($n) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "say 5!;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "my $x = 7;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "20. Factorial!",
+   "url": "/using-raku/using-numbers/factorial",
+   "first": "sub postfix:<!>($n) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "21. Fibonacci numbers",
+   "url": "/using-raku/using-numbers/fibonacci-numbers",
+   "first": "my ($a, $b) = (1, 1);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "21. Fibonacci numbers",
+   "url": "/using-raku/using-numbers/fibonacci-numbers",
+   "first": "my @fib = 1, 1, * + * ... *;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "22. Print squares",
+   "url": "/using-raku/using-numbers/print-squares",
+   "first": "say $_ ** 2 for 1..10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "22. Print squares",
+   "url": "/using-raku/using-numbers/print-squares",
+   "first": "for 1..10 -> $x {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "22. Print squares",
+   "url": "/using-raku/using-numbers/print-squares",
+   "first": ".say for map {$_ ** 2}, 1..10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "23. Powers of two",
+   "url": "/using-raku/using-numbers/powers-of-two",
+   "first": "say 2 ** $_ for 0..9;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "23. Powers of two",
+   "url": "/using-raku/using-numbers/powers-of-two",
+   "first": "my @power2 = 1, 2, {$_ * 2} ... *;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "23. Powers of two",
+   "url": "/using-raku/using-numbers/powers-of-two",
+   "first": "my @power2 = 1, 2, 4 ... *;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "24. Odd and even numbers",
+   "url": "/using-raku/using-numbers/odd-and-even-numbers",
+   "first": ".say if $_ % 2 for 1 .. 20;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "24. Odd and even numbers",
+   "url": "/using-raku/using-numbers/odd-and-even-numbers",
+   "first": ".say unless $_ % 2 for 1 .. 20;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "24. Odd and even numbers",
+   "url": "/using-raku/using-numbers/odd-and-even-numbers",
+   "first": ".say for grep {$_ % 2}, 1..20;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "24. Odd and even numbers",
+   "url": "/using-raku/using-numbers/odd-and-even-numbers",
+   "first": ".say for grep {$_ %% 2}, 1..20;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "24. Odd and even numbers",
+   "url": "/using-raku/using-numbers/odd-and-even-numbers",
+   "first": "my @odd = 1, 3 ... *;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "24. Odd and even numbers",
+   "url": "/using-raku/using-numbers/odd-and-even-numbers",
+   "first": "my @even = 2, 4 ... *;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "25. Compare numbers approximately",
+   "url": "/using-raku/using-numbers/compare-numbers-approximately",
+   "first": "say 1/1000 =~= 1/1001;         # False"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "25. Compare numbers approximately",
+   "url": "/using-raku/using-numbers/compare-numbers-approximately",
+   "first": "say 0.1 + 0.2 - 0.3; # 0"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "25. Compare numbers approximately",
+   "url": "/using-raku/using-numbers/compare-numbers-approximately",
+   "first": "'%.20f'.printf(0.1 + 0.2 - 0.3); # 0.00000000000000000000"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "26. Multiplying big numbers",
+   "url": "/using-raku/using-numbers/multiplying-big-numbers",
+   "first": "my $a ="
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "27. Prime numbers",
+   "url": "/using-raku/using-numbers/prime-numbers",
+   "first": "say 'Prime' if is-prime(17);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "27. Prime numbers",
+   "url": "/using-raku/using-numbers/prime-numbers",
+   "first": "my $n = 15;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "28. List of prime numbers",
+   "url": "/using-raku/using-numbers/list-of-prime-numbers",
+   "first": "my @numbers = grep {.is-prime}, 1..*;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "28. List of prime numbers",
+   "url": "/using-raku/using-numbers/list-of-prime-numbers",
+   "first": "my @numbers = (1..*).grep: *.is-prime;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "28. List of prime numbers",
+   "url": "/using-raku/using-numbers/list-of-prime-numbers",
+   "first": "my @numbers = (^Inf).grep: *.is-prime;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "28. List of prime numbers",
+   "url": "/using-raku/using-numbers/list-of-prime-numbers",
+   "first": "say ((^\u221e).grep: *.is-prime)[^10];"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "29. Prime factors",
+   "url": "/using-raku/using-numbers/prime-factors",
+   "first": "my $n = 123456789;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "30. Reducing a fraction",
+   "url": "/using-raku/using-numbers/reducing-a-fraction",
+   "first": "my $a = 16;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "30. Reducing a fraction",
+   "url": "/using-raku/using-numbers/reducing-a-fraction",
+   "first": "my Rat $r = $a/$b;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "30. Reducing a fraction",
+   "url": "/using-raku/using-numbers/reducing-a-fraction",
+   "first": "dd $r; # Rat $r = <2/35>"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "31. Divide by zero",
+   "url": "/using-raku/using-numbers/divide-by-zero",
+   "first": "my $v = 42 / 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "31. Divide by zero",
+   "url": "/using-raku/using-numbers/divide-by-zero",
+   "first": "my $v = 42 / 0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "31. Divide by zero",
+   "url": "/using-raku/using-numbers/divide-by-zero",
+   "first": "try {"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "32. Generating random numbers",
+   "url": "/using-raku/random-numbers/generating-random-numbers",
+   "first": "say 1.rand;    # between 0 and 1"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "32. Generating random numbers",
+   "url": "/using-raku/random-numbers/generating-random-numbers",
+   "first": "say 10.rand.Int; # Either 0, or 1, 2, 3, 4, 5, 6, 7, 8, or 9 but not 1"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "32. Generating random numbers",
+   "url": "/using-raku/random-numbers/generating-random-numbers",
+   "first": "srand(1);"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "32. Generating random numbers",
+   "url": "/using-raku/random-numbers/generating-random-numbers",
+   "first": "srand(1);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "33. Neumann\u2019s random generator",
+   "url": "/using-raku/random-numbers/neumanns-random-generator",
+   "first": "my $n = 1234;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "33. Neumann\u2019s random generator",
+   "url": "/using-raku/random-numbers/neumanns-random-generator",
+   "first": "my $n = 1234;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "33. Neumann\u2019s random generator",
+   "url": "/using-raku/random-numbers/neumanns-random-generator",
+   "first": "my $n = 1234;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "33. Neumann\u2019s random generator",
+   "url": "/using-raku/random-numbers/neumanns-random-generator",
+   "first": "my $n = 1234;"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "34. Histogram of random numbers",
+   "url": "/using-raku/random-numbers/histogram-of-random-numbers",
+   "first": "my @histogram;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "34. Histogram of random numbers",
+   "url": "/using-raku/random-numbers/histogram-of-random-numbers",
+   "first": "@histogram[(10 * rand).Int]++"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "35. Distance between two points",
+   "url": "/using-raku/mathematical-problems/distance-between-two-points",
+   "first": "my ($x1, $y1) = (10, 3);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "35. Distance between two points",
+   "url": "/using-raku/mathematical-problems/distance-between-two-points",
+   "first": "my $a = 10+3i;"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "36. Standard deviation",
+   "url": "/using-raku/mathematical-problems/standard-deviation",
+   "first": "my @data = 727.7, 1086.5, 1091.0, 1361.3, 1490.5, 1956.1;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "36. Standard deviation",
+   "url": "/using-raku/mathematical-problems/standard-deviation",
+   "first": "my $sigma = sqrt("
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "36. Standard deviation",
+   "url": "/using-raku/mathematical-problems/standard-deviation",
+   "first": "my @data = 727.7, 1086.5, 1091.0, 1361.3, 1490.5, 1956.1;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "36. Standard deviation",
+   "url": "/using-raku/mathematical-problems/standard-deviation",
+   "first": "my $x\u0304 = ([+] @data) / @data;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "37. Polar coordinates",
+   "url": "/using-raku/mathematical-problems/polar-coordinates",
+   "first": "sub polar-to-cartesian($r, $\u03c6) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "37. Polar coordinates",
+   "url": "/using-raku/mathematical-problems/polar-coordinates",
+   "first": "say cartesian-to-polar(1, 2);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "37. Polar coordinates",
+   "url": "/using-raku/mathematical-problems/polar-coordinates",
+   "first": "sub cartesian-to-polar($x, $y) {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ error (non-deterministic)",
+   "label": "38. Monte Carlo method",
+   "url": "/using-raku/mathematical-problems/monte-carlo-method",
+   "first": "my $inside = 0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "39. Unicode digits",
+   "url": "/using-raku/numbers-and-strings/unicode-digits",
+   "first": "for 1 .. 0x10FFFD {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "39. Unicode digits",
+   "url": "/using-raku/numbers-and-strings/unicode-digits",
+   "first": "say $char ~ ' ' ~ $char.uniname if $char ~~ /<:digit>/;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo run timed out",
+   "label": "40. Guess the number",
+   "url": "/using-raku/numbers-and-strings/guess-the-number",
+   "first": "my $n = 10.rand.round;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "40. Guess the number",
+   "url": "/using-raku/numbers-and-strings/guess-the-number",
+   "first": "say $guess < $n ?? 'Too small.' !! 'Too big.';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "41. Binary to integer",
+   "url": "/using-raku/numbers-and-strings/binary-to-integer",
+   "first": "my $bin = '101101';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "41. Binary to integer",
+   "url": "/using-raku/numbers-and-strings/binary-to-integer",
+   "first": "my $bin = '101101';"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "41. Binary to integer",
+   "url": "/using-raku/numbers-and-strings/binary-to-integer",
+   "first": "my $b = 0110;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "42. Integer as binary, octal, and hex",
+   "url": "/using-raku/numbers-and-strings/integer-as-binary-octal-and-hex",
+   "first": "say 42.base(2);  # 101010"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "42. Integer as binary, octal, and hex",
+   "url": "/using-raku/numbers-and-strings/integer-as-binary-octal-and-hex",
+   "first": "my $int = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "42. Integer as binary, octal, and hex",
+   "url": "/using-raku/numbers-and-strings/integer-as-binary-octal-and-hex",
+   "first": "my $int = 42;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "42. Integer as binary, octal, and hex",
+   "url": "/using-raku/numbers-and-strings/integer-as-binary-octal-and-hex",
+   "first": "printf(\"Hex: %#x\\n\", $int); # Hex: 0x2a"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "43. Sum of digits",
+   "url": "/using-raku/numbers-and-strings/sum-of-digits",
+   "first": "my $number = 139487854;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "43. Sum of digits",
+   "url": "/using-raku/numbers-and-strings/sum-of-digits",
+   "first": "my $number = 139487854;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "44. Bit counter",
+   "url": "/using-raku/numbers-and-strings/bit-counter",
+   "first": "my $value = prompt('Enter value > ');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "44. Bit counter",
+   "url": "/using-raku/numbers-and-strings/bit-counter",
+   "first": "$value ~~ s:g/0//;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "44. Bit counter",
+   "url": "/using-raku/numbers-and-strings/bit-counter",
+   "first": "my $value = prompt('Enter value > ');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "45. Compose the largest number",
+   "url": "/using-raku/numbers-and-strings/compose-the-largest-number",
+   "first": "my @a = (67, 8, 1, 5, 45);"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "45. Compose the largest number",
+   "url": "/using-raku/numbers-and-strings/compose-the-largest-number",
+   "first": "{$^b.Str cmp $^a.Str}"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "46. Convert to Roman numerals",
+   "url": "/using-raku/numbers-and-strings/convert-to-roman-numerals",
+   "first": "my $n = 2018;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "46. Convert to Roman numerals",
+   "url": "/using-raku/numbers-and-strings/convert-to-roman-numerals",
+   "first": "my $digit = ($n / $x.key).Int;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "46. Convert to Roman numerals",
+   "url": "/using-raku/numbers-and-strings/convert-to-roman-numerals",
+   "first": "$n %= $x.key;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "46. Convert to Roman numerals",
+   "url": "/using-raku/numbers-and-strings/convert-to-roman-numerals",
+   "first": "$roman ~= $x.value[$digit - 1] if $digit;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "47. Spelling numbers",
+   "url": "/using-raku/numbers-and-strings/spelling-numbers",
+   "first": "my @names = <zero one two three four five six seven eight"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "47. Spelling numbers",
+   "url": "/using-raku/numbers-and-strings/spelling-numbers",
+   "first": "say spell-number(987654);  # nine hundred eighty-seven"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "47. Spelling numbers",
+   "url": "/using-raku/numbers-and-strings/spelling-numbers",
+   "first": "my @names = <zero one two three four five six seven eight"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "48. Swap two values",
+   "url": "/using-raku/manipulating-lists-and-arrays/swap-two-values",
+   "first": "($b, $a) = ($a, $b);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "48. Swap two values",
+   "url": "/using-raku/manipulating-lists-and-arrays/swap-two-values",
+   "first": "($a, $b).=reverse;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "48. Swap two values",
+   "url": "/using-raku/manipulating-lists-and-arrays/swap-two-values",
+   "first": "my ($a, $b) = (10, 20);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "48. Swap two values",
+   "url": "/using-raku/manipulating-lists-and-arrays/swap-two-values",
+   "first": "$a = 20, $b = 10"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "48. Swap two values",
+   "url": "/using-raku/manipulating-lists-and-arrays/swap-two-values",
+   "first": "my @a = (3, 5, 7, 4);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "48. Swap two values",
+   "url": "/using-raku/manipulating-lists-and-arrays/swap-two-values",
+   "first": "my @a = (3, 5, 7, 4);"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "49. Reverse a list",
+   "url": "/using-raku/manipulating-lists-and-arrays/reverse-a-list",
+   "first": "my @a = (10, 20, 30, 40, 50);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "49. Reverse a list",
+   "url": "/using-raku/manipulating-lists-and-arrays/reverse-a-list",
+   "first": "say @a.reverse;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "49. Reverse a list",
+   "url": "/using-raku/manipulating-lists-and-arrays/reverse-a-list",
+   "first": "my $range = 10..15;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "50. Rotate a list",
+   "url": "/using-raku/manipulating-lists-and-arrays/rotate-a-list",
+   "first": "my @a = (1, 3, 5, 7, 9, 11, 13, 15);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "50. Rotate a list",
+   "url": "/using-raku/manipulating-lists-and-arrays/rotate-a-list",
+   "first": "@a.=rotate(3);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "50. Rotate a list",
+   "url": "/using-raku/manipulating-lists-and-arrays/rotate-a-list",
+   "first": "@a.push(@a.shift) for 1..3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "50. Rotate a list",
+   "url": "/using-raku/manipulating-lists-and-arrays/rotate-a-list",
+   "first": "@a.unshift(@a.pop) for 1..3;"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "51. Randomise an array",
+   "url": "/using-raku/manipulating-lists-and-arrays/randomise-an-array",
+   "first": "my @a = 1..20;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "51. Randomise an array",
+   "url": "/using-raku/manipulating-lists-and-arrays/randomise-an-array",
+   "first": "@a.=pick(@a);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "51. Randomise an array",
+   "url": "/using-raku/manipulating-lists-and-arrays/randomise-an-array",
+   "first": "say @a.roll(@a);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "52. Incrementing array elements",
+   "url": "/using-raku/manipulating-lists-and-arrays/incrementing-array-elements",
+   "first": "@data>>++;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "52. Incrementing array elements",
+   "url": "/using-raku/manipulating-lists-and-arrays/incrementing-array-elements",
+   "first": "my @data = 1..10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "52. Incrementing array elements",
+   "url": "/using-raku/manipulating-lists-and-arrays/incrementing-array-elements",
+   "first": "@data <<+=>> 1;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "52. Incrementing array elements",
+   "url": "/using-raku/manipulating-lists-and-arrays/incrementing-array-elements",
+   "first": "my @data = 1..10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "53. Adding up two arrays",
+   "url": "/using-raku/manipulating-lists-and-arrays/adding-up-two-arrays",
+   "first": "my @a = 10..20;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "53. Adding up two arrays",
+   "url": "/using-raku/manipulating-lists-and-arrays/adding-up-two-arrays",
+   "first": "my @long = 1, 2, 3, 4;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "53. Adding up two arrays",
+   "url": "/using-raku/manipulating-lists-and-arrays/adding-up-two-arrays",
+   "first": "say @long <<+<< @short; # [11 22]"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "54. Exclusion of two arrays",
+   "url": "/using-raku/manipulating-lists-and-arrays/exclusion-of-two-arrays",
+   "first": "my @a = 2, 5, 7, 8, 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "54. Exclusion of two arrays",
+   "url": "/using-raku/manipulating-lists-and-arrays/exclusion-of-two-arrays",
+   "first": ".say for (@a \u2216 @b).keys;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "54. Exclusion of two arrays",
+   "url": "/using-raku/manipulating-lists-and-arrays/exclusion-of-two-arrays",
+   "first": ".say for (@a (-) @b).keys;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "54. Exclusion of two arrays",
+   "url": "/using-raku/manipulating-lists-and-arrays/exclusion-of-two-arrays",
+   "first": ".say for grep *  @b, @a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "54. Exclusion of two arrays",
+   "url": "/using-raku/manipulating-lists-and-arrays/exclusion-of-two-arrays",
+   "first": ".say for grep * !(<) $b, @a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "55. Sum of the elements of an array",
+   "url": "/using-raku/information-retrieval/sum-of-the-elements-of-an-array",
+   "first": "my @a = (4, 6, 8, 1, 0, 58, 1, 34, 7, 4, 2);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "55. Sum of the elements of an array",
+   "url": "/using-raku/information-retrieval/sum-of-the-elements-of-an-array",
+   "first": "say [+] @a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "55. Sum of the elements of an array",
+   "url": "/using-raku/information-retrieval/sum-of-the-elements-of-an-array",
+   "first": "say [+] grep {$_ > 10}, @a; # Prints 92"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "55. Sum of the elements of an array",
+   "url": "/using-raku/information-retrieval/sum-of-the-elements-of-an-array",
+   "first": "say reduce &infix:<+>, @a; # Prints 125"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "55. Sum of the elements of an array",
+   "url": "/using-raku/information-retrieval/sum-of-the-elements-of-an-array",
+   "first": "my @a = (4, 6, 8, 1, 0, 58, 1, 34, 7, 4, 2);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "56. Average of an array",
+   "url": "/using-raku/information-retrieval/average-of-an-array",
+   "first": "my @data = 7, 11, 34, 50, 200;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "56. Average of an array",
+   "url": "/using-raku/information-retrieval/average-of-an-array",
+   "first": "say sum(@data) / @data.elems;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "56. Average of an array",
+   "url": "/using-raku/information-retrieval/average-of-an-array",
+   "first": "say ([+] @data) / @data;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "57. Moving average",
+   "url": "/using-raku/information-retrieval/moving-average",
+   "first": "my @data = map {rand}, 1..100;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "57. Moving average",
+   "url": "/using-raku/information-retrieval/moving-average",
+   "first": "my @average = map {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "57. Moving average",
+   "url": "/using-raku/information-retrieval/moving-average",
+   "first": "sum(@data[$_ - 3 .. $_ + 3])."
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "58. Is an element in a list?",
+   "url": "/using-raku/information-retrieval/is-an-element-in-a-list",
+   "first": "my @array = (10, 14, 0, 15, 17, 20, 30, 35);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "58. Is an element in a list?",
+   "url": "/using-raku/information-retrieval/is-an-element-in-a-list",
+   "first": "say 'In the list' if grep $x, @array;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "58. Is an element in a list?",
+   "url": "/using-raku/information-retrieval/is-an-element-in-a-list",
+   "first": "say 'In the list' if first $x, @array;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "58. Is an element in a list?",
+   "url": "/using-raku/information-retrieval/is-an-element-in-a-list",
+   "first": "say 'In the list' if $x == first $x, @array;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "58. Is an element in a list?",
+   "url": "/using-raku/information-retrieval/is-an-element-in-a-list",
+   "first": "my %hash = map {$_ => 1}, @array;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "59. First odd number",
+   "url": "/using-raku/information-retrieval/first-odd-number",
+   "first": "my @nums = (2, 4, 18, 9, 16, 7, 10);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "59. First odd number",
+   "url": "/using-raku/information-retrieval/first-odd-number",
+   "first": "my $first = @nums.first(* % 2);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "59. First odd number",
+   "url": "/using-raku/information-retrieval/first-odd-number",
+   "first": "my @odd = grep {$_ % 2}, @nums;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "59. First odd number",
+   "url": "/using-raku/information-retrieval/first-odd-number",
+   "first": "@nums ~~ /(\\d*<[13579]>$)/;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "60. Take every second element",
+   "url": "/using-raku/information-retrieval/take-every-second-element",
+   "first": "my @data = 20..30;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "60. Take every second element",
+   "url": "/using-raku/information-retrieval/take-every-second-element",
+   "first": "my @selected = @data[1, 3 ... *];"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "60. Take every second element",
+   "url": "/using-raku/information-retrieval/take-every-second-element",
+   "first": "say @data[2, 3, 5]; # (22 23 25)"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "61. Number of occurrences in array",
+   "url": "/using-raku/information-retrieval/number-of-occurrences-in-array",
+   "first": "my @data = <"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "61. Number of occurrences in array",
+   "url": "/using-raku/information-retrieval/number-of-occurrences-in-array",
+   "first": "my $n = @data.grep('grape').elems;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "61. Number of occurrences in array",
+   "url": "/using-raku/information-retrieval/number-of-occurrences-in-array",
+   "first": "my %count;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "62. Finding unique elements",
+   "url": "/using-raku/information-retrieval/finding-unique-elements",
+   "first": "my @a = 2, 3, 7, 4, 5, 5, 6, 2, 10, 7;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "62. Finding unique elements",
+   "url": "/using-raku/information-retrieval/finding-unique-elements",
+   "first": "say unique(@a);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "62. Finding unique elements",
+   "url": "/using-raku/information-retrieval/finding-unique-elements",
+   "first": "<1.1 1.3 2.2 2.5 3.6>.unique(with => {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "62. Finding unique elements",
+   "url": "/using-raku/information-retrieval/finding-unique-elements",
+   "first": "unique(@data, with => -> $x, $y {$x.Int == $y.Int}).say;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "63. Minimum and maximum",
+   "url": "/using-raku/information-retrieval/minimum-and-maximum",
+   "first": "my @list = 7, 6, 12, 3, 4, 10, 2, 5, 15, 6, 7, 8, 9, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "63. Minimum and maximum",
+   "url": "/using-raku/information-retrieval/minimum-and-maximum",
+   "first": "say 7 min 8; # Prints 7"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "63. Minimum and maximum",
+   "url": "/using-raku/information-retrieval/minimum-and-maximum",
+   "first": "say 7 min 5 min 8; # Prints 5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "63. Minimum and maximum",
+   "url": "/using-raku/information-retrieval/minimum-and-maximum",
+   "first": "say [min] 7, 9, 5; # Prints 5"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "64. Increasing sequences",
+   "url": "/using-raku/information-retrieval/increasing-sequences",
+   "first": "my @data = 3, 7, 19, 20, 34;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "64. Increasing sequences",
+   "url": "/using-raku/information-retrieval/increasing-sequences",
+   "first": "say [<] @data;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "64. Increasing sequences",
+   "url": "/using-raku/information-retrieval/increasing-sequences",
+   "first": "say [>] @data;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "64. Increasing sequences",
+   "url": "/using-raku/information-retrieval/increasing-sequences",
+   "first": "say @data[0] < @data[1] < @data[2] < @data[3] < @data[4];"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "64. Increasing sequences",
+   "url": "/using-raku/information-retrieval/increasing-sequences",
+   "first": "my $x = 15;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "65. Passing arrays to subroutines",
+   "url": "/using-raku/working-with-subroutines/passing-arrays-to-subroutines",
+   "first": "my @colours = <red green blue>;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "65. Passing arrays to subroutines",
+   "url": "/using-raku/working-with-subroutines/passing-arrays-to-subroutines",
+   "first": "sub g($a, $b, $c, $sep) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "66. Variadic parameters in a sub",
+   "url": "/using-raku/working-with-subroutines/variadic-parameters-in-a-sub",
+   "first": "sub h($sep, *@data) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "66. Variadic parameters in a sub",
+   "url": "/using-raku/working-with-subroutines/variadic-parameters-in-a-sub",
+   "first": "h(', ', 'apple');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "66. Variadic parameters in a sub",
+   "url": "/using-raku/working-with-subroutines/variadic-parameters-in-a-sub",
+   "first": "h(', ', 'a' .. 'z');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "66. Variadic parameters in a sub",
+   "url": "/using-raku/working-with-subroutines/variadic-parameters-in-a-sub",
+   "first": "Cannot put required parameter $sep after variadic parameters"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "67. Transpose a matrix",
+   "url": "/using-raku/multi-dimensional-data/transpose-a-matrix",
+   "first": "my @matrix = [1, 2],"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "67. Transpose a matrix",
+   "url": "/using-raku/multi-dimensional-data/transpose-a-matrix",
+   "first": "my @transposed = [Z] @matrix;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "67. Transpose a matrix",
+   "url": "/using-raku/multi-dimensional-data/transpose-a-matrix",
+   "first": "my @transposed = [1, 2] Z [3, 4];"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "68. Sort hashes by parameter",
+   "url": "/using-raku/multi-dimensional-data/sort-hashes-by-parameter",
+   "first": "my @people = ("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "68. Sort hashes by parameter",
+   "url": "/using-raku/multi-dimensional-data/sort-hashes-by-parameter",
+   "first": "@people.sort( -> %first, %second {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "69. Count hash values",
+   "url": "/using-raku/multi-dimensional-data/count-hash-values",
+   "first": "my %data ="
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "69. Count hash values",
+   "url": "/using-raku/multi-dimensional-data/count-hash-values",
+   "first": "my %stat;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "70. Product table",
+   "url": "/using-raku/multi-dimensional-data/product-table",
+   "first": "say \"$_[0]\u00d7$_[1] = {[*] @$_}\" for 1..10 X 1..10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "70. Product table",
+   "url": "/using-raku/multi-dimensional-data/product-table",
+   "first": "for 1..10 -> $x {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "70. Product table",
+   "url": "/using-raku/multi-dimensional-data/product-table",
+   "first": "for 1..10 -> $x {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "70. Product table",
+   "url": "/using-raku/multi-dimensional-data/product-table",
+   "first": "for 1..10 -> $x {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "70. Product table",
+   "url": "/using-raku/multi-dimensional-data/product-table",
+   "first": "for 1..10 -> $x {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "71. Pascal triangle",
+   "url": "/using-raku/multi-dimensional-data/pascal-triangle",
+   "first": "@row = (|@row, 0) >>+<< (0, |@row);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "71. Pascal triangle",
+   "url": "/using-raku/multi-dimensional-data/pascal-triangle",
+   "first": "my @row = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "71. Pascal triangle",
+   "url": "/using-raku/multi-dimensional-data/pascal-triangle",
+   "first": "my @row = 1;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "72. Count vowels in a word",
+   "url": "/using-raku/regex-matching/count-vowels-in-a-word",
+   "first": "my $word = 'Hello';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "72. Count vowels in a word",
+   "url": "/using-raku/regex-matching/count-vowels-in-a-word",
+   "first": "$word = 'M\u00fcnich';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "72. Count vowels in a word",
+   "url": "/using-raku/regex-matching/count-vowels-in-a-word",
+   "first": "$word ~~ m:global:ignorecase:ignoremark/<[aeiou]>/;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "73. Count words",
+   "url": "/using-raku/regex-matching/count-words",
+   "first": "my $text = prompt('Text> ');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "73. Count words",
+   "url": "/using-raku/regex-matching/count-words",
+   "first": "$text.comb(/\\w+/)"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "73. Count words",
+   "url": "/using-raku/regex-matching/count-words",
+   "first": "$text ~~ m:g/(\\w+)/;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "74. Skipping Pod documentation",
+   "url": "/using-raku/regex-matching/skipping-pod-documentation",
+   "first": "# Hello, World!"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "74. Skipping Pod documentation",
+   "url": "/using-raku/regex-matching/skipping-pod-documentation",
+   "first": "while $_ = $*IN.get {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "75. Currency converter",
+   "url": "/using-raku/regex-matching/currency-converter",
+   "first": "my %EUR ="
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "75. Currency converter",
+   "url": "/using-raku/regex-matching/currency-converter",
+   "first": "$request ~~"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "75. Currency converter",
+   "url": "/using-raku/regex-matching/currency-converter",
+   "first": "while (my $request = prompt('> ')) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "76. Double each character",
+   "url": "/using-raku/substitutions-with-regexes/double-each-character",
+   "first": "my $string = 'Hello, 1 World!';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "76. Double each character",
+   "url": "/using-raku/substitutions-with-regexes/double-each-character",
+   "first": "$string ~~ s:g/(<[\\w] - [r]>)/$0$0/;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "77. Remove duplicated words",
+   "url": "/using-raku/substitutions-with-regexes/remove-duplicated-words",
+   "first": "my $string = 'This is is a string';"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "78. Separate digits and letters",
+   "url": "/using-raku/substitutions-with-regexes/separate-digits-and-letters",
+   "first": "my $s = '6TGT68';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "79. Separate groups of digits",
+   "url": "/using-raku/substitutions-with-regexes/separate-groups-of-digits",
+   "first": "$n ~~ s/<?after \\d> (\\d ** 3)+ $/{$0.map(',' ~ *).join}/;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "80. Increase digits by one",
+   "url": "/using-raku/substitutions-with-regexes/increase-digits-by-one",
+   "first": "my $number = 564378901;"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "81. Pig Latin",
+   "url": "/using-raku/substitutions-with-regexes/pig-latin",
+   "first": "my $text = prompt('English > ');"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "82. Simple string compressor",
+   "url": "/using-raku/substitutions-with-regexes/simple-string-compressor",
+   "first": "my $str = 'abccccdefffffggghhi';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "83. %Templating% engine",
+   "url": "/using-raku/substitutions-with-regexes/templating-engine",
+   "first": "my $template = 'Hello, %name%! Welcome to %city%!';"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "83. %Templating% engine",
+   "url": "/using-raku/substitutions-with-regexes/templating-engine",
+   "first": "sub process_template($template is copy, %data) {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "84. Decode Roman numerals",
+   "url": "/using-raku/using-grammars/decode-roman-numerals",
+   "first": "my $n = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "85. Balanced parentheses",
+   "url": "/using-raku/using-grammars/balanced-parentheses",
+   "first": "my @tests = 'a',         '(a)',      '(a b c)', 'a (b)',"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "85. Balanced parentheses",
+   "url": "/using-raku/using-grammars/balanced-parentheses",
+   "first": "grammar Balanced {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "85. Balanced parentheses",
+   "url": "/using-raku/using-grammars/balanced-parentheses",
+   "first": "for @tests -> $test {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "86. Basic calculator",
+   "url": "/using-raku/using-grammars/basic-calculator",
+   "first": "my $expression = \"14 * 16.4\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "86. Basic calculator",
+   "url": "/using-raku/using-grammars/basic-calculator",
+   "first": "grammar calc {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "86. Basic calculator",
+   "url": "/using-raku/using-grammars/basic-calculator",
+   "first": "my $expression = \"14 * 16.2\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "86. Basic calculator",
+   "url": "/using-raku/using-grammars/basic-calculator",
+   "first": "say $<value>[0] + $<value>[1]"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "87. Current date and time",
+   "url": "/using-raku/current-date-and-time",
+   "first": "say time;"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "87. Current date and time",
+   "url": "/using-raku/current-date-and-time",
+   "first": "say DateTime.now;"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "87. Current date and time",
+   "url": "/using-raku/current-date-and-time",
+   "first": "my $dt = DateTime.now;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "87. Current date and time",
+   "url": "/using-raku/current-date-and-time",
+   "first": "say $dt.second.Int;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "88. Formatted date",
+   "url": "/using-raku/formatted-date",
+   "first": "my $now = DateTime.now;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "88. Formatted date",
+   "url": "/using-raku/formatted-date",
+   "first": "say $now.hh-mm-ss; # 22:37:16"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "88. Formatted date",
+   "url": "/using-raku/formatted-date",
+   "first": "my $now = DateTime.now("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "88. Formatted date",
+   "url": "/using-raku/formatted-date",
+   "first": "say \"Current date and time: $now.\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "89. Datetime arithmetic",
+   "url": "/using-raku/datetime-arithmetic",
+   "first": "my $date1 = DateTime.new('2017-12-31T23:59:50');"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "89. Datetime arithmetic",
+   "url": "/using-raku/datetime-arithmetic",
+   "first": "my $now = DateTime.now();"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "89. Datetime arithmetic",
+   "url": "/using-raku/datetime-arithmetic",
+   "first": "my $back = $now - Duration.new(3600 * 24 * 7);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "90. Leap years",
+   "url": "/using-raku/leap-years",
+   "first": "my $year = 2018;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "90. Leap years",
+   "url": "/using-raku/leap-years",
+   "first": "for 1800 .. 2400 -> $year {"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "91. Setting timeouts",
+   "url": "/using-raku/setting-timeouts",
+   "first": "my $timeout = Promise.in(2).then({"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "91. Setting timeouts",
+   "url": "/using-raku/setting-timeouts",
+   "first": "await Promise.anyof($timeout, $code);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "91. Setting timeouts",
+   "url": "/using-raku/setting-timeouts",
+   "first": "await Promise.anyof($timeout, $code);"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "92. Sleep Sort",
+   "url": "/using-raku/sleep-sort",
+   "first": "await gather for @*ARGS -> $value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "92. Sleep Sort",
+   "url": "/using-raku/sleep-sort",
+   "first": "for @*ARGS -> $value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "92. Sleep Sort",
+   "url": "/using-raku/sleep-sort",
+   "first": "start {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "92. Sleep Sort",
+   "url": "/using-raku/sleep-sort",
+   "first": "gather for @*ARGS -> $value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "92. Sleep Sort",
+   "url": "/using-raku/sleep-sort",
+   "first": "await gather . . . {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "93. Atomic operations",
+   "url": "/using-raku/atomic-operations",
+   "first": "my atomicint $inside = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "93. Atomic operations",
+   "url": "/using-raku/atomic-operations",
+   "first": "\u269b++"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "93. Atomic operations",
+   "url": "/using-raku/atomic-operations",
+   "first": "my atomicint $inside;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "93. Atomic operations",
+   "url": "/using-raku/atomic-operations",
+   "first": "atomic-fetch-inc($inside)"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "93. Atomic operations",
+   "url": "/using-raku/atomic-operations",
+   "first": "\u269b= $value        atomic-assign($var, $value)"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "94. Parallel file processing",
+   "url": "/using-raku/parallel-file-processing",
+   "first": "my $channel = Channel.new();"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "94. Parallel file processing",
+   "url": "/using-raku/parallel-file-processing",
+   "first": "my @workers;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "94. Parallel file processing",
+   "url": "/using-raku/parallel-file-processing",
+   "first": "await(@workers);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "94. Parallel file processing",
+   "url": "/using-raku/parallel-file-processing",
+   "first": "while (my $file = $channel.poll) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "94. Parallel file processing",
+   "url": "/using-raku/parallel-file-processing",
+   "first": "sub do_something($file) {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "95. The cat utility",
+   "url": "/using-raku/the-cat-utility",
+   "first": "say $*IN.slurp;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "95. The cat utility",
+   "url": "/using-raku/the-cat-utility",
+   "first": ".say while $_ = $*IN.get;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "96. The uniq utility",
+   "url": "/using-raku/the-uniq-utility",
+   "first": "my $previous = '';"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "96. The uniq utility",
+   "url": "/using-raku/the-uniq-utility",
+   "first": "my %seen;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "97. Reading directory content",
+   "url": "/using-raku/reading-directory-content",
+   "first": "say dir();"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "97. Reading directory content",
+   "url": "/using-raku/reading-directory-content",
+   "first": ".path.say for dir;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "97. Reading directory content",
+   "url": "/using-raku/reading-directory-content",
+   "first": "for dir() -> $file {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "97. Reading directory content",
+   "url": "/using-raku/reading-directory-content",
+   "first": ".absolute.say for dir;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "97. Reading directory content",
+   "url": "/using-raku/reading-directory-content",
+   "first": "for dir(test => /\\.jpg$/) -> $file {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "98. Text to Morse code",
+   "url": "/using-raku/text-to-morse-code",
+   "first": "my %code = ("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "99. Morse to text",
+   "url": "/using-raku/morse-to-text",
+   "first": "my %char = %code.kv.reverse;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "99. Morse to text",
+   "url": "/using-raku/morse-to-text",
+   "first": "my $text = prompt('Morse phrase> ') ~ ' ';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "my $program = $*IN.slurp;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "sub brainfuck($program) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "while $program_pointer < @program.elems {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "given @program[$program_pointer] {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "when '.' {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "when '[' {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "$program_pointer++;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "sub _move_back(@program, $program_pointer is copy) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "when ',' {@data_memory[$data_pointer] = $*IN.getc.?ord}"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "100. Brainfuck interpreter",
+   "url": "/using-raku/brainfuck-interpreter",
+   "first": "say $program;"
+  }
+ ]
+}

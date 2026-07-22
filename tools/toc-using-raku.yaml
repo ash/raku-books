@@ -1,0 +1,290 @@
+- title: Using Raku
+  url: using-raku
+  long_title: 'Using Raku: 100 Programming Challenges Solved with the Brand-New Raku Programming Language'
+  description: 100 programming challenges solved in Raku — string handling, numbers, aggregate data, regexes
+    and grammars, dates, and parallel computing — each with a runnable solution.
+  covers:
+  - using-raku
+  - using-perl-6
+  meta:
+    author: Andrew Shitov
+    published: 14 October 2019
+    publisher: DeepText, Amsterdam
+    isbn: 978-90-821568-8-1
+    pages: 187
+    note: First published as “Using Perl 6” on 1 November 2017.
+  items:
+  - title: Introduction
+    url: introduction
+    items:
+    - title: Foreword
+      url: foreword
+    - title: Prerequisites
+      url: prerequisites
+    - title: How to debug programs
+      url: how-to-debug-programs
+  - title: Strings
+    url: strings
+    items:
+    - title: Using strings
+      url: using-strings
+      items:
+      - title: 1. Hello, World!
+        url: hello-world
+      - title: 2. Greet a person
+        url: greet-a-person
+      - title: 3. String length
+        url: string-length
+      - title: 4. Unique digits
+        url: unique-digits
+    - title: Modifying string data
+      url: modifying-string-data
+      items:
+      - title: 5. Reverse a string
+        url: reverse-a-string
+      - title: 6. Removing blanks from a string
+        url: removing-blanks-from-a-string
+      - title: 7. Camel case
+        url: camel-case
+      - title: 8. Incrementing filenames
+        url: incrementing-filenames
+      - title: 9. Random passwords
+        url: random-passwords
+      - title: 10. DNA-to-RNA transcription
+        url: dna-to-rna-transcription
+      - title: 11. Caesar cipher
+        url: caesar-cipher
+    - title: Text analysis
+      url: text-analysis
+      items:
+      - title: 12. Plural endings
+        url: plural-endings
+      - title: 13. The most frequent word
+        url: the-most-frequent-word
+      - title: 14. The longest common substring
+        url: the-longest-common-substring
+      - title: 15. Anagram test
+        url: anagram-test
+      - title: 16. Palindrome test
+        url: palindrome-test
+      - title: 17. The longest palindrome
+        url: the-longest-palindrome
+      - title: 18. Finding duplicate texts
+        url: finding-duplicate-texts
+  - title: Numbers
+    url: numbers
+    items:
+    - title: Using numbers
+      url: using-numbers
+      items:
+      - title: 19. π
+        url: page
+      - title: 20. Factorial!
+        url: factorial
+      - title: 21. Fibonacci numbers
+        url: fibonacci-numbers
+      - title: 22. Print squares
+        url: print-squares
+      - title: 23. Powers of two
+        url: powers-of-two
+      - title: 24. Odd and even numbers
+        url: odd-and-even-numbers
+      - title: 25. Compare numbers approximately
+        url: compare-numbers-approximately
+      - title: 26. Multiplying big numbers
+        url: multiplying-big-numbers
+      - title: 27. Prime numbers
+        url: prime-numbers
+      - title: 28. List of prime numbers
+        url: list-of-prime-numbers
+      - title: 29. Prime factors
+        url: prime-factors
+      - title: 30. Reducing a fraction
+        url: reducing-a-fraction
+      - title: 31. Divide by zero
+        url: divide-by-zero
+    - title: Random numbers
+      url: random-numbers
+      items:
+      - title: 32. Generating random numbers
+        url: generating-random-numbers
+      - title: 33. Neumann’s random generator
+        url: neumanns-random-generator
+      - title: 34. Histogram of random numbers
+        url: histogram-of-random-numbers
+    - title: Mathematical problems
+      url: mathematical-problems
+      items:
+      - title: 35. Distance between two points
+        url: distance-between-two-points
+      - title: 36. Standard deviation
+        url: standard-deviation
+      - title: 37. Polar coordinates
+        url: polar-coordinates
+      - title: 38. Monte Carlo method
+        url: monte-carlo-method
+    - title: Numbers and strings
+      url: numbers-and-strings
+      items:
+      - title: 39. Unicode digits
+        url: unicode-digits
+      - title: 40. Guess the number
+        url: guess-the-number
+      - title: 41. Binary to integer
+        url: binary-to-integer
+      - title: 42. Integer as binary, octal, and hex
+        url: integer-as-binary-octal-and-hex
+      - title: 43. Sum of digits
+        url: sum-of-digits
+      - title: 44. Bit counter
+        url: bit-counter
+      - title: 45. Compose the largest number
+        url: compose-the-largest-number
+      - title: 46. Convert to Roman numerals
+        url: convert-to-roman-numerals
+      - title: 47. Spelling numbers
+        url: spelling-numbers
+  - title: Aggregate Data Types
+    url: aggregate-data-types
+    items:
+    - title: Manipulating lists and arrays
+      url: manipulating-lists-and-arrays
+      items:
+      - title: 48. Swap two values
+        url: swap-two-values
+      - title: 49. Reverse a list
+        url: reverse-a-list
+      - title: 50. Rotate a list
+        url: rotate-a-list
+      - title: 51. Randomise an array
+        url: randomise-an-array
+      - title: 52. Incrementing array elements
+        url: incrementing-array-elements
+      - title: 53. Adding up two arrays
+        url: adding-up-two-arrays
+      - title: 54. Exclusion of two arrays
+        url: exclusion-of-two-arrays
+    - title: Information retrieval
+      url: information-retrieval
+      items:
+      - title: 55. Sum of the elements of an array
+        url: sum-of-the-elements-of-an-array
+      - title: 56. Average of an array
+        url: average-of-an-array
+      - title: 57. Moving average
+        url: moving-average
+      - title: 58. Is an element in a list?
+        url: is-an-element-in-a-list
+      - title: 59. First odd number
+        url: first-odd-number
+      - title: 60. Take every second element
+        url: take-every-second-element
+      - title: 61. Number of occurrences in array
+        url: number-of-occurrences-in-array
+      - title: 62. Finding unique elements
+        url: finding-unique-elements
+      - title: 63. Minimum and maximum
+        url: minimum-and-maximum
+      - title: 64. Increasing sequences
+        url: increasing-sequences
+    - title: Working with subroutines
+      url: working-with-subroutines
+      items:
+      - title: 65. Passing arrays to subroutines
+        url: passing-arrays-to-subroutines
+      - title: 66. Variadic parameters in a sub
+        url: variadic-parameters-in-a-sub
+    - title: Multi-dimensional data
+      url: multi-dimensional-data
+      items:
+      - title: 67. Transpose a matrix
+        url: transpose-a-matrix
+      - title: 68. Sort hashes by parameter
+        url: sort-hashes-by-parameter
+      - title: 69. Count hash values
+        url: count-hash-values
+      - title: 70. Product table
+        url: product-table
+      - title: 71. Pascal triangle
+        url: pascal-triangle
+  - title: Regexes and Grammars
+    url: regexes-and-grammars
+    items:
+    - title: Regex matching
+      url: regex-matching
+      items:
+      - title: 72. Count vowels in a word
+        url: count-vowels-in-a-word
+      - title: 73. Count words
+        url: count-words
+      - title: 74. Skipping Pod documentation
+        url: skipping-pod-documentation
+      - title: 75. Currency converter
+        url: currency-converter
+    - title: Substitutions with regexes
+      url: substitutions-with-regexes
+      items:
+      - title: 76. Double each character
+        url: double-each-character
+      - title: 77. Remove duplicated words
+        url: remove-duplicated-words
+      - title: 78. Separate digits and letters
+        url: separate-digits-and-letters
+      - title: 79. Separate groups of digits
+        url: separate-groups-of-digits
+      - title: 80. Increase digits by one
+        url: increase-digits-by-one
+      - title: 81. Pig Latin
+        url: pig-latin
+      - title: 82. Simple string compressor
+        url: simple-string-compressor
+      - title: 83. %Templating% engine
+        url: templating-engine
+    - title: Using grammars
+      url: using-grammars
+      items:
+      - title: 84. Decode Roman numerals
+        url: decode-roman-numerals
+      - title: 85. Balanced parentheses
+        url: balanced-parentheses
+      - title: 86. Basic calculator
+        url: basic-calculator
+  - title: Date and Time
+    url: date-and-time
+    items:
+    - title: 87. Current date and time
+      url: current-date-and-time
+    - title: 88. Formatted date
+      url: formatted-date
+    - title: 89. Datetime arithmetic
+      url: datetime-arithmetic
+    - title: 90. Leap years
+      url: leap-years
+  - title: Parallel Computing
+    url: parallel-computing
+    items:
+    - title: 91. Setting timeouts
+      url: setting-timeouts
+    - title: 92. Sleep Sort
+      url: sleep-sort
+    - title: 93. Atomic operations
+      url: atomic-operations
+    - title: 94. Parallel file processing
+      url: parallel-file-processing
+  - title: Miscellaneous
+    url: miscellaneous
+    items:
+    - title: 95. The cat utility
+      url: the-cat-utility
+    - title: 96. The uniq utility
+      url: the-uniq-utility
+    - title: 97. Reading directory content
+      url: reading-directory-content
+    - title: 98. Text to Morse code
+      url: text-to-morse-code
+    - title: 99. Morse to text
+      url: morse-to-text
+    - title: 100. Brainfuck interpreter
+      url: brainfuck-interpreter
+    - title: What’s next?
+      url: whats-next

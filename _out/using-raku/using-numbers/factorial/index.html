@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>20. Factorial! — Raku Books</title>
+    <meta property="og:title" content="20. Factorial! — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku" selected>Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/using-raku">Using Raku</a> /
+<a href="/raku-books/using-raku/numbers">Numbers</a> / <a
+href="/raku-books/using-raku/using-numbers">Using numbers</a></p>
+<h1 id="factorial">20. Factorial!</h1>
+<p><em>Print the factorial of a given number.</em></p>
+<p>By definition, the factorial of a positive integer number N is a
+product of all the integers numbering from 1 to N, including N. This can
+be easily expressed with the use of a reduction operator:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$n</span> = <span class="mi">5</span>;
+<span class="k">my</span> <span class="nv">$f</span> = [*] <span class="mi">1</span> .. <span class="nv">$n</span>;
+<span class="nb">say</span> <span class="nv">$f</span>;</pre></div>
+
+<p>The record <code>[*] 1 .. $n</code> is equivalent to the following
+expression:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="mi">1</span> * <span class="mi">2</span> * <span class="mi">3</span> * <span class="mi">4</span> * ... * (<span class="nv">$n</span> – <span class="mi">1</span>) * <span class="nv">$n</span></pre></div>
+
+<p>A compact form <code>[*]</code> means that the operation character
+<code>*</code> is placed between the numbers in the given list.</p>
+<p>The result in the case of <code>$n</code> equals 5 is:</p>
+<p>Another approach to calculating factorials is using recursion
+according to the formula:</p>
+<p>&amp;! = &amp; ∙(&amp; −1)!</p>
+<p>On each iteration step, the function calls itself with decremented
+argument and should stop as soon as the value becomes less than two. In
+Raku, the knowledge of the fact that 1! is 1 can be encoded as a special
+case using multi-functions.</p>
+<p>Multi-functions are subroutines prefixed with the <code>multi</code>
+keyword. They all share the name but may be distinguished by the type,
+number or values of their arguments.</p>
+<p>For the factorial, define two multi-functions, one to calculate the
+factorial of the smallest numbers 0 and 1 (ignore the negative numbers
+for now):</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="k">sub</span> <span class="n">factorial</span>(<span class="nb">Int</span> <span class="nv">$x</span> <span class="k">where</span> {<span class="nv">$x</span> &lt; <span class="mi">2</span>}) {
+    <span class="k">return</span> <span class="mi">1</span>;
+}</pre></div>
+
+<p>The second variant is for all the other numbers.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="k">sub</span> <span class="n">factorial</span>(<span class="nb">Int</span> <span class="nv">$x</span>) {
+    <span class="k">return</span> <span class="nv">$x</span> * <span class="n">factorial</span>(<span class="nv">$x</span> - <span class="mi">1</span>);
+}</pre></div>
+
+<p>The <code>where</code> clause in the function signature splits the
+calls to the <code>factorial</code> functions. It is enough to have the
+<code>where</code> clause only in one of the two function variants, but
+you can explicitly add it for clarity:
+<code>where $x &gt;= 2</code>.</p>
+<p>Calling the factorial with the number 5 calls the second variant a
+few times first, switching to the first variant when <code>$x</code>
+reaches <code>1</code>. As that variant does not iteratively call
+itself, the whole recursion loop stops.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="n">factorial</span>(<span class="mi">5</span>);</pre></div>
+
+<p>Take a look at the signature of the function:</p>
+<div class="highlight raku no-run"><pre><span></span>(<span class="nb">Int</span> <span class="nv">$x</span> <span class="k">where</span> {<span class="nv">$x</span> &lt; <span class="mi">2</span>})</pre></div>
+
+<p>Here, the variable <code>$x</code> is typed as <code>Int</code>
+(which is an integer in Raku) and restricted by the condition
+<code>{$x &lt; 2}</code> in the <code>where</code> clause. Therefore,
+this signature does its work to decide if the corresponding subroutine
+accepts the number or not.</p>
+<p>Raku offers another exciting thing, which gives quite impressive
+results in its application to the factorial task. It is possible to
+define your own postfix operators, so you can write <code>5!</code> in
+the code and get the factorial of five.</p>
+<p>Here is an example of defining the postfix <code>!</code>
+operator:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">postfix</span>:<span class="s">&lt;!&gt;</span>(<span class="nv">$n</span>) {
+    <span class="k">return</span> [*] <span class="mi">1</span> .. <span class="nv">$n</span>;
+}</pre></div>
+
+<p>Using it is straightforward:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="mi">5</span>!;</pre></div>
+
+<p>This factorial operator is also applicable to variables, including
+the default variable:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$x</span> = <span class="mi">7</span>;
+<span class="nb">say</span> <span class="nv">$x</span>!; <span class="c1"># Prints 5040</span>
+
+<span class="nb">say</span> .! <span class="k">for</span> <span class="mi">3</span>.<span class="mf">.7</span>; <span class="c1"># 6, 24, 120, 720, 5040</span></pre></div>
+
+<p>Recursive definition works with the user-defined operator, too. It is
+possible to use it even from the body of the operator definition
+itself:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">postfix</span>:<span class="s">&lt;!&gt;</span>(<span class="nv">$n</span>) {
+    <span class="nv">$n</span> &lt;= <span class="mi">1</span> ?? <span class="mi">1</span> !! <span class="nv">$n</span> * (<span class="nv">$n</span> - <span class="mi">1</span>)!
+}
+
+<span class="nb">say</span> <span class="mi">5</span>!; <span class="c1"># Prints 120</span></pre></div>
+
+<p>The stop condition of the recursion is implemented here via the
+Boolean check <code>$n &lt;= 1</code>. In one-line functions like those
+shown above, it is not necessary to type the <code>return</code>
+keyword, as the last calculated value is used as the result.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/using-raku/using-numbers/page">19. π</a>   |   <a
+href="/raku-books/using-raku/using-numbers/fibonacci-numbers">21. Fibonacci
+numbers</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Final notes — Raku Books</title>
+    <meta property="og:title" content="Final notes — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku" selected>Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a
+href="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</a> / <a
+href="/raku-books/creating-a-compiler-in-raku/parsing-a-number">Parsing a
+Number</a></p>
+<h1 id="final-notes">Final notes</h1>
+<p>In this chapter, we managed to convert strings to numbers, but what
+kind of numbers are they? To get the numbers, we were using operators
+that are available in Raku, such as binary <code>+</code>, arithmetic
+operators, and the power operator <code>**</code>. The result of the
+calculations that use all of those is a number that is an instance of
+one of the numeric types that Raku offers.</p>
+<p>You can see the class name by explicitly printing it in the test
+loop:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="s">&quot;OK $number = &quot;</span> ~ <span class="nv">$test</span>.<span class="n">made</span> ~
+    <span class="s">' ('</span> ~ <span class="nv">$test</span>.<span class="n">made</span>.^<span class="n">name</span> ~ <span class="s">')'</span>;</pre></div>
+
+<p>All numbers that did not contain a decimal point became
+<code>Int</code>s, all the rest are <code>Rat</code>s:</p>
+<div class="highlight"><pre>OK 7 = 7 (Int)
+OK 77 = 77 (Int)
+OK -84 = -84 (Int)
+OK +7 = 7 (Int)
+OK 0 = 0 (Int)
+OK 3.14 = 3.14 (Rat)
+OK -2.78 = -2.78 (Rat)
+OK 5.0 = 5 (Rat)
+OK .5 = 0.5 (Rat)
+OK -5.3 = -5.3 (Rat)
+OK -.3 = -0.3 (Rat)
+OK 3E4 = 30000 (Int)
+OK -33E55 = -330000000000000000000000000000000000000000000000000000000 (Int)
+OK 3E-3 = 0.003 (Rat)
+OK -1E-2 = -0.01 (Rat)
+OK 3.14E2 = 314 (Rat)
+OK .5E-3 = 0.0005 (Rat)</pre></div>
+<p>Now, look again at the <code>floating-point</code> method in the
+actions class. Although its algorithm is straightforward and produces
+correct results, it is quite wordy and needs a few lines of code.
+Alternatively, you can pass this task to the host language itself! Let
+Raku parse the floating-point number for you:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$n</span> = +<span class="s">&quot;$int.$frac&quot;</span>;
+<span class="nv">$/</span>.<span class="n">make</span>(<span class="nv">$n</span>);</pre></div>
+
+<p>Wait, what is <code>"$int.$frac"</code>? It is a string that was
+matched by the <code>floating-point</code> token during the parsing
+process, and it means that instead of reconstructing the string and
+converting it to a number, we can access it directly converting the
+<code>$/</code> object to a number directly:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">method</span> <span class="n">floating-point</span>(<span class="nv">$/</span>) {
+    <span class="nv">$/</span>.<span class="n">make</span>(+<span class="nv">$/</span>);
+}</pre></div>
+
+<p>Does this code resemble something that you’ve already seen? The body
+of this method is exactly the same as the body of the
+<code>integer</code> method:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">method</span> <span class="n">integer</span>(<span class="nv">$/</span>) {
+    <span class="nv">$/</span>.<span class="n">make</span>(+<span class="nv">$/</span>);
+}</pre></div>
+
+<p>Indeed, we allowed Raku to build the number for us when it contained
+digits only. We can delegate it again if we met a number with a decimal
+point, too.</p>
+<p>But that’s not all. The numbers that our <code>Number</code> grammar
+allows are all valid Raku numbers, and it is possible to replace all our
+actions with a single line of code:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">NumberActions</span> {
+    <span class="k">method</span> <span class="n">TOP</span>(<span class="nv">$/</span>) {
+        <span class="nv">$/</span>.<span class="n">make</span>(+<span class="nv">$/</span>);
+    }
+}</pre></div>
+
+<p>After this change, the types of the number differ a bit. Raku treats
+a number in the scientific notation as <code>Num</code>, not
+<code>Rat</code>. You can confirm that by running the test loop
+again:</p>
+<div class="highlight"><pre>OK 7 = 7 (Int)
+OK 77 = 77 (Int)
+OK -84 = -84 (Int)
+OK +7 = 7 (Int)
+OK 0 = 0 (Int)
+OK 3.14 = 3.14 (Rat)
+OK -2.78 = -2.78 (Rat)
+OK 5.0 = 5 (Rat)
+OK .5 = 0.5 (Rat)
+OK -5.3 = -5.3 (Rat)
+OK -.3 = -0.3 (Rat)
+OK 3E4 = 30000 (Num)
+OK -33E55 = -3.3e+56 (Num)
+OK 3E-3 = 0.003 (Num)
+OK -1E-2 = -0.01 (Num)
+OK 3.14E2 = 314 (Num)
+OK .5E-3 = 0.0005 (Num)</pre></div>
+<p>The output format here also depends on how Raku prints the numbers of
+different numerical types.</p>
+<p>In this particular task, all our manual labour is replaced by the
+compiler actions in the host language. Of course, that was possible
+because we chose standard data formats that many programming languages
+can deal with. Do not be afraid to remove your own code as soon as you
+discovered a simpler way to solve the task.</p>
+<p>The techniques of working with AST that were demonstrated in this
+chapter, are the base for our future adventure in this book. Stay
+tuned!</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/creating-a-compiler-in-raku/using-ast">Using AST</a>
+  |   <a
+href="/raku-books/creating-a-compiler-in-raku/creating-a-calculator">Creating a
+Calculator</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

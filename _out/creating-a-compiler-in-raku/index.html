@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Creating a Compiler in Raku — Raku Books</title>
+    <meta property="og:title" content="Creating a Compiler in Raku — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku" selected>Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a></p>
+<div class="book-hero">
+<div class="book-covers">
+<img class="book-cover" src="/raku-books/assets/covers/creating-a-compiler-in-raku.jpg" alt="Creating a Compiler in Raku cover" loading="lazy">
+</div>
+<section id="creating-a-compiler-in-raku" class="book-hero-text"
+data-markdown="1">
+<h1>Creating a Compiler in Raku</h1>
+<p>A step-by-step coding essay that builds a working compiler in Raku —
+from a tiny translator through grammars, actions, and an abstract syntax
+tree to a full calculator and interpreter.</p>
+<dl class="book-meta">
+<div>
+<dt>
+Author
+</dt>
+<dd>
+Andrew Shitov
+</dd>
+</div>
+<div>
+<dt>
+Published
+</dt>
+<dd>
+1 November 2018 · DeepText, Amsterdam
+</dd>
+</div>
+<div>
+<dt>
+ISBN
+</dt>
+<dd>
+978-90-821568-1-2
+</dd>
+</div>
+</dl>
+</section>
+</div>
+<p class="book-banner">
+📝 This book is not yet published — the text here is still under
+proofreading.
+</p>
+<h4 id="creating-a-simple-translator"><a
+href="/raku-books/creating-a-compiler-in-raku/creating-a-simple-translator">Creating
+a Simple Translator</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/grammar">Grammar</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/actions">Actions</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/modules">Modules</a></li>
+</ul>
+<h4 id="parsing-a-number"><a
+href="/raku-books/creating-a-compiler-in-raku/parsing-a-number">Parsing a
+Number</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/finding-a-number">Finding a
+number</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/getting-the-value">Getting the
+value</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/using-ast">Using AST</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/final-notes">Final
+notes</a></li>
+</ul>
+<h4 id="creating-a-calculator"><a
+href="/raku-books/creating-a-compiler-in-raku/creating-a-calculator">Creating a
+Calculator</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/enrolling-a-sum">Enrolling a
+sum</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/premature-optimization">Premature
+optimization</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/more-operands">More
+operands</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/a-diversity-test">A diversity
+test</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/adding-more-math">Adding more
+math</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/testing-the-code">Testing the
+code</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/adding-more-power">Adding more
+power</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/allowing-parentheses">Allowing
+parentheses</a></li>
+</ul>
+<h4 id="a-better-translator"><a
+href="/raku-books/creating-a-compiler-in-raku/a-better-translator">A Better
+Translator</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/skipping-comments">Skipping
+comments</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/sophisticated-numbers">Sophisticated
+numbers</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/sophisticated-expressions">Sophisticated
+expressions</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/using-variables">Using
+variables</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/declaration-with-initialisation">Declaration
+with initialisation</a></li>
+</ul>
+<h4 id="working-on-grammar"><a
+href="/raku-books/creating-a-compiler-in-raku/working-on-grammar">Working on
+Grammar</a></h4>
+<ul>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/executable">Executable</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/composing-and-inheriting-grammars">Composing
+and inheriting grammars</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/reviewing-the-calculator">Reviewing
+the calculator</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/using-multi-rules">Using
+multi-rules</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/get-rid-of-globals">Get rid of
+globals</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/better-variable-names">Better
+variable names</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/functions-take-expressions">Functions
+take expressions</a></li>
+</ul>
+<h4 id="dealing-with-strings"><a
+href="/raku-books/creating-a-compiler-in-raku/dealing-with-strings">Dealing with
+Strings</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/strings">Strings</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/escaping-quotes">Escaping
+quotes</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/variable-interpolation">Variable
+interpolation</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/indexing-a-string">Indexing a
+string</a></li>
+</ul>
+<h4 id="arrays-and-hashes"><a
+href="/raku-books/creating-a-compiler-in-raku/arrays-and-hashes">Arrays and
+Hashes</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/arrays">Arrays</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/assigning-to-an-array-item">Assigning
+to an array item</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/off-topic-the-joy-of-syntax">Off-topic:
+The joy of syntax</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/accessing-array-elements">Accessing
+array elements</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/list-assignments">List
+assignments</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/printing-arrays">Printing
+arrays</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/hashes">Hashes</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/review-and-test">Review and
+test</a></li>
+</ul>
+<h4 id="building-ast"><a
+href="/raku-books/creating-a-compiler-in-raku/building-ast">Building AST</a></h4>
+<ul>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/thinking-of-the-if-keyword">Thinking
+of the if keyword</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/the-ast-blocks">The AST
+blocks</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/value-nodes">Value
+nodes</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/declaring-strings">Declaring
+strings</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/declaring-arrays-and-hashes">Declaring
+arrays and hashes</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/scalar-assignment">Scalar
+assignment</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/working-with-indices">Working
+with indices</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/array-and-hash-assignment-and-initialisation">Array
+and hash assignment and initialisation</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/ast-for-expressions">AST for
+expressions</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/function-calls">Function
+calls</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/final-tuning">Final
+tuning</a></li>
+</ul>
+<h4 id="evaluating-ast"><a
+href="/raku-books/creating-a-compiler-in-raku/evaluating-ast">Evaluating
+AST</a></h4>
+<ul>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/evaluating-from-the-top">Evaluating
+from the TOP</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/working-with-variables">Working with
+variables</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/string-interpolation">String
+interpolation</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/using-raku-getters">Using Raku
+getters</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/interpolating-everywhere">Interpolating
+everywhere</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/arithmetic-operations">Arithmetic
+operations</a></li>
+</ul>
+<h4 id="test-suite"><a
+href="/raku-books/creating-a-compiler-in-raku/test-suite">Test suite</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/test-runner">Test
+runner</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/tests">Tests</a>
+<ul>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/tests/numbers">Numbers</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/tests/strings-2">Strings</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/tests/expressions">Expressions</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/tests/arrays-and-hashes-2">Arrays and
+hashes</a></li>
+</ul></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/spotting-the-errors">Spotting
+the errors</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/feature-coverage">Feature
+coverage</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/it-is-never-enough">It is
+never enough</a></li>
+</ul>
+<h4 id="control-flow"><a
+href="/raku-books/creating-a-compiler-in-raku/control-flow">Control Flow</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/implementing-if">Implementing
+if</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/implementing-else">Implementing
+else</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/implementing-a-loop">Implementing a
+loop</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/statement-blocks">Statement
+blocks</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/blocks-in-the-ast">Blocks in
+the AST</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/a-real-life-test">A real-life
+test</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/conditional-operators">Conditional
+operators</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/implementing-while">Implementing
+while</a></li>
+</ul>
+<h4 id="functions"><a
+href="/raku-books/creating-a-compiler-in-raku/functions">Functions</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/built-in-functions">Built-in
+functions</a>
+<ul>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/built-in-functions/print">print</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/built-in-functions/len">len</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/built-in-functions/keys">keys</a></li>
+</ul></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/user-defined-functions">User-defined
+functions</a>
+<ul>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/user-defined-functions/defining-a-function">Defining
+a function</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/user-defined-functions/calling-a-function">Calling
+a function</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/user-defined-functions/returning-a-value">Returning
+a value</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/user-defined-functions/the-scope-of-variables">The
+scope of variables</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/user-defined-functions/recursion">Recursion</a></li>
+</ul></li>
+</ul>
+<h4 id="optimising-the-ast"><a
+href="/raku-books/creating-a-compiler-in-raku/optimising-the-ast">Optimising the
+AST</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/the-optimiser-class">The
+optimiser class</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/constant-folding">Constant
+folding</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/algebraic-identities">Algebraic
+identities</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/eliminating-dead-branches">Eliminating
+dead branches</a></li>
+</ul>
+<h4 id="afterword"><a
+href="/raku-books/creating-a-compiler-in-raku/afterword">Afterword</a></h4>
+<ul>
+<li><a href="/raku-books/creating-a-compiler-in-raku/a-proper-command-line">A
+proper command line</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/looking-back">Looking
+back</a></li>
+</ul>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/using-raku/whats-next">What’s next?</a>   |   <a
+href="/raku-books/creating-a-compiler-in-raku/creating-a-simple-translator">Creating
+a Simple Translator</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

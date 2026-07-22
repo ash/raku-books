@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>98. Text to Morse code — Raku Books</title>
+    <meta property="og:title" content="98. Text to Morse code — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku" selected>Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/using-raku">Using Raku</a> /
+<a href="/raku-books/using-raku/miscellaneous">Miscellaneous</a></p>
+<h1 id="text-to-morse-code">98. Text to Morse code</h1>
+<p><em>Convert the given text to the Morse code.</em></p>
+<p>Converting text to the Morse code is a relatively easy task. The
+solution is to replace all the alphanumeric characters with the
+corresponding representation in the Morse code.</p>
+<p>In this solution, all the other characters are ignored and are
+removed from the source string. In the Morse code, letters are separated
+by the duration of one dash, and words are separated by the duration of
+approximately 2.5 dashes, so in the program, one space is used for
+separating characters, and three spaces separate the words.</p>
+<p>The above logic is programmed in the series of replacements. First,
+lowercase the whole phrase (there is no distinction between lower- and
+uppercase letters) and then remove all the non-alphanumeric characters
+and increase the distance between the words. Finally, replace each
+remaining printable symbol with the corresponding Morse sequence.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">%code</span> = (
+    <span class="n">a</span> =&gt; <span class="s">'.-'</span>,      <span class="n">b</span> =&gt; <span class="s">'-...'</span>,    <span class="n">c</span> =&gt; <span class="s">'-.-.'</span>,
+    <span class="n">d</span> =&gt; <span class="s">'-..'</span>,     <span class="n">e</span> =&gt; <span class="s">'.'</span>,       <span class="n">f</span> =&gt; <span class="s">'..-.'</span>,
+
+    <span class="n">j</span> =&gt; <span class="s">'.---'</span>,    <span class="n">k</span> =&gt; <span class="s">'-.-'</span>,     <span class="n">l</span> =&gt; <span class="s">'.-..'</span>,
+    <span class="n">m</span> =&gt; <span class="s">'--'</span>,      <span class="n">n</span> =&gt; <span class="s">'-.'</span>,      <span class="n">o</span> =&gt; <span class="s">'---'</span>,
+    <span class="n">p</span> =&gt; <span class="s">'.--.'</span>,    <span class="n">q</span> =&gt; <span class="s">'--.-'</span>,    <span class="n">r</span> =&gt; <span class="s">'.-.'</span>,
+    <span class="n">s</span> =&gt; <span class="s">'...'</span>,     <span class="n">t</span> =&gt; <span class="s">'-'</span>,       <span class="n">u</span> =&gt; <span class="s">'..-'</span>,
+    <span class="n">v</span> =&gt; <span class="s">'...-'</span>,    <span class="n">w</span> =&gt; <span class="s">'.--'</span>,     <span class="n">x</span> =&gt; <span class="s">'-..-'</span>,
+    <span class="n">y</span> =&gt; <span class="s">'-.--'</span>,    <span class="n">z</span> =&gt; <span class="s">'--..'</span>,    <span class="mi">0</span> =&gt; <span class="s">'-----'</span>,
+    <span class="mi">1</span> =&gt; <span class="s">'.----'</span>,   <span class="mi">2</span> =&gt; <span class="s">'..---'</span>,   <span class="mi">3</span> =&gt; <span class="s">'...--'</span>,
+
+    <span class="mi">7</span> =&gt; <span class="s">'--...'</span>,   <span class="mi">8</span> =&gt; <span class="s">'---..'</span>,   <span class="mi">9</span> =&gt; <span class="s">'----.'</span>
+);
+<span class="k">my</span> <span class="nv">$phrase</span> = <span class="nb">prompt</span>(<span class="s">'Your phrase in plain text&gt; '</span>);
+
+<span class="nv">$phrase</span>.=<span class="nb">lc</span>;
+<span class="nv">$phrase</span> ~~ <span class="sr">s:g/&lt;-[a..z0..9]&gt;/ /</span>;
+<span class="nv">$phrase</span> ~~ <span class="sr">s:g/\s+/  /</span>;
+<span class="nv">$phrase</span> ~~ <span class="sr">s:g/(&lt;[a..z0..9]&gt;)/%code{$0} /</span>;
+
+<span class="nb">say</span> <span class="nv">$phrase</span>;</pre></div>
+
+<p>Let us test this on a random phrase:</p>
+<div class="highlight"><pre>$ raku morse.rk
+Your phrase in plain text&gt; Hello, World!</pre></div>
+<p>The conversion table takes the biggest part of the program.</p>
+<p>The regexes show how character classes are created.</p>
+<p>A characters class with a range of symbols:</p>
+<div class="highlight"><pre>&lt;[a..z0..9]&gt;</pre></div>
+<p>A negative character class, which matches with any character other
+than the one from the range:</p>
+<div class="highlight"><pre>&lt;-[a..z0..9]&gt;</pre></div>
+<p>These character classes list all the allowed characters that can be
+encoded by the given <code>%code</code> hash. It is also possible to use
+<code>\w</code> and <code>\W</code> or <code>&lt;alnum&gt;</code> and
+<code>&lt;!alnum&gt;</code> instead of the above regexes if you are sure
+that the input string is pure ASCII.</p>
+<p>All the regexes in the program come with the <code>:g</code> adverb
+to make them global. Regex matching uses the double tilde
+<code>~~</code> operator for both matching and replacement.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/using-raku/reading-directory-content">97. Reading
+directory content</a>   |   <a href="/raku-books/using-raku/morse-to-text">99.
+Morse to text</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

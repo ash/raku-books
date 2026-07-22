@@ -1,0 +1,178 @@
+{% comment %}
+#### prev
+* prev_part: {{prev_part.title}}
+* prev_section: {{prev_section.title}}, part={{prev_section_part.title}}
+* prev_topic: {{prev_topic.title}}, part={{prev_topic_part.title}}, section={{prev_topic_section.title}}
+
+#### curr
+
+* curr_part: {{curr_part.title}}
+* curr_section: {{curr_section.title}}
+* curr_topic: {{curr_topic.title}}
+
+#### next
+
+* next_part: {{next_part.title}}
+* next_section: {{next_section.title}}, part={{next_section_part.title}}
+* next_topic: {{next_topic.title}}, part={{next_topic_part.title}}, section={{next_topic_section.title}}
+{% endcomment %}
+
+{% if curr_quiz == nil and L3 != 'exercises' %}
+    {% include topics.html %}
+{% endif %}
+
+{%- if next_quiz and next_quiz_topic and next_quiz_topic.url == curr_topic.url %}
+%%practiceblock
+## {{strings.More_practice}}
+
+* [{{next_quiz.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/{{curr_topic.url}}/{{next_quiz.url}})
+
+%%/practiceblock
+{%- endif %}
+{%- if next_quiz and next_quiz_section and next_quiz_section.url == curr_section.url and curr_quiz_topic == nil %}
+%%practiceblock
+## {{strings.More_practice}}
+
+* [{{next_quiz.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/{{next_quiz.url}})
+
+%%/practiceblock
+{% endif %}
+
+{%- if curr_topic and L3 != 'exercises' %}
+    {%- if curr_topic.quizzes and curr_quiz == nil %}
+%%practiceblock
+## {{strings.Practice}}
+
+{% include decline.html number=curr_topic.quizzes.size word=strings.Complete_the_quiz text_only=1 %}
+
+        {%- for quiz in curr_topic.quizzes %}
+* [{{quiz.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/{{curr_topic.url}}/{{quiz.url}})
+        {%- endfor %}
+    {% endif %}
+%%/practiceblock
+{% else %}
+    {% if curr_section.quizzes and curr_quiz == nil and L3 != 'exercises' %}
+%%practiceblock
+## {{strings.Practice}}
+
+{% include decline.html number=curr_section.quizzes.size word=strings.Complete_the_quiz text_only=1 %}
+
+        {%- for quiz in curr_section.quizzes %}
+* [{{quiz.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/{{quiz.url}})
+        {% endfor %}
+%%/practiceblock
+    {% endif %}
+{% endif %}
+
+
+{% if curr_quiz == nil and curr_exercise == nil %}
+{% if curr_section.exercises and curr_section.items.last.url != curr_topic.url and curr_topic == nil %}
+%%exercisesblock
+{% if curr_section.exercises.size != 1 %}
+{% if L3 != 'exercises' %}
+## {{strings.Exercises}}
+{% endif %}
+{% if L3 != 'exercises' %}{{strings.This_section_contains}} [{% include decline.html number=curr_section.exercises.size word=strings.exercise %}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises){% else %}{{strings.This_section_contains}} {% include decline.html number=curr_section.exercises.size word=strings.exercise %}{% endif %}. {% if L3 != 'exercises' %}{{strings.Examine_the_topics}}{% endif %}
+
+{%- for exercise in curr_section.exercises %}
+1. [{{exercise.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises/{{exercise.url}})
+{%- endfor %}
+{% else %}
+{% if L3 != 'exercises' %}
+## {{strings.Exercise}}
+{% endif %}
+{% if L3 != 'exercises' %}{{strings.Contains_an_exercise}}{% else %}{{strings.One_exercise}}{% endif %}
+
+💪 [{{curr_section.exercises[0].title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises/{{curr_section.exercises[0].url}})
+{% endif %}
+%%/exercisesblock
+{% endif %}
+
+{% if L3 == 'exercises' %}
+## {{strings.Refresh_your_knowledge}}
+
+{{strings.Refer_to_contents}}
+
+* [{{curr_section.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}})
+{%- if curr_section.items.size %}
+{%- for topic in curr_section.items %}
+    - [{{topic.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/{{topic.url}})
+{%- endfor %}
+
+{% endif %}
+
+
+{% endif %}
+{% endif %}
+
+{% if next_exercise %}
+%%exercisesblock
+## {{strings.Next_exercise}}
+
+💪 [{{next_exercise.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises/{{next_exercise.url}})
+%%/exercisesblock
+{% endif %}
+
+## {{strings.Course_navigation}}
+
+←
+{%- if prev_section == nil %}
+[Start]({{top}}/)
+{%- endif %}
+{%- if curr_topic %}
+    {%- if prev_topic_section.url == curr_section.url %}
+        [{{curr_section.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}) / [{{prev_topic.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/{{prev_topic.url}})
+    {%- else %}
+        [{{curr_section.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}})
+    {%- endif %}
+{%- else %}
+    [{{prev_section.title}}]({{top}}/{{prev_section_part.url}}/{{prev_section.url}})
+    {%- if prev_section.items.size != nil %}
+        / [{{prev_section.items.last.title}}]({{top}}/{{prev_section_part.url}}/{{prev_section.url}}/{{prev_section.items.last.url}})
+    {%- endif %}
+{%- endif %}
+&nbsp;&nbsp;|&nbsp;&nbsp;
+{%- if L3 == 'exercises' %}
+    [{{next_section.title}}]({{top}}/{{curr_part.url}}/{{next_section.url}})
+{%- elsif curr_section.exercises and curr_section.items.last.url == curr_topic.url %}
+    {%-if curr_section.exercises.size != 1 %}
+        💪 [{{strings.Exercises}}: {{curr_section.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises)
+    {%- else %}
+        💪 [{{strings.Exercise}}: {{curr_section.exercises[0].title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises/{{curr_section.exercises[0].url}})
+    {%- endif %}
+{%- else %}
+{%- if curr_topic %}
+    {%- if next_topic_section.url == curr_section.url %}
+        [{{curr_section.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}) / [{{next_topic.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/{{next_topic.url}})
+    {%- else %}
+        [{{next_section.title}}]({{top}}/{{next_section_part.url}}/{{next_section.url}})
+    {%- endif %}
+{%- else %}
+    {%- if curr_section.items.size != nil %}
+        [{{curr_section.items[0].title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/{{curr_section.items[0].url}})
+    {%- else %}
+        [{{next_section.title}}]({{top}}/{{next_section_part.url}}/{{next_section.url}})
+    {%- endif %}
+{%- endif %}
+{%- endif %}
+→
+
+{% if curr_section.exercises and curr_section.items.last.url != curr_topic.url and curr_topic != nil %}
+{%if curr_section.exercises.size != 1 %}
+<br />
+💪 Or jump directly [to the exercises to this section]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises).
+{% else %}
+<br />
+💪 Or jump directly [to the exercise to this section]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises/{{curr_section.exercises[0].url}}).
+{% endif %}
+{% endif %}
+
+{% if curr_exercise %}
+<!-- <style>
+    body {
+        background-color: #f6fdff;
+    }
+</style> -->
+{% endif %}
+
+{% include translations.html %}

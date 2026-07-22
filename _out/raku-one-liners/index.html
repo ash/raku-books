@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Raku One-Liners — Raku Books</title>
+    <meta property="og:title" content="Raku One-Liners — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners" selected>Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a></p>
+<div class="book-hero">
+<div class="book-covers">
+<img class="book-cover" src="/raku-books/assets/covers/raku-one-liners.jpg" alt="Raku One-Liners cover" loading="lazy">
+</div>
+<section id="raku-one-liners" class="book-hero-text" data-markdown="1">
+<h1>Raku One-Liners</h1>
+<p>Short, powerful Raku programs — command-line one-liners for files,
+numbers, strings, and dates, a tour of the language’s most expressive
+syntax, a round of Raku golf, and a look behind floating-point
+arithmetic.</p>
+<dl class="book-meta">
+<div>
+<dt>
+Author
+</dt>
+<dd>
+Andrew Shitov
+</dd>
+</div>
+<div>
+<dt>
+Published
+</dt>
+<dd>
+18 October 2019 · DeepText, Amsterdam
+</dd>
+</div>
+<div>
+<dt>
+ISBN
+</dt>
+<dd>
+978-90-821568-9-8
+</dd>
+</div>
+<div>
+<dt>
+Pages
+</dt>
+<dd>
+93
+</dd>
+</div>
+</dl>
+</section>
+</div>
+<h4 id="preface"><a href="/raku-books/raku-one-liners/preface">Preface</a></h4>
+<h4 id="command-line-options"><a
+href="/raku-books/raku-one-liners/command-line-options">Command-Line
+Options</a></h4>
+<ul>
+<li><a href="/raku-books/raku-one-liners/using-command-line-options">Using
+command-line options</a></li>
+<li><a href="/raku-books/raku-one-liners/examples-of-short-one-lines">Examples of
+short one-lines</a></li>
+<li><a href="/raku-books/raku-one-liners/reading-files-with-argfiles">Reading files
+with $*ARGFILES</a></li>
+</ul>
+<h4 id="working-with-files"><a
+href="/raku-books/raku-one-liners/working-with-files">Working with Files</a></h4>
+<ul>
+<li><a href="/raku-books/raku-one-liners/renaming-files">Renaming files</a></li>
+<li><a href="/raku-books/raku-one-liners/merging-files-horizontally">Merging files
+horizontally</a></li>
+<li><a href="/raku-books/raku-one-liners/reversing-a-file">Reversing a
+file</a></li>
+</ul>
+<h4 id="working-with-numbers"><a
+href="/raku-books/raku-one-liners/working-with-numbers">Working with
+Numbers</a></h4>
+<ul>
+<li><a href="/raku-books/raku-one-liners/grepping-multiples-of-3-and-5">Grepping
+multiples of 3 and 5</a></li>
+<li><a href="/raku-books/raku-one-liners/generating-random-integers">Generating
+random integers</a></li>
+<li><a href="/raku-books/raku-one-liners/working-with-big-numbers">Working with big
+numbers</a></li>
+<li><a href="/raku-books/raku-one-liners/testing-palindromic-numbers">Testing
+palindromic numbers</a></li>
+<li><a href="/raku-books/raku-one-liners/adding-up-even-fibonacci-numbers">Adding
+up even Fibonacci numbers</a></li>
+<li><a href="/raku-books/raku-one-liners/playing-with-fibonacci-numbers">Playing
+with Fibonacci numbers</a></li>
+<li><a href="/raku-books/raku-one-liners/distance-between-two-points">Distance
+between two points</a></li>
+<li><a href="/raku-books/raku-one-liners/playing-with-prime-numbers">Playing with
+prime numbers</a></li>
+<li><a
+href="/raku-books/raku-one-liners/using-map-and-seq-to-compute-the-value-of">Using
+map and Seq to compute the value of π</a></li>
+<li><a href="/raku-books/raku-one-liners/computing-totals">Computing
+totals</a></li>
+<li><a
+href="/raku-books/raku-one-liners/sum-of-the-numbers-equal-to-the-sum-of-factorials-of-digits">Sum
+of the numbers equal to the sum of factorials of digits</a></li>
+<li><a href="/raku-books/raku-one-liners/via-the-cubes">42 via the cubes</a></li>
+</ul>
+<h4 id="working-with-strings"><a
+href="/raku-books/raku-one-liners/working-with-strings">Working with
+Strings</a></h4>
+<ul>
+<li><a href="/raku-books/raku-one-liners/generating-random-passwords">Generating
+random passwords</a></li>
+<li><a href="/raku-books/raku-one-liners/the-joy-of-unicode">The joy of
+Unicode</a></li>
+</ul>
+<h4 id="working-with-dates"><a
+href="/raku-books/raku-one-liners/working-with-dates">Working with Dates</a></h4>
+<ul>
+<li><a href="/raku-books/raku-one-liners/whats-the-date-today">What’s the date
+today?</a></li>
+<li><a
+href="/raku-books/raku-one-liners/how-many-days-in-the-century-match-the-condition">How
+many days in the century match the condition?</a></li>
+<li><a
+href="/raku-books/raku-one-liners/another-solution-of-the-same-prob-lem">Another
+solution of the same prob- lem</a></li>
+</ul>
+<h4 id="raku-syntax"><a href="/raku-books/raku-one-liners/raku-syntax">Raku
+Syntax</a></h4>
+<ul>
+<li><a href="/raku-books/raku-one-liners/more-on-x-and">More on X, .., and
+…</a></li>
+<li><a href="/raku-books/raku-one-liners/reduction-operator">Reduction
+operator</a></li>
+<li><a href="/raku-books/raku-one-liners/all-the-stars-of-raku">All the stars of
+Raku</a></li>
+<li><a href="/raku-books/raku-one-liners/the-eval-routine">The EVAL
+routine</a></li>
+</ul>
+<h4 id="raku-golf"><a href="/raku-books/raku-one-liners/raku-golf">Raku
+Golf</a></h4>
+<ul>
+<li><a href="/raku-books/raku-one-liners/the-first-test">The first test</a></li>
+<li><a href="/raku-books/raku-one-liners/the-second-test">The second test</a></li>
+<li><a
+href="/raku-books/raku-one-liners/tips-and-ideas-for-the-raku-golf-code">Tips and
+ideas for the Raku Golf code</a></li>
+</ul>
+<h4 id="appendix-on-compiler-internals"><a
+href="/raku-books/raku-one-liners/appendix-on-compiler-internals">Appendix on
+Compiler Internals</a></h4>
+<ul>
+<li><a href="/raku-books/raku-one-liners/whats-behind-0-1-0-2">What’s behind 0.1 +
+0.2</a></li>
+</ul>
+<h4 id="afterword"><a
+href="/raku-books/raku-one-liners/afterword">Afterword</a></h4>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/the-raku-course">The Raku Course</a>   |   <a
+href="/raku-books/raku-one-liners/preface">Preface</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

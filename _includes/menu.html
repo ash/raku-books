@@ -1,0 +1,133 @@
+{% include languages.html %}
+
+{% assign urlparts = url | remove_first: "/" | split: "/" %}
+{% assign L1 = urlparts[0] | default '' %}
+{% assign L2 = urlparts[1] | default '' %}
+{% assign L3 = urlparts[2] | default '' %}
+{% assign L4 = urlparts[3] | default '' %}
+{% assign L5 = urlparts[4] | default '' %}
+
+{% assign levels = urlparts.size %}
+
+{% comment %}
+URL levels: {{ levels }} 
+
+ L1         L2               L3
+/essentials/running-programs/from-ide/
+ ^ part     ^ section        ^ topic
+  | subpart is not part of an URL
+{% endcomment %}
+
+{% for part in toc %}
+    {% if part.url == L1 %}
+        {% assign curr_part = part %}
+    {% else %}
+        {% if curr_part == nil %}
+            {% assign prev_part = part %}
+        {% endif %}
+        {% if curr_part != nil and next_part == nil %}
+            {% assign next_part = part %}
+        {% endif %}
+    {% endif %}
+
+    {% for subpart in part.items %}
+        {% for section in subpart.items %}
+            {% if part.url == L1 %}
+                {% if section.url == L2 %}
+                    {% assign curr_subpart = subpart %}
+                    {% assign curr_section = section %}
+                {% else %}
+                    {% if curr_section == nil %}
+                        {% assign prev_section = section %}
+                        {% assign prev_section_part = part %}
+                    {% endif %}
+                    {% if curr_section != nil and next_section == nil %}
+                        {% assign next_section = section %}
+                        {% assign next_section_part = part %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+            {% if section.url == L2 %}
+                {% for topic in section.items %}                
+                    {% if topic.url == L3 %}
+                        {% assign curr_topic = topic %}
+                    {% else %}
+                        {% if curr_topic == nil %}
+                            {% assign prev_topic = topic %}
+                            {% assign prev_topic_section = section %}
+                            {% assign prev_topic_part = part %}
+                        {% endif %}
+                        {% if curr_topic != nil and next_topic == nil %}
+                            {% assign next_topic = topic %}
+                            {% assign next_topic_section = section %}
+                            {% assign next_topic_part = part %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if topic.url == L3 %}
+                        {% for quiz in topic.quizzes %}
+                            {% if quiz.url == L4 %}
+                                {% assign curr_quiz = quiz %}
+                                {% assign curr_quiz_topic = topic %}
+                            {% else %}
+                                {% if curr_quiz != nil and next_quiz == nil %}
+                                    {% assign next_quiz = quiz %}
+                                    {% assign next_quiz_topic = topic %}                                    
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            
+                {% for quiz in section.quizzes %}
+                    {% if quiz.url == L3 %}
+                        {% assign curr_quiz = quiz %}
+                    {% else %}
+                        {% if curr_quiz and next_quiz == nil %}
+                            {% assign next_quiz = quiz %}
+                            {% assign next_quiz_section = section %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for exercise in section.exercises %}
+                    {% if exercise.url == L4 %}
+                        {% assign curr_exercise = exercise %}
+                    {% else %}
+                        {% if curr_exercise != nil and next_exercise == nil %}
+                            {% assign next_exercise = exercise %}
+                            {% assign next_exercise_section = section %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+{% endfor %}
+
+[{{course_title}}]({{top}}/)
+{%- if curr_part    and curr_section                       %} / [{{curr_part.title}}]({{top}}/{{curr_part.url}}){%- endif %}
+{%- if curr_section and curr_topic                         %} / [{{curr_section.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}){%- endif %}
+{%- if curr_topic   and curr_quiz                          %} / [{{curr_topic.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/{{curr_topic.url}}){%- endif %}
+{%- if curr_section and curr_topic == nil and curr_quiz    %} / [{{curr_section.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}){%- endif %}
+{%- if L3 == 'exercises'                                   %} / [{{curr_section.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/){%- endif %}
+{%- if curr_exercise                                       %} / [{{strings.Exercises}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises/){%- endif %}
+{%- if curr_exercise and L5 == 'solution'                  %} / [{{curr_exercise.title}}]({{top}}/{{curr_part.url}}/{{curr_section.url}}/exercises/{{curr_exercise.url}}){%- endif %}
+
+{% capture title %}
+{%- if    curr_part       and curr_section == nil and curr_part.long_title                             %}{{ curr_part.long_title    }}
+{%- elsif curr_part       and curr_section == nil and curr_part.long_title == nil                      %}{{ curr_part.title         }}
+{%- elsif curr_section and curr_topic   == nil and curr_quiz == nil and curr_section.long_title        %}{{ curr_section.long_title }}
+{%- elsif curr_section and curr_topic   == nil and curr_quiz == nil and curr_section.long_title == nil and L3 != 'exercises' and curr_exercise == nil %}{{ curr_section.title }}
+{%- elsif curr_section and curr_topic   == nil and curr_quiz == nil and L3 == 'exercises' and curr_exercise == nil               %}{{strings.Exercises}}: {{ curr_section.title }}
+{%- elsif curr_section and curr_topic   == nil and curr_quiz == nil and L3 == 'exercises' and curr_exercise and L5 == 'solution' %}{{strings.Solution}}: {{ curr_exercise.title }}
+{%- elsif curr_section and curr_topic   == nil and curr_quiz == nil and L3 == 'exercises' and curr_exercise %}{{ curr_exercise.title }}
+{%- elsif curr_topic   and curr_quiz    == nil and curr_topic.long_title                               %}{{ curr_topic.long_title   }}
+{%- elsif curr_topic   and curr_quiz    == nil and curr_topic.long_title == nil                        %}{{ curr_topic.title        }}
+{%- elsif curr_quiz                                                                                    %}{{ curr_quiz.title         }}
+{%- endif %}
+{% endcapture %}
+# {{title}}

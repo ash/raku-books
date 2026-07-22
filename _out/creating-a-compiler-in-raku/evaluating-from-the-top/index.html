@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Evaluating from the TOP — Raku Books</title>
+    <meta property="og:title" content="Evaluating from the TOP — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku" selected>Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a
+href="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</a> / <a
+href="/raku-books/creating-a-compiler-in-raku/evaluating-ast">Evaluating
+AST</a></p>
+<h1 id="evaluating-from-the-top">Evaluating from the TOP</h1>
+<p>The AST tree elements bubble up from the leaf rules and tokens to the
+TOP rule. Let us take the final AST out of the grammar:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">method</span> <span class="n">TOP</span>(<span class="nv">$/</span>) {
+    <span class="k">my</span> <span class="nv">$top</span> = <span class="n">AST::TOP</span>.<span class="nb">new</span>;
+    
+    . . .
+    
+    <span class="nv">$/</span>.<span class="n">make</span>(<span class="nv">$top</span>);
+}</pre></div>
+
+<p>While we were building the tree, the pair of methods
+<code>make</code> and <code>made</code> gave you the way to pass a tree
+fragment to the parent node. When you use <code>make</code> at the
+<code>TOP</code> level, you get the data as the result of the
+<code>parse</code> method:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$ast</span> = <span class="n">Lingua</span>.<span class="n">parse</span>(<span class="nv">$code</span>, :<span class="n">actions</span>(<span class="n">LinguaActions</span>.<span class="nb">new</span>));
+<span class="nb">say</span> <span class="nv">$ast</span> ?? <span class="s">'OK'</span> !! <span class="n">error</span>(<span class="s">'Error: parse failed'</span>);</pre></div>
+
+<p>We used the resulting AST in a Boolean context but that’s not the
+only thing we can do with it. In this chapter, we will work on creating
+the code to walk along the tree and execute actions that the nodes
+demand.</p>
+<p>In the main script, let’s pass the AST to some <code>eval</code>
+method of the <code>LinguaEvaluator</code> class:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">LinguaEvaluator</span>; 
+
+. . .
+
+<span class="n">my</span> <span class="nv">$eval</span> = <span class="n">LinguaEvaluator</span>.<span class="nb">new</span>();
+<span class="nv">$eval</span>.<span class="n">eval</span>(<span class="nv">$ast</span>.<span class="n">made</span>);</pre></div>
+
+<p>Let me remind two design ideas from the previous chapter. Any AST
+node is a child class of an abstract <code>ASTNode</code> class, and the
+top-level node contains everything in an array of statements:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">ASTNode</span> {    
+}
+
+<span class="k">class</span> <span class="n">AST::TOP</span> <span class="k">is</span> <span class="n">ASTNode</span> {
+    <span class="k">has</span> <span class="n">ASTNode</span> <span class="nv">@.statements</span>;
+}</pre></div>
+
+<p>Executing a program means to run through all the nodes, and thus we
+start from the top level, taking all the statements one by one:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">LinguaAST</span>;
+
+<span class="k">class</span> <span class="n">LinguaEvaluator</span> {    
+    <span class="k">method</span> <span class="n">eval</span>(<span class="n">ASTNode</span> <span class="nv">$top</span>) {
+        <span class="nb">self</span>.<span class="n">eval-node</span>(<span class="nv">$_</span>) <span class="k">for</span> <span class="nv">$top</span>.<span class="n">statements</span>;
+    }
+}</pre></div>
+
+<p>For each statement, the <code>eval-node</code> method is called.
+There is no need to explicitly check the real nature of each statement,
+as we can let Raku do decide, which method to call for a given
+statement, using multiple dispatch.</p>
+<p>Let us start with the simplest program that declares a variable and
+initialises it with a value:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="n">a</span> = <span class="mi">7</span>;</pre></div>
+
+<p>There is a single statement in the AST for this program:</p>
+<div class="highlight"><pre>AST::TOP.new(
+    statements =&gt; Array[ASTNode].new(
+        AST::ScalarDeclaration.new(
+            variable-name =&gt; "a",
+            value =&gt; AST::NumberValue.new(
+                value =&gt; 7
+            )
+        )
+    )
+)</pre></div>
+<p>The type of the node is <code>AST::ScalarDeclaration</code>, so there
+should be a multi-method <code>eval-node</code> that takes an argument
+of that type:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">LinguaEvaluator</span> {
+    . . .
+
+    <span class="n">multi</span> <span class="k">method</span> <span class="n">eval-node</span>(<span class="n">AST::ScalarDeclaration</span> <span class="nv">$node</span>) {
+        . . .
+    }
+}</pre></div>
+
+<p>The job of the method is to create a variable and put a value there.
+But where do you store the variables now? In the previous chapters, the
+<code>%!var</code> hash was part of the <code>LinguaActions</code>
+class. Now, we don’t need it there anymore and can remove the
+<code>hash %!var</code> declaration from the class.</p>
+<p>By the way, that is a good sanity check: there should be no more
+references to the hash in the <code>LinguaActions</code> class. We have
+one left in the <code>LinguaActions.string</code> method where it is
+used to make string interpolation. Let us remove it from there and keep
+the action method as simple as possible:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">LinguaActions</span> {
+    . . .
+    <span class="n">method</span> <span class="n">string</span>(<span class="nv">$/</span>) {
+        <span class="nv">$/</span>.<span class="n">make</span>(<span class="n">AST::StringValue</span>.<span class="nb">new</span>(<span class="n">value</span> =&gt; ~<span class="nv">$/</span>[<span class="mi">0</span>]));
+    }
+    . . .
+}</pre></div>
+
+<p>As there are no data members in the class left, we can get rid of
+instantiating it and pass a class name instead of an instance to the
+parser:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$ast</span> = <span class="n">Lingua</span>.<span class="n">parse</span>(<span class="nv">$code</span>, :<span class="n">actions</span>(<span class="n">LinguaActions</span>));</pre></div>
+
+<p>If everything runs now, then your definition of the
+<code>LinguaActions</code> class is cleaned up completely.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/creating-a-compiler-in-raku/evaluating-ast">Evaluating
+AST</a>   |   <a
+href="/raku-books/creating-a-compiler-in-raku/working-with-variables">Working with
+variables</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

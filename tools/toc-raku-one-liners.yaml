@@ -1,0 +1,105 @@
+- title: Raku One-Liners
+  url: raku-one-liners
+  long_title: Raku One-Liners
+  description: Short, powerful Raku programs — command-line one-liners for files, numbers, strings, and
+    dates, a tour of the language’s most expressive syntax, a round of Raku golf, and a look behind floating-point
+    arithmetic.
+  covers:
+  - raku-one-liners
+  meta:
+    author: Andrew Shitov
+    published: 18 October 2019
+    publisher: DeepText, Amsterdam
+    isbn: 978-90-821568-9-8
+    pages: 93
+  items:
+  - title: Preface
+    url: preface
+  - title: Command-Line Options
+    url: command-line-options
+    items:
+    - title: Using command-line options
+      url: using-command-line-options
+    - title: Examples of short one-lines
+      url: examples-of-short-one-lines
+    - title: Reading files with $*ARGFILES
+      url: reading-files-with-argfiles
+  - title: Working with Files
+    url: working-with-files
+    items:
+    - title: Renaming files
+      url: renaming-files
+    - title: Merging files horizontally
+      url: merging-files-horizontally
+    - title: Reversing a file
+      url: reversing-a-file
+  - title: Working with Numbers
+    url: working-with-numbers
+    items:
+    - title: Grepping multiples of 3 and 5
+      url: grepping-multiples-of-3-and-5
+    - title: Generating random integers
+      url: generating-random-integers
+    - title: Working with big numbers
+      url: working-with-big-numbers
+    - title: Testing palindromic numbers
+      url: testing-palindromic-numbers
+    - title: Adding up even Fibonacci numbers
+      url: adding-up-even-fibonacci-numbers
+    - title: Playing with Fibonacci numbers
+      url: playing-with-fibonacci-numbers
+    - title: Distance between two points
+      url: distance-between-two-points
+    - title: Playing with prime numbers
+      url: playing-with-prime-numbers
+    - title: Using map and Seq to compute the value of π
+      url: using-map-and-seq-to-compute-the-value-of
+    - title: Computing totals
+      url: computing-totals
+    - title: Sum of the numbers equal to the sum of factorials of digits
+      url: sum-of-the-numbers-equal-to-the-sum-of-factorials-of-digits
+    - title: 42 via the cubes
+      url: via-the-cubes
+  - title: Working with Strings
+    url: working-with-strings
+    items:
+    - title: Generating random passwords
+      url: generating-random-passwords
+    - title: The joy of Unicode
+      url: the-joy-of-unicode
+  - title: Working with Dates
+    url: working-with-dates
+    items:
+    - title: What’s the date today?
+      url: whats-the-date-today
+    - title: How many days in the century match the condition?
+      url: how-many-days-in-the-century-match-the-condition
+    - title: Another solution of the same prob- lem
+      url: another-solution-of-the-same-prob-lem
+  - title: Raku Syntax
+    url: raku-syntax
+    items:
+    - title: More on X, .., and …
+      url: more-on-x-and
+    - title: Reduction operator
+      url: reduction-operator
+    - title: All the stars of Raku
+      url: all-the-stars-of-raku
+    - title: The EVAL routine
+      url: the-eval-routine
+  - title: Raku Golf
+    url: raku-golf
+    items:
+    - title: The first test
+      url: the-first-test
+    - title: The second test
+      url: the-second-test
+    - title: Tips and ideas for the Raku Golf code
+      url: tips-and-ideas-for-the-raku-golf-code
+  - title: Appendix on Compiler Internals
+    url: appendix-on-compiler-internals
+    items:
+    - title: What’s behind 0.1 + 0.2
+      url: whats-behind-0-1-0-2
+  - title: Afterword
+    url: afterword

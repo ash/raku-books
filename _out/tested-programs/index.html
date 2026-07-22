@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Tested programs — Raku Books</title>
+    <meta property="og:title" content="Tested programs — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a></p>
+<h1 id="tested-programs">Tested programs</h1>
+<p>Every complete Raku program in these books is <strong>compiled and
+run at build time</strong> under two compilers — <a
+href="https://rakudo.org">Rakudo</a> (the reference implementation) and
+<a href="https://github.com/ash/rakupp">Raku++</a> (the engine that runs
+code in your browser via <a href="https://raku.online">Raku.js</a>). A
+program gets a <strong>Run</strong> button only when it runs under
+Rakudo <em>and</em> Raku++ reproduces the same output. Of
+<strong>1341</strong> Raku programs across the books:
+<strong>349</strong> run in the browser, <strong>908</strong> are
+illustrative fragments (no Run button), <strong>29</strong> need a local
+environment (files or the command line), <strong>28</strong> use
+concurrency the single-threaded in-browser engine can’t run, and
+<strong>27</strong> are valid programs the in-browser engine cannot run
+correctly yet.</p>
+<h2 id="programs-that-need-a-local-environment">Programs that need a
+local environment</h2>
+<p>These are complete, valid Raku programs, but they read the
+filesystem, spawn processes, or use the command line — things the
+sandboxed in-browser engine has no access to. They run fine on your own
+computer.</p>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 30%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Program</th>
+<th>Book</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/raku-books/raku-one-liners/renaming-files">Renaming files</a></td>
+<td>Raku One-Liners</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/raku-one-liners/merging-files-horizontally">Merging files
+horizontally</a></td>
+<td>Raku One-Liners</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/raku-one-liners/reversing-a-file">Reversing a
+file</a></td>
+<td>Raku One-Liners</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/raku-one-liners/all-the-stars-of-raku">All the stars of
+Raku</a></td>
+<td>Raku One-Liners</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/text-analysis/finding-duplicate-texts">18.
+Finding duplicate texts</a></td>
+<td>Using Raku</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/sleep-sort">92. Sleep Sort</a></td>
+<td>Using Raku</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/parallel-file-processing">94. Parallel file
+processing</a></td>
+<td>Using Raku</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/the-cat-utility">95. The cat utility</a></td>
+<td>Using Raku</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/reading-directory-content">97. Reading
+directory content</a></td>
+<td>Using Raku</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a
+href="/raku-books/creating-a-compiler-in-raku/creating-a-simple-translator">Creating
+a Simple Translator</a></td>
+<td>Creating a Compiler in Raku</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/creating-a-compiler-in-raku/grammar">Grammar</a></td>
+<td>Creating a Compiler in Raku</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/creating-a-compiler-in-raku/test-runner">Test
+runner</a></td>
+<td>Creating a Compiler in Raku</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/variables/twigils">Twigils</a></td>
+<td>Perl 6 at a Glance</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a
+href="/raku-books/perl-6-at-a-glance/variables/frequently-used-special-variables">Frequently
+used special variables</a></td>
+<td>Perl 6 at a Glance</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/promises/an-example">An
+example</a></td>
+<td>Perl 6 at a Glance</td>
+<td>reads the local environment</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/files">Files</a></td>
+<td>Perl 6 at a Glance</td>
+<td>reads the local environment</td>
+</tr>
+</tbody>
+</table>
+<h2 id="programs-that-use-concurrency">Programs that use
+concurrency</h2>
+<p>These use promises or threads. The in-browser engine (Raku.js) is
+single-threaded, so real parallelism deadlocks — run these on your own
+computer.</p>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 30%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Program</th>
+<th>Book</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/raku-books/using-raku/text-analysis/the-longest-common-substring">14.
+The longest common substring</a></td>
+<td>Using Raku</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/text-analysis/the-longest-palindrome">17. The
+longest palindrome</a></td>
+<td>Using Raku</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/setting-timeouts">91. Setting timeouts</a></td>
+<td>Using Raku</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-calendar-2019/april">April</a></td>
+<td>Perl 6 Calendar 2019</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/channels/read-and-write">Read and
+write</a></td>
+<td>Perl 6 at a Glance</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/channels/the-list-method">The list
+method</a></td>
+<td>Perl 6 at a Glance</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/channels/beyond-scalars">Beyond
+scalars</a></td>
+<td>Perl 6 at a Glance</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/channels/the-closed-method">The closed
+method</a></td>
+<td>Perl 6 at a Glance</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/promises/basics">Basics</a></td>
+<td>Perl 6 at a Glance</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/promises/start">start</a></td>
+<td>Perl 6 at a Glance</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/promises/in-and-at">in and at</a></td>
+<td>Perl 6 at a Glance</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/promises/anyof-and-allof">anyof and
+allof</a></td>
+<td>Perl 6 at a Glance</td>
+<td>uses concurrency (promises/threads)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="programs-the-in-browser-engine-cant-run-yet">Programs the
+in-browser engine can’t run yet</h2>
+<p>These are complete, valid Raku programs, but Raku++ errors or prints
+something different from Rakudo — a gap to close in the browser engine.
+Each page still shows the program’s expected output.</p>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 30%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Program</th>
+<th>Book</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/raku-books/raku-one-liners/all-the-stars-of-raku">All the stars of
+Raku</a></td>
+<td>Raku One-Liners</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/raku-one-liners/the-second-test">The second test</a></td>
+<td>Raku One-Liners</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a
+href="/raku-books/using-raku/modifying-string-data/dna-to-rna-transcription">10.
+DNA-to-RNA transcription</a></td>
+<td>Using Raku</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/random-numbers/generating-random-numbers">32.
+Generating random numbers</a></td>
+<td>Using Raku</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/mathematical-problems/standard-deviation">36.
+Standard deviation</a></td>
+<td>Using Raku</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/mathematical-problems/monte-carlo-method">38.
+Monte Carlo method</a></td>
+<td>Using Raku</td>
+<td>Raku++ error (non-deterministic)</td>
+</tr>
+<tr>
+<td><a
+href="/raku-books/using-raku/substitutions-with-regexes/separate-digits-and-letters">78.
+Separate digits and letters</a></td>
+<td>Using Raku</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/substitutions-with-regexes/pig-latin">81. Pig
+Latin</a></td>
+<td>Using Raku</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a
+href="/raku-books/using-raku/substitutions-with-regexes/simple-string-compressor">82.
+Simple string compressor</a></td>
+<td>Using Raku</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/using-grammars/decode-roman-numerals">84.
+Decode Roman numerals</a></td>
+<td>Using Raku</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/using-raku/using-grammars/basic-calculator">86. Basic
+calculator</a></td>
+<td>Using Raku</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/prefixes/not">!, not</a></td>
+<td>Perl 6 at a Glance</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/method-postfixes">Method
+postfixes</a></td>
+<td>Perl 6 at a Glance</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a
+href="/raku-books/perl-6-at-a-glance/universal-comparison-operators/before-after">before,
+after</a></td>
+<td>Perl 6 at a Glance</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/modules">Modules</a></td>
+<td>Perl 6 at a Glance</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/private-closed-methods">Private
+(closed) methods</a></td>
+<td>Perl 6 at a Glance</td>
+<td>Raku++ output differs</td>
+</tr>
+<tr>
+<td><a href="/raku-books/perl-6-at-a-glance/unicode">Unicode</a></td>
+<td>Perl 6 at a Glance</td>
+<td>Raku++ output differs</td>
+</tr>
+</tbody>
+</table>
+<h2 id="verified-runnable-programs">Verified-runnable programs</h2>
+<details>
+<summary>
+<strong>Raku One-Liners</strong> — 23 programs
+</summary>
+<div data-markdown="1">
+<ul>
+<li><a href="/raku-books/raku-one-liners/grepping-multiples-of-3-and-5">Grepping
+multiples of 3 and 5</a></li>
+<li><a href="/raku-books/raku-one-liners/generating-random-integers">Generating
+random integers</a></li>
+<li><a href="/raku-books/raku-one-liners/testing-palindromic-numbers">Testing
+palindromic numbers</a></li>
+<li><a href="/raku-books/raku-one-liners/adding-up-even-fibonacci-numbers">Adding
+up even Fibonacci numbers</a></li>
+<li><a href="/raku-books/raku-one-liners/playing-with-fibonacci-numbers">Playing
+with Fibonacci numbers</a></li>
+<li><a href="/raku-books/raku-one-liners/distance-between-two-points">Distance
+between two points</a></li>
+<li><a href="/raku-books/raku-one-liners/playing-with-prime-numbers">Playing with
+prime numbers</a></li>
+<li><a
+href="/raku-books/raku-one-liners/using-map-and-seq-to-compute-the-value-of">Using
+map and Seq to compute the value of π</a></li>
+<li><a href="/raku-books/raku-one-liners/computing-totals">Computing
+totals</a></li>
+<li><a
+href="/raku-books/raku-one-liners/sum-of-the-numbers-equal-to-the-sum-of-factorials-of-digits">Sum
+of the numbers equal to the sum of factorials of digits</a></li>
+<li><a href="/raku-books/raku-one-liners/generating-random-passwords">Generating
+random passwords</a></li>
+<li><a href="/raku-books/raku-one-liners/the-joy-of-unicode">The joy of
+Unicode</a></li>
+<li><a href="/raku-books/raku-one-liners/whats-the-date-today">What’s the date
+today?</a></li>
+<li><a
+href="/raku-books/raku-one-liners/how-many-days-in-the-century-match-the-condition">How
+many days in the century match the condition?</a></li>
+<li><a
+href="/raku-books/raku-one-liners/another-solution-of-the-same-prob-lem">Another
+solution of the same prob- lem</a></li>
+<li><a href="/raku-books/raku-one-liners/more-on-x-and">More on X, .., and
+…</a></li>
+<li><a href="/raku-books/raku-one-liners/reduction-operator">Reduction
+operator</a></li>
+<li><a href="/raku-books/raku-one-liners/all-the-stars-of-raku">All the stars of
+Raku</a></li>
+<li><a href="/raku-books/raku-one-liners/the-eval-routine">The EVAL
+routine</a></li>
+<li><a href="/raku-books/raku-one-liners/the-first-test">The first test</a></li>
+<li><a href="/raku-books/raku-one-liners/the-second-test">The second test</a></li>
+<li><a
+href="/raku-books/raku-one-liners/tips-and-ideas-for-the-raku-golf-code">Tips and
+ideas for the Raku Golf code</a></li>
+<li><a href="/raku-books/raku-one-liners/whats-behind-0-1-0-2">What’s behind 0.1 +
+0.2</a></li>
+</ul>
+</div>
+</details>
+<details>
+<summary>
+<strong>Using Raku</strong> — 59 programs
+</summary>
+<div data-markdown="1">
+<ul>
+<li><a href="/raku-books/using-raku/how-to-debug-programs">How to debug
+programs</a></li>
+<li><a href="/raku-books/using-raku/using-strings/hello-world">1. Hello,
+World!</a></li>
+<li><a href="/raku-books/using-raku/using-strings/greet-a-person">2. Greet a
+person</a></li>
+<li><a href="/raku-books/using-raku/using-strings/string-length">3. String
+length</a></li>
+<li><a href="/raku-books/using-raku/modifying-string-data/reverse-a-string">5.
+Reverse a string</a></li>
+<li><a
+href="/raku-books/using-raku/modifying-string-data/removing-blanks-from-a-string">6.
+Removing blanks from a string</a></li>
+<li><a
+href="/raku-books/using-raku/modifying-string-data/incrementing-filenames">8.
+Incrementing filenames</a></li>
+<li><a href="/raku-books/using-raku/modifying-string-data/random-passwords">9.
+Random passwords</a></li>
+<li><a href="/raku-books/using-raku/modifying-string-data/caesar-cipher">11. Caesar
+cipher</a></li>
+<li><a href="/raku-books/using-raku/text-analysis/plural-endings">12. Plural
+endings</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/page">19. π</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/factorial">20.
+Factorial!</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/fibonacci-numbers">21. Fibonacci
+numbers</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/print-squares">22. Print
+squares</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/powers-of-two">23. Powers of
+two</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/odd-and-even-numbers">24. Odd and
+even numbers</a></li>
+<li><a
+href="/raku-books/using-raku/using-numbers/compare-numbers-approximately">25.
+Compare numbers approximately</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/prime-numbers">27. Prime
+numbers</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/list-of-prime-numbers">28. List
+of prime numbers</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/prime-factors">29. Prime
+factors</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/reducing-a-fraction">30. Reducing
+a fraction</a></li>
+<li><a href="/raku-books/using-raku/using-numbers/divide-by-zero">31. Divide by
+zero</a></li>
+<li><a href="/raku-books/using-raku/random-numbers/generating-random-numbers">32.
+Generating random numbers</a></li>
+<li><a href="/raku-books/using-raku/random-numbers/neumanns-random-generator">33.
+Neumann’s random generator</a></li>
+<li><a href="/raku-books/using-raku/random-numbers/histogram-of-random-numbers">34.
+Histogram of random numbers</a></li>
+<li><a
+href="/raku-books/using-raku/mathematical-problems/distance-between-two-points">35.
+Distance between two points</a></li>
+<li><a href="/raku-books/using-raku/numbers-and-strings/unicode-digits">39. Unicode
+digits</a></li>
+<li><a href="/raku-books/using-raku/numbers-and-strings/binary-to-integer">41.
+Binary to integer</a></li>
+<li><a
+href="/raku-books/using-raku/numbers-and-strings/integer-as-binary-octal-and-hex">42.
+Integer as binary, octal, and hex</a></li>
+<li><a href="/raku-books/using-raku/numbers-and-strings/sum-of-digits">43. Sum of
+digits</a></li>
+<li><a href="/raku-books/using-raku/numbers-and-strings/bit-counter">44. Bit
+counter</a></li>
+<li><a
+href="/raku-books/using-raku/numbers-and-strings/compose-the-largest-number">45.
+Compose the largest number</a></li>
+<li><a
+href="/raku-books/using-raku/numbers-and-strings/convert-to-roman-numerals">46.
+Convert to Roman numerals</a></li>
+<li><a
+href="/raku-books/using-raku/manipulating-lists-and-arrays/swap-two-values">48.
+Swap two values</a></li>
+<li><a
+href="/raku-books/using-raku/manipulating-lists-and-arrays/reverse-a-list">49.
+Reverse a list</a></li>
+<li><a
+href="/raku-books/using-raku/manipulating-lists-and-arrays/rotate-a-list">50.
+Rotate a list</a></li>
+<li><a
+href="/raku-books/using-raku/manipulating-lists-and-arrays/randomise-an-array">51.
+Randomise an array</a></li>
+<li><a
+href="/raku-books/using-raku/manipulating-lists-and-arrays/incrementing-array-elements">52.
+Incrementing array elements</a></li>
+<li><a
+href="/raku-books/using-raku/manipulating-lists-and-arrays/adding-up-two-arrays">53.
+Adding up two arrays</a></li>
+<li><a
+href="/raku-books/using-raku/information-retrieval/sum-of-the-elements-of-an-array">55.
+Sum of the elements of an array</a></li>
+<li><a href="/raku-books/using-raku/information-retrieval/average-of-an-array">56.
+Average of an array</a></li>
+<li><a
+href="/raku-books/using-raku/information-retrieval/is-an-element-in-a-list">58. Is
+an element in a list?</a></li>
+<li><a href="/raku-books/using-raku/information-retrieval/first-odd-number">59.
+First odd number</a></li>
+<li><a
+href="/raku-books/using-raku/information-retrieval/finding-unique-elements">62.
+Finding unique elements</a></li>
+<li><a href="/raku-books/using-raku/information-retrieval/minimum-and-maximum">63.
+Minimum and maximum</a></li>
+<li><a href="/raku-books/using-raku/information-retrieval/increasing-sequences">64.
+Increasing sequences</a></li>
+<li><a
+href="/raku-books/using-raku/working-with-subroutines/passing-arrays-to-subroutines">65.
+Passing arrays to subroutines</a></li>
+<li><a
+href="/raku-books/using-raku/working-with-subroutines/variadic-parameters-in-a-sub">66.
+Variadic parameters in a sub</a></li>
+<li><a href="/raku-books/using-raku/multi-dimensional-data/product-table">70.
+Product table</a></li>
+<li><a href="/raku-books/using-raku/multi-dimensional-data/pascal-triangle">71.
+Pascal triangle</a></li>
+<li><a href="/raku-books/using-raku/regex-matching/count-vowels-in-a-word">72.
+Count vowels in a word</a></li>
+<li><a
+href="/raku-books/using-raku/substitutions-with-regexes/double-each-character">76.
+Double each character</a></li>
+<li><a
+href="/raku-books/using-raku/substitutions-with-regexes/remove-duplicated-words">77.
+Remove duplicated words</a></li>
+<li><a
+href="/raku-books/using-raku/substitutions-with-regexes/increase-digits-by-one">80.
+Increase digits by one</a></li>
+<li><a href="/raku-books/using-raku/using-grammars/basic-calculator">86. Basic
+calculator</a></li>
+<li><a href="/raku-books/using-raku/current-date-and-time">87. Current date and
+time</a></li>
+<li><a href="/raku-books/using-raku/formatted-date">88. Formatted date</a></li>
+<li><a href="/raku-books/using-raku/datetime-arithmetic">89. Datetime
+arithmetic</a></li>
+<li><a href="/raku-books/using-raku/leap-years">90. Leap years</a></li>
+</ul>
+</div>
+</details>
+<details>
+<summary>
+<strong>Creating a Compiler in Raku</strong> — 6 programs
+</summary>
+<div data-markdown="1">
+<ul>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/functions-take-expressions">Functions
+take expressions</a></li>
+<li><a href="/raku-books/creating-a-compiler-in-raku/escaping-quotes">Escaping
+quotes</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/variable-interpolation">Variable
+interpolation</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/tests/strings-2">Strings</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/built-in-functions/print">print</a></li>
+<li><a
+href="/raku-books/creating-a-compiler-in-raku/eliminating-dead-branches">Eliminating
+dead branches</a></li>
+</ul>
+</div>
+</details>
+<details>
+<summary>
+<strong>Perl 6 Calendar 2019</strong> — 11 programs
+</summary>
+<div data-markdown="1">
+<ul>
+<li><a href="/raku-books/perl-6-calendar-2019/january">January</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/february">February</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/march">March</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/may">May</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/june">June</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/july">July</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/august">August</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/september">September</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/october">October</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/november">November</a></li>
+<li><a href="/raku-books/perl-6-calendar-2019/december">December</a></li>
+</ul>
+</div>
+</details>
+<details>
+<summary>
+<strong>Perl 6 at a Glance</strong> — 51 programs
+</summary>
+<div data-markdown="1">
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/hello-world">Hello, World!</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/variables/sigils">Sigils</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/variables/introspection">Introspection</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/variables/frequently-used-special-variables">Frequently
+used special variables</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/typed-variables">Typed
+variables</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/bool">Bool</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/int">Int</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/str">Str</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/array">Array</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/prefixes/not">!, not</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/prefixes/so">?, so</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/postfixes">Postfixes</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/method-postfixes">Method
+postfixes</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators/div-mod">div,
+mod</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators/page-4">+&lt;,
++&gt;</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/string-operators">String
+operators</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/string-operators/lt-gt-le-ge">lt, gt,
+le, ge</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/universal-comparison-operators">Universal
+comparison operators</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/universal-comparison-operators/before-after">before,
+after</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/list-operators">List operators</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/junction-operators/page-7">|, &amp;,
+^</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/shortcut-operators">Shortcut
+operators</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/other-infix-operators/min-max">min,
+max</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/other-infix-operators/page-8">:</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/meta-operators/negation">Negation</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/meta-operators/reverse-operator">Reverse
+operator</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/meta-operators/reduction">Reduction</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/meta-operators/cross-operators">Cross-operators</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/meta-operators/zip-meta-operators">Zip
+meta-operators</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/hyper-operators">Hyper-operators</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/subroutines-or-subs">Subroutines, or
+subs</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/non-value-argument-passing">Non-value
+argument passing</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/optional-parameters">Optional
+parameters</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/default-values">Default
+values</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/slurpy-parameters-and-flattening">Slurpy
+parameters and flattening</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/nested-subs">Nested
+subs</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/anonymous-subs">Anonymous
+subs</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/variables-and-signatures/lexical-variables">Lexical
+variables</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/variables-and-signatures/dynamic-variables">Dynamic
+variables</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/anonymous-code-blocks">Anonymous code
+blocks</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/placeholders">Placeholders</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/function-overloading">Function
+overloading</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/class-methods">Class methods</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/multiple-inheritance">Multiple
+inheritance</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/private-closed-methods">Private
+(closed) methods</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/submethods">Submethods</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/constructors">Constructors</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/the-object">The $/ object</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/actions">Actions</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/unicode">Unicode</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/whatever">Whatever (*)</a></li>
+</ul>
+</div>
+</details>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

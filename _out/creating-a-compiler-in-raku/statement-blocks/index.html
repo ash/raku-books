@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Statement blocks — Raku Books</title>
+    <meta property="og:title" content="Statement blocks — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku" selected>Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a
+href="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</a> / <a
+href="/raku-books/creating-a-compiler-in-raku/control-flow">Control Flow</a></p>
+<h1 id="statement-blocks">Statement blocks</h1>
+<p>Until now, both <code>if</code> and <code>else</code> constructs
+could contain only single statements. Of course, if you need more than
+one statement, you can always add an <code>if</code> clause to each of
+them, but it would be much nicer to implement support of code blocks,
+which present in many other languages. The goal of this section is to
+execute the following program with both
+<code>if</code>-<code>else</code> and a <code>loop</code> blocks:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="n">c</span> = <span class="mi">0</span>;
+<span class="k">if</span> <span class="n">c</span> {
+    <span class="nb">say</span> <span class="s">&quot;c = $c&quot;</span>;
+    <span class="nb">say</span> <span class="s">&quot;IF block&quot;</span>;
+}
+<span class="k">else</span> {
+    <span class="nb">say</span> <span class="s">&quot;c = $c&quot;</span>;
+    <span class="nb">say</span> <span class="s">&quot;ELSE block&quot;</span>;
+}
+
+<span class="k">my</span> <span class="n">n</span> = <span class="mi">5</span>;
+<span class="k">loop</span> <span class="n">n</span> {
+    <span class="nb">say</span> <span class="n">n</span>;
+    <span class="nb">say</span> <span class="mi">2</span> * <span class="n">n</span>;
+}</pre></div>
+
+<p>Let us make a first attempt to replace a <code>statement</code> with
+a newly defined <code>block</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">block</span> {
+    | <span class="s">'{'</span> ~ <span class="s">'}'</span> <span class="s">&lt;statement&gt;</span>* %% <span class="s">';'</span>
+    | <span class="s">&lt;statement&gt;</span> <span class="s">';'</span>
+}</pre></div>
+
+<p>(The <code>'{' ~ '}' &lt;r&gt;</code> construct in Raku is equivalent
+to <code>'{' &lt;r&gt; '}'</code>, but often looks cleaner.)</p>
+<p>On a conceptual level, we have to allow code blocks where a
+<code>statement</code> is allowed in the grammar. From a practical
+perspective, we have to think about semicolons at the end of the
+statements.</p>
+<p>For example, a semicolon is not allowed before the else keyword:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">if</span> <span class="mi">1</span> <span class="nb">say</span> <span class="s">&quot;A&quot;</span>; <span class="k">else</span> <span class="nb">say</span> <span class="s">&quot;B&quot;</span>;</pre></div>
+
+<p>The problem is that it is still put after a statement. So, we should
+distinguish between a statement in the <code>if</code> clause with and
+without the <code>else</code> clause.</p>
+<p>Also, we should not insist on a semicolon after the closing curly
+brace:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">loop</span> <span class="n">n</span> {
+    <span class="nb">say</span> <span class="n">n</span>;
+    <span class="nb">say</span> <span class="mi">2</span> * <span class="n">n</span>;
+};</pre></div>
+
+<p>And finally, a semicolon before that brace can be declared
+optional:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">loop</span> <span class="n">n</span> {
+    <span class="nb">say</span> <span class="n">n</span>;
+    <span class="nb">say</span> <span class="mi">2</span> * <span class="n">n</span>
+}</pre></div>
+
+<p>To satisfy all the conditions listed above, let us instruct the
+grammar where we expect a semicolon and where it is not needed. We can
+introduce two alternatives of the <code>block</code> rule:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="k">rule</span> <span class="n">block</span>() {
+    | <span class="s">'{'</span> ~ <span class="s">'}'</span> <span class="s">&lt;statement&gt;</span>* %% <span class="s">';'</span>
+    | <span class="s">&lt;statement&gt;</span>
+}
+
+<span class="k">multi</span> <span class="k">rule</span> <span class="n">block</span>(<span class="s">';'</span>) {
+    | <span class="s">'{'</span> ~ <span class="s">'}'</span> <span class="s">&lt;statement&gt;</span>* %% <span class="s">';'</span>
+    | <span class="s">&lt;statement&gt;</span> <span class="s">';'</span>
+}</pre></div>
+
+<p>We avoid adding a new rule name and use its argument to select the
+one. Now we can rewrite the rules for conditions and while-loops:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">conditional-statement</span> {
+    | <span class="s">'if'</span> <span class="s">&lt;value&gt;</span> &lt;<span class="n">block</span>()&gt; <span class="s">'else'</span> &lt;<span class="n">block</span>(<span class="s">';'</span>)&gt;
+    | <span class="s">'if'</span> <span class="s">&lt;value&gt;</span> &lt;<span class="n">block</span>(<span class="s">';'</span>)&gt;
+}
+
+<span class="k">rule</span> <span class="n">loopped-statement</span> {
+    <span class="s">'while'</span> <span class="s">&lt;variable-name&gt;</span> &lt;<span class="n">block</span>(<span class="s">';'</span>)&gt;
+}</pre></div>
+
+<p>Notice that in the <code>conditional-statement</code> rule it was
+also possible to use square brackets to extract the common part:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">conditional-statement</span> {
+    <span class="s">'if'</span> <span class="s">&lt;value&gt;</span> [
+        | <span class="s">&lt;block()&gt;</span> <span class="s">'else'</span> &lt;<span class="n">block</span>(<span class="s">';'</span>)&gt;
+        | <span class="s">&lt;block(';')&gt;</span>
+    ]
+}</pre></div>
+
+<p>You may prefer either; my own personal preference is towards the
+shorter form where you see both branches one after another:</p>
+<div class="highlight raku no-run"><pre><span></span>    | <span class="s">'if'</span> <span class="s">&lt;value&gt;</span> &lt;<span class="n">block</span>()&gt; <span class="s">'else'</span> &lt;<span class="n">block</span>(<span class="s">';'</span>)&gt;
+    | <span class="s">'if'</span> <span class="s">&lt;value&gt;</span> &lt;<span class="n">block</span>(<span class="s">';'</span>)&gt;</pre></div>
+
+<p>Finally, adjust the <code>TOP</code> rule to remove extra semicolons
+from there:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">TOP</span> {
+    [
+        | <span class="s">&lt;one-line-comment&gt;</span>
+        | <span class="s">&lt;statement=conditional-statement&gt;</span>
+        | <span class="s">&lt;statement=loopped-statement&gt;</span>
+        | <span class="s">&lt;statement&gt;</span> <span class="s">';'</span>
+    ]*
+}</pre></div>
+
+<p>Now to the actions part. First, let us change the actions for the
+conditional constructs and use <code>block</code>s there:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">method</span> <span class="n">conditional-statement</span>(<span class="nv">$/</span>) {
+    <span class="nv">$/</span>.<span class="n">make</span>(<span class="n">AST::Condition</span>.<span class="nb">new</span>(
+        <span class="n">value</span> =&gt; <span class="nv">$/</span><span class="s">&lt;value&gt;</span>.<span class="n">made</span>,
+        <span class="n">statement</span> =&gt; <span class="nv">$/</span><span class="s">&lt;block&gt;</span>[<span class="mi">0</span>]<span class="s">&lt;statement&gt;</span>[<span class="mi">0</span>].<span class="n">made</span>,
+        <span class="n">antistatement</span> =&gt; <span class="nv">$/</span><span class="s">&lt;block&gt;</span>[<span class="mi">1</span>] ??
+            <span class="nv">$/</span><span class="s">&lt;block&gt;</span>[<span class="mi">1</span>]<span class="s">&lt;statement&gt;</span>[<span class="mi">0</span>].<span class="n">made</span> !! <span class="n">AST::Null</span>,
+    ));
+}
+
+<span class="k">method</span> <span class="n">loopped-statement</span>(<span class="nv">$/</span>) {
+    <span class="nv">$/</span>.<span class="n">make</span>(<span class="n">AST::Loop</span>.<span class="nb">new</span>(
+        <span class="n">variable</span> =&gt; <span class="n">AST::Variable</span>.<span class="nb">new</span>(
+            <span class="n">variable-name</span> =&gt; ~<span class="nv">$/</span><span class="s">&lt;variable-name&gt;</span>
+        ),
+        <span class="n">statement</span> =&gt; <span class="nv">$/</span><span class="s">&lt;block&gt;</span><span class="s">&lt;statement&gt;</span>[<span class="mi">0</span>].<span class="n">made</span>,
+    ));
+}</pre></div>
+
+<p>Although the result contains long chains of keys and indices of the
+match object, such as
+<code>$/&lt;block&gt;[1]&lt;statement&gt;[0]</code>, the transformation
+is simple and is easy to understand. You can test the program, and it
+will execute the first statement from each curly block.</p>
+<p>The next step is to modify the AST so that it keeps more than one
+statement where a block is allowed. We have to keep all of them, so let
+us use arrays instead of scalars:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">AST::Condition</span> <span class="k">is</span> <span class="n">ASTNode</span> {
+    <span class="k">has</span> <span class="n">ASTNode</span> <span class="nv">$.value</span>;
+    <span class="k">has</span> <span class="n">ASTNode</span> <span class="nv">@.statements</span>;
+    <span class="k">has</span> <span class="n">ASTNode</span> <span class="nv">@.antistatements</span>;
+}
+
+<span class="k">class</span> <span class="n">AST::Loop</span> <span class="k">is</span> <span class="n">ASTNode</span> {
+    <span class="k">has</span> <span class="n">ASTNode</span> <span class="nv">$.variable</span>;
+    <span class="k">has</span> <span class="n">ASTNode</span> <span class="nv">@.statements</span>;
+}</pre></div>
+
+<p>The corresponding actions should now create the new AST nodes and
+pass all the statements from the code blocks. In the next fragment we
+use <code>map</code>s to loop over the statements in the match
+object:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">method</span> <span class="n">conditional-statement</span>(<span class="nv">$/</span>) {
+    <span class="nv">$/</span>.<span class="n">make</span>(<span class="n">AST::Condition</span>.<span class="nb">new</span>(
+        <span class="n">value</span> =&gt; <span class="nv">$/</span><span class="s">&lt;value&gt;</span>.<span class="n">made</span>,
+        <span class="n">statements</span> =&gt; (<span class="nv">$/</span><span class="s">&lt;block&gt;</span>[<span class="mi">0</span>]<span class="s">&lt;statement&gt;</span>.<span class="nb">map</span>: *.<span class="n">made</span>),
+        <span class="n">antistatements</span> =&gt; <span class="nv">$/</span><span class="s">&lt;block&gt;</span>[<span class="mi">1</span>] ?? 
+        (<span class="nv">$/</span><span class="s">&lt;block&gt;</span>[<span class="mi">1</span>]<span class="s">&lt;statement&gt;</span>.<span class="nb">map</span>: *.<span class="n">made</span>) !! (<span class="n">AST::Null</span>),
+    ));
+}
+
+<span class="k">method</span> <span class="n">loopped-statement</span>(<span class="nv">$/</span>) {
+    <span class="nv">$/</span>.<span class="n">make</span>(<span class="n">AST::Loop</span>.<span class="nb">new</span>(
+        <span class="n">variable</span> =&gt; <span class="n">AST::Variable</span>.<span class="nb">new</span>(
+            <span class="n">variable-name</span> =&gt; ~<span class="nv">$/</span><span class="s">&lt;variable-name&gt;</span>
+        ),
+        <span class="n">statements</span> =&gt; (<span class="nv">$/</span><span class="s">&lt;block&gt;</span><span class="s">&lt;statement&gt;</span>.<span class="nb">map</span>: *.<span class="n">made</span>),
+    ));
+}</pre></div>
+
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a
+href="/raku-books/creating-a-compiler-in-raku/implementing-a-loop">Implementing a
+loop</a>   |   <a
+href="/raku-books/creating-a-compiler-in-raku/blocks-in-the-ast">Blocks in the
+AST</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

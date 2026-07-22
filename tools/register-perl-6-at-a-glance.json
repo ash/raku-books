@@ -1,0 +1,2505 @@
+{
+ "book": "Perl 6 at a Glance",
+ "slug": "perl-6-at-a-glance",
+ "verdicts": [
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/perl-6-at-a-glance/hello-world",
+   "first": "say \"Hello, Perl 6!\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Sigils",
+   "url": "/perl-6-at-a-glance/variables/sigils",
+   "first": "my $scalar = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Sigils",
+   "url": "/perl-6-at-a-glance/variables/sigils",
+   "first": "my @array = (10, 20, 30);"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Sigils",
+   "url": "/perl-6-at-a-glance/variables/sigils",
+   "first": "my @list1 = <10 20 30>;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Sigils",
+   "url": "/perl-6-at-a-glance/variables/sigils",
+   "first": "my @list2 = 10, 20, 30;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Sigils",
+   "url": "/perl-6-at-a-glance/variables/sigils",
+   "first": "my %hash ="
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Sigils",
+   "url": "/perl-6-at-a-glance/variables/sigils",
+   "first": "my @squares = 0, 1, 4, 9, 16, 25;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Sigils",
+   "url": "/perl-6-at-a-glance/variables/sigils",
+   "first": "my %capitals ="
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Sigils",
+   "url": "/perl-6-at-a-glance/variables/sigils",
+   "first": "my %month-abbrs ="
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Sigils",
+   "url": "/perl-6-at-a-glance/variables/sigils",
+   "first": "my $hello-world = \"Hello, World\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Introspection",
+   "url": "/perl-6-at-a-glance/variables/introspection",
+   "first": "my $scalar = 42;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Introspection",
+   "url": "/perl-6-at-a-glance/variables/introspection",
+   "first": "my @list = 10, 20, 30;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Introspection",
+   "url": "/perl-6-at-a-glance/variables/introspection",
+   "first": "my %hash = 'Language' => 'Perl';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Introspection",
+   "url": "/perl-6-at-a-glance/variables/introspection",
+   "first": "say %hash.WHAT;     # (Hash)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Introspection",
+   "url": "/perl-6-at-a-glance/variables/introspection",
+   "first": "my $value = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Introspection",
+   "url": "/perl-6-at-a-glance/variables/introspection",
+   "first": "my $value = 42;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Twigils",
+   "url": "/perl-6-at-a-glance/variables/twigils",
+   "first": ".say for @*ARGS;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Twigils",
+   "url": "/perl-6-at-a-glance/variables/twigils",
+   "first": "for @*ARGS {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Frequently used special variables",
+   "url": "/perl-6-at-a-glance/variables/frequently-used-special-variables",
+   "first": "for @*ARGS {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Frequently used special variables",
+   "url": "/perl-6-at-a-glance/variables/frequently-used-special-variables",
+   "first": "for @*ARGS {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Frequently used special variables",
+   "url": "/perl-6-at-a-glance/variables/frequently-used-special-variables",
+   "first": "\"Perl\u2019s Birthday: 18 December 1987\" ~~ "
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Frequently used special variables",
+   "url": "/perl-6-at-a-glance/variables/frequently-used-special-variables",
+   "first": "say $! if $!;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Typed variables",
+   "url": "/perl-6-at-a-glance/built-in-types/typed-variables",
+   "first": "my Int $x;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Typed variables",
+   "url": "/perl-6-at-a-glance/built-in-types/typed-variables",
+   "first": "my Int $x;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Typed variables",
+   "url": "/perl-6-at-a-glance/built-in-types/typed-variables",
+   "first": "my Int $x;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Bool",
+   "url": "/perl-6-at-a-glance/built-in-types/bool",
+   "first": "my $b = Bool::True;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Bool",
+   "url": "/perl-6-at-a-glance/built-in-types/bool",
+   "first": "say 42.Bool; # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Bool",
+   "url": "/perl-6-at-a-glance/built-in-types/bool",
+   "first": "say Bool::True.Int; # 1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Int",
+   "url": "/perl-6-at-a-glance/built-in-types/int",
+   "first": "my Int $x ="
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Int",
+   "url": "/perl-6-at-a-glance/built-in-types/int",
+   "first": "say :16<D0CF11E0>"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Int",
+   "url": "/perl-6-at-a-glance/built-in-types/int",
+   "first": "my Int $x = 735_817_503_285_431_532;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Int",
+   "url": "/perl-6-at-a-glance/built-in-types/int",
+   "first": "my Int $a = 65;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Str",
+   "url": "/perl-6-at-a-glance/built-in-types/str",
+   "first": "my $str = \"My string\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Str",
+   "url": "/perl-6-at-a-glance/built-in-types/str",
+   "first": "No such method 'length' for invocant of type 'Str'"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Str",
+   "url": "/perl-6-at-a-glance/built-in-types/str",
+   "first": "say \"\u03c0\u03b5\u03c1\u03bb 6\".chars; # 6"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Str",
+   "url": "/perl-6-at-a-glance/built-in-types/str",
+   "first": "\"Today is %02i %s %i\\n\".printf($day, $month, $year);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Array",
+   "url": "/perl-6-at-a-glance/built-in-types/array",
+   "first": "my @a = 1, 2, 3, 5, 7, 11;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Array",
+   "url": "/perl-6-at-a-glance/built-in-types/array",
+   "first": "my @a = 1, 2, 3, 5, 7, 11;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Hash",
+   "url": "/perl-6-at-a-glance/built-in-types/hash",
+   "first": "my %hash = Language => 'Perl', Version => 6;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hash",
+   "url": "/perl-6-at-a-glance/built-in-types/hash",
+   "first": "say %hash.elems;  # number of pairs in the hash"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hash",
+   "url": "/perl-6-at-a-glance/built-in-types/hash",
+   "first": "for %hash.pairs {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hash",
+   "url": "/perl-6-at-a-glance/built-in-types/hash",
+   "first": "say %hash.kv # (Version 6 Language Perl)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "!, not",
+   "url": "/perl-6-at-a-glance/prefixes/not",
+   "first": "say !True;     # False"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "!, not",
+   "url": "/perl-6-at-a-glance/prefixes/not",
+   "first": "say not False; # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "!, not",
+   "url": "/perl-6-at-a-glance/prefixes/not",
+   "first": "my Str $price = '4' ~ '2';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "!, not",
+   "url": "/perl-6-at-a-glance/prefixes/not",
+   "first": "my Str $price = '4' ~ '2';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "say ?42; # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "say so 42;   # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "my Str $a = ~42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "my $x = 41;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "my $f = \"file001.txt\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "my $x = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "my $x = 10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "my $x = 10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": ".print for ^5; # 01234"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": ".print for 0..4; # 01234"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "sub sum($a, $b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "Calling sum(Positional) will never work with declared signature ($a, $"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "my $x = 'x';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "?, so",
+   "url": "/perl-6-at-a-glance/prefixes/so",
+   "first": "my $var = 'a';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Postfixes",
+   "url": "/perl-6-at-a-glance/postfixes",
+   "first": "my $x = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Postfixes",
+   "url": "/perl-6-at-a-glance/postfixes",
+   "first": "my $filename = 'file01.txt';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Method postfixes",
+   "url": "/perl-6-at-a-glance/method-postfixes",
+   "first": "say \"0.0\".Numeric; # 0"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Method postfixes",
+   "url": "/perl-6-at-a-glance/method-postfixes",
+   "first": "class D { }"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Method postfixes",
+   "url": "/perl-6-at-a-glance/method-postfixes",
+   "first": "my Int $i;"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Method postfixes",
+   "url": "/perl-6-at-a-glance/method-postfixes",
+   "first": "class C {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Method postfixes",
+   "url": "/perl-6-at-a-glance/method-postfixes",
+   "first": "class A {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "div, mod",
+   "url": "/perl-6-at-a-glance/numerical-operators/div-mod",
+   "first": "say 10 div 3;  # 3"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "div, mod",
+   "url": "/perl-6-at-a-glance/numerical-operators/div-mod",
+   "first": "say 10 % 3;   # 1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "div, mod",
+   "url": "/perl-6-at-a-glance/numerical-operators/div-mod",
+   "first": "say 10 % \"3\"; # 1"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "div, mod",
+   "url": "/perl-6-at-a-glance/numerical-operators/div-mod",
+   "first": "say 10 mod \"3\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "div, mod",
+   "url": "/perl-6-at-a-glance/numerical-operators/div-mod",
+   "first": "say 10 mod +\"3\"; # 1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "div, mod",
+   "url": "/perl-6-at-a-glance/numerical-operators/div-mod",
+   "first": "say 10 mod \"3\".Int; # 1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "div, mod",
+   "url": "/perl-6-at-a-glance/numerical-operators/div-mod",
+   "first": "say 10 %% 3; # False"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "+<, +>",
+   "url": "/perl-6-at-a-glance/numerical-operators/page-4",
+   "first": "say 8 +< 2;    # 32"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "+<, +>",
+   "url": "/perl-6-at-a-glance/numerical-operators/page-4",
+   "first": "say 50 gcd 15; # 5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "+<, +>",
+   "url": "/perl-6-at-a-glance/numerical-operators/page-4",
+   "first": "say 1043 lcm 14; # 2086"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "String operators",
+   "url": "/perl-6-at-a-glance/string-operators",
+   "first": "say \"a\" ~ \"b\"; # ab"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "String operators",
+   "url": "/perl-6-at-a-glance/string-operators",
+   "first": "say \"N\" ~ 1; # N1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "String operators",
+   "url": "/perl-6-at-a-glance/string-operators",
+   "first": "say \"A\" x 5; # AAAAA"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "String operators",
+   "url": "/perl-6-at-a-glance/string-operators",
+   "first": "say 0 x 5; # 00000"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "lt, gt, le, ge",
+   "url": "/perl-6-at-a-glance/string-operators/lt-gt-le-ge",
+   "first": "say \"a\" leg \"b\";        # Less"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "lt, gt, le, ge",
+   "url": "/perl-6-at-a-glance/string-operators/lt-gt-le-ge",
+   "first": "say 42 leg \"+42\"; # More"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Universal comparison operators",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators",
+   "first": "say 2 cmp 2;   # Same"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Universal comparison operators",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators",
+   "first": "my %a = (a => 1);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Universal comparison operators",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators",
+   "first": "proto sub infix:<cmp>(Any, Any)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Universal comparison operators",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators",
+   "first": "say \"+42\" cmp +42; # Less"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "say 10 before 2;      # False"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "my $x = 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "my @a = (3, 4);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "say 42 eqv 42.0; # False"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "say 42 eqv 84/2;       # False, 84/2 is Rat"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "class I { }"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "my $x = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "say 42 ~~ 42.0; # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "say \"42.0\" ~~ 42; # True"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "before, after",
+   "url": "/perl-6-at-a-glance/universal-comparison-operators/before-after",
+   "first": "say 42.ACCEPTS(\"42.0\"); # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "List operators",
+   "url": "/perl-6-at-a-glance/list-operators",
+   "first": "say (1, -1) xx 2; # ((1 -1) (1 -1))"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "List operators",
+   "url": "/perl-6-at-a-glance/list-operators",
+   "first": "@c = @a Z @b;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "List operators",
+   "url": "/perl-6-at-a-glance/list-operators",
+   "first": "@c = ((@a[0], @b[0]), (@a[1], @b[1]), ...);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "List operators",
+   "url": "/perl-6-at-a-glance/list-operators",
+   "first": "my @a = ^5; # A range from 0 to 5 (excluding 5)"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "List operators",
+   "url": "/perl-6-at-a-glance/list-operators",
+   "first": "@c = @a X @b;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "List operators",
+   "url": "/perl-6-at-a-glance/list-operators",
+   "first": "@c = ((@a[0], @b[0]), (@a[0], @b[1]), (@a[0], @b[2]), ... (@a[N], @b[0"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "List operators",
+   "url": "/perl-6-at-a-glance/list-operators",
+   "first": "my @list = 1 ... 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "List operators",
+   "url": "/perl-6-at-a-glance/list-operators",
+   "first": "my @back = 10 ... 1;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "|, &, ^",
+   "url": "/perl-6-at-a-glance/junction-operators/page-7",
+   "first": "# The value of 4 is one of the listed options"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Shortcut operators",
+   "url": "/perl-6-at-a-glance/shortcut-operators",
+   "first": "say 10 && 0; # 0"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Shortcut operators",
+   "url": "/perl-6-at-a-glance/shortcut-operators",
+   "first": "say 10 || 0; # 10"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Shortcut operators",
+   "url": "/perl-6-at-a-glance/shortcut-operators",
+   "first": "say 0 ^^ '' ^^ \"abc\" ^^ -0.0;  # abc"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Shortcut operators",
+   "url": "/perl-6-at-a-glance/shortcut-operators",
+   "first": "my $x;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "min, max",
+   "url": "/perl-6-at-a-glance/other-infix-operators/min-max",
+   "first": "say 20 min 10;         # 10"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "min, max",
+   "url": "/perl-6-at-a-glance/other-infix-operators/min-max",
+   "first": "say rand < 0.5 ?? 'Yes' !! 'No';"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "min, max",
+   "url": "/perl-6-at-a-glance/other-infix-operators/min-max",
+   "first": "my $pair = alpha => \"one\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "min, max",
+   "url": "/perl-6-at-a-glance/other-infix-operators/min-max",
+   "first": "my $what = (1, 2, 3);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": ":",
+   "url": "/perl-6-at-a-glance/other-infix-operators/page-8",
+   "first": "class C {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Assignment",
+   "url": "/perl-6-at-a-glance/meta-operators/assignment",
+   "first": "sub infix:<^_^>($a, $b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Assignment",
+   "url": "/perl-6-at-a-glance/meta-operators/assignment",
+   "first": "say 4 ^_^ 5; # 4_5"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Assignment",
+   "url": "/perl-6-at-a-glance/meta-operators/assignment",
+   "first": "my $x = 'file';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Negation",
+   "url": "/perl-6-at-a-glance/meta-operators/negation",
+   "first": "say \"no\" if \"abcd\" !~~ \"e\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Reverse operator",
+   "url": "/perl-6-at-a-glance/meta-operators/reverse-operator",
+   "first": "say 2 R/ 10; # 5. Same as say 10 / 2"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Reverse operator",
+   "url": "/perl-6-at-a-glance/meta-operators/reverse-operator",
+   "first": "say [R~] 'a'..'z'; # zyxwvutsrqponmlkjihgfedcba"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Reduction",
+   "url": "/perl-6-at-a-glance/meta-operators/reduction",
+   "first": "sub infix:<pairsum>($a, $b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Reduction",
+   "url": "/perl-6-at-a-glance/meta-operators/reduction",
+   "first": "sub infix:<pairsum>($a, $b) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Cross-operators",
+   "url": "/perl-6-at-a-glance/meta-operators/cross-operators",
+   "first": "say 'a'..'h' X~ 1..8;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Zip meta-operators",
+   "url": "/perl-6-at-a-glance/meta-operators/zip-meta-operators",
+   "first": "@a Z+ @b"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Zip meta-operators",
+   "url": "/perl-6-at-a-glance/meta-operators/zip-meta-operators",
+   "first": "((@a[0] + @b[0]), (@a[1] + @b[1]), . . . (@a[*-1] + @b[*-1]))"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Zip meta-operators",
+   "url": "/perl-6-at-a-glance/meta-operators/zip-meta-operators",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Zip meta-operators",
+   "url": "/perl-6-at-a-glance/meta-operators/zip-meta-operators",
+   "first": "my @a = ^5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Zip meta-operators",
+   "url": "/perl-6-at-a-glance/meta-operators/zip-meta-operators",
+   "first": "my @a = ^5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hyper-operators",
+   "url": "/perl-6-at-a-glance/hyper-operators",
+   "first": "my @a = (True, False, True);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hyper-operators",
+   "url": "/perl-6-at-a-glance/hyper-operators",
+   "first": "my @a = (1, 2, 3);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hyper-operators",
+   "url": "/perl-6-at-a-glance/hyper-operators",
+   "first": "my @a = ('a', 'b')>>.uc;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hyper-operators",
+   "url": "/perl-6-at-a-glance/hyper-operators",
+   "first": "my @a = (1, 2, 3) >>+<< (4, 5, 6);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hyper-operators",
+   "url": "/perl-6-at-a-glance/hyper-operators",
+   "first": "say((1, 2, 3) >>+>> 1); # (2 3 4)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hyper-operators",
+   "url": "/perl-6-at-a-glance/hyper-operators",
+   "first": "my @a = (1, 2, 3, 4) >>+>> (1, -1);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hyper-operators",
+   "url": "/perl-6-at-a-glance/hyper-operators",
+   "first": "my @b = (1, -1) <<+<< (1, 2, 3, 4);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hyper-operators",
+   "url": "/perl-6-at-a-glance/hyper-operators",
+   "first": "my @a = (1, -1) <<+>> (1, 2, 3, 4);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hyper-operators",
+   "url": "/perl-6-at-a-glance/hyper-operators",
+   "first": "say((1,2) \u00bb+\u00ab (3,4)); # (4 6)"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Subroutines, or subs",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs",
+   "first": "sub call-me {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Subroutines, or subs",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs",
+   "first": "call-me;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Subroutines, or subs",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs",
+   "first": "sub cube($x) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Subroutines, or subs",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs",
+   "first": "say cube(3); # 27"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Subroutines, or subs",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs",
+   "first": "sub min($x, $y) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Non-value argument passing",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/non-value-argument-passing",
+   "first": "sub inc($x is rw) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Typed arguments",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/typed-arguments",
+   "first": "sub say-hi(Str $name) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Typed arguments",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/typed-arguments",
+   "first": "say-hi(\"Mr. X\"); # OK"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Typed arguments",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/typed-arguments",
+   "first": "# say-hi(123); # Error: Calling say-hi(Int) will never work"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Optional parameters",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/optional-parameters",
+   "first": "sub send-mail(Str $to, Str $bcc?) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Default values",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/default-values",
+   "first": "sub i-live-in(Str $city = \"Moscow\") {"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "Default values",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/default-values",
+   "first": "sub to-pay($salary, $bonus = 100.rand) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Default values",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/default-values",
+   "first": "sub f($a, $b = $a) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Named arguments",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/named-arguments",
+   "first": "sub power(:$base, :$exponent) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Named arguments",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/named-arguments",
+   "first": "say power(:base(2), :exponent(3)); # 8"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Named arguments",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/named-arguments",
+   "first": "sub power(:val($base), :pow($exponent)) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Named arguments",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/named-arguments",
+   "first": "say power(:val(5), :pow(2)); # 25"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Named arguments",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/named-arguments",
+   "first": "say power(val => 5, pow => 2); # 25"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Slurpy parameters and flattening",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/slurpy-parameters-and-flattening",
+   "first": "sub cute-output(@text, $before, $after) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Slurpy parameters and flattening",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/slurpy-parameters-and-flattening",
+   "first": "sub get-array(@a) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Slurpy parameters and flattening",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/slurpy-parameters-and-flattening",
+   "first": "sub get-array(*@a) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Slurpy parameters and flattening",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/slurpy-parameters-and-flattening",
+   "first": "sub get-scalars($a, $b, $c) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Slurpy parameters and flattening",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/slurpy-parameters-and-flattening",
+   "first": "get-scalars(|@a); # 3 and 4 and 5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Nested subs",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/nested-subs",
+   "first": "sub cube($x) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Anonymous subs",
+   "url": "/perl-6-at-a-glance/subroutines-or-subs/anonymous-subs",
+   "first": "say sub ($x, $y) {$x ~ ' ' ~ $y}(\"Perl\", 6);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Lexical variables",
+   "url": "/perl-6-at-a-glance/variables-and-signatures/lexical-variables",
+   "first": "{"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Lexical variables",
+   "url": "/perl-6-at-a-glance/variables-and-signatures/lexical-variables",
+   "first": "sub seq($init) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Lexical variables",
+   "url": "/perl-6-at-a-glance/variables-and-signatures/lexical-variables",
+   "first": "my $a = seq(1);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Lexical variables",
+   "url": "/perl-6-at-a-glance/variables-and-signatures/lexical-variables",
+   "first": "my $a = seq(1);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Lexical variables",
+   "url": "/perl-6-at-a-glance/variables-and-signatures/lexical-variables",
+   "first": "say $a(); # 1"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "state variables",
+   "url": "/perl-6-at-a-glance/variables-and-signatures/state-variables",
+   "first": "sub seq($init) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "state variables",
+   "url": "/perl-6-at-a-glance/variables-and-signatures/state-variables",
+   "first": "my $a = seq(1);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "state variables",
+   "url": "/perl-6-at-a-glance/variables-and-signatures/state-variables",
+   "first": "say $a(); # 1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Dynamic variables",
+   "url": "/perl-6-at-a-glance/variables-and-signatures/dynamic-variables",
+   "first": "sub alpha {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Anonymous code blocks",
+   "url": "/perl-6-at-a-glance/anonymous-code-blocks",
+   "first": "my $cube = -> $x {$x ** 3};"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Anonymous code blocks",
+   "url": "/perl-6-at-a-glance/anonymous-code-blocks",
+   "first": "for 1..10 -> $c {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Anonymous code blocks",
+   "url": "/perl-6-at-a-glance/anonymous-code-blocks",
+   "first": "for 0..9 -> $i, $j {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Placeholders",
+   "url": "/perl-6-at-a-glance/placeholders",
+   "first": "my $pow = {$^x ** $^y};"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Placeholders",
+   "url": "/perl-6-at-a-glance/placeholders",
+   "first": "for 0..9 {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Placeholders",
+   "url": "/perl-6-at-a-glance/placeholders",
+   "first": "my $pow = {$:base ** $:exp};"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Placeholders",
+   "url": "/perl-6-at-a-glance/placeholders",
+   "first": "say $pow(:exp(2), :base(25)); # 625"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Placeholders",
+   "url": "/perl-6-at-a-glance/placeholders",
+   "first": "sub f($a) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Placeholders",
+   "url": "/perl-6-at-a-glance/placeholders",
+   "first": "sub f($a) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Function overloading",
+   "url": "/perl-6-at-a-glance/function-overloading",
+   "first": "multi sub twice(Int $x) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Sub overloading with subtypes",
+   "url": "/perl-6-at-a-glance/function-overloading/sub-overloading-with-subtypes",
+   "first": "subset Odd of Int where {$^n % 2 == 1};"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Sub overloading with subtypes",
+   "url": "/perl-6-at-a-glance/function-overloading/sub-overloading-with-subtypes",
+   "first": "multi sub testnum(Odd $x) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Sub overloading with subtypes",
+   "url": "/perl-6-at-a-glance/function-overloading/sub-overloading-with-subtypes",
+   "first": "testnum($x);"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "unit module X;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "module X {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "unit module X;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "unit module Greet;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "use Greet;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "module Greet::Polite {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "use Greet;"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "my module M {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "my module M {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "unit module N;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "need N;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "unit module Math;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Modules",
+   "url": "/perl-6-at-a-glance/modules",
+   "first": "require Math;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Classes",
+   "url": "/perl-6-at-a-glance/classes",
+   "first": "class Cafe {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Class attributes",
+   "url": "/perl-6-at-a-glance/class-attributes",
+   "first": "class Cafe {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Class attributes",
+   "url": "/perl-6-at-a-glance/class-attributes",
+   "first": "my $cafe = Cafe.new("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Class attributes",
+   "url": "/perl-6-at-a-glance/class-attributes",
+   "first": "say $cafe.name;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Class attributes",
+   "url": "/perl-6-at-a-glance/class-attributes",
+   "first": "class Cafe {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Class attributes",
+   "url": "/perl-6-at-a-glance/class-attributes",
+   "first": "$cafe.name = \"Berlin\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Class methods",
+   "url": "/perl-6-at-a-glance/class-methods",
+   "first": "class Cafe {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Class methods",
+   "url": "/perl-6-at-a-glance/class-methods",
+   "first": "@!orders.sort.join(', ').say;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Class methods",
+   "url": "/perl-6-at-a-glance/class-methods",
+   "first": "method order($what) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Inheritance",
+   "url": "/perl-6-at-a-glance/inheritance",
+   "first": "class A {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Inheritance",
+   "url": "/perl-6-at-a-glance/inheritance",
+   "first": "my $a = A.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Inheritance",
+   "url": "/perl-6-at-a-glance/inheritance",
+   "first": "my A $b = B.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Inheritance",
+   "url": "/perl-6-at-a-glance/inheritance",
+   "first": "say $b.^mro;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple inheritance",
+   "url": "/perl-6-at-a-glance/multiple-inheritance",
+   "first": "class A {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Multiple inheritance",
+   "url": "/perl-6-at-a-glance/multiple-inheritance",
+   "first": "class A {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Multiple inheritance",
+   "url": "/perl-6-at-a-glance/multiple-inheritance",
+   "first": "class C is A is B {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Multiple inheritance",
+   "url": "/perl-6-at-a-glance/multiple-inheritance",
+   "first": "my $c = C.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Multiple inheritance",
+   "url": "/perl-6-at-a-glance/multiple-inheritance",
+   "first": "$c.^mro.say; # ((C) (A) (B) (Any) (Mu))"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Private (closed) methods",
+   "url": "/perl-6-at-a-glance/private-closed-methods",
+   "first": "class A {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Private (closed) methods",
+   "url": "/perl-6-at-a-glance/private-closed-methods",
+   "first": "class C {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Submethods",
+   "url": "/perl-6-at-a-glance/submethods",
+   "first": "class A {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "my $a = A.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "my A $a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "my A $a = A.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "class A {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "my A $a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "$a.m; # Prints \u201cA.m\u201d"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "say $a.x; # Error: Cannot look up attributes in a A type object"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "my A $b = A.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "my A $c = A.new(x => 14);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "my A $c = A.new :x(14); # Or A.new(:x(14)) if you wish"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Constructors",
+   "url": "/perl-6-at-a-glance/constructors",
+   "first": "class A {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Roles",
+   "url": "/perl-6-at-a-glance/roles",
+   "first": "# The role of the catering place is to take orders "
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Roles",
+   "url": "/perl-6-at-a-glance/roles",
+   "first": "method bill {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Roles",
+   "url": "/perl-6-at-a-glance/roles",
+   "first": "my $cafe = Cafe.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Roles",
+   "url": "/perl-6-at-a-glance/roles",
+   "first": "my $restaurant = Restaurant.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Roles",
+   "url": "/perl-6-at-a-glance/roles",
+   "first": "role Liquid {"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Read and write",
+   "url": "/perl-6-at-a-glance/channels/read-and-write",
+   "first": "my $c = Channel.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Read and write",
+   "url": "/perl-6-at-a-glance/channels/read-and-write",
+   "first": "my $ch = Channel.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Read and write",
+   "url": "/perl-6-at-a-glance/channels/read-and-write",
+   "first": "my $channel = Channel.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Read and write",
+   "url": "/perl-6-at-a-glance/channels/read-and-write",
+   "first": "$channel.close;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Read and write",
+   "url": "/perl-6-at-a-glance/channels/read-and-write",
+   "first": "$channel.close;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "The list method",
+   "url": "/perl-6-at-a-glance/channels/the-list-method",
+   "first": "my $c = Channel.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Beyond scalars",
+   "url": "/perl-6-at-a-glance/channels/beyond-scalars",
+   "first": "my $c = Channel.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Beyond scalars",
+   "url": "/perl-6-at-a-glance/channels/beyond-scalars",
+   "first": "my $x = $c.receive;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Beyond scalars",
+   "url": "/perl-6-at-a-glance/channels/beyond-scalars",
+   "first": "my $c = Channel.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Beyond scalars",
+   "url": "/perl-6-at-a-glance/channels/beyond-scalars",
+   "first": "$c.close;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Beyond scalars",
+   "url": "/perl-6-at-a-glance/channels/beyond-scalars",
+   "first": "$c.close;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "The closed method",
+   "url": "/perl-6-at-a-glance/channels/the-closed-method",
+   "first": "my $c = Channel.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Basics",
+   "url": "/perl-6-at-a-glance/promises/basics",
+   "first": "my $p = Promise.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Basics",
+   "url": "/perl-6-at-a-glance/promises/basics",
+   "first": "my $p = Promise.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Basics",
+   "url": "/perl-6-at-a-glance/promises/basics",
+   "first": "my $p = Promise.new;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Basics",
+   "url": "/perl-6-at-a-glance/promises/basics",
+   "first": "say $p.Bool;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Basics",
+   "url": "/perl-6-at-a-glance/promises/basics",
+   "first": "my $p = Promise.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Basics",
+   "url": "/perl-6-at-a-glance/promises/basics",
+   "first": "my $p = Promise.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Basics",
+   "url": "/perl-6-at-a-glance/promises/basics",
+   "first": "my $p = Promise.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Basics",
+   "url": "/perl-6-at-a-glance/promises/basics",
+   "first": "my $p = Promise.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Basics",
+   "url": "/perl-6-at-a-glance/promises/basics",
+   "first": "my $p = Promise.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "start",
+   "url": "/perl-6-at-a-glance/promises/start",
+   "first": "my $p = start {"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "start",
+   "url": "/perl-6-at-a-glance/promises/start",
+   "first": "my $p = start {"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "start",
+   "url": "/perl-6-at-a-glance/promises/start",
+   "first": "my $p = start {"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "start",
+   "url": "/perl-6-at-a-glance/promises/start",
+   "first": "my $p = start {"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "start",
+   "url": "/perl-6-at-a-glance/promises/start",
+   "first": "# $p1 is Kept"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "in and at",
+   "url": "/perl-6-at-a-glance/promises/in-and-at",
+   "first": "my $p = Promise.in(3);"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "anyof and allof",
+   "url": "/perl-6-at-a-glance/promises/anyof-and-allof",
+   "first": "my $code = start {"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "anyof and allof",
+   "url": "/perl-6-at-a-glance/promises/anyof-and-allof",
+   "first": "my $p = Promise.in(2);"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "anyof and allof",
+   "url": "/perl-6-at-a-glance/promises/anyof-and-allof",
+   "first": "Promise.start({  # A new promise"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "An example",
+   "url": "/perl-6-at-a-glance/promises/an-example",
+   "first": "my @promises;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "An example",
+   "url": "/perl-6-at-a-glance/promises/an-example",
+   "first": "await do for @*ARGS {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Regexes",
+   "url": "/perl-6-at-a-glance/regexes",
+   "first": "my regex weekday"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Regexes",
+   "url": "/perl-6-at-a-glance/regexes",
+   "first": "say 'Thu' ~~ m/<weekday>/;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Regexes",
+   "url": "/perl-6-at-a-glance/regexes",
+   "first": "my token number_token { <[\\d]> <[\\d]> }"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Regexes",
+   "url": "/perl-6-at-a-glance/regexes",
+   "first": "say 1 if \"42\" ~~ /<number_token>/;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The $/ object",
+   "url": "/perl-6-at-a-glance/the-object",
+   "first": "'Wed 15' ~~ /(\\w+) \\s (\\d+)/;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "x = 42;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "grammar Lang {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "rule expression {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "token identifier {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "token value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "my $parsed = Lang.parsefile('test.lang');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "\u300cx = 42;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Simple parser",
+   "url": "/perl-6-at-a-glance/grammars/simple-parser",
+   "first": "grammar Lang {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "An interpreter",
+   "url": "/perl-6-at-a-glance/grammars/an-interpreter",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Actions",
+   "url": "/perl-6-at-a-glance/actions",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/perl-6-at-a-glance/actions",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/perl-6-at-a-glance/actions",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/perl-6-at-a-glance/actions",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/perl-6-at-a-glance/actions",
+   "first": "rule printout {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/perl-6-at-a-glance/actions",
+   "first": "my %var;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/perl-6-at-a-glance/actions",
+   "first": "token identifier {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Actions",
+   "url": "/perl-6-at-a-glance/actions",
+   "first": "grammar G {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "AST and attributes",
+   "url": "/perl-6-at-a-glance/ast-and-attributes",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "AST and attributes",
+   "url": "/perl-6-at-a-glance/ast-and-attributes",
+   "first": "method identifier($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "AST and attributes",
+   "url": "/perl-6-at-a-glance/ast-and-attributes",
+   "first": "method expression($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "AST and attributes",
+   "url": "/perl-6-at-a-glance/ast-and-attributes",
+   "first": "$/.make(%var{$<identifier>} // 0);"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "AST and attributes",
+   "url": "/perl-6-at-a-glance/ast-and-attributes",
+   "first": "method printout($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "AST and attributes",
+   "url": "/perl-6-at-a-glance/ast-and-attributes",
+   "first": "method assignment($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "AST and attributes",
+   "url": "/perl-6-at-a-glance/ast-and-attributes",
+   "first": "Lang.parsefile("
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "AST and attributes",
+   "url": "/perl-6-at-a-glance/ast-and-attributes",
+   "first": "grammar Lang {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "AST and attributes",
+   "url": "/perl-6-at-a-glance/ast-and-attributes",
+   "first": "class LangActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "<term>+ %% ['+'|'-']"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "<factor>+  %% ['*'|'/']"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "rule group {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "token value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "grammar Calc {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "class CalcActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "method group($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "method factor($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "method term($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "my @ops = $<op>.map(~*);"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "my @vals = $<factor>[1..*].map(*.ast);"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "method expression($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "my $calc = Calc.parse("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calculator",
+   "url": "/perl-6-at-a-glance/calculator",
+   "first": "x = 40 + 2;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "say $s.NFC; # codepoint"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "my $name = 'na\u00efve';"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "unidump('\u262d');"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "say '2'.NFKD; # NFKD:0x<0032>"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "say unimatch('\u9053', 'CJK'); # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "say unimatch('\u0457', 'Cyrillic'); # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "say 1 if '\u044d' ~~ /<:Cyrillic>/;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "say \"x\".uniprop; # Ll"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "say Uni.new(0x0439).Str;     # \u0439"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Unicode",
+   "url": "/perl-6-at-a-glance/unicode",
+   "first": "say \"\\x0439\";   # \u0439"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "say *.WHAT; # (Whatever)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "say (1 .. *).WHAT; # (Range)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "for (5 .. *) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "my @a = <2 4 6 8 10 12>;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "say (1 ... *).WHAT; # (Seq)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "my @a = (100 ... *);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "my @a = (1, 2 ... *);    # step by 1"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "my @default_values = 'NULL' xx *;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "my $f = * ** 2;  # square"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "# An anonymous code block with one argument $x"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "my @a = <2 4 6 8 10 12>;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "Unsupported use of a negative -1 subscript to index from the end; in P"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "say @a[*-1]; # 12"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "@a[@a.elems - 1]"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Whatever (*)",
+   "url": "/perl-6-at-a-glance/whatever",
+   "first": "my @f = 0, 1, * + * ... *;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Files",
+   "url": "/perl-6-at-a-glance/files",
+   "first": "say slurp \"file.txt\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Files",
+   "url": "/perl-6-at-a-glance/files",
+   "first": "spurt $dest, $data, :append;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Files",
+   "url": "/perl-6-at-a-glance/files",
+   "first": "spurt $dest, $data, :createonly;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files",
+   "url": "/perl-6-at-a-glance/files",
+   "first": "my ($source, $dest) = @*ARGS;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files",
+   "url": "/perl-6-at-a-glance/files",
+   "first": "say 'file.txt'.IO.abspath;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Files",
+   "url": "/perl-6-at-a-glance/files",
+   "first": "say '.'.IO.dir;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files",
+   "url": "/perl-6-at-a-glance/files",
+   "first": "say 1 if 'file.txt'.IO.e; # same as -e 'file.txt' in Perl 5 (file exis"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Programming for the Internet",
+   "url": "/perl-6-at-a-glance/programming-for-the-internet",
+   "first": "use Bailador;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Programming for the Internet",
+   "url": "/perl-6-at-a-glance/programming-for-the-internet",
+   "first": "get '/:name' => sub ($name) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Programming for the Internet",
+   "url": "/perl-6-at-a-glance/programming-for-the-internet",
+   "first": "get '/:name' => -> $name {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Programming for the Internet",
+   "url": "/perl-6-at-a-glance/programming-for-the-internet",
+   "first": "get / 'square-of/' (<digit>+) / => sub ($n) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Programming for the Internet",
+   "url": "/perl-6-at-a-glance/programming-for-the-internet",
+   "first": "get '/ua' => sub {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Programming for the Internet",
+   "url": "/perl-6-at-a-glance/programming-for-the-internet",
+   "first": "use Bailador;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Programming for the Internet",
+   "url": "/perl-6-at-a-glance/programming-for-the-internet",
+   "first": "get '/form/:name' => sub ($name) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Database access",
+   "url": "/perl-6-at-a-glance/database-access",
+   "first": "use DBIish;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Database access",
+   "url": "/perl-6-at-a-glance/database-access",
+   "first": "my $sth = $dbh.prepare(\"select what, when from calendar\");"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Database access",
+   "url": "/perl-6-at-a-glance/database-access",
+   "first": "my $sth = $dbh.prepare("
+  }
+ ]
+}

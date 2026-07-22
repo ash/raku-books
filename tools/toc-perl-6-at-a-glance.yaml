@@ -1,0 +1,255 @@
+- title: Perl 6 at a Glance
+  url: perl-6-at-a-glance
+  long_title: Perl 6 at a Glance
+  description: 'A quick dive into Perl 6 (now Raku): the essentials, operators, subroutines and types,
+    object orientation, regexes and grammars, and a practical appendix — the initial knowledge to start
+    working with the language.'
+  covers:
+  - perl-6-at-a-glance
+  meta:
+    author: Andrew Shitov
+    published: January 2017
+    publisher: DeepText, Amsterdam
+    isbn: 978-90-821568-3-6
+    pages: 155
+    note: The first book based on the stable Perl 6 (Raku) 6.c release.
+  items:
+  - title: Foreword
+    url: foreword
+  - title: Perl 6 Essentials
+    url: perl-6-essentials
+    items:
+    - title: Hello, World!
+      url: hello-world
+    - title: Variables
+      url: variables
+      items:
+      - title: Sigils
+        url: sigils
+      - title: Introspection
+        url: introspection
+      - title: Twigils
+        url: twigils
+      - title: Frequently used special variables
+        url: frequently-used-special-variables
+    - title: Built-in types
+      url: built-in-types
+      items:
+      - title: Typed variables
+        url: typed-variables
+      - title: Bool
+        url: bool
+      - title: Int
+        url: int
+      - title: Str
+        url: str
+      - title: Array
+        url: array
+      - title: Hash
+        url: hash
+  - title: Operators
+    url: operators
+    items:
+    - title: Prefixes
+      url: prefixes
+      items:
+      - title: '!, not'
+        url: not
+      - title: ?, so
+        url: so
+    - title: Postfixes
+      url: postfixes
+    - title: Method postfixes
+      url: method-postfixes
+    - title: Infix operators
+      url: infix-operators
+    - title: Numerical operators
+      url: numerical-operators
+      items:
+      - title: +, -, *, /
+        url: page
+      - title: div, mod
+        url: div-mod
+      - title: +&, +|, +^
+        url: page-2
+      - title: ?|, ?&, ?^
+        url: page-3
+      - title: +<, +>
+        url: page-4
+      - title: ==, !=
+        url: page-5
+      - title: <, >, <=, >=
+        url: page-6
+    - title: String operators
+      url: string-operators
+      items:
+      - title: eq, ne
+        url: eq-ne
+      - title: lt, gt, le, ge
+        url: lt-gt-le-ge
+    - title: Universal comparison operators
+      url: universal-comparison-operators
+      items:
+      - title: before, after
+        url: before-after
+    - title: List operators
+      url: list-operators
+    - title: Junction operators
+      url: junction-operators
+      items:
+      - title: '|, &, ^'
+        url: page-7
+    - title: Shortcut operators
+      url: shortcut-operators
+    - title: Other infix operators
+      url: other-infix-operators
+      items:
+      - title: min, max
+        url: min-max
+      - title: ':'
+        url: page-8
+    - title: Meta-operators
+      url: meta-operators
+      items:
+      - title: Assignment
+        url: assignment
+      - title: Negation
+        url: negation
+      - title: Reverse operator
+        url: reverse-operator
+      - title: Reduction
+        url: reduction
+      - title: Cross-operators
+        url: cross-operators
+      - title: Zip meta-operators
+        url: zip-meta-operators
+    - title: Hyper-operators
+      url: hyper-operators
+  - title: Code Organization
+    url: code-organization
+    items:
+    - title: Subroutines, or subs
+      url: subroutines-or-subs
+      items:
+      - title: Non-value argument passing
+        url: non-value-argument-passing
+      - title: Typed arguments
+        url: typed-arguments
+      - title: Optional parameters
+        url: optional-parameters
+      - title: Default values
+        url: default-values
+      - title: Named arguments
+        url: named-arguments
+      - title: Slurpy parameters and flattening
+        url: slurpy-parameters-and-flattening
+      - title: Nested subs
+        url: nested-subs
+      - title: Anonymous subs
+        url: anonymous-subs
+    - title: Variables and signatures
+      url: variables-and-signatures
+      items:
+      - title: Lexical variables
+        url: lexical-variables
+      - title: state variables
+        url: state-variables
+      - title: Dynamic variables
+        url: dynamic-variables
+    - title: Anonymous code blocks
+      url: anonymous-code-blocks
+    - title: Placeholders
+      url: placeholders
+    - title: Function overloading
+      url: function-overloading
+      items:
+      - title: Sub overloading with subtypes
+        url: sub-overloading-with-subtypes
+    - title: Modules
+      url: modules
+      items:
+      - title: Import summary
+        url: import-summary
+  - title: Classes
+    url: classes
+    items:
+    - title: Class attributes
+      url: class-attributes
+    - title: Class methods
+      url: class-methods
+    - title: Inheritance
+      url: inheritance
+    - title: Multiple inheritance
+      url: multiple-inheritance
+    - title: Private (closed) methods
+      url: private-closed-methods
+    - title: Submethods
+      url: submethods
+    - title: Constructors
+      url: constructors
+    - title: Roles
+      url: roles
+  - title: New Concepts
+    url: new-concepts
+    items:
+    - title: Channels
+      url: channels
+      items:
+      - title: Read and write
+        url: read-and-write
+      - title: The list method
+        url: the-list-method
+      - title: Beyond scalars
+        url: beyond-scalars
+      - title: The closed method
+        url: the-closed-method
+    - title: Promises
+      url: promises
+      items:
+      - title: Basics
+        url: basics
+      - title: Factory methods
+        url: factory-methods
+      - title: start
+        url: start
+      - title: in and at
+        url: in-and-at
+      - title: anyof and allof
+        url: anyof-and-allof
+      - title: An example
+        url: an-example
+  - title: Regexes and Grammars
+    url: regexes-and-grammars
+    items:
+    - title: Regexes
+      url: regexes
+    - title: The $/ object
+      url: the-object
+    - title: Grammars
+      url: grammars
+      items:
+      - title: Simple parser
+        url: simple-parser
+      - title: An interpreter
+        url: an-interpreter
+    - title: Actions
+      url: actions
+    - title: AST and attributes
+      url: ast-and-attributes
+    - title: Calculator
+      url: calculator
+  - title: Appendix
+    url: appendix
+    items:
+    - title: Unicode
+      url: unicode
+    - title: Whatever (*)
+      url: whatever
+    - title: Files
+      url: files
+    - title: Programming for the Internet
+      url: programming-for-the-internet
+    - title: Database access
+      url: database-access
+  - title: Conclusion
+    url: conclusion

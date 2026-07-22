@@ -1,0 +1,35 @@
+{% include languages.html %}
+
+{% assign part_n = 0 %}
+{% for part in toc %}
+{% if (menu_for_part == nil) or (menu_for_part == part.url) %}
+
+{% assign part_n = part_n | plus: 1 %}
+{% if part_n == 1 or lang == "" %}
+## {{strings.Part}} {{part_n}}. {% if part.long_title %}{{part.long_title}}{% else %}{{part.title}}{% endif %}
+
+{%- for subpart in part.items %}
+#### {{subpart.title}}
+{%- for section in subpart.items %}
+* [{{section.title}}]({{top}}/{{part.url}}/{{section.url}})
+{%-if extended_menu %}
+    {%- if section.quizzes %} — <span class="has-q">[{% include decline.html number=section.quizzes.size word=strings.quiz %}]({{top}}/{{part.url}}/{{section.url}}#practice)</span>{% endif %}
+    {%- if section.exercises %}
+        {%if section.quizzes %} {{strings.and}} {%- else %} — {%- endif %}
+        <span class="has-e">[{% include decline.html number=section.exercises.size word=strings.exercise %}]({{top}}/{{part.url}}/{{section.url}}/exercises)</span>
+    {%- endif %}
+{%- endif %}
+
+{%- if compact_menu == nil %}
+{%- for topic in section.items %}
+    - [{{topic.title}}]({{top}}/{{part.url}}/{{section.url}}/{{topic.url}})
+    {%- if extended_menu %}
+        {%- if topic.quizzes %} — <span class="has-q">[{% include decline.html number=topic.quizzes.size word=strings.quiz %}]({{top}}/{{part.url}}/{{section.url}}/{{topic.url}}#practice)</span>{% endif %}
+    {%- endif %}
+{%- endfor %}
+{%- endif %}
+{%- endfor %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endfor %}

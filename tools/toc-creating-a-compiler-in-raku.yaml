@@ -1,0 +1,237 @@
+- title: Creating a Compiler in Raku
+  url: creating-a-compiler-in-raku
+  long_title: Creating a Compiler in Raku
+  description: A step-by-step coding essay that builds a working compiler in Raku — from a tiny translator
+    through grammars, actions, and an abstract syntax tree to a full calculator and interpreter.
+  covers:
+  - creating-a-compiler-in-raku
+  meta:
+    author: Andrew Shitov
+    published: 1 November 2018
+    publisher: DeepText, Amsterdam
+    isbn: 978-90-821568-1-2
+  banner: This book is not yet published — the text here is still under proofreading.
+  items:
+  - title: Creating a Simple Translator
+    url: creating-a-simple-translator
+    items:
+    - title: Grammar
+      url: grammar
+    - title: Actions
+      url: actions
+    - title: Modules
+      url: modules
+  - title: Parsing a Number
+    url: parsing-a-number
+    items:
+    - title: Finding a number
+      url: finding-a-number
+    - title: Getting the value
+      url: getting-the-value
+    - title: Using AST
+      url: using-ast
+    - title: Final notes
+      url: final-notes
+  - title: Creating a Calculator
+    url: creating-a-calculator
+    items:
+    - title: Enrolling a sum
+      url: enrolling-a-sum
+    - title: Premature optimization
+      url: premature-optimization
+    - title: More operands
+      url: more-operands
+    - title: A diversity test
+      url: a-diversity-test
+    - title: Adding more math
+      url: adding-more-math
+    - title: Testing the code
+      url: testing-the-code
+    - title: Adding more power
+      url: adding-more-power
+    - title: Allowing parentheses
+      url: allowing-parentheses
+  - title: A Better Translator
+    url: a-better-translator
+    items:
+    - title: Skipping comments
+      url: skipping-comments
+    - title: Sophisticated numbers
+      url: sophisticated-numbers
+    - title: Sophisticated expressions
+      url: sophisticated-expressions
+    - title: Using variables
+      url: using-variables
+    - title: Declaration with initialisation
+      url: declaration-with-initialisation
+  - title: Working on Grammar
+    url: working-on-grammar
+    items:
+    - title: Executable
+      url: executable
+    - title: Composing and inheriting grammars
+      url: composing-and-inheriting-grammars
+    - title: Reviewing the calculator
+      url: reviewing-the-calculator
+    - title: Using multi-rules
+      url: using-multi-rules
+    - title: Get rid of globals
+      url: get-rid-of-globals
+    - title: Better variable names
+      url: better-variable-names
+    - title: Functions take expressions
+      url: functions-take-expressions
+  - title: Dealing with Strings
+    url: dealing-with-strings
+    items:
+    - title: Strings
+      url: strings
+    - title: Escaping quotes
+      url: escaping-quotes
+    - title: Variable interpolation
+      url: variable-interpolation
+    - title: Indexing a string
+      url: indexing-a-string
+  - title: Arrays and Hashes
+    url: arrays-and-hashes
+    items:
+    - title: Arrays
+      url: arrays
+    - title: Assigning to an array item
+      url: assigning-to-an-array-item
+    - title: 'Off-topic: The joy of syntax'
+      url: off-topic-the-joy-of-syntax
+    - title: Accessing array elements
+      url: accessing-array-elements
+    - title: List assignments
+      url: list-assignments
+    - title: Printing arrays
+      url: printing-arrays
+    - title: Hashes
+      url: hashes
+    - title: Review and test
+      url: review-and-test
+  - title: Building AST
+    url: building-ast
+    items:
+    - title: Thinking of the if keyword
+      url: thinking-of-the-if-keyword
+    - title: The AST blocks
+      url: the-ast-blocks
+    - title: Value nodes
+      url: value-nodes
+    - title: Declaring strings
+      url: declaring-strings
+    - title: Declaring arrays and hashes
+      url: declaring-arrays-and-hashes
+    - title: Scalar assignment
+      url: scalar-assignment
+    - title: Working with indices
+      url: working-with-indices
+    - title: Array and hash assignment and initialisation
+      url: array-and-hash-assignment-and-initialisation
+    - title: AST for expressions
+      url: ast-for-expressions
+    - title: Function calls
+      url: function-calls
+    - title: Final tuning
+      url: final-tuning
+  - title: Evaluating AST
+    url: evaluating-ast
+    items:
+    - title: Evaluating from the TOP
+      url: evaluating-from-the-top
+    - title: Working with variables
+      url: working-with-variables
+    - title: String interpolation
+      url: string-interpolation
+    - title: Using Raku getters
+      url: using-raku-getters
+    - title: Interpolating everywhere
+      url: interpolating-everywhere
+    - title: Arithmetic operations
+      url: arithmetic-operations
+  - title: Test suite
+    url: test-suite
+    items:
+    - title: Test runner
+      url: test-runner
+    - title: Tests
+      url: tests
+      items:
+      - title: Numbers
+        url: numbers
+      - title: Strings
+        url: strings-2
+      - title: Expressions
+        url: expressions
+      - title: Arrays and hashes
+        url: arrays-and-hashes-2
+    - title: Spotting the errors
+      url: spotting-the-errors
+    - title: Feature coverage
+      url: feature-coverage
+    - title: It is never enough
+      url: it-is-never-enough
+  - title: Control Flow
+    url: control-flow
+    items:
+    - title: Implementing if
+      url: implementing-if
+    - title: Implementing else
+      url: implementing-else
+    - title: Implementing a loop
+      url: implementing-a-loop
+    - title: Statement blocks
+      url: statement-blocks
+    - title: Blocks in the AST
+      url: blocks-in-the-ast
+    - title: A real-life test
+      url: a-real-life-test
+    - title: Conditional operators
+      url: conditional-operators
+    - title: Implementing while
+      url: implementing-while
+  - title: Functions
+    url: functions
+    items:
+    - title: Built-in functions
+      url: built-in-functions
+      items:
+      - title: print
+        url: print
+      - title: len
+        url: len
+      - title: keys
+        url: keys
+    - title: User-defined functions
+      url: user-defined-functions
+      items:
+      - title: Defining a function
+        url: defining-a-function
+      - title: Calling a function
+        url: calling-a-function
+      - title: Returning a value
+        url: returning-a-value
+      - title: The scope of variables
+        url: the-scope-of-variables
+      - title: Recursion
+        url: recursion
+  - title: Optimising the AST
+    url: optimising-the-ast
+    items:
+    - title: The optimiser class
+      url: the-optimiser-class
+    - title: Constant folding
+      url: constant-folding
+    - title: Algebraic identities
+      url: algebraic-identities
+    - title: Eliminating dead branches
+      url: eliminating-dead-branches
+  - title: Afterword
+    url: afterword
+    items:
+    - title: A proper command line
+      url: a-proper-command-line
+    - title: Looking back
+      url: looking-back

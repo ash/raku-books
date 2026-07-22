@@ -1,0 +1,90 @@
+{
+ "book": "Perl 6 Calendar 2019",
+ "slug": "perl-6-calendar-2019",
+ "verdicts": [
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "January",
+   "url": "/perl-6-calendar-2019/january",
+   "first": "say [*] 1..2019"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "February",
+   "url": "/perl-6-calendar-2019/february",
+   "first": "say ((1..*).grep: *.is-prime)[2018]"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "March",
+   "url": "/perl-6-calendar-2019/march",
+   "first": "my $r = 5;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "April",
+   "url": "/perl-6-calendar-2019/april",
+   "first": "my @data = 5, 3, 1, 4, 2;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "May",
+   "url": "/perl-6-calendar-2019/may",
+   "first": "say ([~] ^2020).comb.sum"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "June",
+   "url": "/perl-6-calendar-2019/june",
+   "first": "say ('0'..'z').pick(15).join"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "July",
+   "url": "/perl-6-calendar-2019/july",
+   "first": "say 0.1 + 0.2 - 0.3"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "August",
+   "url": "/perl-6-calendar-2019/august",
+   "first": "2019.rand.Int.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "September",
+   "url": "/perl-6-calendar-2019/september",
+   "first": "my @data = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "October",
+   "url": "/perl-6-calendar-2019/october",
+   "first": "say DateTime.now.yyyy-mm-dd"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "November",
+   "url": "/perl-6-calendar-2019/november",
+   "first": "say 1..10 X* 1..10"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "December",
+   "url": "/perl-6-calendar-2019/december",
+   "first": "my $month = 12;"
+  }
+ ]
+}

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>94. Parallel file processing — Raku Books</title>
+    <meta property="og:title" content="94. Parallel file processing — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku" selected>Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/using-raku">Using Raku</a> /
+<a href="/raku-books/using-raku/parallel-computing">Parallel Computing</a></p>
+<h1 id="parallel-file-processing">94. Parallel file processing</h1>
+<p><em>Process the files from the current directory in a few parallel
+threads.</em></p>
+<p>We have to do something with each file in the directory, and it has
+to be done in such a way that files are processed independently with a
+few workers. It is not possible to predict how long the process will
+take for each individual file, that’s why we need a common queue, which
+supplies the filenames for the next available worker.</p>
+<p>A good candidate for the queue is a channel.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$channel</span> = <span class="nb">Channel</span>.<span class="nb">new</span>();
+<span class="nv">$channel</span>.<span class="n">send</span>(<span class="nv">$_</span>) <span class="k">for</span> <span class="n">dir</span>();
+<span class="nv">$channel</span>.<span class="nb">close</span>;</pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>All the file names are sent to the channel, which we close afterward.
+(On how to read directories, see more details in Task 97, Reading
+directory con-</p>
+<p><em>tents.)</em></p>
+<p>Channels are designed to work thread-safe. It means that it is
+possible to get data from the channel using several threads, and each
+value is processed only once. Raku cannot predict which thread gets
+which name but it can guarantee that each data item is only read by the
+threads once.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@workers</span>;
+<span class="k">for</span> <span class="mi">1</span>.<span class="mf">.4</span> {
+    <span class="nb">push</span> <span class="nv">@workers</span>, <span class="k">start</span> {
+        <span class="k">while</span> (<span class="k">my</span> <span class="nv">$file</span> = <span class="nv">$channel</span>.<span class="n">poll</span>) {
+            <span class="n">do_something</span>(<span class="nv">$file</span>);
+        }
+    }
+}</pre></div>
+
+<p>The code on the previous page creates four independent workers using
+the <code>start</code> keyword. As they are executed independently not
+only from each other but also from the main program, it is important to
+wait until all of them are done:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">await</span>(<span class="nv">@workers</span>);</pre></div>
+
+<p>The elements of the <code>@workers</code> array are promises (objects
+of the <code>Promise</code> data type). The <code>await</code> routine
+waits until all the promises are kept.</p>
+<p>Another practical way of creating and waiting workers is shown in
+Task 92, Sleep Sort: instead of collecting them in an array, you can use
+the <code>gather</code> and <code>take</code> keywords.</p>
+<p>Examine the main loop:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">while</span> (<span class="k">my</span> <span class="nv">$file</span> = <span class="nv">$channel</span>.<span class="n">poll</span>) {
+    <span class="n">do_something</span>(<span class="nv">$file</span>);
+}</pre></div>
+
+<p>On each iteration, a value from the channel is read. The
+<code>poll</code> method ensures that the reading stops after the
+channel is exhausted.</p>
+<p>All four threads are doing similar work and are polling the same
+channel. This approach distributes the filenames that were sent to the
+channel between the workers. As a name has been read, it is removed from
+the channel, and the next read request returns the next name.</p>
+<p>Finally, cook the <code>do_something</code> sub according to your
+needs. In the following simplest example, it only prints filenames:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">do_something</span>(<span class="nv">$file</span>) {
+    <span class="nb">say</span> <span class="nv">$file</span>.<span class="n">path</span>;
+}</pre></div>
+
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/using-raku/atomic-operations">93. Atomic operations</a>
+  |   <a href="/raku-books/using-raku/miscellaneous">Miscellaneous</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

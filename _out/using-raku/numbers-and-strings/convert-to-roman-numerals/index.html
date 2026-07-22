@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>46. Convert to Roman numerals — Raku Books</title>
+    <meta property="og:title" content="46. Convert to Roman numerals — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku" selected>Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/using-raku">Using Raku</a> /
+<a href="/raku-books/using-raku/numbers">Numbers</a> / <a
+href="/raku-books/using-raku/numbers-and-strings">Numbers and strings</a></p>
+<h1 id="convert-to-roman-numerals">46. Convert to Roman numerals</h1>
+<p><em>Convert an integer number to a Roman numerals string.</em></p>
+<p>Roman numbers are not a direct translation of the decimal system. In
+this task, we assume that the number is not more than 3999, which is the
+maximum a regular Roman number can reach.</p>
+<p>Let’s use the algorithm that keeps the table of pre-calculated
+sequences of Roman letters so that we don’t have to check when III
+becomes IV, or when another I appears after V, etc.</p>
+<p>In the program below, there are four such sequences: for thousands,
+hundreds, tens, and ones. The program iterates over the digits of the
+number in the decimal representation and chooses one of the values from
+the array of lists stored in the <code>@roman</code> variable.</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$n</span> = <span class="mi">2018</span>;
+
+<span class="k">my</span> <span class="nv">$roman</span>;
+<span class="k">my</span> <span class="nv">@roman</span> =
+    <span class="mi">1000</span> =&gt; <span class="s">&lt; M MM MMM &gt;</span>,
+    <span class="mi">100</span>  =&gt; <span class="s">&lt; C CC CCC CD D DC DCC DCCC CM &gt;</span>,
+    <span class="mi">10</span>   =&gt; <span class="s">&lt; X XX XXX XL L LX LXX LXXX XC &gt;</span>,
+    <span class="mi">1</span>    =&gt; <span class="s">&lt; I II III IV V VI VII VIII IX &gt;</span>;
+
+<span class="k">for</span> <span class="nv">@roman</span> -&gt; <span class="nv">$x</span> {
+    <span class="k">my</span> <span class="nv">$digit</span> = (<span class="nv">$n</span> / <span class="nv">$x</span>.<span class="n">key</span>).<span class="nb">Int</span>;
+    <span class="nv">$roman</span> ~= <span class="nv">$x</span>.<span class="n">value</span>[<span class="nv">$digit</span> - <span class="mi">1</span>] <span class="k">if</span> <span class="nv">$digit</span>;
+    <span class="nv">$n</span> <span class="nv">%=</span> <span class="nv">$x</span>.<span class="n">key</span>;
+}
+
+<span class="nb">say</span> <span class="nv">$roman</span>; <span class="c1"># MMXVIII</span></pre></div>
+
+<p>Let us examine the structure of the <code>@roman</code> container. In
+the program code, it looks like a hash. Indeed, it could be a hash, but
+in our case, the algorithm requires division by 1000, 100, and 10, so it
+is easier to organise data so that they are already sorted in the
+correct order.</p>
+<p>The <code>&lt; &gt;</code> quotation construct in the program is the
+simplest way to create a list from the strings that do not contain
+spaces. If you print it with the <code>say</code> <code>@roman</code>
+instruction, you’ll get the following:</p>
+<div class="highlight"><pre>[1000 =&gt; (M MM MMM) 100 =&gt; (C CC CCC CD D DC DCC DCCC CM) 10
+=&gt; (X XX XXX XL L LX LXX LXXX XC) 1 =&gt; (I II III IV V VI VII
+VIII IX)]</pre></div>
+<p>On the top level, it is a list of pairs, such as
+<code>1000 =&gt; (M MM MMM)</code>. Pairs, or objects of the
+<code>Pair</code> class, have the <code>key</code> and
+<code>value</code> methods. For the shown example of a pair, the
+<code>key</code> method returns <code>1000</code>, and the
+<code>value</code> method returns a list <code>(M MM MMM)</code>.</p>
+<p>The digits of the input number <code>$n</code> are scanned from left
+to right:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$digit</span> = (<span class="nv">$n</span> / <span class="nv">$x</span>.<span class="n">key</span>).<span class="nb">Int</span>;</pre></div>
+
+<p>The value of <code>$n</code> also becomes smaller and smaller at each
+step:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nv">$n</span> <span class="nv">%=</span> <span class="nv">$x</span>.<span class="n">key</span>;</pre></div>
+
+<p>At each iteration, the next digit lands in the <code>$digit</code>
+variable, and it is used as the index that selects the correct Roman
+representation:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nv">$roman</span> ~= <span class="nv">$x</span>.<span class="n">value</span>[<span class="nv">$digit</span> - <span class="mi">1</span>] <span class="k">if</span> <span class="nv">$digit</span>;</pre></div>
+
+<p>As zeros in the decimal form have no correspondence to the Roman
+numbers, only non-zero values are taken. When the loop is over, the
+<code>$roman</code> variable contains the desired Roman string.</p>
+<p>The opposite conversion is examined in Task 84, Decode Roman
+numerals.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a
+href="/raku-books/using-raku/numbers-and-strings/compose-the-largest-number">45.
+Compose the largest number</a>   |   <a
+href="/raku-books/using-raku/numbers-and-strings/spelling-numbers">47. Spelling
+numbers</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

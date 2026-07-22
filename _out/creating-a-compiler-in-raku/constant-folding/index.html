@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Constant folding — Raku Books</title>
+    <meta property="og:title" content="Constant folding — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku" selected>Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a
+href="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</a> / <a
+href="/raku-books/creating-a-compiler-in-raku/optimising-the-ast">Optimising the
+AST</a></p>
+<h1 id="constant-folding">Constant folding</h1>
+<p>The first real optimisation is the classic one: constant folding. If
+all the operands of an arithmetic node are number literals, the whole
+node can be replaced with a single literal that carries the result.</p>
+<p>Where does the result come from? Here comes the reward for the design
+we chose in Chapter 9. An <code>AST::MathOperations</code> node knows
+how to compute itself: that is its <code>value</code> method, which the
+evaluator calls at run time. Nothing prevents the optimiser from calling
+the very same method at compile time:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="k">method</span> <span class="n">optimize-node</span>(<span class="n">AST::MathOperations</span> <span class="nv">$node</span>) {
+    <span class="k">my</span> <span class="nv">@operands</span> = <span class="nv">$node</span>.<span class="n">operands</span>.<span class="nb">map</span>: { <span class="nb">self</span>.<span class="n">optimize-node</span>(<span class="nv">$_</span>) };
+
+    <span class="k">my</span> <span class="nv">$new</span> = <span class="n">AST::MathOperations</span>.<span class="nb">new</span>(
+        <span class="n">operators</span> =&gt; <span class="nv">$node</span>.<span class="n">operators</span>,
+        <span class="n">operands</span> =&gt; <span class="nv">@operands</span>,
+    );
+
+    <span class="k">if</span> <span class="n">all</span>(<span class="nv">@operands</span>) ~~ <span class="n">AST::NumberValue</span> {
+        <span class="k">return</span> <span class="n">AST::NumberValue</span>.<span class="nb">new</span>(<span class="n">value</span> =&gt; <span class="nv">$new</span>.<span class="n">value</span>);
+    }
+
+    <span class="k">return</span> <span class="nv">$new</span>;
+}</pre></div>
+
+<p>The operands are optimised first, and this detail makes the folding
+work from the inside out: in <code>2 + 3 * 4</code>, the inner
+multiplication node collapses to 12 first, and then the outer addition
+sees two number literals and collapses to 14. The <code>all</code>
+junction expresses ’every operand is a literal’ in one readable
+line.</p>
+<p>To see the effect, dump the tree of a one-line program
+<code>my x = 2 + 3 * 4;</code> before and after the optimisation.
+Before, the value of the declaration is a tree of seven nodes:</p>
+<div class="highlight"><pre>AST::ScalarDeclaration.new(
+    variable-name =&gt; "x",
+    value =&gt; AST::MathOperations.new(
+        operators =&gt; Array[Str].new("+"),
+        operands =&gt; Array[ASTNode].new(
+            AST::NumberValue.new(value =&gt; 2),
+            AST::MathOperations.new(
+                operators =&gt; Array[Str].new("*"),
+                operands =&gt; Array[ASTNode].new(
+                    AST::NumberValue.new(value =&gt; 3),
+                    AST::NumberValue.new(value =&gt; 4)
+                )
+            )
+        )
+    )
+)</pre></div>
+<p>After, it is a single node:</p>
+<div class="highlight"><pre>AST::ScalarDeclaration.new(
+    variable-name =&gt; "x",
+    value =&gt; AST::NumberValue.new(value =&gt; 14)
+)</pre></div>
+<p>The folding also covers the comparison and Boolean operators, as they
+live in the same <code>AST::MathOperations</code> nodes. In
+<code>if 1 + 1 == 2</code>, the whole condition becomes a single node
+containing <code>True</code>, which is exactly the value the runtime
+would produce. Add a test file:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="n">x</span> = <span class="mi">2</span> + <span class="mi">3</span> * <span class="mi">4</span>;
+<span class="nb">say</span> <span class="n">x</span>; <span class="c1">## 14</span>
+<span class="nb">say</span> <span class="mi">10</span> - <span class="mi">2</span> ** <span class="mi">3</span>; <span class="c1">## 2</span>
+<span class="k">my</span> <span class="n">y</span> = <span class="n">x</span> + <span class="mi">2</span> * <span class="mi">3</span>;
+<span class="nb">say</span> <span class="n">y</span>; <span class="c1">## 20</span>
+<span class="k">if</span> <span class="mi">1</span> + <span class="mi">1</span> == <span class="mi">2</span> <span class="nb">say</span> <span class="s">&quot;arithmetic works&quot;</span>; <span class="c1">## arithmetic works</span></pre></div>
+
+<p>In the expression <code>x + 2 * 3</code>, only the multiplication is
+folded: <code>x</code> is a variable, and its value is not known at
+compile time. The node stays an <code>AST::MathOperations</code>, but
+with one operand fewer to compute at run time.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/creating-a-compiler-in-raku/the-optimiser-class">The
+optimiser class</a>   |   <a
+href="/raku-books/creating-a-compiler-in-raku/algebraic-identities">Algebraic
+identities</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

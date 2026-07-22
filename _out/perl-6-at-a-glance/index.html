@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Perl 6 at a Glance — Raku Books</title>
+    <meta property="og:title" content="Perl 6 at a Glance — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance" selected>Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a></p>
+<div class="book-hero">
+<div class="book-covers">
+<img class="book-cover" src="/raku-books/assets/covers/perl-6-at-a-glance.jpg" alt="Perl 6 at a Glance cover" loading="lazy">
+</div>
+<section id="perl-6-at-a-glance" class="book-hero-text"
+data-markdown="1">
+<h1>Perl 6 at a Glance</h1>
+<p>A quick dive into Perl 6 (now Raku): the essentials, operators,
+subroutines and types, object orientation, regexes and grammars, and a
+practical appendix — the initial knowledge to start working with the
+language.</p>
+<dl class="book-meta">
+<div>
+<dt>
+Author
+</dt>
+<dd>
+Andrew Shitov
+</dd>
+</div>
+<div>
+<dt>
+Published
+</dt>
+<dd>
+January 2017 · DeepText, Amsterdam
+</dd>
+</div>
+<div>
+<dt>
+ISBN
+</dt>
+<dd>
+978-90-821568-3-6
+</dd>
+</div>
+<div>
+<dt>
+Pages
+</dt>
+<dd>
+155
+</dd>
+</div>
+</dl>
+<p class="book-meta-note">
+The first book based on the stable Perl 6 (Raku) 6.c release.
+</p>
+</section>
+</div>
+<h4 id="foreword"><a
+href="/raku-books/perl-6-at-a-glance/foreword">Foreword</a></h4>
+<h4 id="perl-6-essentials"><a
+href="/raku-books/perl-6-at-a-glance/perl-6-essentials">Perl 6 Essentials</a></h4>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/hello-world">Hello, World!</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/variables">Variables</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/variables/sigils">Sigils</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/variables/introspection">Introspection</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/variables/twigils">Twigils</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/variables/frequently-used-special-variables">Frequently
+used special variables</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types">Built-in types</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/typed-variables">Typed
+variables</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/bool">Bool</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/int">Int</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/str">Str</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/array">Array</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/built-in-types/hash">Hash</a></li>
+</ul></li>
+</ul>
+<h4 id="operators"><a
+href="/raku-books/perl-6-at-a-glance/operators">Operators</a></h4>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/prefixes">Prefixes</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/prefixes/not">!, not</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/prefixes/so">?, so</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/postfixes">Postfixes</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/method-postfixes">Method
+postfixes</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/infix-operators">Infix
+operators</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators">Numerical
+operators</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators/page">+, -, *,
+/</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators/div-mod">div,
+mod</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators/page-2">+&amp;, +|,
++^</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators/page-3">?|, ?&amp;,
+?^</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators/page-4">+&lt;,
++&gt;</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators/page-5">==,
+!=</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/numerical-operators/page-6">&lt;, &gt;,
+&lt;=, &gt;=</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/string-operators">String operators</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/string-operators/eq-ne">eq, ne</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/string-operators/lt-gt-le-ge">lt, gt,
+le, ge</a></li>
+</ul></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/universal-comparison-operators">Universal
+comparison operators</a>
+<ul>
+<li><a
+href="/raku-books/perl-6-at-a-glance/universal-comparison-operators/before-after">before,
+after</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/list-operators">List operators</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/junction-operators">Junction
+operators</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/junction-operators/page-7">|, &amp;,
+^</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/shortcut-operators">Shortcut
+operators</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/other-infix-operators">Other infix
+operators</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/other-infix-operators/min-max">min,
+max</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/other-infix-operators/page-8">:</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/meta-operators">Meta-operators</a>
+<ul>
+<li><a
+href="/raku-books/perl-6-at-a-glance/meta-operators/assignment">Assignment</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/meta-operators/negation">Negation</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/meta-operators/reverse-operator">Reverse
+operator</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/meta-operators/reduction">Reduction</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/meta-operators/cross-operators">Cross-operators</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/meta-operators/zip-meta-operators">Zip
+meta-operators</a></li>
+</ul></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/hyper-operators">Hyper-operators</a></li>
+</ul>
+<h4 id="code-organization"><a
+href="/raku-books/perl-6-at-a-glance/code-organization">Code Organization</a></h4>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/subroutines-or-subs">Subroutines, or
+subs</a>
+<ul>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/non-value-argument-passing">Non-value
+argument passing</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/typed-arguments">Typed
+arguments</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/optional-parameters">Optional
+parameters</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/default-values">Default
+values</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/named-arguments">Named
+arguments</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/slurpy-parameters-and-flattening">Slurpy
+parameters and flattening</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/nested-subs">Nested
+subs</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/subroutines-or-subs/anonymous-subs">Anonymous
+subs</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/variables-and-signatures">Variables and
+signatures</a>
+<ul>
+<li><a
+href="/raku-books/perl-6-at-a-glance/variables-and-signatures/lexical-variables">Lexical
+variables</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/variables-and-signatures/state-variables">state
+variables</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/variables-and-signatures/dynamic-variables">Dynamic
+variables</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/anonymous-code-blocks">Anonymous code
+blocks</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/placeholders">Placeholders</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/function-overloading">Function
+overloading</a>
+<ul>
+<li><a
+href="/raku-books/perl-6-at-a-glance/function-overloading/sub-overloading-with-subtypes">Sub
+overloading with subtypes</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/modules">Modules</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/modules/import-summary">Import
+summary</a></li>
+</ul></li>
+</ul>
+<h4 id="classes"><a href="/raku-books/perl-6-at-a-glance/classes">Classes</a></h4>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/class-attributes">Class
+attributes</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/class-methods">Class methods</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/inheritance">Inheritance</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/multiple-inheritance">Multiple
+inheritance</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/private-closed-methods">Private
+(closed) methods</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/submethods">Submethods</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/constructors">Constructors</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/roles">Roles</a></li>
+</ul>
+<h4 id="new-concepts"><a href="/raku-books/perl-6-at-a-glance/new-concepts">New
+Concepts</a></h4>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/channels">Channels</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/channels/read-and-write">Read and
+write</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/channels/the-list-method">The list
+method</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/channels/beyond-scalars">Beyond
+scalars</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/channels/the-closed-method">The closed
+method</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/promises">Promises</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/promises/basics">Basics</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/promises/factory-methods">Factory
+methods</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/promises/start">start</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/promises/in-and-at">in and at</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/promises/anyof-and-allof">anyof and
+allof</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/promises/an-example">An
+example</a></li>
+</ul></li>
+</ul>
+<h4 id="regexes-and-grammars"><a
+href="/raku-books/perl-6-at-a-glance/regexes-and-grammars">Regexes and
+Grammars</a></h4>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/regexes">Regexes</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/the-object">The $/ object</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/grammars">Grammars</a>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/grammars/simple-parser">Simple
+parser</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/grammars/an-interpreter">An
+interpreter</a></li>
+</ul></li>
+<li><a href="/raku-books/perl-6-at-a-glance/actions">Actions</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/ast-and-attributes">AST and
+attributes</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/calculator">Calculator</a></li>
+</ul>
+<h4 id="appendix"><a
+href="/raku-books/perl-6-at-a-glance/appendix">Appendix</a></h4>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/unicode">Unicode</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/whatever">Whatever (*)</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/files">Files</a></li>
+<li><a
+href="/raku-books/perl-6-at-a-glance/programming-for-the-internet">Programming for
+the Internet</a></li>
+<li><a href="/raku-books/perl-6-at-a-glance/database-access">Database
+access</a></li>
+</ul>
+<h4 id="conclusion"><a
+href="/raku-books/perl-6-at-a-glance/conclusion">Conclusion</a></h4>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/perl-6-calendar-2019/december">December</a>   |   <a
+href="/raku-books/perl-6-at-a-glance/foreword">Foreword</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

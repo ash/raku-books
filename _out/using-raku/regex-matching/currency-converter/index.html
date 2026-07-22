@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>75. Currency converter — Raku Books</title>
+    <meta property="og:title" content="75. Currency converter — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku" selected>Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/using-raku">Using Raku</a> /
+<a href="/raku-books/using-raku/regexes-and-grammars">Regexes and Grammars</a> / <a
+href="/raku-books/using-raku/regex-matching">Regex matching</a></p>
+<h1 id="currency-converter">75. Currency converter</h1>
+<p><em>Parse the string with a currency converting request such as ‘10
+EUR in USD’ and print the result.</em></p>
+<p>The task of understanding free text is quite complicated. For the
+currency conversion, we can create a simple regex that matches the most
+common quires.</p>
+<p>Let’s ignore the way the exchange rate data are obtained and use the
+hardcoded values:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">%EUR</span> =
+    <span class="n">AUD</span> =&gt; <span class="mf">1.4994</span>,  <span class="n">CAD</span> =&gt; <span class="mf">1.4741</span>,
+    <span class="n">CHF</span> =&gt; <span class="mf">1.1504</span>,  <span class="n">CNY</span> =&gt; <span class="mf">7.7846</span>,
+    <span class="n">DKK</span> =&gt; <span class="mf">7.4439</span>,  <span class="n">GBP</span> =&gt; <span class="mf">0.89148</span>,
+    <span class="n">ILS</span> =&gt; <span class="mf">4.1274</span>,  <span class="n">JPY</span> =&gt; <span class="mf">131.94</span>,
+    <span class="n">RUB</span> =&gt; <span class="mf">67.471</span>,  <span class="n">USD</span> =&gt; <span class="mf">1.1759</span>;</pre></div>
+
+<p>This hash contains the exchange rates of a few currencies to Euro.
+Thus, it is possible to directly use it to get the results for any pair
+with EUR, such as:</p>
+<div class="highlight"><pre>10 EUR in GBP
+20 ILS to EUR</pre></div>
+<p>For other combinations, a cross-rate can be used. For example, the
+request to convert JPY to CHF uses the values of JPY-to-EUR and
+EUR-to-CHF conversion.</p>
+<p>Here is a regex that parses the textual request:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nv">$request</span> ~~
+    <span class="sr">/(&lt;[\d .]&gt;+) \s* (&lt;:alpha&gt; ** 3) .* (&lt;:alpha&gt; ** 3)/</span>;</pre></div>
+
+<p>Let’s also make a loop to accept multiple requests from the
+keyboard.</p>
+<p>Here is the program:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">while</span> (<span class="k">my</span> <span class="nv">$request</span> = <span class="nb">prompt</span>(<span class="s">'&gt; '</span>)) {
+    <span class="nv">$request</span> ~~
+        <span class="sr">/(&lt;[\d .]&gt;+) \s* (&lt;:alpha&gt; ** 3) .* (&lt;:alpha&gt; ** 3)/</span>;
+    <span class="k">my</span> (<span class="nv">$amount</span>, <span class="nv">$from</span>, <span class="nv">$to</span>) = <span class="nv">$0</span>, <span class="nv">$1</span>, <span class="nv">$2</span>;
+
+    <span class="k">my</span> <span class="nv">$result</span> = <span class="mi">0</span>;
+    <span class="k">if</span> <span class="nv">$to</span> <span class="n">eq</span> <span class="s">'EUR'</span> {
+       <span class="nv">$result</span> = <span class="nv">$amount</span> / <span class="nv">%EUR</span>{<span class="nv">$from</span>};
+    }
+    <span class="k">elsif</span> <span class="nv">$from</span> <span class="n">eq</span> <span class="s">'EUR'</span> {
+       <span class="nv">$result</span> = <span class="nv">$amount</span> * <span class="nv">%EUR</span>{<span class="nv">$to</span>};
+    }
+    <span class="k">else</span> {
+       <span class="nv">$result</span> = <span class="nv">$amount</span> * <span class="nv">%EUR</span>{<span class="nv">$to</span>} <span class="sr">/ %EUR{$from};
+    }
+
+    say &quot;$amount $from = $result $to&quot;;
+}</span></pre></div>
+
+<p>After the regex match, the values are copied to the three variables:
+<code>$amount</code>, <code>$from</code>, and <code>$to</code>. The
+<code>if</code>—<code>elsif</code>—<code>else</code> chain is used to
+choose how the new amount is calculated: either as direct or cross
+rate.</p>
+<p>Run the program and enter different requests with both integer and
+floatingpoint values for different combinations of the currency codes
+listed in the <code>%EUR</code> hash.</p>
+<p>Here are a few ideas of how to improve the program:</p>
+<ol type="1">
+<li>Check if the entered currency code exists. 2. Make the request
+case-insensitive. 3. Create another hash with exchange rates against USD
+and choose it, whenever possible, to avoid cross-calculations.</li>
+</ol>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/using-raku/regex-matching/skipping-pod-documentation">74.
+Skipping Pod documentation</a>   |   <a
+href="/raku-books/using-raku/substitutions-with-regexes">Substitutions with
+regexes</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

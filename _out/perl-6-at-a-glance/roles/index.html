@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Roles — Raku Books</title>
+    <meta property="og:title" content="Roles — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance" selected>Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/perl-6-at-a-glance">Perl 6 at
+a Glance</a> / <a href="/raku-books/perl-6-at-a-glance/classes">Classes</a></p>
+<h1 id="roles">Roles</h1>
+<p>Apart from the bare classes, the Perl 6 language allows roles. These
+are what are sometimes called interfaces in other object-oriented
+languages. Both the methods and the data, which are defined in a role,
+are available for “addition” (or mixing-in) to a new class with the help
+of the <code>does</code> keyword.</p>
+<p>A role looks like a base class that appends its methods and data to
+generate a new type. The difference between prepending a role and
+deriving a class from a base class is that with a role, you do not
+create any inheritance. Instead, all the fields from the role become the
+fields of an existing class. In other words, classes are the is a
+characteristic of an object, while roles are the does traits. With
+roles, name conflicts will be found at compile time; there is no need to
+traverse the method resolution order paths.</p>
+<p>The following example defines a role, which is later used to create
+two classes; we could achieve the same with bare inheritance,
+though:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="c1"># The role of the catering place is to take orders </span>
+<span class="c1"># (via the order method), to count the total amount </span>
+<span class="c1"># of the order (method calc) and issuing a bill (method bill).</span>
+<span class="k">role</span> <span class="n">FoodService</span> {
+    <span class="k">has</span> <span class="nv">@!orders</span>;
+
+    <span class="k">method</span> <span class="n">order</span>(<span class="nv">$price</span>) {
+        <span class="nv">@!orders</span>.<span class="nb">push</span>(<span class="nv">$price</span>);
+    }
+
+    <span class="k">method</span> <span class="n">calc</span> {
+        <span class="c1"># [+] is a hyperoperator (hyperop) connecting all the</span>
+        <span class="c1"># elements of an array.</span>
+        <span class="c1"># It means that [+] @a is equivalent to</span>
+        <span class="c1"># @a[0] + @a[1] + ... + @a[N].</span>
+        <span class="k">return</span> [+] <span class="nv">@!orders</span>;
+    }</pre></div>
+
+<div class="highlight raku no-run"><pre><span></span>    <span class="k">method</span> <span class="n">bill</span> {
+        <span class="c1"># Order's total is still a sum of the orders.</span>
+        <span class="k">return</span> <span class="nb">self</span>.<span class="n">calc</span>;
+    }
+}
+
+<span class="c1"># Launching a cafe. A cafe is a catering place.</span>
+<span class="k">class</span> <span class="n">Cafe</span> <span class="k">does</span> <span class="n">FoodService</span> {
+    <span class="k">method</span> <span class="n">bill</span> {
+        <span class="c1"># But with a small surcharge.</span>
+        <span class="k">return</span> <span class="nb">self</span>.<span class="n">calc</span> * <span class="mf">1.1</span>;
+    }
+}
+
+<span class="c1"># And now a restaurant.</span>
+<span class="k">class</span> <span class="n">Restaurant</span> <span class="k">does</span> <span class="n">FoodService</span> {
+    <span class="k">method</span> <span class="n">bill</span> {
+        <span class="c1"># First, let the customer wait some time.</span>
+        <span class="nb">sleep</span> <span class="mi">10</span>.<span class="n">rand</span>;
+
+        <span class="c1"># Second, increase the prices even more.</span>
+        <span class="k">return</span> <span class="nb">self</span>.<span class="n">calc</span> * <span class="mf">1.3</span>;
+    }
+}</pre></div>
+
+<p>Let us try that in action. First, the cafe.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$cafe</span> = <span class="n">Cafe</span>.<span class="nb">new</span>;
+<span class="nv">$cafe</span>.<span class="n">order</span>(<span class="mi">10</span>);
+<span class="nv">$cafe</span>.<span class="n">order</span>(<span class="mi">20</span>);
+<span class="nb">say</span> <span class="nv">$cafe</span>.<span class="n">bill</span>; <span class="c1"># Immediate 33</span></pre></div>
+
+<p>Then, the restaurant. (Note that this code will have a delay because
+of the class definition).</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$restaurant</span> = <span class="n">Restaurant</span>.<span class="nb">new</span>;
+<span class="nv">$restaurant</span>.<span class="n">order</span>(<span class="mi">100</span>);
+<span class="nv">$restaurant</span>.<span class="n">order</span>(<span class="mi">200</span>);
+<span class="nb">say</span> <span class="nv">$restaurant</span>.<span class="n">bill</span>; <span class="c1"># 390 after some unpredictable delay</span></pre></div>
+
+<p><code>Roles can be used for defining and API and forcing the presence of a method in a class that uses a role. For example, let’s create a role named Liquid</code>,
+<code>which requires that the flows method must be implemented.</code></p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">role</span> <span class="n">Liquid</span> {
+    <span class="k">method</span> <span class="n">flows</span> {...}
+}
+
+<span class="k">class</span> <span class="n">Water</span> <span class="k">does</span> <span class="n">Liquid</span> {
+}
+
+<span class="n">It</span> <span class="k">is</span> <span class="k">not</span> <span class="n">possible</span> <span class="n">to</span> <span class="nb">run</span> <span class="n">this</span> <span class="n">programme</span> <span class="n">as</span> <span class="n">it</span> <span class="n">generates</span> <span class="n">a</span> <span class="n">compile-time</span> <span class="n">error</span>:
+
+<span class="nb">Method</span> <span class="s">'flows'</span> <span class="n">must</span> <span class="n">be</span> <span class="n">implemented</span> <span class="n">by</span> <span class="n">Water</span> <span class="n">because</span> <span class="n">it</span> <span class="k">is</span> <span class="n">required</span> <span class="n">by</span> <span class="n">a</span> <span class="k">role</span></pre></div>
+
+<p>Note that the ellipsis <code>...</code> is a valid Perl 6
+construction that is used to create forward declarations.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/perl-6-at-a-glance/constructors">Constructors</a>   |  
+<a href="/raku-books/perl-6-at-a-glance/new-concepts">New Concepts</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

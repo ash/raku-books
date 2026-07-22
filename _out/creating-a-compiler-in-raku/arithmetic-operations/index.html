@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Arithmetic operations — Raku Books</title>
+    <meta property="og:title" content="Arithmetic operations — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku" selected>Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a
+href="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</a> / <a
+href="/raku-books/creating-a-compiler-in-raku/evaluating-ast">Evaluating
+AST</a></p>
+<h1 id="arithmetic-operations">Arithmetic operations</h1>
+<p>It is time to restore the work of our calculator within the compiler,
+and to implement the solution for the <code>AST::MathOperations</code>
+node. The work we did earlier to re-use the <code>value</code> method
+brings its benefits, and the code is very simple:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">AST::MathOperations</span> <span class="k">is</span> <span class="n">ASTNode</span> {
+    . . .
+    <span class="n">method</span> <span class="n">value</span>() {
+        <span class="k">my</span> <span class="nv">$result</span> = <span class="nv">@.operands</span>.<span class="nb">shift</span>.<span class="n">value</span>;
+
+        <span class="k">while</span> <span class="nv">@.operands</span> {
+            <span class="nv">$result</span> = <span class="n">operation</span>(
+                <span class="nv">@.operators</span>.<span class="nb">shift</span>,
+                <span class="nv">$result</span>, <span class="nv">@.operands</span>.<span class="nb">shift</span>.<span class="n">value</span>);
+        }
+
+        <span class="k">return</span> <span class="nv">$result</span>;
+    }
+}</pre></div>
+
+<p>The actual operation methods are the same which we had in the
+calculator discussed in Chapter 3. Put them to the
+<code>AST::MathOperations</code> class:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="k">sub</span> <span class="n">operation</span>(<span class="s">'+'</span>, <span class="nv">$a</span>, <span class="nv">$b</span>) {
+    <span class="nv">$a</span> + <span class="nv">$b</span>
+}
+
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">operation</span>(<span class="s">'-'</span>, <span class="nv">$a</span>, <span class="nv">$b</span>) {
+    <span class="nv">$a</span> - <span class="nv">$b</span>
+}
+
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">operation</span>(<span class="s">'*'</span>, <span class="nv">$a</span>, <span class="nv">$b</span>) {
+    <span class="nv">$a</span> * <span class="nv">$b</span>
+}
+
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">operation</span>(<span class="s">'/'</span>, <span class="nv">$a</span>, <span class="nv">$b</span>) {
+    <span class="nv">$a</span> / <span class="nv">$b</span>
+}
+
+<span class="k">multi</span> <span class="k">sub</span> <span class="n">operation</span>(<span class="s">'**'</span>, <span class="nv">$a</span>, <span class="nv">$b</span>) {
+    <span class="nv">$a</span> ** <span class="nv">$b</span>
+}</pre></div>
+
+<p>Having that done, we can simplify the implementation of the
+<code>say</code> function. Previously, we had two multi-variants
+reacting for either <code>AST::NumberValue</code> or
+<code>AST::StringValue</code>. As strings can now interpolate variables
+themselves, we can just take the value of the node, and there’s no need
+to distinguish between the types of the nodes:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="k">method</span> <span class="n">call-function</span>(<span class="s">'say'</span>, <span class="n">ASTNode</span> <span class="nv">$value</span>) {
+    <span class="nb">say</span> <span class="nv">$value</span>.<span class="n">value</span>;
+}</pre></div>
+
+<p>Don’t forget to specify the behaviour of the say function for array
+and hashes. Again, multiple dispatch with the where clause can help
+here, while the condition becomes a bit wordy:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="k">method</span> <span class="n">call-function</span>(<span class="s">'say'</span>, <span class="n">AST::Variable</span> <span class="nv">$value</span> 
+    <span class="k">where</span> <span class="nv">%!var</span>{<span class="nv">$value</span>.<span class="n">variable-name</span>} ~~ <span class="nb">Array</span>) {
+
+    <span class="nb">say</span> <span class="nv">%!var</span>{<span class="nv">$value</span>.<span class="n">variable-name</span>}.<span class="nb">join</span>(<span class="s">', '</span>);
+}
+
+<span class="k">multi</span> <span class="k">method</span> <span class="n">call-function</span>(<span class="s">'say'</span>, <span class="n">AST::Variable</span> <span class="nv">$value</span> 
+    <span class="k">where</span> <span class="nv">%!var</span>{<span class="nv">$value</span>.<span class="n">variable-name</span>} ~~ <span class="nb">Hash</span>) {
+    
+    <span class="k">my</span> <span class="nv">$data</span> = <span class="nv">%!var</span>{<span class="nv">$value</span>.<span class="n">variable-name</span>};
+    <span class="k">my</span> <span class="nv">@str</span>;
+    <span class="k">for</span> <span class="nv">$data</span>.<span class="nb">keys</span>.<span class="nb">sort</span> -&gt; <span class="nv">$key</span> {
+        <span class="nv">@str</span>.<span class="nb">push</span>(<span class="s">&quot;$key: $data{$key}&quot;</span>);
+    }
+    <span class="nb">say</span> <span class="nv">@str</span>.<span class="nb">join</span>(<span class="s">', '</span>);
+}</pre></div>
+
+<p>For array and hash items the functions are straightforward:</p>
+<div class="highlight"><pre>multi method call-function('say', AST::ArrayItem $item) {
+    say %!var{$item.variable-name}[$item.index.value];
+}
+
+multi method call-function('say', AST::HashItem $item) {
+    say %!var{$item.variable-name}{$item.key.value};
+}</pre></div>
+<p>This is the end of this chapter, where we used the AST tree to
+evaluate the values of its nodes and to run the program in the end. The
+evaluator class that was built is very compact, as we moved some logic
+to AST nodes. This let us balance between the pure design and complex
+code.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a
+href="/raku-books/creating-a-compiler-in-raku/interpolating-everywhere">Interpolating
+everywhere</a>   |   <a
+href="/raku-books/creating-a-compiler-in-raku/test-suite">Test suite</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

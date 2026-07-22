@@ -1,0 +1,1063 @@
+{
+ "book": "Raku One-Liners",
+ "slug": "raku-one-liners",
+ "verdicts": [
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Reading files with $*ARGFILES",
+   "url": "/raku-one-liners/reading-files-with-argfiles",
+   "first": ".say for $*ARGFILES.lines"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Reading files with $*ARGFILES",
+   "url": "/raku-one-liners/reading-files-with-argfiles",
+   "first": "sub MAIN(*@files) {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Renaming files",
+   "url": "/raku-one-liners/renaming-files",
+   "first": "@*ARGS[0..*-2].sort.map: *.Str.IO.rename(++@*ARGS[*-1])"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Merging files horizontally",
+   "url": "/raku-one-liners/merging-files-horizontally",
+   "first": ".say for [Z~] @*ARGS.map: *.IO.lines;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Merging files horizontally",
+   "url": "/raku-one-liners/merging-files-horizontally",
+   "first": "(.say for)."
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Merging files horizontally",
+   "url": "/raku-one-liners/merging-files-horizontally",
+   "first": ".trim.say for [Z~] @*ARGS.map: *.IO.lines.map: *~ ' '"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Reversing a file",
+   "url": "/raku-one-liners/reversing-a-file",
+   "first": ".say for $*IN.lines.reverse"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Reversing a file",
+   "url": "/raku-one-liners/reversing-a-file",
+   "first": ".say for lines.reverse"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Reversing a file",
+   "url": "/raku-one-liners/reversing-a-file",
+   "first": ".say for @*ARGS[0].IO.open.lines.reverse"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Reversing a file",
+   "url": "/raku-one-liners/reversing-a-file",
+   "first": "dd $_ for @*ARGS[0].IO.open.nl-in"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Reversing a file",
+   "url": "/raku-one-liners/reversing-a-file",
+   "first": "$[\"\\n\", \"\\r\\n\"]"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Reversing a file",
+   "url": "/raku-one-liners/reversing-a-file",
+   "first": "@*ARGS[0].IO.open(chomp => False).lines.reverse.put"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Reversing a file",
+   "url": "/raku-one-liners/reversing-a-file",
+   "first": "@*ARGS[0].IO.open("
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Grepping multiples of 3 and 5",
+   "url": "/raku-one-liners/grepping-multiples-of-3-and-5",
+   "first": "say sum((1..999).grep: * %% (3 | 5))"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Grepping multiples of 3 and 5",
+   "url": "/raku-one-liners/grepping-multiples-of-3-and-5",
+   "first": "$x %% 3 | 5"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Grepping multiples of 3 and 5",
+   "url": "/raku-one-liners/grepping-multiples-of-3-and-5",
+   "first": "!($x % (3 | 5))"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grepping multiples of 3 and 5",
+   "url": "/raku-one-liners/grepping-multiples-of-3-and-5",
+   "first": "(1..999).grep: * %% (3 | 5)"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grepping multiples of 3 and 5",
+   "url": "/raku-one-liners/grepping-multiples-of-3-and-5",
+   "first": "(1..999).grep({$_ %% (3 | 5)})"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Grepping multiples of 3 and 5",
+   "url": "/raku-one-liners/grepping-multiples-of-3-and-5",
+   "first": "((1..999).grep: * %% (3 | 5)).sum.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Grepping multiples of 3 and 5",
+   "url": "/raku-one-liners/grepping-multiples-of-3-and-5",
+   "first": "sub f($n) {"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "Generating random integers",
+   "url": "/raku-one-liners/generating-random-integers",
+   "first": "2020.rand.Int.say;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Generating random integers",
+   "url": "/raku-one-liners/generating-random-integers",
+   "first": "method rand() { self.Num.rand }"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Generating random integers",
+   "url": "/raku-one-liners/generating-random-integers",
+   "first": "method rand(Num:D: ) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Generating random integers",
+   "url": "/raku-one-liners/generating-random-integers",
+   "first": "proto sub srand($, *%) {*}"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Generating random integers",
+   "url": "/raku-one-liners/generating-random-integers",
+   "first": "proto sub rand(*%) {*}"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Working with big numbers",
+   "url": "/raku-one-liners/working-with-big-numbers",
+   "first": "<"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Testing palindromic numbers",
+   "url": "/raku-one-liners/testing-palindromic-numbers",
+   "first": "(((999...100) X* (999...100)).grep: {$^a eq $^a.flip}).max.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Testing palindromic numbers",
+   "url": "/raku-one-liners/testing-palindromic-numbers",
+   "first": "(((999...100) X* (999...100)).grep:"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Adding up even Fibonacci numbers",
+   "url": "/raku-one-liners/adding-up-even-fibonacci-numbers",
+   "first": "(1, 1, * + * ...^ * >= 4_000_000).grep(* %% 2).sum.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Playing with Fibonacci numbers",
+   "url": "/raku-one-liners/playing-with-fibonacci-numbers",
+   "first": "say (0, 1, * + * ... *).first(*.chars >= 1000, :k)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Distance between two points",
+   "url": "/raku-one-liners/distance-between-two-points",
+   "first": "say abs(5.5+2i - (1.5+5i))"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Distance between two points",
+   "url": "/raku-one-liners/distance-between-two-points",
+   "first": "say sqrt((5.5 - 1.5)\u00b2 + (2 - 5)\u00b2)"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Distance between two points",
+   "url": "/raku-one-liners/distance-between-two-points",
+   "first": "say \u221a((5.5 - 1.5)\u00b2 + (2 - 5)\u00b2)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Playing with prime numbers",
+   "url": "/raku-one-liners/playing-with-prime-numbers",
+   "first": "say ((1..*).grep: *.is-prime)[10000]"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Using map and Seq to compute the value of \u03c0",
+   "url": "/raku-one-liners/using-map-and-seq-to-compute-the-value-of",
+   "first": "my $pi = 1;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Using map and Seq to compute the value of \u03c0",
+   "url": "/raku-one-liners/using-map-and-seq-to-compute-the-value-of",
+   "first": "say 4 * [+] (^1000).map({(-1) ** $_ / (2 * $_ + 1)})"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Using map and Seq to compute the value of \u03c0",
+   "url": "/raku-one-liners/using-map-and-seq-to-compute-the-value-of",
+   "first": "say 4 * [+] <1/1>,"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using map and Seq to compute the value of \u03c0",
+   "url": "/raku-one-liners/using-map-and-seq-to-compute-the-value-of",
+   "first": "{ <$^n.numerator / $^n.denominator + 2> }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Using map and Seq to compute the value of \u03c0",
+   "url": "/raku-one-liners/using-map-and-seq-to-compute-the-value-of",
+   "first": "say 4 * [+] (1, -1, 1 \u2026 *   )"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Computing totals",
+   "url": "/raku-one-liners/computing-totals",
+   "first": "put [Z+] lines.map: *.words"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Computing totals",
+   "url": "/raku-one-liners/computing-totals",
+   "first": "put 'Total ', [Z+] lines.map: *.words[1..*]"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Sum of the numbers equal to the sum of factorials of digits",
+   "url": "/raku-one-liners/sum-of-the-numbers-equal-to-the-sum-of-factorials-of-digits",
+   "first": "say [+] (3..50_000).grep({$_ == [+] .comb.map({[*] 2..$_})})"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Sum of the numbers equal to the sum of factorials of digits",
+   "url": "/raku-one-liners/sum-of-the-numbers-equal-to-the-sum-of-factorials-of-digits",
+   "first": "{$_ == .comb.map({[*] 2..$_}).sum}"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Sum of the numbers equal to the sum of factorials of digits",
+   "url": "/raku-one-liners/sum-of-the-numbers-equal-to-the-sum-of-factorials-of-digits",
+   "first": "my @f = (0..9).map({[*] 1..$_});"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "Generating random passwords",
+   "url": "/raku-one-liners/generating-random-passwords",
+   "first": "('0'..'z').pick(15).join.say"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Generating random passwords",
+   "url": "/raku-one-liners/generating-random-passwords",
+   "first": "Z4x72B8wkWHo0QD"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Generating random passwords",
+   "url": "/raku-one-liners/generating-random-passwords",
+   "first": "('0'..'z').join.say"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Generating random passwords",
+   "url": "/raku-one-liners/generating-random-passwords",
+   "first": "0123456789:;<=>?@"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The joy of Unicode",
+   "url": "/raku-one-liners/the-joy-of-unicode",
+   "first": "say \u03c0 \u00d7 $%\u00b2"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The joy of Unicode",
+   "url": "/raku-one-liners/the-joy-of-unicode",
+   "first": "say pi * $r ** 2"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The joy of Unicode",
+   "url": "/raku-one-liners/the-joy-of-unicode",
+   "first": "sub f($n) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "What\u2019s the date today?",
+   "url": "/raku-one-liners/whats-the-date-today",
+   "first": "DateTime.now.yyyy-mm-dd.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "What\u2019s the date today?",
+   "url": "/raku-one-liners/whats-the-date-today",
+   "first": "say(DateTime.now().yyyy-mm-dd());"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "What\u2019s the date today?",
+   "url": "/raku-one-liners/whats-the-date-today",
+   "first": "DateTime.now(formatter => -> $dt {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "How many days in the century match the condition?",
+   "url": "/raku-one-liners/how-many-days-in-the-century-match-the-condition",
+   "first": "say ("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "How many days in the century match the condition?",
+   "url": "/raku-one-liners/how-many-days-in-the-century-match-the-condition",
+   "first": "multi method new("
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "How many days in the century match the condition?",
+   "url": "/raku-one-liners/how-many-days-in-the-century-match-the-condition",
+   "first": "say ("
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "How many days in the century match the condition?",
+   "url": "/raku-one-liners/how-many-days-in-the-century-match-the-condition",
+   "first": "say ("
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Another solution of the same prob- lem",
+   "url": "/raku-one-liners/another-solution-of-the-same-prob-lem",
+   "first": "(gather for 1901..2000 X 1..12 {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Another solution of the same prob- lem",
+   "url": "/raku-one-liners/another-solution-of-the-same-prob-lem",
+   "first": "say +(1901..2000 X 1..12).map("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "More on X, .., and \u2026",
+   "url": "/raku-one-liners/more-on-x-and",
+   "first": "my class Range is Cool does Iterable does Positional {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "More on X, .., and \u2026",
+   "url": "/raku-one-liners/more-on-x-and",
+   "first": ".say for 1..10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "More on X, .., and \u2026",
+   "url": "/raku-one-liners/more-on-x-and",
+   "first": "(1, 2, 3) X* (4, 5, 6);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Reduction operator",
+   "url": "/raku-one-liners/reduction-operator",
+   "first": "say [*] 1..2019"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Reduction operator",
+   "url": "/raku-one-liners/reduction-operator",
+   "first": "say 1 * 2 * 3 #`(more elements) * 2018 * 2019"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Reduction operator",
+   "url": "/raku-one-liners/reduction-operator",
+   "first": "say [lcm] 1..20"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Reduction operator",
+   "url": "/raku-one-liners/reduction-operator",
+   "first": "say 1 lcm 2 lcm 3 lcm 4 lcm 5 lcm 6 lcm 7 # ... and up to 20"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "say 20 * 18; # 360"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "say pi ** e; # 22.4591577183611"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "my $weather = '*****';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "my $operator = '..';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "say 'You are so uncertain...'"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "list-gifts('chocolade', 'ipad', 'camelia', 'perl6');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "dump(alpha => 'a', beta => 'b'); # Prints:"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "Too few positionals passed; expected 1 argument but got 0"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "my @a = < chocolade ipad >;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "keep-groupped(@a, @b);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "sub happy-new-year() {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "Variable '$year' is not declared"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "sub happy-new-year() {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "say @*ARGS;      # Prints command-line arguments"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "class Present {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo run timed out",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": ".say for 1 .. *;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "class N {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "my $n = N.new;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "sub echo($x) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "Unsupported use of a negative -1 subscript"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "say (*-1).WHAT; # (WhateverCode)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "my @a = < one two three four five six >;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "say (3..*).WHAT; # (Range)"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "say @a[3 .. *-2]; # (four five)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "say (3 .. *-2).WHAT; # (WhateverCode)"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "class N {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "display(WhateverCode):"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "multi method display(WhateverCode $code)"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "say $code(2000 + 100.rand.Int);"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "multi method display(WhateverCode $code"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "N.display( * + * );"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "N.display( * * * );"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "my @n = ((0, 1, * + * ... *).grep: *.is-prime).map: * * * * *;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo run timed out",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "((0, 1, * + * ... Inf).grep: *.is-prime).map: * * * * *"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo run timed out",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "((0, 1, -> $x, $y {$x + $y} ... Inf).grep:"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo run timed out",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "(0, 1, -> $x, $y {$x + $y} ... Inf).grep({"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "All the stars of Raku",
+   "url": "/raku-one-liners/all-the-stars-of-raku",
+   "first": "my @n = (0, 1, -> $x, $y {$x + $y} ... Inf).grep({"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "EVAL('say 123');"
+  },
+  {
+   "state": "run",
+   "reason": "non-deterministic; Raku++ ran",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "EVAL('say {456}');"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "-> ;; $_? is raw { #`(Block|140570649867712) ... }"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "EVAL(\"say {789}\");"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "===SORRY!=== Error while compiling eval.pl"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "use MONKEY-SEE-NO-EVAL;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "use MONKEY-SEE-NO-EVAL;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "use MONKEY-SEE-NO-EVAL;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "Constraint type check failed in binding to parameter '$code';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "eval('say 42');"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The EVAL routine",
+   "url": "/raku-one-liners/the-eval-routine",
+   "first": "===SORRY!=== Error while compiling eval2.raku"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The first test",
+   "url": "/raku-one-liners/the-first-test",
+   "first": ".is-prime&&.say for ^"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The first test",
+   "url": "/raku-one-liners/the-first-test",
+   "first": ".say if .is-prime for ^100"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The second test",
+   "url": "/raku-one-liners/the-second-test",
+   "first": ".say for (0, 1, * + * ... *)[^31]"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The second test",
+   "url": "/raku-one-liners/the-second-test",
+   "first": ".say for (0,1,*+*...*)[^31]"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The second test",
+   "url": "/raku-one-liners/the-second-test",
+   "first": "(0,1,*+*...*)[^31]>>.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The second test",
+   "url": "/raku-one-liners/the-second-test",
+   "first": "(0,1,*+*\u2026*)[^31]\u00bb.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The second test",
+   "url": "/raku-one-liners/the-second-test",
+   "first": "(0,1,*+*\u2026*>514229)\u00bb.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The second test",
+   "url": "/raku-one-liners/the-second-test",
+   "first": "(0,1,*+*\u2026*>7\u2077)\u00bb.say"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The second test",
+   "url": "/raku-one-liners/the-second-test",
+   "first": "(0,1,*+*\u2026*>)\u00bb.say"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "The second test",
+   "url": "/raku-one-liners/the-second-test",
+   "first": "(0,1,*+*\u2026/20/)\u00bb.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "say 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "$_.say for 1..10"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "for 1..10 {.say}"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": ".say for 1..9"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": ".say for ^10"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": ".say for 1..10"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": ".say for 10\u20261"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "(^10).map: *.say"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "if ($x > 0) {say $x;exit}"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "say(42)"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "my @a = ('alpha', 'beta')"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "say $z if $x < 10 < $y"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "(^10).map({.sin}).grep: *>0"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "abs($x)"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "if $x=~=$y"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "say $x**2"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": "my \\a=42;say a"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Tips and ideas for the Raku Golf code",
+   "url": "/raku-one-liners/tips-and-ideas-for-the-raku-golf-code",
+   "first": ".say if $x>0"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "What\u2019s behind 0.1 + 0.2",
+   "url": "/raku-one-liners/whats-behind-0-1-0-2",
+   "first": "say 0.1 + 0.2 - 0.3"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "What\u2019s behind 0.1 + 0.2",
+   "url": "/raku-one-liners/whats-behind-0-1-0-2",
+   "first": "token numish {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "What\u2019s behind 0.1 + 0.2",
+   "url": "/raku-one-liners/whats-behind-0-1-0-2",
+   "first": "token rat_number { '<' <bare_rat_number> '>' }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "What\u2019s behind 0.1 + 0.2",
+   "url": "/raku-one-liners/whats-behind-0-1-0-2",
+   "first": "say <1/10> + <2/10> - <3/10>"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "What\u2019s behind 0.1 + 0.2",
+   "url": "/raku-one-liners/whats-behind-0-1-0-2",
+   "first": "method rat_number($/) { make $<bare_rat_number>.ast }"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "What\u2019s behind 0.1 + 0.2",
+   "url": "/raku-one-liners/whats-behind-0-1-0-2",
+   "first": "token dec_number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "What\u2019s behind 0.1 + 0.2",
+   "url": "/raku-one-liners/whats-behind-0-1-0-2",
+   "first": "method dec_number($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "What\u2019s behind 0.1 + 0.2",
+   "url": "/raku-one-liners/whats-behind-0-1-0-2",
+   "first": "$parti=1, $partf=10"
+  }
+ ]
+}

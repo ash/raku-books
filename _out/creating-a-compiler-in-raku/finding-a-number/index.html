@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Finding a number — Raku Books</title>
+    <meta property="og:title" content="Finding a number — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku" selected>Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a
+href="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</a> / <a
+href="/raku-books/creating-a-compiler-in-raku/parsing-a-number">Parsing a
+Number</a></p>
+<h1 id="finding-a-number">Finding a number</h1>
+<p>Calculators work with numbers, so the first thing we’ll do will be a
+parser that parses numbers. In the previous chapter, we only worked with
+non-negative integers, but there are much more number formats that a
+good calculator has to understand. It includes, for example, negative
+numbers and floating-point numbers, which can be also written in
+scientific notation. We also have to allow the cases when people omit
+zeros before the decimal point and type .5 instead of 0.5.</p>
+<p>Let’s iteratively create the parser for different kinds of numbers.
+As we are going to make a lot of changes in the grammar, a test suite
+comes for the rescue.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@cases</span> = <span class="mi">7</span>, <span class="mi">77</span>, -<span class="mi">84</span>;
+<span class="k">for</span> <span class="nv">@cases</span> -&gt; <span class="nv">$number</span> {
+    <span class="nb">say</span> <span class="s">&quot;Test $number&quot;</span>;
+    <span class="nb">say</span> <span class="n">Number</span>.<span class="n">parse</span>(<span class="nv">$number</span>);
+}</pre></div>
+
+<p>The <code>@cases</code> array contains a list of numbers that will be
+tested against the <code>Number</code> grammar. Here is its first
+version:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">grammar</span> <span class="n">Number</span> {
+    <span class="k">rule</span> <span class="n">TOP</span> {
+        <span class="s">&lt;number&gt;</span>
+    }
+
+    <span class="k">token</span> <span class="n">number</span> {
+        \<span class="n">d</span>+
+    }
+}</pre></div>
+
+<p>The whole grammar expects a single number, which is a sequence of
+digits. It works with our current test cases, and the program’s output
+is quite predictable:</p>
+<div class="highlight"><pre>Test 7
+｢7｣
+ number =&gt; ｢7｣
+Test 77
+｢77｣
+ number =&gt; ｢77｣
+Test -84
+Nil</pre></div>
+<p>The first two numbers pass the exam, but the third one does not. For
+a negative number, the <code>parse</code> method returns
+<code>Nil</code>.</p>
+<p>So, we need to extend the <code>number</code> token and add an
+optional minus sign in front of the number. An important thing that it
+still has to be a token, as you normally do not expect a space between
+the sign and the number.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">number</span> {
+    <span class="s">'-'</span>? \<span class="n">d</span>+
+}</pre></div>
+
+<p>This small change makes another half of integer numbers, negative
+integers, valid. The above test will now pass.</p>
+<div class="highlight"><pre>Test -84
+｢-84｣
+ number =&gt; ｢-84｣</pre></div>
+<p>But what if you spell a positive number as <code>+7</code>?</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@cases</span> = <span class="mi">7</span>, <span class="mi">77</span>, -<span class="mi">84</span>, <span class="s">'+7'</span>, <span class="mi">0</span>;</pre></div>
+
+<p>(A grammar parser always consumes strings, but we can let Raku
+convert positive numbers to avoid extra quoting in the list of test
+cases.)</p>
+<p>This number is not a valid number according to the grammar. As it
+expects the whole string to be a number, we cannot expect that the plus
+sign will be simply ignored. The parser needs to know about the possible
+sign at the beginning, thus, we need to add it to the token body:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">number</span> {
+    <span class="s">&lt;[+-]&gt;</span>? \<span class="n">d</span>+
+}</pre></div>
+
+<p>Let us also reduce the noise in the output, and do not print the
+parse tree:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">for</span> <span class="nv">@cases</span> -&gt; <span class="nv">$number</span> {
+    <span class="k">my</span> <span class="nv">$test</span> = <span class="n">Number</span>.<span class="n">parse</span>(<span class="nv">$number</span>);
+    <span class="nb">say</span> (<span class="nv">$test</span> ?? <span class="s">'OK '</span> !! <span class="s">'NOT OK '</span>) ~ <span class="nv">$number</span>;
+}</pre></div>
+
+<p>The output now is partially compatible with the TAP (Test Anything
+Protocol) which is widely used in testing Perl modules.</p>
+<div class="highlight"><pre>OK 7
+OK 77
+OK -84
+OK +7
+OK 0</pre></div>
+<p>Add a non-valid number and you’ll immediately see that it fails, for
+example:</p>
+<div class="highlight"><pre>NOT OK 3.14</pre></div>
+<p>The first attempt to implement a parser for the flowing-point numbers
+can be as simple as this:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">number</span> {
+    <span class="s">&lt;[+-]&gt;</span>? \<span class="n">d</span>+ [<span class="s">'.'</span> \<span class="n">d</span>+]?
+}</pre></div>
+
+<p>We just added an optional decimal part. But what if you meet a number
+with a point but with no integer part? It will not pass the test, but it
+is easy to solve by changing <code>\d+</code> to <code>\d*</code> in the
+left part of the regex:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">number</span> {
+    <span class="s">&lt;[+-]&gt;</span>? \<span class="n">d</span>* [<span class="s">'.'</span> \<span class="n">d</span>+]?
+}</pre></div>
+
+<p>Unfortunately, this change breaks the token, as it can be applied to
+a single sign or even to an empty string. All these test cases are now
+OK:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@cases</span> =
+    <span class="mi">7</span>, <span class="mi">77</span>, -<span class="mi">84</span>, <span class="s">'+7'</span>, <span class="mi">0</span>,
+    <span class="mf">3.14</span>, -<span class="mf">2.78</span>, <span class="mf">5.0</span>, <span class="s">'.5'</span>,
+    <span class="s">''</span>, <span class="s">'-'</span>, <span class="s">'+'</span>;</pre></div>
+
+<p>It is a bit tricky to try to express all the options in a single
+regex. It is much easier to explicitly list all the alternatives. As we
+know that the sign can appear in front of any number, let us group the
+alternatives in square brackets:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">number</span> {
+    <span class="s">&lt;[+-]&gt;</span>? [
+        | \<span class="n">d</span>+ 
+        | \<span class="n">d</span>* [<span class="s">'.'</span> \<span class="n">d</span>+]
+    ]
+}</pre></div>
+
+<p>This approach makes the whole token more readable and more
+extendable. We can add another alternative to match the numbers in
+scientific notation.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">number</span> {
+    <span class="s">&lt;[+-]&gt;</span>? [
+        | \<span class="n">d</span>+
+        | \<span class="n">d</span>* [<span class="s">'.'</span> \<span class="n">d</span>+]
+        | \<span class="n">d</span>+ <span class="s">&lt;[eE]&gt;</span> &lt;[+-]&gt;? \<span class="n">d</span>+
+    ]
+}</pre></div>
+
+<p>More test cases pass the grammar now:</p>
+<div class="highlight"><pre>'3E4', '-33E55', '3E-3', '-1E-2'</pre></div>
+<p>What we are missing are the numbers in scientific notation with
+non-integer mantissa, e.g., <code>3.14E2</code> or <code>.5E-3</code>.
+Another alternative can solve this issue:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">number</span> {
+    <span class="s">&lt;[+-]&gt;</span>? [
+        | \<span class="n">d</span>+
+        | \<span class="n">d</span>* [<span class="s">'.'</span> \<span class="n">d</span>+]
+        | \<span class="n">d</span>+ <span class="s">&lt;[eE]&gt;</span> &lt;[+-]&gt;? \<span class="n">d</span>+
+        | \<span class="n">d</span>* [<span class="s">'.'</span> \<span class="n">d</span>+] &lt;[<span class="n">eE</span>]&gt; <span class="s">&lt;[+-]&gt;</span>? \<span class="n">d</span>+
+    ]
+}</pre></div>
+
+<p>In this form, there are parts that repeat, such as <code>\d+</code>
+or <code>\d* ['.' \d+]</code>. In such compact rules that may be fine,
+but it is also possible to decompose it further, and to introduce
+sub-tokens that are responsible for such repeated parts. The transformed
+<code>number</code> token and its family look like this:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">number</span> {
+    <span class="s">&lt;sign&gt;</span>? [
+        | <span class="s">&lt;integer&gt;</span>
+        | <span class="s">&lt;floating-point&gt;</span>
+        | <span class="s">&lt;integer&gt;</span> <span class="s">&lt;exponent&gt;</span>
+        | <span class="s">&lt;floating-point&gt;</span> <span class="s">&lt;exponent&gt;</span>
+    ]
+}
+
+<span class="k">token</span> <span class="n">sign</span> {
+    <span class="s">&lt;[+-]&gt;</span>
+}
+
+<span class="k">token</span> <span class="n">exp</span> {
+    <span class="s">&lt;[eE]&gt;</span>
+}
+
+<span class="k">token</span> <span class="n">integer</span> {
+    \<span class="n">d</span>+
+}
+
+<span class="k">token</span> <span class="n">floating-point</span> {
+    \<span class="n">d</span>* [<span class="s">'.'</span> <span class="s">&lt;integer&gt;</span>]
+}
+
+<span class="k">token</span> <span class="n">exponent</span> {
+    <span class="s">&lt;exp&gt;</span> <span class="s">&lt;sign&gt;</span>? <span class="s">&lt;integer&gt;</span>
+}</pre></div>
+
+<p>While there is much more code comparing to the previous version, each
+token is simpler to understand. Compare, for example, the previous and
+the current regexes for a number in scientific notation having a
+floating point number in its mantissa. Earlier, it was:</p>
+<div class="highlight"><pre>\d* ['.' \d+] &lt;[eE]&gt; &lt;[+-]&gt;? \d+</pre></div>
+<p>After the transformation, it became:</p>
+<div class="highlight"><pre>&lt;floating-point&gt; &lt;exponent&gt;</pre></div>
+<p>Looking at the alternatives of the main token,</p>
+<div class="highlight"><pre>| &lt;integer&gt;
+| &lt;floating-point&gt;
+| &lt;integer&gt; &lt;exponent&gt;
+| &lt;floating-point&gt; &lt;exponent&gt;</pre></div>
+<p>you immediately see what they describe. Even more, we can reduce it
+further:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">number</span> {
+    <span class="s">&lt;sign&gt;</span>? [
+        | <span class="s">&lt;integer&gt;</span>
+        | <span class="s">&lt;floating-point&gt;</span>
+    ] <span class="s">&lt;exponent&gt;</span>?
+}</pre></div>
+
+<p>In other words, a number is either an integer or a floating-point
+value, which is preceded by an optional sign and can be followed by an
+optional exponent part. In this form, the description is so clean and
+compact. All the details (the regex “noise”) is hidden in the
+supplementary tokens.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/creating-a-compiler-in-raku/parsing-a-number">Parsing a
+Number</a>   |   <a
+href="/raku-books/creating-a-compiler-in-raku/getting-the-value">Getting the
+value</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+- title: The Raku Course
+  url: the-raku-course
+  long_title: The Complete Course of the Raku Programming Language
+  description: >-
+    The complete, hands-on course of the Raku programming language — five parts of
+    theory and practice with hundreds of quizzes and exercises, hosted online at
+    course.raku.org.
+  covers:
+  - the-raku-course
+  link-list:
+  - title: Raku essentials
+    url: https://course.raku.org/essentials
+  - title: Advanced Raku subjects
+    url: https://course.raku.org/advanced
+  - title: Objects, I/O, and exceptions
+    url: https://course.raku.org/oop
+  - title: Regexes and grammars
+    url: https://course.raku.org/regexes
+  - title: Functional, concurrent, reactive, and web programming
+    url: https://course.raku.org/paradigms
+  meta:
+    author: Andrew Shitov
+    publisher: course.raku.org
+    note: Links to the online course; to be replaced with a full book here later.

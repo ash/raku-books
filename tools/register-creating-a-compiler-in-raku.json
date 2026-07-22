@@ -1,0 +1,3506 @@
+{
+ "book": "Creating a Compiler in Raku",
+ "slug": "creating-a-compiler-in-raku",
+ "verdicts": [
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Creating a Simple Translator",
+   "url": "/creating-a-compiler-in-raku/creating-a-simple-translator",
+   "first": "my x;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Creating a Simple Translator",
+   "url": "/creating-a-compiler-in-raku/creating-a-simple-translator",
+   "first": "my $code = 'test.lng'.IO.slurp();"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "grammar Lingua {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "\uff62my x;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "\uff62my x;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "rule variable-declaration {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "token variable-name {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "'my' <variable-name>"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "my x"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "token value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "rule function-name {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "statement => \uff62my x\uff63"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "token function-name {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Grammar",
+   "url": "/creating-a-compiler-in-raku/grammar",
+   "first": "statement => \uff62say x\uff63"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/creating-a-compiler-in-raku/actions",
+   "first": "my x;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/creating-a-compiler-in-raku/actions",
+   "first": "my %var;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/creating-a-compiler-in-raku/actions",
+   "first": "rule variable-declaration {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/creating-a-compiler-in-raku/actions",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/creating-a-compiler-in-raku/actions",
+   "first": "rule function-call {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/creating-a-compiler-in-raku/actions",
+   "first": "my $code = 'test.lng'.IO.slurp();"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/creating-a-compiler-in-raku/actions",
+   "first": "my alpha;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Actions",
+   "url": "/creating-a-compiler-in-raku/actions",
+   "first": "my value;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules",
+   "url": "/creating-a-compiler-in-raku/modules",
+   "first": "class LinguaActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules",
+   "url": "/creating-a-compiler-in-raku/modules",
+   "first": "Lingua.parse($code, :actions(LinguaActions));"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules",
+   "url": "/creating-a-compiler-in-raku/modules",
+   "first": "use lib 'lib';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "my @cases = 7, 77, -84;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "grammar Number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "my @cases = 7, 77, -84, '+7', 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "for @cases -> $number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "my @cases ="
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Finding a number",
+   "url": "/creating-a-compiler-in-raku/finding-a-number",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Getting the value",
+   "url": "/creating-a-compiler-in-raku/getting-the-value",
+   "first": "my $n = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Getting the value",
+   "url": "/creating-a-compiler-in-raku/getting-the-value",
+   "first": "for @cases -> $number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Getting the value",
+   "url": "/creating-a-compiler-in-raku/getting-the-value",
+   "first": "method sign($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Getting the value",
+   "url": "/creating-a-compiler-in-raku/getting-the-value",
+   "first": "my $n = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Getting the value",
+   "url": "/creating-a-compiler-in-raku/getting-the-value",
+   "first": "class NumberActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Getting the value",
+   "url": "/creating-a-compiler-in-raku/getting-the-value",
+   "first": "for @cases -> $number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "method integer($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "my $test = Number.parse($number, :actions($actions));"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "Number $test = Match.new(list => (), hash => Map.new((:number(Match.ne"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "method number($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "grammar Number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "my $test = Number.parse($number, :actions($actions));"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "method exponent($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "token floating-point {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "token floating-point {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "method floating-point($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using AST",
+   "url": "/creating-a-compiler-in-raku/using-ast",
+   "first": "my $n = $<integer> ?? "
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Final notes",
+   "url": "/creating-a-compiler-in-raku/final-notes",
+   "first": "say \"OK $number = \" ~ $test.made ~"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Final notes",
+   "url": "/creating-a-compiler-in-raku/final-notes",
+   "first": "my $n = +\"$int.$frac\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final notes",
+   "url": "/creating-a-compiler-in-raku/final-notes",
+   "first": "method floating-point($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final notes",
+   "url": "/creating-a-compiler-in-raku/final-notes",
+   "first": "method integer($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final notes",
+   "url": "/creating-a-compiler-in-raku/final-notes",
+   "first": "class NumberActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Enrolling a sum",
+   "url": "/creating-a-compiler-in-raku/enrolling-a-sum",
+   "first": "grammar Calculator {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Enrolling a sum",
+   "url": "/creating-a-compiler-in-raku/enrolling-a-sum",
+   "first": "class CalculatorActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Enrolling a sum",
+   "url": "/creating-a-compiler-in-raku/enrolling-a-sum",
+   "first": "Calculator.parse('3 + 4',"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Enrolling a sum",
+   "url": "/creating-a-compiler-in-raku/enrolling-a-sum",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Enrolling a sum",
+   "url": "/creating-a-compiler-in-raku/enrolling-a-sum",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Enrolling a sum",
+   "url": "/creating-a-compiler-in-raku/enrolling-a-sum",
+   "first": "my @cases = '3 + 4', '3 - 4';"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Enrolling a sum",
+   "url": "/creating-a-compiler-in-raku/enrolling-a-sum",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Enrolling a sum",
+   "url": "/creating-a-compiler-in-raku/enrolling-a-sum",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Premature optimization",
+   "url": "/creating-a-compiler-in-raku/premature-optimization",
+   "first": "$/.make($<number>[0].made + $<number>[1].made);"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Premature optimization",
+   "url": "/creating-a-compiler-in-raku/premature-optimization",
+   "first": "$/.make($<number>[0].made - $<number>[1].made);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Premature optimization",
+   "url": "/creating-a-compiler-in-raku/premature-optimization",
+   "first": "class CalculatorActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Premature optimization",
+   "url": "/creating-a-compiler-in-raku/premature-optimization",
+   "first": "class CalculatorActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Premature optimization",
+   "url": "/creating-a-compiler-in-raku/premature-optimization",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Premature optimization",
+   "url": "/creating-a-compiler-in-raku/premature-optimization",
+   "first": "class CalculatorActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "More operands",
+   "url": "/creating-a-compiler-in-raku/more-operands",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "More operands",
+   "url": "/creating-a-compiler-in-raku/more-operands",
+   "first": "my @cases ="
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "More operands",
+   "url": "/creating-a-compiler-in-raku/more-operands",
+   "first": "multi sub operation('+', @values) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "More operands",
+   "url": "/creating-a-compiler-in-raku/more-operands",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "More operands",
+   "url": "/creating-a-compiler-in-raku/more-operands",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "A diversity test",
+   "url": "/creating-a-compiler-in-raku/a-diversity-test",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "A diversity test",
+   "url": "/creating-a-compiler-in-raku/a-diversity-test",
+   "first": "multi sub operation('+', $a is rw, $b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Adding more math",
+   "url": "/creating-a-compiler-in-raku/adding-more-math",
+   "first": "grammar Calculator {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Adding more math",
+   "url": "/creating-a-compiler-in-raku/adding-more-math",
+   "first": "grammar Calculator {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Adding more math",
+   "url": "/creating-a-compiler-in-raku/adding-more-math",
+   "first": "<number>* %% <op>"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Adding more math",
+   "url": "/creating-a-compiler-in-raku/adding-more-math",
+   "first": "class CalculatorActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Testing the code",
+   "url": "/creating-a-compiler-in-raku/testing-the-code",
+   "first": "use Test;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Adding more power",
+   "url": "/creating-a-compiler-in-raku/adding-more-power",
+   "first": "rule factor {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Adding more power",
+   "url": "/creating-a-compiler-in-raku/adding-more-power",
+   "first": "token number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Adding more power",
+   "url": "/creating-a-compiler-in-raku/adding-more-power",
+   "first": "rule number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Adding more power",
+   "url": "/creating-a-compiler-in-raku/adding-more-power",
+   "first": "multi sub operation('**', $a is rw, $b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Allowing parentheses",
+   "url": "/creating-a-compiler-in-raku/allowing-parentheses",
+   "first": "rule factor {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Allowing parentheses",
+   "url": "/creating-a-compiler-in-raku/allowing-parentheses",
+   "first": "method value($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "# Declare a variable"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "rule comment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "my a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "my $result = Lingua.parse($code, :actions(LinguaActions));"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "my /* inline comment */ a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "token assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "a=10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "a = 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "regex ws {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Skipping comments",
+   "url": "/creating-a-compiler-in-raku/skipping-comments",
+   "first": "regex ws {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Sophisticated numbers",
+   "url": "/creating-a-compiler-in-raku/sophisticated-numbers",
+   "first": "token value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Sophisticated numbers",
+   "url": "/creating-a-compiler-in-raku/sophisticated-numbers",
+   "first": "method value($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Sophisticated numbers",
+   "url": "/creating-a-compiler-in-raku/sophisticated-numbers",
+   "first": "my alpha;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Sophisticated expressions",
+   "url": "/creating-a-compiler-in-raku/sophisticated-expressions",
+   "first": "grammar Lingua {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Sophisticated expressions",
+   "url": "/creating-a-compiler-in-raku/sophisticated-expressions",
+   "first": "class LinguaActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Sophisticated expressions",
+   "url": "/creating-a-compiler-in-raku/sophisticated-expressions",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Sophisticated expressions",
+   "url": "/creating-a-compiler-in-raku/sophisticated-expressions",
+   "first": "method assignment($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Sophisticated expressions",
+   "url": "/creating-a-compiler-in-raku/sophisticated-expressions",
+   "first": "my pi;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using variables",
+   "url": "/creating-a-compiler-in-raku/using-variables",
+   "first": "rule value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using variables",
+   "url": "/creating-a-compiler-in-raku/using-variables",
+   "first": "method value($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using variables",
+   "url": "/creating-a-compiler-in-raku/using-variables",
+   "first": "my r;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaration with initialisation",
+   "url": "/creating-a-compiler-in-raku/declaration-with-initialisation",
+   "first": "my x;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaration with initialisation",
+   "url": "/creating-a-compiler-in-raku/declaration-with-initialisation",
+   "first": "my x = 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Declaration with initialisation",
+   "url": "/creating-a-compiler-in-raku/declaration-with-initialisation",
+   "first": "rule variable-declaration {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaration with initialisation",
+   "url": "/creating-a-compiler-in-raku/declaration-with-initialisation",
+   "first": "method variable-declaration($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaration with initialisation",
+   "url": "/creating-a-compiler-in-raku/declaration-with-initialisation",
+   "first": "my pi = 3.1415926;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Executable",
+   "url": "/creating-a-compiler-in-raku/executable",
+   "first": "./lingua my-prog.lng"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Executable",
+   "url": "/creating-a-compiler-in-raku/executable",
+   "first": "#!/usr/bin/env raku"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Composing and inheriting grammars",
+   "url": "/creating-a-compiler-in-raku/composing-and-inheriting-grammars",
+   "first": "grammar Lingua {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Composing and inheriting grammars",
+   "url": "/creating-a-compiler-in-raku/composing-and-inheriting-grammars",
+   "first": "grammar CommentableLanguage {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Composing and inheriting grammars",
+   "url": "/creating-a-compiler-in-raku/composing-and-inheriting-grammars",
+   "first": "use CommentableLanguage;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Composing and inheriting grammars",
+   "url": "/creating-a-compiler-in-raku/composing-and-inheriting-grammars",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Composing and inheriting grammars",
+   "url": "/creating-a-compiler-in-raku/composing-and-inheriting-grammars",
+   "first": "role Number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Composing and inheriting grammars",
+   "url": "/creating-a-compiler-in-raku/composing-and-inheriting-grammars",
+   "first": "use CommentableLanguage;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Reviewing the calculator",
+   "url": "/creating-a-compiler-in-raku/reviewing-the-calculator",
+   "first": "rule expression {        "
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Reviewing the calculator",
+   "url": "/creating-a-compiler-in-raku/reviewing-the-calculator",
+   "first": "my x;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Reviewing the calculator",
+   "url": "/creating-a-compiler-in-raku/reviewing-the-calculator",
+   "first": "Cannot shift from an empty Array"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Reviewing the calculator",
+   "url": "/creating-a-compiler-in-raku/reviewing-the-calculator",
+   "first": "rule expression {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using multi-rules",
+   "url": "/creating-a-compiler-in-raku/using-multi-rules",
+   "first": "multi token op(1) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using multi-rules",
+   "url": "/creating-a-compiler-in-raku/using-multi-rules",
+   "first": "rule expression {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using multi-rules",
+   "url": "/creating-a-compiler-in-raku/using-multi-rules",
+   "first": "method expression($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using multi-rules",
+   "url": "/creating-a-compiler-in-raku/using-multi-rules",
+   "first": "rule expression {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Using multi-rules",
+   "url": "/creating-a-compiler-in-raku/using-multi-rules",
+   "first": "multi rule expr($n) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using multi-rules",
+   "url": "/creating-a-compiler-in-raku/using-multi-rules",
+   "first": "method expression($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Get rid of globals",
+   "url": "/creating-a-compiler-in-raku/get-rid-of-globals",
+   "first": "class LinguaActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Get rid of globals",
+   "url": "/creating-a-compiler-in-raku/get-rid-of-globals",
+   "first": "method assignment($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Get rid of globals",
+   "url": "/creating-a-compiler-in-raku/get-rid-of-globals",
+   "first": "my $result = Lingua.parse($code,"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Better variable names",
+   "url": "/creating-a-compiler-in-raku/better-variable-names",
+   "first": "token variable-name {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Better variable names",
+   "url": "/creating-a-compiler-in-raku/better-variable-names",
+   "first": "my 4 = 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Better variable names",
+   "url": "/creating-a-compiler-in-raku/better-variable-names",
+   "first": "token variable-name {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Better variable names",
+   "url": "/creating-a-compiler-in-raku/better-variable-names",
+   "first": "my var_4 = 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functions take expressions",
+   "url": "/creating-a-compiler-in-raku/functions-take-expressions",
+   "first": "say 42;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Functions take expressions",
+   "url": "/creating-a-compiler-in-raku/functions-take-expressions",
+   "first": "rule function-call {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Functions take expressions",
+   "url": "/creating-a-compiler-in-raku/functions-take-expressions",
+   "first": "method function-call($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Functions take expressions",
+   "url": "/creating-a-compiler-in-raku/functions-take-expressions",
+   "first": "method function-call($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/strings",
+   "first": "my str = \"Hello, World\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/strings",
+   "first": "rule variable-declaration {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/strings",
+   "first": "multi rule expr(4) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/strings",
+   "first": "method expr($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/strings",
+   "first": "rule string {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/strings",
+   "first": "method string($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/strings",
+   "first": "rule string {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/strings",
+   "first": "grammar Lingua is CommentableLanguage does Number {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/strings",
+   "first": "class LinguaActions {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Escaping quotes",
+   "url": "/creating-a-compiler-in-raku/escaping-quotes",
+   "first": "say \"Hello, \\\"World\\\"!\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Escaping quotes",
+   "url": "/creating-a-compiler-in-raku/escaping-quotes",
+   "first": "token string {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Escaping quotes",
+   "url": "/creating-a-compiler-in-raku/escaping-quotes",
+   "first": "token string {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Escaping quotes",
+   "url": "/creating-a-compiler-in-raku/escaping-quotes",
+   "first": "say \"\\\\\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Escaping quotes",
+   "url": "/creating-a-compiler-in-raku/escaping-quotes",
+   "first": "method string($a) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Variable interpolation",
+   "url": "/creating-a-compiler-in-raku/variable-interpolation",
+   "first": "my name = \"John\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Variable interpolation",
+   "url": "/creating-a-compiler-in-raku/variable-interpolation",
+   "first": "say \"5\\$\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Variable interpolation",
+   "url": "/creating-a-compiler-in-raku/variable-interpolation",
+   "first": "token string {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Variable interpolation",
+   "url": "/creating-a-compiler-in-raku/variable-interpolation",
+   "first": "method string($a) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Variable interpolation",
+   "url": "/creating-a-compiler-in-raku/variable-interpolation",
+   "first": "my name = \"John\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Indexing a string",
+   "url": "/creating-a-compiler-in-raku/indexing-a-string",
+   "first": "my s = \"abcdef\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Indexing a string",
+   "url": "/creating-a-compiler-in-raku/indexing-a-string",
+   "first": "multi rule expr(4) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Indexing a string",
+   "url": "/creating-a-compiler-in-raku/indexing-a-string",
+   "first": "method expr($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Indexing a string",
+   "url": "/creating-a-compiler-in-raku/indexing-a-string",
+   "first": "my ch = s[4];"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays",
+   "url": "/creating-a-compiler-in-raku/arrays",
+   "first": "my data[];"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Arrays",
+   "url": "/creating-a-compiler-in-raku/arrays",
+   "first": "rule variable-declaration {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Arrays",
+   "url": "/creating-a-compiler-in-raku/arrays",
+   "first": "rule array-declaration {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays",
+   "url": "/creating-a-compiler-in-raku/arrays",
+   "first": "method variable-declaration($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays",
+   "url": "/creating-a-compiler-in-raku/arrays",
+   "first": "method scalar-declaration($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays",
+   "url": "/creating-a-compiler-in-raku/arrays",
+   "first": "method variable-declaration($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays",
+   "url": "/creating-a-compiler-in-raku/arrays",
+   "first": "my x = 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays",
+   "url": "/creating-a-compiler-in-raku/arrays",
+   "first": "Hash %!var = {:x(3)}"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Assigning to an array item",
+   "url": "/creating-a-compiler-in-raku/assigning-to-an-array-item",
+   "first": "data[0] = 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Assigning to an array item",
+   "url": "/creating-a-compiler-in-raku/assigning-to-an-array-item",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Assigning to an array item",
+   "url": "/creating-a-compiler-in-raku/assigning-to-an-array-item",
+   "first": "method assignment($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Assigning to an array item",
+   "url": "/creating-a-compiler-in-raku/assigning-to-an-array-item",
+   "first": "Hash %!var = {:data($[10, 20])}"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Off-topic: The joy of syntax",
+   "url": "/creating-a-compiler-in-raku/off-topic-the-joy-of-syntax",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Off-topic: The joy of syntax",
+   "url": "/creating-a-compiler-in-raku/off-topic-the-joy-of-syntax",
+   "first": "method array-item-assignment($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Off-topic: The joy of syntax",
+   "url": "/creating-a-compiler-in-raku/off-topic-the-joy-of-syntax",
+   "first": "multi method assignment($/ where $<integer>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Off-topic: The joy of syntax",
+   "url": "/creating-a-compiler-in-raku/off-topic-the-joy-of-syntax",
+   "first": "multi method value($/ where $<expression>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Off-topic: The joy of syntax",
+   "url": "/creating-a-compiler-in-raku/off-topic-the-joy-of-syntax",
+   "first": "multi method expr($/ where $<number>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Accessing array elements",
+   "url": "/creating-a-compiler-in-raku/accessing-array-elements",
+   "first": "say data[0];"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Accessing array elements",
+   "url": "/creating-a-compiler-in-raku/accessing-array-elements",
+   "first": "multi method expr($/ where $<variable-name> && $<integer>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Accessing array elements",
+   "url": "/creating-a-compiler-in-raku/accessing-array-elements",
+   "first": "rule index {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Accessing array elements",
+   "url": "/creating-a-compiler-in-raku/accessing-array-elements",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Accessing array elements",
+   "url": "/creating-a-compiler-in-raku/accessing-array-elements",
+   "first": "method index($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Accessing array elements",
+   "url": "/creating-a-compiler-in-raku/accessing-array-elements",
+   "first": "multi method assignment($/ where $<index>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "List assignments",
+   "url": "/creating-a-compiler-in-raku/list-assignments",
+   "first": "my data[] = 111, 222, 333;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "List assignments",
+   "url": "/creating-a-compiler-in-raku/list-assignments",
+   "first": "rule array-declaration {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "List assignments",
+   "url": "/creating-a-compiler-in-raku/list-assignments",
+   "first": "my strings[] = \"alpha\", \"beta\", \"gamma\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "List assignments",
+   "url": "/creating-a-compiler-in-raku/list-assignments",
+   "first": "method init-array($variable-name, @values) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Printing arrays",
+   "url": "/creating-a-compiler-in-raku/printing-arrays",
+   "first": "my data[] = 5, 7, 9;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Printing arrays",
+   "url": "/creating-a-compiler-in-raku/printing-arrays",
+   "first": "method function-call($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "my data{};"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "my hash{} = \"alpha\" : 1, \"beta\": 2, \"gamma\": 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "rule variable-declaration {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "rule assignment {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "method init-hash($variable-name, @keys, @values) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "rule index {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "multi method assignment($/ where $<index> && "
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "multi method expr($/ where $<variable-name> && $<index>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "days{\"Tue\"} = \"work\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/creating-a-compiler-in-raku/hashes",
+   "first": "method function-call($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Review and test",
+   "url": "/creating-a-compiler-in-raku/review-and-test",
+   "first": "rule array-index {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Review and test",
+   "url": "/creating-a-compiler-in-raku/review-and-test",
+   "first": "multi method array-index($/ where !$<variable-name>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Review and test",
+   "url": "/creating-a-compiler-in-raku/review-and-test",
+   "first": "# Illustrating the Pythagorean theorem"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "my condition = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "rule function-call {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "method function-call($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "rule function-call {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "my condition = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "my condition = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "method condition($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "method statement($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "if condition x = 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Thinking of the if keyword",
+   "url": "/creating-a-compiler-in-raku/thinking-of-the-if-keyword",
+   "first": "if condition say \"Passed\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "my a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "class ASTNode {    "
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "class AST::TOP is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "multi method scalar-declaration($/ where !$<value>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "method variable-declaration($/ where $<scalar-declaration>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "method statement($/ where $<variable-declaration>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "AST::TOP $top = AST::TOP.new(statements => Array[ASTNode].new(AST::Sca"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "my a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "The AST blocks",
+   "url": "/creating-a-compiler-in-raku/the-ast-blocks",
+   "first": "method scalar-declaration($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "my c = 2 + 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "class AST::NumberValue is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "class AST::Null is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "class AST::ScalarDeclaration is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "method number($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "method scalar-declaration($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "my c = b;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "class AST::Variable is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "multi method expr($/ where $<variable-name> && !$<index>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Value nodes",
+   "url": "/creating-a-compiler-in-raku/value-nodes",
+   "first": "my a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaring strings",
+   "url": "/creating-a-compiler-in-raku/declaring-strings",
+   "first": "class AST::StringValue is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaring strings",
+   "url": "/creating-a-compiler-in-raku/declaring-strings",
+   "first": "method string($a) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "class AST::ArrayDeclaration is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "multi method array-declaration($/ where !$<value>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "multi method array-declaration($/ where !$<value>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "multi method variable-declaration($/ "
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "multi method variable-declaration($/"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "class AST::HashDeclaration is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "multi method variable-declaration($/ "
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "rule variable-declaration {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "\uff62my array[]\uff63"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Declaring arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/declaring-arrays-and-hashes",
+   "first": "multi method variable-declaration($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Scalar assignment",
+   "url": "/creating-a-compiler-in-raku/scalar-assignment",
+   "first": "class AST::ScalarAssignment is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Scalar assignment",
+   "url": "/creating-a-compiler-in-raku/scalar-assignment",
+   "first": "multi method assignment($/ where !$<index>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Scalar assignment",
+   "url": "/creating-a-compiler-in-raku/scalar-assignment",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Scalar assignment",
+   "url": "/creating-a-compiler-in-raku/scalar-assignment",
+   "first": "method statement($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with indices",
+   "url": "/creating-a-compiler-in-raku/working-with-indices",
+   "first": "class AST::ArrayItemAssignment is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Working with indices",
+   "url": "/creating-a-compiler-in-raku/working-with-indices",
+   "first": "multi method assignment($/ "
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with indices",
+   "url": "/creating-a-compiler-in-raku/working-with-indices",
+   "first": "my a[];"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Array and hash assignment and initialisation",
+   "url": "/creating-a-compiler-in-raku/array-and-hash-assignment-and-initialisation",
+   "first": "my d[];"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Array and hash assignment and initialisation",
+   "url": "/creating-a-compiler-in-raku/array-and-hash-assignment-and-initialisation",
+   "first": "class AST::ArrayAssignment is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Array and hash assignment and initialisation",
+   "url": "/creating-a-compiler-in-raku/array-and-hash-assignment-and-initialisation",
+   "first": "multi method assignment($/ "
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Array and hash assignment and initialisation",
+   "url": "/creating-a-compiler-in-raku/array-and-hash-assignment-and-initialisation",
+   "first": "sub init-array($variable-name, $elements) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Array and hash assignment and initialisation",
+   "url": "/creating-a-compiler-in-raku/array-and-hash-assignment-and-initialisation",
+   "first": "sub init-hash($variable-name, $keys, $values) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "AST for expressions",
+   "url": "/creating-a-compiler-in-raku/ast-for-expressions",
+   "first": "my a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "AST for expressions",
+   "url": "/creating-a-compiler-in-raku/ast-for-expressions",
+   "first": "class AST::MathOperations is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "AST for expressions",
+   "url": "/creating-a-compiler-in-raku/ast-for-expressions",
+   "first": "multi method expr($/ where $<expr> && !$<op>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "AST for expressions",
+   "url": "/creating-a-compiler-in-raku/ast-for-expressions",
+   "first": "my x = 2 + 3 * 4 / 5 - 6;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "AST for expressions",
+   "url": "/creating-a-compiler-in-raku/ast-for-expressions",
+   "first": "AST::TOP $top = AST::TOP.new("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Function calls",
+   "url": "/creating-a-compiler-in-raku/function-calls",
+   "first": "class AST::FunctionCall is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Function calls",
+   "url": "/creating-a-compiler-in-raku/function-calls",
+   "first": "method function-call($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "rule value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "multi method value($/ where $<variable-name>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "rule value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "class AST::ArrayItem is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "my c{} = \"a\": 1, \"b\": 2;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "multi method value($/"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "multi method array-index($/ where !$<variable-name>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "multi method expr($/ where $<variable-name> && $<index>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "multi method expr($/"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "my a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Final tuning",
+   "url": "/creating-a-compiler-in-raku/final-tuning",
+   "first": "multi method assignment($/"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Evaluating from the TOP",
+   "url": "/creating-a-compiler-in-raku/evaluating-from-the-top",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Evaluating from the TOP",
+   "url": "/creating-a-compiler-in-raku/evaluating-from-the-top",
+   "first": "my $ast = Lingua.parse($code, :actions(LinguaActions.new));"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Evaluating from the TOP",
+   "url": "/creating-a-compiler-in-raku/evaluating-from-the-top",
+   "first": "use LinguaEvaluator; "
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Evaluating from the TOP",
+   "url": "/creating-a-compiler-in-raku/evaluating-from-the-top",
+   "first": "class ASTNode {    "
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Evaluating from the TOP",
+   "url": "/creating-a-compiler-in-raku/evaluating-from-the-top",
+   "first": "use LinguaAST;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Evaluating from the TOP",
+   "url": "/creating-a-compiler-in-raku/evaluating-from-the-top",
+   "first": "my a = 7;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Evaluating from the TOP",
+   "url": "/creating-a-compiler-in-raku/evaluating-from-the-top",
+   "first": "class LinguaEvaluator {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Evaluating from the TOP",
+   "url": "/creating-a-compiler-in-raku/evaluating-from-the-top",
+   "first": "class LinguaActions {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Evaluating from the TOP",
+   "url": "/creating-a-compiler-in-raku/evaluating-from-the-top",
+   "first": "my $ast = Lingua.parse($code, :actions(LinguaActions));"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "class LinguaEvaluator {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "multi method eval-node(AST::ScalarDeclaration $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "method eval(ASTNode $top) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "Hash %!var = {:a(\"7\")}"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "my a = 7;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "AST::TOP.new("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "multi method eval-node(AST::FunctionCall $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "multi method call-function('say', AST::Variable $value) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "multi method call-function('say', AST::NumberValue $value) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "my a = 7;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "a = 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "multi method eval-node(AST::ScalarAssignment $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "my data[];"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "multi method eval-node(AST::ArrayDeclaration $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "Hash %!var = {:data($[]), :relation(${})}"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "data[3] = 4;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "multi method eval-node(AST::ArrayItemAssignment $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "data = 7, 8, 9;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "multi method eval-node(AST::ArrayAssignment $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Working with variables",
+   "url": "/creating-a-compiler-in-raku/working-with-variables",
+   "first": "my array[] = 1, 3, 4;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "String interpolation",
+   "url": "/creating-a-compiler-in-raku/string-interpolation",
+   "first": "my alpha = 54;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "String interpolation",
+   "url": "/creating-a-compiler-in-raku/string-interpolation",
+   "first": "token string {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "String interpolation",
+   "url": "/creating-a-compiler-in-raku/string-interpolation",
+   "first": "class AST::StringValue is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "String interpolation",
+   "url": "/creating-a-compiler-in-raku/string-interpolation",
+   "first": "method string($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "String interpolation",
+   "url": "/creating-a-compiler-in-raku/string-interpolation",
+   "first": "multi method call-function('say', AST::StringValue $value) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "String interpolation",
+   "url": "/creating-a-compiler-in-raku/string-interpolation",
+   "first": "my alpha = 54;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "my date = 18;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "multi method eval-node(AST::ScalarDeclaration $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "class AST::StringValue . . . {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "class AST::StringValue is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "class AST::StringValue is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "multi method eval-node(AST::ScalarDeclaration $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "my a[] = 10, 20;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "class AST::Variable is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "multi method array-index($/ where $<variable-name>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "multi method hash-index($/ where $<variable-name>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Using Raku getters",
+   "url": "/creating-a-compiler-in-raku/using-raku-getters",
+   "first": "multi method expr($/ where $<variable-name> && !$<index>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Interpolating everywhere",
+   "url": "/creating-a-compiler-in-raku/interpolating-everywhere",
+   "first": "my date = \"18\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Interpolating everywhere",
+   "url": "/creating-a-compiler-in-raku/interpolating-everywhere",
+   "first": "my $evaluator = LinguaEvaluator.new();"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Interpolating everywhere",
+   "url": "/creating-a-compiler-in-raku/interpolating-everywhere",
+   "first": "class LinguaEvaluator {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Interpolating everywhere",
+   "url": "/creating-a-compiler-in-raku/interpolating-everywhere",
+   "first": "use LinguaEvaluator;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Interpolating everywhere",
+   "url": "/creating-a-compiler-in-raku/interpolating-everywhere",
+   "first": "$/.make(AST::StringValue.new("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Interpolating everywhere",
+   "url": "/creating-a-compiler-in-raku/interpolating-everywhere",
+   "first": "class AST::StringValue is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Interpolating everywhere",
+   "url": "/creating-a-compiler-in-raku/interpolating-everywhere",
+   "first": "method value() {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arithmetic operations",
+   "url": "/creating-a-compiler-in-raku/arithmetic-operations",
+   "first": "class AST::MathOperations is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Arithmetic operations",
+   "url": "/creating-a-compiler-in-raku/arithmetic-operations",
+   "first": "multi sub operation('+', $a, $b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arithmetic operations",
+   "url": "/creating-a-compiler-in-raku/arithmetic-operations",
+   "first": "multi method call-function('say', ASTNode $value) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arithmetic operations",
+   "url": "/creating-a-compiler-in-raku/arithmetic-operations",
+   "first": "multi method call-function('say', AST::Variable $value "
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Test runner",
+   "url": "/creating-a-compiler-in-raku/test-runner",
+   "first": "my a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Test runner",
+   "url": "/creating-a-compiler-in-raku/test-runner",
+   "first": "my a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Test runner",
+   "url": "/creating-a-compiler-in-raku/test-runner",
+   "first": "if $ast {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Test runner",
+   "url": "/creating-a-compiler-in-raku/test-runner",
+   "first": "my a;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Test runner",
+   "url": "/creating-a-compiler-in-raku/test-runner",
+   "first": "#!/usr/bin/env raku"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Test runner",
+   "url": "/creating-a-compiler-in-raku/test-runner",
+   "first": "sub test-file($file) {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Test runner",
+   "url": "/creating-a-compiler-in-raku/test-runner",
+   "first": "sub expected($path) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Numbers",
+   "url": "/creating-a-compiler-in-raku/tests/numbers",
+   "first": "my int = 42;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/tests/strings-2",
+   "first": "my s1;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/tests/strings-2",
+   "first": "my i = 10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/creating-a-compiler-in-raku/tests/strings-2",
+   "first": "say \"\\\\\"; ## \\"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/tests/arrays-and-hashes-2",
+   "first": "my a[];"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/tests/arrays-and-hashes-2",
+   "first": "my h{};"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays and hashes",
+   "url": "/creating-a-compiler-in-raku/tests/arrays-and-hashes-2",
+   "first": "my a[] = 2, 4, 6, 8, 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Spotting the errors",
+   "url": "/creating-a-compiler-in-raku/spotting-the-errors",
+   "first": "my abc = \"abcdef\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Spotting the errors",
+   "url": "/creating-a-compiler-in-raku/spotting-the-errors",
+   "first": "AST::FunctionCall.new("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Spotting the errors",
+   "url": "/creating-a-compiler-in-raku/spotting-the-errors",
+   "first": "multi method call-function('say', AST::ArrayItem $item) {        "
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Spotting the errors",
+   "url": "/creating-a-compiler-in-raku/spotting-the-errors",
+   "first": "multi method call-function('say', AST::ArrayItem $item"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Spotting the errors",
+   "url": "/creating-a-compiler-in-raku/spotting-the-errors",
+   "first": "multi method call-function('say', AST::ArrayItem $item"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Feature coverage",
+   "url": "/creating-a-compiler-in-raku/feature-coverage",
+   "first": "my a[] = 3, 5, 7;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Feature coverage",
+   "url": "/creating-a-compiler-in-raku/feature-coverage",
+   "first": "No such method 'value' for invocant of type 'AST::ArrayItem'."
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Feature coverage",
+   "url": "/creating-a-compiler-in-raku/feature-coverage",
+   "first": "multi method eval-node(AST::ScalarDeclaration $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Feature coverage",
+   "url": "/creating-a-compiler-in-raku/feature-coverage",
+   "first": "class AST::ArrayItem is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Feature coverage",
+   "url": "/creating-a-compiler-in-raku/feature-coverage",
+   "first": "class AST::HashItem is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Feature coverage",
+   "url": "/creating-a-compiler-in-raku/feature-coverage",
+   "first": "$/.make(AST::ArrayItem.new("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Feature coverage",
+   "url": "/creating-a-compiler-in-raku/feature-coverage",
+   "first": "my g{} = \"a\": \"b\", \"c\": \"d\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "It is never enough",
+   "url": "/creating-a-compiler-in-raku/it-is-never-enough",
+   "first": "my x = 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "It is never enough",
+   "url": "/creating-a-compiler-in-raku/it-is-never-enough",
+   "first": "rule value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "It is never enough",
+   "url": "/creating-a-compiler-in-raku/it-is-never-enough",
+   "first": "rule value {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "It is never enough",
+   "url": "/creating-a-compiler-in-raku/it-is-never-enough",
+   "first": "my x = 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing if",
+   "url": "/creating-a-compiler-in-raku/implementing-if",
+   "first": "my flag = 42;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Implementing if",
+   "url": "/creating-a-compiler-in-raku/implementing-if",
+   "first": "rule condition {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing if",
+   "url": "/creating-a-compiler-in-raku/implementing-if",
+   "first": "class AST::Condition is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Implementing if",
+   "url": "/creating-a-compiler-in-raku/implementing-if",
+   "first": "multi method statement($/ where !$<condition>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing if",
+   "url": "/creating-a-compiler-in-raku/implementing-if",
+   "first": "multi method eval-node(AST::Condition $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing if",
+   "url": "/creating-a-compiler-in-raku/implementing-if",
+   "first": "my flag = 1;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing else",
+   "url": "/creating-a-compiler-in-raku/implementing-else",
+   "first": "my flag = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Implementing else",
+   "url": "/creating-a-compiler-in-raku/implementing-else",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing else",
+   "url": "/creating-a-compiler-in-raku/implementing-else",
+   "first": "method TOP($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing else",
+   "url": "/creating-a-compiler-in-raku/implementing-else",
+   "first": "class AST::Condition is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Implementing else",
+   "url": "/creating-a-compiler-in-raku/implementing-else",
+   "first": "method conditional-statement($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Implementing else",
+   "url": "/creating-a-compiler-in-raku/implementing-else",
+   "first": "method statement($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing else",
+   "url": "/creating-a-compiler-in-raku/implementing-else",
+   "first": "multi method eval-node(AST::Condition $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing else",
+   "url": "/creating-a-compiler-in-raku/implementing-else",
+   "first": "multi method eval-node(AST::Null) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing else",
+   "url": "/creating-a-compiler-in-raku/implementing-else",
+   "first": "if 1 say \"A\" else say \"B\"; ## A"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing a loop",
+   "url": "/creating-a-compiler-in-raku/implementing-a-loop",
+   "first": "my n = 5;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Implementing a loop",
+   "url": "/creating-a-compiler-in-raku/implementing-a-loop",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing a loop",
+   "url": "/creating-a-compiler-in-raku/implementing-a-loop",
+   "first": "class AST::Loop is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Implementing a loop",
+   "url": "/creating-a-compiler-in-raku/implementing-a-loop",
+   "first": "method loopped-statement($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing a loop",
+   "url": "/creating-a-compiler-in-raku/implementing-a-loop",
+   "first": "multi method eval-node(AST::Loop $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing a loop",
+   "url": "/creating-a-compiler-in-raku/implementing-a-loop",
+   "first": "while %!var{$node.variable.variable-name} > 0 {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing a loop",
+   "url": "/creating-a-compiler-in-raku/implementing-a-loop",
+   "first": "my n = 5.5;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing a loop",
+   "url": "/creating-a-compiler-in-raku/implementing-a-loop",
+   "first": "my n = 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "my c = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "rule block {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "if 1 say \"A\"; else say \"B\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "loop n {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "loop n {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "multi rule block() {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "rule conditional-statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "rule conditional-statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "| 'if' <value> <block()> 'else' <block(';')>"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "method conditional-statement($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "class AST::Condition is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Statement blocks",
+   "url": "/creating-a-compiler-in-raku/statement-blocks",
+   "first": "method conditional-statement($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Blocks in the AST",
+   "url": "/creating-a-compiler-in-raku/blocks-in-the-ast",
+   "first": "loop n {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Blocks in the AST",
+   "url": "/creating-a-compiler-in-raku/blocks-in-the-ast",
+   "first": "multi method eval-node(AST::Condition $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "A real-life test",
+   "url": "/creating-a-compiler-in-raku/a-real-life-test",
+   "first": "5"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "A real-life test",
+   "url": "/creating-a-compiler-in-raku/a-real-life-test",
+   "first": "method value() {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "A real-life test",
+   "url": "/creating-a-compiler-in-raku/a-real-life-test",
+   "first": "multi method eval-node(AST::HashAssignment $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "A real-life test",
+   "url": "/creating-a-compiler-in-raku/a-real-life-test",
+   "first": "my n = 5;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Conditional operators",
+   "url": "/creating-a-compiler-in-raku/conditional-operators",
+   "first": "|  &  <  <=  >  >=  ==  !="
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Conditional operators",
+   "url": "/creating-a-compiler-in-raku/conditional-operators",
+   "first": "multi token op(1) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Conditional operators",
+   "url": "/creating-a-compiler-in-raku/conditional-operators",
+   "first": "multi token op(3) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Conditional operators",
+   "url": "/creating-a-compiler-in-raku/conditional-operators",
+   "first": "multi sub operation('|', $a, $b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Conditional operators",
+   "url": "/creating-a-compiler-in-raku/conditional-operators",
+   "first": "multi sub operation('<', $a, $b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Conditional operators",
+   "url": "/creating-a-compiler-in-raku/conditional-operators",
+   "first": "my x = 10;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing while",
+   "url": "/creating-a-compiler-in-raku/implementing-while",
+   "first": "my n = 1;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Implementing while",
+   "url": "/creating-a-compiler-in-raku/implementing-while",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing while",
+   "url": "/creating-a-compiler-in-raku/implementing-while",
+   "first": "class AST::While is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Implementing while",
+   "url": "/creating-a-compiler-in-raku/implementing-while",
+   "first": "method while-statement($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Implementing while",
+   "url": "/creating-a-compiler-in-raku/implementing-while",
+   "first": "multi method eval-node(AST::While $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Built-in functions",
+   "url": "/creating-a-compiler-in-raku/built-in-functions",
+   "first": "token function-name {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "print",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/print",
+   "first": "use LinguaFunctions;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "print",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/print",
+   "first": "use LinguaAST;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "print",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/print",
+   "first": "my $print-instructions = 'say' | 'print';"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "print",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/print",
+   "first": "multi method gist(%var, AST::Variable $value) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "multi method call-function('len', %var, ASTNode $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "len \"abc\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "multi method call-function("
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "class AST::FunctionCall is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "method function-call($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "method call-function($function-name, $argument) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "class AST::FunctionCall is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "multi rule expr(6) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "multi method expr($/ where $<function-call>) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "multi method call-function('len', %var, ASTNode $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "say len \"abc\"; ## 3"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "my sayonara = 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "multi method call-function('len', %var, AST::Variable $node"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "len",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/len",
+   "first": "my a[] = 2, 4, 6;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "keys",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/keys",
+   "first": "multi method call-function('keys', %var, AST::Variable $node"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "keys",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/keys",
+   "first": "multi method call-function('keys', %var, AST::Variable $node"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "keys",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/keys",
+   "first": "multi method gist(%var, ASTNode $value where $value.value ~~ List) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "keys",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/keys",
+   "first": "multi method call-function('len', %var, ASTNode $node"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "keys",
+   "url": "/creating-a-compiler-in-raku/built-in-functions/keys",
+   "first": "my h{} = \"beta\": 2, \"alpha\": 1, \"gamma\": 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "User-defined functions",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions",
+   "first": "func add(a, b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Defining a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/defining-a-function",
+   "first": "rule TOP {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Defining a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/defining-a-function",
+   "first": "rule function-definition {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Defining a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/defining-a-function",
+   "first": "rule return-statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Defining a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/defining-a-function",
+   "first": "class AST::FunctionDefinition is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Defining a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/defining-a-function",
+   "first": "method function-definition($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Defining a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/defining-a-function",
+   "first": "class LinguaEvaluator {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Defining a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/defining-a-function",
+   "first": "func greet(name) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calling a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/calling-a-function",
+   "first": "rule user-function-call {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Calling a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/calling-a-function",
+   "first": "rule statement {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calling a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/calling-a-function",
+   "first": "class AST::UserFunctionCall is ASTNode {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calling a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/calling-a-function",
+   "first": "method user-function-call($/) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calling a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/calling-a-function",
+   "first": "method call-user-function($function-name, @arguments) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calling a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/calling-a-function",
+   "first": "multi method eval-node(AST::UserFunctionCall $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Calling a function",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/calling-a-function",
+   "first": "func greet(name) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Returning a value",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/returning-a-value",
+   "first": "class X::LinguaReturn is Exception {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Returning a value",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/returning-a-value",
+   "first": "multi method eval-node(AST::Return $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Returning a value",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/returning-a-value",
+   "first": "my $result = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Returning a value",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/returning-a-value",
+   "first": "func add(a, b) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The scope of variables",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/the-scope-of-variables",
+   "first": "my x = 100;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Recursion",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/recursion",
+   "first": "func fact(n) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Recursion",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/recursion",
+   "first": "multi rule block(';') {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Recursion",
+   "url": "/creating-a-compiler-in-raku/user-defined-functions/recursion",
+   "first": "func fact(n) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The optimiser class",
+   "url": "/creating-a-compiler-in-raku/the-optimiser-class",
+   "first": "use LinguaAST;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The optimiser class",
+   "url": "/creating-a-compiler-in-raku/the-optimiser-class",
+   "first": "multi method optimize-node(AST::ScalarDeclaration $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The optimiser class",
+   "url": "/creating-a-compiler-in-raku/the-optimiser-class",
+   "first": "multi method optimize-node(ASTNode $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "The optimiser class",
+   "url": "/creating-a-compiler-in-raku/the-optimiser-class",
+   "first": "use LinguaOptimizer;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constant folding",
+   "url": "/creating-a-compiler-in-raku/constant-folding",
+   "first": "multi method optimize-node(AST::MathOperations $node) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Constant folding",
+   "url": "/creating-a-compiler-in-raku/constant-folding",
+   "first": "my x = 2 + 3 * 4;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Algebraic identities",
+   "url": "/creating-a-compiler-in-raku/algebraic-identities",
+   "first": "sub is-number($node, $n) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Algebraic identities",
+   "url": "/creating-a-compiler-in-raku/algebraic-identities",
+   "first": "if @operands.elems == 2 {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Algebraic identities",
+   "url": "/creating-a-compiler-in-raku/algebraic-identities",
+   "first": "my x = 5;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Eliminating dead branches",
+   "url": "/creating-a-compiler-in-raku/eliminating-dead-branches",
+   "first": "method optimize-list(@statements) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Eliminating dead branches",
+   "url": "/creating-a-compiler-in-raku/eliminating-dead-branches",
+   "first": "if 1 {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Eliminating dead branches",
+   "url": "/creating-a-compiler-in-raku/eliminating-dead-branches",
+   "first": "say \"always\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "A proper command line",
+   "url": "/creating-a-compiler-in-raku/a-proper-command-line",
+   "first": "#!/usr/bin/env raku"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "A proper command line",
+   "url": "/creating-a-compiler-in-raku/a-proper-command-line",
+   "first": "method eval(ASTNode $top) {"
+  }
+ ]
+}

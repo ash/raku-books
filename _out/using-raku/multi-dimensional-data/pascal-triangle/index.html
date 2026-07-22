@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>71. Pascal triangle — Raku Books</title>
+    <meta property="og:title" content="71. Pascal triangle — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku" selected>Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/using-raku">Using Raku</a> /
+<a href="/raku-books/using-raku/aggregate-data-types">Aggregate Data Types</a> / <a
+href="/raku-books/using-raku/multi-dimensional-data">Multi-dimensional data</a></p>
+<h1 id="pascal-triangle">71. Pascal triangle</h1>
+<p><em>Generate the numbers of the Pascal triangle and print
+them.</em></p>
+<p>The Pascal triangle is a sequence of rows of integers. It starts with
+a single 1 on the top row, and each following row has one number more,
+starting and ending with 1, while all of the other items are the sums of
+the two elements above it in the previous row. It is quite obvious from
+the illustration:</p>
+<div class="highlight"><pre>1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+1 5 10 10 5 1
+1 6 15 20 25 6 1</pre></div>
+<p>To calculate the values of the next row, you may want to iterate over
+the values of the current row and make the sums with the numbers next to
+it. Let us use the functional style that the language offers.</p>
+<p>Consider the fourth row, for example: <code>1 3 3 1</code>. To make
+the fifth row, you can shift all the values by one position to the right
+and add them up to the current row:</p>
+<div class="highlight"><pre>1 3 3 1
++   1 3 3 1
+  1 4 6 4 1</pre></div>
+<p>In terms of arrays and assuming that the values of the fourth row are
+now contained in the <code>@row</code> variable, the calculations above
+are equivalent to the sum of the two arrays: current values in
+<code>@row</code> and a list of values that include <code>0</code> and
+all the values of <code>@row</code>. A trailing zero can be added to the
+current <code>@row</code> to make the arrays equally long.</p>
+<p>This approach is illustrated by the following diagram:</p>
+<div class="highlight"><pre>  1 3 3 1 0
++ 0 1 3 3 1
+  1 4 6 4 1</pre></div>
+<p>Now, write that down in the Raku syntax using the technique from Task
+53,</p>
+<p><em>Adding up two arrays.</em></p>
+<div class="highlight raku no-run"><pre><span></span><span class="nv">@row</span> = (|<span class="nv">@row</span>, <span class="mi">0</span>) &gt;&gt;+&lt;&lt; (<span class="mi">0</span>, |<span class="nv">@row</span>);</pre></div>
+
+<p>Notice that the arrays are flattened with the help of a vertical bar:
+<code>|@a</code>. Without that, the <code>(@row, 0)</code> list is a
+list of two elements—an array and a scalar. Compare the output of the
+following test constructions:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@row</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="nb">say</span> (<span class="nv">@row</span>, <span class="mi">0</span>);  <span class="c1"># ([1 2 3] 0)</span>
+<span class="nb">say</span> (|<span class="nv">@row</span>, <span class="mi">0</span>); <span class="c1"># (1 2 3 0)</span></pre></div>
+
+<p>Now, complete the program: we need to initialize the
+<code>@row</code> and add some printing instructions and create a
+loop:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@row</span> = <span class="mi">1</span>;
+<span class="nb">say</span> <span class="mi">1</span>;
+<span class="k">for</span> <span class="mi">1</span>.<span class="mf">.6</span> {
+    <span class="nv">@row</span> = (|<span class="nv">@row</span>, <span class="mi">0</span>) &gt;&gt;+&lt;&lt; (<span class="mi">0</span>, |<span class="nv">@row</span>);
+    <span class="nb">say</span> <span class="nv">@row</span>.<span class="nb">join</span>(<span class="s">' '</span>);
+}</pre></div>
+
+<p>The program prints the first seven rows of the Pascal triangle. The
+rows are not centred and are aligned to the left side.</p>
+<p>As an extra exercise, modify the program so that it prints the
+triangle as it is shown at the beginning of this task. For example, you
+can first generate rows and keep them in a separate array and then,
+knowing the length of the longest string, add some spaces in front of
+the rows before printing them.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/using-raku/multi-dimensional-data/product-table">70.
+Product table</a>   |   <a
+href="/raku-books/using-raku/regexes-and-grammars">Regexes and Grammars</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

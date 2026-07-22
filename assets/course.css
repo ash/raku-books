@@ -1,0 +1,1087 @@
+ul li {
+    list-style-type: none;
+}
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3 {
+    border-bottom: none;
+}
+.markdown-body h2 {
+    margin-top: 1.5em;
+    margin-bottom: 0.3em;
+}
+.markdown-body h4 {
+    margin-bottom: 0.5em;
+}
+.practice {
+    background: #faf8e0;
+}
+.practice,
+.exercises,
+.topics,
+.tip {
+    padding: 0.8em 1.5em;
+    margin-top: 2em;
+    border-radius: 5px;
+}
+.practice h2,
+.exercises h2,
+.topics h2,
+.tip h2 {
+    margin-top: 0;
+}
+.exercises {
+    background: #d1f2f9;
+}
+.topics {
+    background: #defde8;
+}
+.tip {
+    background: #fbe4eb;
+}
+.tip h2::before {
+    content: '📌 ';
+}
+.tip pre {
+    background: #fbe4eb;
+}
+span.has-q {
+    background-color: #f0e8fb;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+span.has-q a {
+    color: #7b3fb5;
+}
+span.has-e {
+    background-color: #e7eefb;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+span.has-e a {
+    color: #3160a8;
+}
+div.formula {
+    text-align: center;
+}
+
+
+.c { color: #408080; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.cp { color: #BC7A00 } /* Comment.Preproc */
+.cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #408080; font-style: italic } /* Comment.Single */
+.cs { color: #408080; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.gr { color: #FF0000 } /* Generic.Error */
+.gh { color: #000080; } /* Generic.Heading */
+.gi { color: #00A000 } /* Generic.Inserted */
+.go { color: #242424 ; } /* Generic.Output */
+.gp { color: #008000; } /* Generic.Prompt */
+.gs {  } /* Generic.Strong */
+.gu { color: #800080; } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; } /* Keyword.Constant */
+.kd { color: #008000; } /* Keyword.Declaration */
+.kn { color: #008000; } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #7D9029 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #999999; } /* Name.Entity */
+.ne { color: #D2413A; } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #A0A000 } /* Name.Label */
+.nn { color: #0000FF; } /* Name.Namespace */
+.nt { color: #008000; } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #BB6622;  } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #BB6688;  } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #BB6688 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+
+.c { color: #008000 } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #0000ff } /* Keyword */
+.nb { color: #0000ff } /* Keyword */
+.ch { color: #008000 } /* Comment.Hashbang */
+.cm { color: #008000 } /* Comment.Multiline */
+.cp { color: #0000ff } /* Comment.Preproc */
+.cpf { color: #008000 } /* Comment.PreprocFile */
+.c1 { color: #008000 } /* Comment.Single */
+.cs { color: #008000 } /* Comment.Special */
+.ge { font-style: italic } /* Generic.Emph */
+.gh {  } /* Generic.Heading */
+.gp {  } /* Generic.Prompt */
+.gs { } /* Generic.Strong */
+.gu {  } /* Generic.Subheading */
+.kc { color: #0000ff } /* Keyword.Constant */
+.kd { color: #0000ff } /* Keyword.Declaration */
+.kn { color: #0000ff } /* Keyword.Namespace */
+.kp { color: #0000ff } /* Keyword.Pseudo */
+.kr { color: #0000ff } /* Keyword.Reserved */
+.kt { color: #2b91af } /* Keyword.Type */
+.s { color: #a31515 } /* Literal.String */
+.nc { color: #2b91af } /* Name.Class */
+.ow { color: #0000ff } /* Operator.Word */
+.sa { color: #a31515 } /* Literal.String.Affix */
+.sb { color: #a31515 } /* Literal.String.Backtick */
+.sc { color: #a31515 } /* Literal.String.Char */
+.dl { color: #a31515 } /* Literal.String.Delimiter */
+.sd { color: #a31515 } /* Literal.String.Doc */
+.s2 { color: #a31515 } /* Literal.String.Double */
+.se { color: #a31515 } /* Literal.String.Escape */
+.sh { color: #a31515 } /* Literal.String.Heredoc */
+.si { color: #a31515 } /* Literal.String.Interpol */
+.sx { color: #a31515 } /* Literal.String.Other */
+.sr { color: #a31515 } /* Literal.String.Regex */
+.s1 { color: #a31515 } /* Literal.String.Single */
+.ss { color: #a31515 } /* Literal.String.Symbol */
+
+div.related-docs {
+    margin: 2.5em 0 1em;
+    padding: 0.7em 1.2em;
+    background-color: #f6f8fa;
+    border-left: 3px solid #b9c2cc;
+    border-radius: 3px;
+    font-size: 95%;
+}
+div.related-docs p {
+    margin: 0 0 0.4em;
+}
+div.related-docs ul {
+    margin: 0;
+    padding-left: 1.4em;
+}
+div.related-docs li {
+    margin: 0.1em 0;
+}
+/* External-link ("opens in a new tab") icon after each docs link. A masked
+   SVG so it takes the link's colour and themes automatically. */
+div.related-docs a::after {
+    content: "";
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    margin-left: 0.3em;
+    vertical-align: baseline;
+    background-color: currentColor;
+    opacity: 0.7;
+    -webkit-mask: var(--ext-link-icon) no-repeat center / contain;
+    mask: var(--ext-link-icon) no-repeat center / contain;
+}
+:root {
+    --ext-link-icon: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%20fill='none'%20stroke='black'%20stroke-width='1.6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M9%203h4v4'/%3E%3Cpath%20d='M13%203%207%209'/%3E%3Cpath%20d='M12%2010v2.5a1%201%200%200%201-1%201H3.5a1%201%200%200%201-1-1V5.5a1%201%200%200%201%201-1H6'/%3E%3C/svg%3E");
+
+    /* Accent for embedded raku.online play-code widgets (Part 6 solutions),
+       matching the course's own blue. Inherits through the widget's shadow
+       DOM; where the widget is not present this variable is simply unused. */
+    --rk-embed-accent: #0969da;
+}
+
+/* ════════════════════════════════════════════════════════════════ */
+/*  Home landing page                                                 */
+/* ════════════════════════════════════════════════════════════════ */
+
+/* ── Hero ── */
+.home-hero {
+    text-align: center;
+    padding: 1em 1em 1.6em;
+}
+.home-hero h1 {
+    font-size: 2.5em;
+    line-height: 1.15;
+    max-width: 16em;
+    margin: 0.1em auto 0.35em;
+    border-bottom: none;
+}
+.home-hero .tagline {
+    font-size: 1.2em;
+    line-height: 1.55;
+    color: #57606a;
+    max-width: 36em;
+    margin: 0.5em auto 1.5em;
+}
+.home-hero .cta-row {
+    margin: 1.3em 0 1em;
+}
+.home-hero .cta-row a {
+    display: inline-block;
+    margin: 0.35em 0.35em;
+    padding: 0.62em 1.5em;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color .15s ease, border-color .15s ease;
+}
+.home-hero .btn-primary {
+    background: #0969da;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(9, 105, 218, .25);
+}
+.home-hero .btn-primary:hover {
+    background: #0860c9;
+}
+.home-hero .btn-ghost {
+    color: #0969da;
+    border: 1px solid #d0d7de;
+}
+.home-hero .btn-ghost:hover {
+    border-color: #0969da;
+    background: #f6f8fa;
+}
+.home-hero .trust {
+    font-size: 0.92em;
+    color: #6a737d;
+    margin: 0.9em auto 0;
+    max-width: 40em;
+}
+
+/* ── Stats strip ── */
+.home-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7em;
+    max-width: 40em;
+    margin: 0 auto 2.8em;
+}
+.home-stats .stat {
+    flex: 1 1 7em;
+    min-width: 6em;
+    text-align: center;
+    padding: 0.85em 0.4em;
+    border: 1px solid #d8dee4;
+    border-radius: 10px;
+    background: #fff;
+}
+.home-stats .num {
+    display: block;
+    font-size: 1.7em;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #0969da;
+}
+.home-stats .label {
+    display: block;
+    margin-top: 0.15em;
+    font-size: 0.82em;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #6a737d;
+}
+
+/* ── Section label above the part cards ── */
+.section-label {
+    text-align: center;
+    font-size: 0.82em;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #8a929c;
+    margin: 0 0 1.2em;
+}
+
+/* ── Part cards (the course map) ── */
+.course-map {
+    margin: 0 0 2.5em;
+}
+.part-card {
+    border: 1px solid #d8dee4;
+    border-radius: 12px;
+    padding: 1.1em 1.4em 1.2em;
+    margin: 0 0 1em;
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease;
+}
+/* A book card with a cover: cover on the left, content on the right. */
+.part-card.has-cover {
+    display: flex;
+    gap: 1.3em;
+    align-items: flex-start;
+}
+.part-card.has-cover .part-body { flex: 1; min-width: 0; }
+.book-cover-link { flex: 0 0 auto; display: block; }
+/* One or more covers sit in a row (an earlier edition beside the current one). */
+.book-covers { display: flex; gap: .5em; align-items: flex-start; }
+.book-cover {
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(31, 35, 40, .18);
+    display: block;
+}
+/* On the home card, stack multiple covers vertically so every book tile keeps
+   the same cover-column width and its title/text lines up uniformly. */
+.part-card .book-covers { flex-direction: column; gap: .6em; }
+.part-card .book-cover { width: 118px; }
+@media (max-width: 560px) {
+    .part-card.has-cover { flex-direction: column; }
+    .part-card .book-cover { width: 96px; }
+}
+/* Book landing page: cover(s) beside the title + blurb. */
+.book-hero {
+    display: flex;
+    gap: 1.6em;
+    align-items: flex-start;
+    margin: 0 0 1.6em;
+}
+.book-hero .book-covers { flex: 0 0 auto; gap: .7em; }
+.book-hero .book-cover {
+    width: 190px;
+    border-radius: 8px;
+    box-shadow: 0 3px 14px rgba(31, 35, 40, .22);
+}
+.book-hero .book-covers.multi .book-cover { width: 140px; }
+.book-hero-text { min-width: 0; }
+.book-hero-text > :first-child { margin-top: 0; }
+/* Bibliographic metadata: a tidy two-column label/value grid, rows top-aligned.
+   Each <div> is display:contents so its <dt>/<dd> become grid items; the dt/dd
+   resets undo the markdown-body definition-list defaults (top margin, italic,
+   left indent) that would otherwise skew the alignment. */
+.book-meta {
+    margin: 1.15em 0 0;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: .4em .9em;
+    align-items: baseline;
+    font-size: 90%;
+}
+.book-meta > div { display: contents; }
+/* Extra specificity (.markdown-body …) to beat the markdown-body dl dt/dd
+   defaults, which add a 16px top/bottom margin and italics that would blow the
+   row spacing wide open. */
+.markdown-body .book-meta dt {
+    margin: 0;
+    padding: 0;
+    font-style: normal;
+    font-weight: 600;
+    color: #57606a;
+}
+.markdown-body .book-meta dd { margin: 0; padding: 0; }
+.book-meta-note { margin: .7em 0 0; font-size: 84%; opacity: .72; font-style: italic; }
+html[data-theme-active="dark"] .markdown-body .book-meta dt { color: #9aa4af; }
+
+/* Gallery landing (the Calendar): a responsive grid of thumbnail previews. */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+    gap: 1em;
+    margin: 1.6em 0;
+}
+.gallery-cell span { font-size: 90%; }
+.gallery-cell { display: block; text-decoration: none; color: inherit; }
+.gallery-cell img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(31, 35, 40, .16);
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+.gallery-cell:hover img {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(31, 35, 40, .24);
+}
+.gallery-cell span { display: block; text-align: center; margin-top: .5em; font-weight: 600; }
+
+/* A thin light frame around each calendar-page image. */
+.markdown-body img.cal-page {
+    border: 1px solid #e4e4e7;
+    border-radius: 4px;
+}
+html[data-theme-active="dark"] .markdown-body img.cal-page { border-color: #2d333b; }
+
+/* "Under proofreading" style banner on a book landing page. */
+.book-banner {
+    margin: 0 0 1.4em;
+    padding: .7em 1em;
+    border: 1px solid #f0d48a;
+    background: #fdf6e3;
+    border-radius: 8px;
+    font-size: 92%;
+    color: #6b5417;
+}
+html[data-theme-active="dark"] .book-banner {
+    border-color: #5a4a1e;
+    background: #2a2410;
+    color: #d9c98f;
+}
+@media (max-width: 560px) {
+    .book-hero { gap: 1.1em; flex-direction: column; }
+    .book-hero .book-cover { width: 128px; }
+    .book-hero .book-covers.multi .book-cover { width: 104px; }
+}
+.part-card:hover {
+    border-color: #c3ccd5;
+    box-shadow: 0 4px 16px rgba(31, 35, 40, .07);
+}
+.part-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.55em;
+    margin: 0 0 0.3em;
+    font-size: 1.3em;
+    border-bottom: none;
+}
+.part-card h3 a {
+    text-decoration: none;
+}
+.part-card h3 a:hover {
+    text-decoration: underline;
+}
+/* Parts not yet published: still listed on the front page, but greyed out
+   and non-clickable. */
+.part-card.part-locked {
+    opacity: 0.6;
+    background: #fafbfc;
+}
+.part-card.part-locked:hover {
+    box-shadow: none;
+    border-color: #d8dee4;
+}
+.part-card.part-locked a {
+    color: #8b949e;
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+}
+.part-soon {
+    font-size: 0.55em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #8b949e;
+    border: 1px solid #d8dee4;
+    border-radius: 999px;
+    padding: 0.15em 0.6em;
+    white-space: nowrap;
+}
+/* In-text link that points into an as-yet unpublished part. */
+.locked-link {
+    color: #8b949e;
+    cursor: default;
+}
+.part-card .pnum {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: 50%;
+    background: #0969da;
+    color: #fff;
+    font-size: 0.78em;
+    font-weight: 700;
+}
+.part-card > p {
+    margin: 0.1em 0 0.7em;
+    color: #424a53;
+    max-width: 48em;
+}
+/* The Final Test — a standout pseudo-part between Part 5 and the Addendum. */
+.part-card.part-pseudo { border-color: #d4a72c; background: #fffdf5; }
+.part-card.part-pseudo:hover { border-color: #bf8700; }
+.part-card .pnum.pnum-star { background: #d4a72c; }
+html[data-theme-active="dark"] .part-card.part-pseudo { background: #1c1a10; border-color: #9e7b0a; }
+
+/* ── "Expand all sections" button on the part header ── */
+.part-expand {
+    flex: 0 0 auto;
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 26px;
+    padding: 0;
+    cursor: pointer;
+    border: 1px solid #d8dee4;
+    border-radius: 7px;
+    background: #fff;
+    color: #57606a;
+}
+.part-expand:hover {
+    color: #0969da;
+    border-color: #c3ccd5;
+    background: #f6f8fa;
+}
+.part-expand svg { display: block; }
+.subparts {
+    margin-top: 0.2em;
+}
+
+/* ── Level-2 subparts: always-visible rows; only their topics collapse ── */
+details.toc-subpart {
+    margin: 0.15em 0;
+    padding: 0.1em 0;
+}
+details.toc-subpart > summary {
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: 600;
+    color: #1f2328;
+    list-style: none;
+    padding: 0.32em 0;
+}
+details.toc-subpart > summary::-webkit-details-marker {
+    display: none;
+}
+details.toc-subpart > summary::before {
+    content: '▸';
+    display: inline-block;
+    width: 1em;
+    font-size: 1.35em;
+    line-height: 1;
+    color: #9aa2ac;
+    font-weight: 400;
+}
+details.toc-subpart[open] > summary::before {
+    content: '▾';
+}
+details.toc-subpart > summary:hover {
+    color: #0969da;
+}
+details.toc-subpart ul {
+    margin: 0.1em 0 0.6em 1.1em;
+}
+
+/* Reserve the vertical scrollbar's gutter at all times, so a page that gains or
+   loses a scrollbar — navigating between pages of different heights, or revealing
+   quiz feedback — never shifts the centred content sideways. No effect where the
+   OS draws overlay scrollbars (they take no layout space). */
+html {
+    scrollbar-gutter: stable;
+}
+
+/* ── Footer ── */
+/* Sticky footer: on short pages, keep the site footer pinned to the bottom of
+   the viewport instead of floating in the middle. The column lives on
+   .container-lg (NOT on <body>), so the container stays a normal centered block
+   and keeps its max-width — making <body> a flex parent would shrink it to its
+   content width. min-height fills the viewport minus the container's 32px+32px
+   (my-5) vertical margins; page-content grows to push the footer down. */
+.container-lg {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+}
+.container-lg > main.page-content {
+    flex: 1 0 auto;
+}
+
+.home-foot {
+    margin-top: 3em;
+    border-top: 1px solid #e6e9ec;
+    padding-top: 1.4em;
+    text-align: center;
+    font-size: 0.9em;
+    color: #6a737d;
+}
+.home-foot div[style] {
+    border-top: none !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+@media (max-width: 480px) {
+    .home-hero h1 { font-size: 2em; }
+    .home-hero .cta-row a { display: block; margin: 0.5em auto; max-width: 16em; }
+}
+
+/* ════════════════════════════════════════════════════════════════ */
+/*  Theme switcher + dark mode                                        */
+/* ════════════════════════════════════════════════════════════════ */
+
+/* Top-right cluster: search box + compact theme icon, on every page. */
+.top-controls {
+    position: fixed;
+    top: 10px;
+    right: 12px;
+    z-index: 50;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* Book switcher — a compact dropdown to jump between books, styled to match
+   the search and theme controls. */
+.book-switch {
+    display: inline-flex;
+    align-items: center;
+}
+.book-select {
+    height: 28px;
+    max-width: 190px;
+    padding: 0 6px;
+    font-size: 12.5px;
+    line-height: 1;
+    cursor: pointer;
+    border: 1px solid #d8dee4;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .9);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #57606a;
+    box-shadow: 0 1px 4px rgba(31, 35, 40, .08);
+}
+.book-select:hover { color: #1f2328; border-color: #c3ccd5; }
+.book-switch-label { display: none; }
+html[data-theme-active="dark"] .book-select {
+    background: rgba(22, 27, 34, .9);
+    border-color: #2d333b;
+    color: #adbac7;
+}
+html[data-theme-active="dark"] .book-select:hover { color: #e6edf3; border-color: #3d444d; }
+
+/* --check-code marks blocks that failed `raku -c` with a subtle left rule, so
+   they are easy to spot during review. Invisible impact on a normal build. */
+.highlight.raku.code-flagged { border-left: 3px solid #e3a008; }
+
+/* Note under a program the in-browser engine can't run yet (```raku-nobrowser).
+   Sits directly beneath its code block, quiet and informative. */
+.run-note {
+    margin: -0.4em 0 1.1em;
+    font-size: 82%;
+    color: #57606a;
+    font-style: italic;
+}
+html[data-theme-active="dark"] .run-note { color: #8b949e; }
+
+/* Theme control — a single icon button that opens a small popup menu. */
+.theme-switch {
+    position: relative;
+}
+.theme-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 28px;
+    padding: 0;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    border: 1px solid #d8dee4;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .9);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #57606a;
+    box-shadow: 0 1px 4px rgba(31, 35, 40, .08);
+}
+.theme-btn:hover {
+    color: #1f2328;
+    border-color: #c3ccd5;
+}
+.theme-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    min-width: 124px;
+    background: #fff;
+    border: 1px solid #d8dee4;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(31, 35, 40, .16);
+}
+.theme-menu li { margin: 0; list-style: none; }
+.theme-menu button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 9px;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #1f2328;
+}
+.theme-menu button .ti { width: 1.1em; text-align: center; }
+.theme-menu button:hover { background: #f0f4f9; }
+.theme-menu button[aria-checked="true"] { color: #0969da; font-weight: 600; }
+.theme-menu button[aria-checked="true"]::after { content: '✓'; margin-left: auto; }
+
+/* ── Dark theme — applied by the head script via data-theme-active="dark". ── */
+/*    Code blocks deliberately keep a light surface so the (light-oriented)    */
+/*    inline syntax colours stay legible against it.                           */
+html[data-theme-active="dark"] body { background-color: #0d1117; color: #e6edf3; }
+html[data-theme-active="dark"] .markdown-body { color: #e6edf3; }
+html[data-theme-active="dark"] a,
+html[data-theme-active="dark"] .markdown-body a { color: #4493f8; }
+html[data-theme-active="dark"] .markdown-body h1,
+html[data-theme-active="dark"] .markdown-body h2,
+html[data-theme-active="dark"] .markdown-body h3,
+html[data-theme-active="dark"] .markdown-body h4,
+html[data-theme-active="dark"] .markdown-body h5,
+html[data-theme-active="dark"] .markdown-body h6 { color: #e6edf3; }
+html[data-theme-active="dark"] .markdown-body hr { background-color: #30363d; }
+html[data-theme-active="dark"] .markdown-body blockquote { color: #9da7b1; border-left-color: #30363d; }
+
+/* Code: dark surface + a dark syntax palette (the token classes come from the
+   class-based pygments output). Inline code on a faint dark chip. */
+html[data-theme-active="dark"] .markdown-body pre {
+    background-color: #161b22;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+}
+html[data-theme-active="dark"] .markdown-body pre code,
+html[data-theme-active="dark"] .markdown-body pre tt { color: #e6edf3; }
+html[data-theme-active="dark"] .markdown-body :not(pre) > code,
+html[data-theme-active="dark"] .markdown-body :not(pre) > tt {
+    background-color: rgba(110, 118, 129, .28);
+    color: #e6edf3;
+}
+/* Dark syntax tokens (GitHub-dark-ish), overriding the light class colours. */
+html[data-theme-active="dark"] .highlight .c,
+html[data-theme-active="dark"] .highlight .ch,
+html[data-theme-active="dark"] .highlight .cm,
+html[data-theme-active="dark"] .highlight .c1,
+html[data-theme-active="dark"] .highlight .cs,
+html[data-theme-active="dark"] .highlight .cp,
+html[data-theme-active="dark"] .highlight .cpf { color: #8b949e; }
+html[data-theme-active="dark"] .highlight .k,
+html[data-theme-active="dark"] .highlight .kc,
+html[data-theme-active="dark"] .highlight .kd,
+html[data-theme-active="dark"] .highlight .kn,
+html[data-theme-active="dark"] .highlight .kp,
+html[data-theme-active="dark"] .highlight .kr,
+html[data-theme-active="dark"] .highlight .o,
+html[data-theme-active="dark"] .highlight .ow { color: #ff7b72; }
+html[data-theme-active="dark"] .highlight .kt,
+html[data-theme-active="dark"] .highlight .nb,
+html[data-theme-active="dark"] .highlight .nc,
+html[data-theme-active="dark"] .highlight .nn,
+html[data-theme-active="dark"] .highlight .no { color: #ffa657; }
+html[data-theme-active="dark"] .highlight .nf,
+html[data-theme-active="dark"] .highlight .fm,
+html[data-theme-active="dark"] .highlight .nd { color: #d2a8ff; }
+html[data-theme-active="dark"] .highlight .s,
+html[data-theme-active="dark"] .highlight .s1,
+html[data-theme-active="dark"] .highlight .s2,
+html[data-theme-active="dark"] .highlight .sa,
+html[data-theme-active="dark"] .highlight .sb,
+html[data-theme-active="dark"] .highlight .sc,
+html[data-theme-active="dark"] .highlight .dl,
+html[data-theme-active="dark"] .highlight .sd,
+html[data-theme-active="dark"] .highlight .se,
+html[data-theme-active="dark"] .highlight .sh,
+html[data-theme-active="dark"] .highlight .si,
+html[data-theme-active="dark"] .highlight .sx,
+html[data-theme-active="dark"] .highlight .sr,
+html[data-theme-active="dark"] .highlight .ss { color: #a5d6ff; }
+html[data-theme-active="dark"] .highlight .m,
+html[data-theme-active="dark"] .highlight .mb,
+html[data-theme-active="dark"] .highlight .mf,
+html[data-theme-active="dark"] .highlight .mh,
+html[data-theme-active="dark"] .highlight .mi,
+html[data-theme-active="dark"] .highlight .mo,
+html[data-theme-active="dark"] .highlight .il { color: #79c0ff; }
+html[data-theme-active="dark"] .highlight .nv,
+html[data-theme-active="dark"] .highlight .vc,
+html[data-theme-active="dark"] .highlight .vg,
+html[data-theme-active="dark"] .highlight .vi,
+html[data-theme-active="dark"] .highlight .vm { color: #e6edf3; }
+html[data-theme-active="dark"] .highlight .na { color: #79c0ff; }
+html[data-theme-active="dark"] .highlight .nt { color: #7ee787; }
+html[data-theme-active="dark"] .highlight .gp,
+html[data-theme-active="dark"] .highlight .go { color: #8b949e; }
+html[data-theme-active="dark"] .highlight .w { color: #484f58; }
+
+/* Tables */
+html[data-theme-active="dark"] .markdown-body table td,
+html[data-theme-active="dark"] .markdown-body table th { border-color: #30363d; }
+html[data-theme-active="dark"] .markdown-body table tr { background-color: #0d1117; border-top-color: #30363d; }
+html[data-theme-active="dark"] .markdown-body table tr:nth-child(2n) { background-color: #161b22; }
+
+/* Coloured assignment boxes */
+html[data-theme-active="dark"] .practice { background: #272414; }
+html[data-theme-active="dark"] .exercises { background: #0f2630; }
+html[data-theme-active="dark"] .topics { background: #10271a; }
+html[data-theme-active="dark"] .tip { background: #2a1620; }
+html[data-theme-active="dark"] .tip pre { background: #161b22; }
+
+/* Quiz tables theme with the page: their text inherits the body colour, so no
+   forced colours here (see quiz.css for the row tints and code blending). */
+
+/* Practice/exercise badges */
+html[data-theme-active="dark"] span.has-q { background-color: rgba(165, 120, 255, .2); }
+html[data-theme-active="dark"] span.has-q a { color: #d3bcff; }
+html[data-theme-active="dark"] span.has-e { background-color: rgba(86, 150, 255, .2); }
+html[data-theme-active="dark"] span.has-e a { color: #a6c8ff; }
+
+/* Related-documentation box */
+html[data-theme-active="dark"] div.related-docs { background-color: #161b22; border-left-color: #30363d; }
+
+/* Landing page surfaces */
+html[data-theme-active="dark"] .home-hero .tagline,
+html[data-theme-active="dark"] .home-hero .trust,
+html[data-theme-active="dark"] .home-stats .label { color: #9da7b1; }
+html[data-theme-active="dark"] details.toc-subpart > summary { color: #e6edf3; }
+html[data-theme-active="dark"] details.toc-subpart > summary:hover { color: #4493f8; }
+html[data-theme-active="dark"] .section-label { color: #768089; }
+html[data-theme-active="dark"] .home-stats .stat,
+html[data-theme-active="dark"] .part-card { background: #161b22; border-color: #30363d; }
+html[data-theme-active="dark"] .part-card:hover { border-color: #3d444d; box-shadow: 0 4px 16px rgba(0, 0, 0, .4); }
+html[data-theme-active="dark"] .part-card > p { color: #c4ccd4; }
+html[data-theme-active="dark"] .part-expand { background: #161b22; border-color: #30363d; color: #9da7b1; }
+html[data-theme-active="dark"] .part-expand:hover { background: #21262d; border-color: #3d444d; color: #4493f8; }
+html[data-theme-active="dark"] .home-hero .btn-primary { color: #fff; }
+html[data-theme-active="dark"] .home-hero .btn-ghost { color: #4493f8; border-color: #30363d; }
+html[data-theme-active="dark"] .home-hero .btn-ghost:hover { background: #161b22; border-color: #4493f8; }
+html[data-theme-active="dark"] .home-foot { border-top-color: #21262d; color: #9da7b1; }
+html[data-theme-active="dark"] .home-foot a { color: #9da7b1; }
+
+/* The theme control, in dark */
+html[data-theme-active="dark"] .theme-btn {
+    background: rgba(22, 27, 34, .9);
+    border-color: #30363d;
+    color: #9da7b1;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+}
+html[data-theme-active="dark"] .theme-btn:hover { color: #e6edf3; border-color: #3d444d; }
+html[data-theme-active="dark"] .theme-menu {
+    background: #161b22;
+    border-color: #30363d;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
+}
+html[data-theme-active="dark"] .theme-menu button { color: #e6edf3; }
+html[data-theme-active="dark"] .theme-menu button:hover { background: #21262d; }
+html[data-theme-active="dark"] .theme-menu button[aria-checked="true"] { color: #4493f8; }
+
+/* ════════════════════════════════════════════════════════════════ */
+/*  Site search (header box + results overlay, on every page)         */
+/* ════════════════════════════════════════════════════════════════ */
+.site-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+/* The magnifier toggle (matches the theme icon button). */
+.search-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 28px;
+    padding: 0;
+    cursor: pointer;
+    border: 1px solid #d8dee4;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .9);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #57606a;
+    box-shadow: 0 1px 4px rgba(31, 35, 40, .08);
+}
+.search-toggle:hover { color: #1f2328; border-color: #c3ccd5; }
+.site-search.open .search-toggle { display: none; }
+/* The field is hidden until the box is opened, then it grows in. */
+.site-search input {
+    width: 0;
+    box-sizing: border-box;
+    font-size: 13px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .9);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #1f2328;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 1px 4px rgba(31, 35, 40, .08);
+    transition: width .18s ease, opacity .18s ease, padding .18s ease;
+}
+.site-search.open input {
+    width: min(280px, 60vw);
+    padding: 5px 10px;
+    border-color: #d8dee4;
+    opacity: 1;
+    pointer-events: auto;
+}
+.site-search.open input:focus {
+    outline: none;
+    border-color: #0969da;
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, .15);
+}
+.ss-results {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    width: min(440px, 92vw);
+    max-height: min(70vh, 520px);
+    overflow-y: auto;
+    padding: 5px;
+    background: #fff;
+    border: 1px solid #d8dee4;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(31, 35, 40, .16);
+}
+.ss-msg {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #6a737d;
+}
+.ss-hit {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 7px;
+    text-decoration: none;
+    color: inherit;
+}
+.ss-hit:hover,
+.ss-hit.sel {
+    background: #f0f4f9;
+}
+.ss-t {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0969da;
+}
+.ss-c {
+    display: block;
+    margin: 1px 0 2px;
+    font-size: 11px;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: #8a929c;
+}
+.ss-s {
+    display: block;
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: #57606a;
+}
+.ss-results mark {
+    background: #fff3b0;
+    color: inherit;
+    padding: 0 1px;
+    border-radius: 2px;
+}
+
+html[data-theme-active="dark"] .search-toggle {
+    background: rgba(22, 27, 34, .9);
+    border-color: #30363d;
+    color: #9da7b1;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+}
+html[data-theme-active="dark"] .search-toggle:hover { color: #e6edf3; border-color: #3d444d; }
+html[data-theme-active="dark"] .site-search input {
+    background: rgba(22, 27, 34, .9);
+    border-color: #30363d;
+    color: #e6edf3;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+}
+html[data-theme-active="dark"] .site-search.open input { border-color: #30363d; }
+html[data-theme-active="dark"] .site-search input::placeholder { color: #768089; }
+html[data-theme-active="dark"] .site-search.open input:focus {
+    border-color: #1f6feb;
+    box-shadow: 0 0 0 3px rgba(31, 111, 235, .25);
+}
+html[data-theme-active="dark"] .ss-results {
+    background: #161b22;
+    border-color: #30363d;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
+}
+html[data-theme-active="dark"] .ss-hit:hover,
+html[data-theme-active="dark"] .ss-hit.sel { background: #21262d; }
+html[data-theme-active="dark"] .ss-t { color: #4493f8; }
+html[data-theme-active="dark"] .ss-s { color: #9da7b1; }
+html[data-theme-active="dark"] .ss-msg { color: #9da7b1; }
+html[data-theme-active="dark"] .ss-results mark { background: #5a4a00; color: #ffe9a8; }
+
+@media (max-width: 620px) {
+    .site-search.open input { width: 56vw; }
+}
+
+/* ── Copy-to-clipboard button on Raku code examples ────────────────────────
+   The generator adds the `raku` class only to ```raku blocks, so program
+   output (```console) and data (```json) blocks never get a button. */
+.highlight.raku { position: relative; }
+
+.highlight.raku .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #57606a;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity .15s ease, color .15s ease, border-color .15s ease;
+}
+.highlight.raku:hover .copy-btn,
+.highlight.raku:focus-within .copy-btn { opacity: 1; }
+.highlight.raku .copy-btn:hover { color: #1f2328; border-color: #b0b7be; }
+.highlight.raku .copy-btn:focus-visible {
+    opacity: 1;
+    outline: 2px solid #0969da;
+    outline-offset: 1px;
+}
+.highlight.raku .copy-btn.copied { color: #1a7f37; border-color: #1a7f37; }
+.highlight.raku .copy-btn svg { display: block; }
+
+/* Touch devices have no hover — keep the button visible there. */
+@media (hover: none) {
+    .highlight.raku .copy-btn { opacity: .6; }
+}
+
+html[data-theme-active="dark"] .highlight.raku .copy-btn {
+    background: #161b22;
+    border-color: #30363d;
+    color: #8b949e;
+}
+html[data-theme-active="dark"] .highlight.raku .copy-btn:hover {
+    color: #e6edf3;
+    border-color: #6e7681;
+}
+html[data-theme-active="dark"] .highlight.raku .copy-btn.copied {
+    color: #3fb950;
+    border-color: #3fb950;
+}

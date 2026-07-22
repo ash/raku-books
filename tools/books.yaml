@@ -1,0 +1,154 @@
+# Per-book extraction config for tools/extract.py.
+#
+# books_root : where the source PDFs live (the cloned github.com/ash/books).
+# Each entry under `books:` is one book:
+#   pdf         : path to the PDF, relative to books_root
+#   slug        : URL slug / output directory name
+#   title       : short title (book switcher, breadcrumb, card)
+#   long_title  : full title (book landing-page heading)
+#   description : one-line blurb for the home-page card
+#   first_page  : 1-based first content page (skip cover/copyright/printed TOC)
+#   last_page   : 1-based last content page (omit = to end)
+#   levels      : font size -> heading level. chapter > section > topic.
+#   drop_sizes  : heading-ish sizes to ignore (e.g. the "Chapter N" / "Part N" labels)
+#   strip_lines : regexes; any line matching is dropped (running headers, etc.)
+#   para_gap    : vertical gap (pt) above which prose/code blocks split (default 22)
+#   intro_title : name for the synthetic chapter holding pre-chapter front matter
+
+# Where the source PDFs live — a local clone of github.com/ash/books. Only needed
+# to RE-EXTRACT a book; rebuilding the site from the committed Markdown does not
+# need it. Adjust to your clone (the .docx sources below use absolute paths too).
+books_root: ~/books
+
+books:
+  the-raku-course:
+    # A placeholder “book” that links out to the online course. It has no source
+    # file: its TOC fragment (tools/toc-the-raku-course.yaml) and landing page
+    # (the-raku-course/index.md) are hand-written, so extract.py/covers.py skip it.
+    static: true
+    slug: the-raku-course
+    title: The Raku Course
+    date: "2026-07-01"        # newest → shown first on the home page
+
+  using-raku:
+    pdf: "Using Raku/Using Raku.pdf"
+    slug: using-raku
+    title: Using Raku
+    date: "2019-10-14"          # for reverse-chronological ordering on the home page
+    long_title: "Using Raku: 100 Programming Challenges Solved with the Brand-New Raku Programming Language"
+    description: >-
+      100 programming challenges solved in Raku — string handling, numbers,
+      aggregate data, regexes and grammars, dates, and parallel computing —
+      each with a runnable solution.
+    first_page: 11
+    intro_title: Introduction
+    levels:
+      chapter: [48.0]
+      section: [25.9]
+      topic:   [22.1]
+    drop_sizes: [72.0, 36.0]
+    strip_lines:
+      - '\.\.\.\.'          # printed-TOC dot leaders, just in case
+    para_gap: 22.0
+    # Additional covers to display alongside this book's own. Using Raku is the
+    # 2nd edition of Using Perl 6, so we show both covers.
+    extra_covers:
+      - pdf: "Using Perl 6/Using Perl 6.pdf"
+        name: using-perl-6
+    # Bibliographic metadata shown on the book's landing page.
+    meta:
+      author: Andrew Shitov
+      published: 14 October 2019
+      publisher: DeepText, Amsterdam
+      isbn: 978-90-821568-8-1
+      pages: 187
+      note: First published as “Using Perl 6” on 1 November 2017.
+
+  creating-a-compiler-in-raku:
+    pdf: "/Users/ash/Books/Compiler in Perl 6/Compiler in Raku (updated).docx"
+    cover_image: "/Users/ash/Books/Compiler in Perl 6/cover-web.jpg"
+    slug: creating-a-compiler-in-raku
+    title: Creating a Compiler in Raku
+    date: "2018-11-02"
+    long_title: "Creating a Compiler in Raku"
+    banner: This book is not yet published — the text here is still under proofreading.
+    description: >-
+      A step-by-step coding essay that builds a working compiler in Raku — from a
+      tiny translator through grammars, actions, and an abstract syntax tree to a
+      full calculator and interpreter.
+    intro_title: Introduction
+    heading_styles:
+      Heading3: chapter
+      Heading4: section
+      Heading5: topic
+    output_styles: [HTMLPreformatted, Cmdline]
+    meta:
+      author: Andrew Shitov
+      published: 1 November 2018
+      publisher: DeepText, Amsterdam
+      isbn: 978-90-821568-1-2
+
+  perl-6-calendar-2019:
+    source: calendar          # custom path: one image + code puzzle per month
+    gallery: true             # landing page shows month thumbnails, not a text list
+    pdf: "Perl 6 Calendar 2019/Perl 6 Calendar 2019.pdf"
+    slug: perl-6-calendar-2019
+    title: Perl 6 Calendar 2019
+    date: "2018-11-01"
+    long_title: Perl 6 Calendar 2019
+    description: >-
+      A wall calendar with a bite-sized Raku code puzzle for every month of 2019
+      — twelve neat one-screen programs, one per page.
+    intro_title: Months
+    meta:
+      author: Andrew Shitov
+      published: 2018
+      publisher: DeepText, Amsterdam
+
+  perl-6-at-a-glance:
+    # Text comes from the .docx (the PDF's code font conflates space and "!"),
+    # but the cover is rendered from the PDF.
+    pdf: "/Users/ash/Books/Perl 6 at a Glance/Perl 6 at a glance.docx"
+    cover_pdf: "Perl 6 at a Glance/Perl 6 at a Glance.pdf"
+    slug: perl-6-at-a-glance
+    title: Perl 6 at a Glance
+    date: "2017-01-15"
+    long_title: Perl 6 at a Glance
+    description: >-
+      A quick dive into Perl 6 (now Raku): the essentials, operators, subroutines
+      and types, object orientation, regexes and grammars, and a practical
+      appendix — the initial knowledge to start working with the language.
+    intro_title: Introduction
+    meta:
+      author: Andrew Shitov
+      published: January 2017
+      publisher: DeepText, Amsterdam
+      isbn: 978-90-821568-3-6
+      pages: 155
+      note: The first book based on the stable Perl 6 (Raku) 6.c release.
+
+  raku-one-liners:
+    pdf: "Raku One-Liners/Raku One Liners.pdf"
+    slug: raku-one-liners
+    title: Raku One-Liners
+    date: "2019-10-18"
+    long_title: Raku One-Liners
+    description: >-
+      Short, powerful Raku programs — command-line one-liners for files, numbers,
+      strings, and dates, a tour of the language’s most expressive syntax, a round
+      of Raku golf, and a look behind floating-point arithmetic.
+    first_page: 8
+    intro_title: Introduction
+    levels:
+      chapter: [48.0]
+      topic:   [22.1]
+    drop_sizes: []
+    strip_lines:
+      - '\.\.\.\.'
+    para_gap: 22.0
+    meta:
+      author: Andrew Shitov
+      published: 18 October 2019
+      publisher: DeepText, Amsterdam
+      isbn: 978-90-821568-9-8
+      pages: 93

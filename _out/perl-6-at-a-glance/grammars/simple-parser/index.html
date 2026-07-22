@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Simple parser — Raku Books</title>
+    <meta property="og:title" content="Simple parser — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance" selected>Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/perl-6-at-a-glance">Perl 6 at
+a Glance</a> / <a
+href="/raku-books/perl-6-at-a-glance/regexes-and-grammars">Regexes and Grammars</a>
+/ <a href="/raku-books/perl-6-at-a-glance/grammars">Grammars</a></p>
+<h1 id="simple-parser">Simple parser</h1>
+<p>The first example of the grammar application is on grammar for tiny
+language that defines an assignment operation and contains the printing
+instruction. Here is an example of a programme in this language.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">x</span> = <span class="mi">42</span>;
+<span class="n">y</span> = <span class="n">x</span>;
+<span class="nb">print</span> <span class="n">x</span>;
+<span class="nb">print</span> <span class="n">y</span>;
+<span class="nb">print</span> <span class="mi">7</span>;</pre></div>
+
+<p>Let’s start writing the grammar for the language. First, we have to
+express the fact that a programme is a sequence of statements separated
+by a semicolon. Thus, at the top level the grammar looks like this:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">grammar</span> <span class="n">Lang</span> {
+    <span class="k">rule</span> <span class="n">TOP</span> {
+        ^ <span class="s">&lt;statements&gt;</span> $
+    }
+    <span class="k">rule</span> <span class="n">statements</span> {
+        <span class="s">&lt;statement&gt;</span>+ %% <span class="s">';'</span>
+    }
+}</pre></div>
+
+<p>CodeBlockPlaceholder3raku-static rule statement { | <assignment> |
+<printout> } CodeBlockPlaceholder4</p>
+<p>The vertical bar separates alternative branches like it does in
+regular expressions in Perl 5. To make the code a bit better-looking and
+simplify the maintenance, an extra vertical bar may be added before the
+first subrule. The following two descriptions are identical:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">statement</span> {
+      <span class="s">&lt;assignment&gt;</span>
+    | <span class="s">&lt;printout&gt;</span>
+}
+<span class="k">rule</span> <span class="n">statement</span> {
+    | <span class="s">&lt;assignment&gt;</span>
+    | <span class="s">&lt;printout&gt;</span>
+}</pre></div>
+
+<p>CodeBlockPlaceholder6raku-static rule assignment { <identifier> ‘=’
+<expression> } rule printout { ‘print’ <expression> }
+CodeBlockPlaceholder7</p>
+<p>Here, we see literal strings, namely, <code>'='</code> and
+<code>'print'</code>. Again, the spaces around them do not affect the
+rule.</p>
+<p>An <code>expression</code> matches with either an identifier (which
+is a variable name in our case) or with a constant value. Thus, an
+<code>expression</code> is either an <code>identifier</code> or a
+<code>value</code> with no additional strings.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">expression</span> {
+    | <span class="s">&lt;identifier&gt;</span>
+    | <span class="s">&lt;value&gt;</span>
+}</pre></div>
+
+<p>At this point, we should write the rules for identifiers and values.
+It is better to use another method, named <code>token</code>, for that
+kind of the grammar bit. In tokens, the spaces matter (except for those
+that are adjacent to the braces).</p>
+<p>An identifier is a sequence of letters:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">identifier</span> {
+    <span class="s">&lt;:alpha&gt;</span>+
+}</pre></div>
+
+<p>CodeBlockPlaceholder10raku-static token value { }
+CodeBlockPlaceholder11</p>
+<p>Our first grammar is complete. It is now possible to use it to parse
+a text file.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$parsed</span> = <span class="n">Lang</span>.<span class="n">parsefile</span>(<span class="s">'test.lang'</span>);</pre></div>
+
+<p>CodeBlockPlaceholder13raku-static 「x = 42; y = x; print x; print y;
+print 7; 」 statements =&gt; 「x = 42; y = x; print x; print y; print 7;
+」 statement =&gt; 「x = 42」 assignment =&gt; 「x = 42」 identifier
+=&gt; 「x」 expression =&gt; 「42」 value =&gt; 「42」 statement =&gt;
+「y = x」 assignment =&gt; 「y = x」 identifier =&gt; 「y」 expression
+=&gt; 「x」 identifier =&gt; 「x」 statement =&gt; 「print x」 printout
+=&gt; 「print x」 expression =&gt; 「x」 identifier =&gt; 「x」
+statement =&gt; 「print y」 printout =&gt; 「print y」 expression =&gt;
+「y」 identifier =&gt; 「y」 statement =&gt; 「print 7」 printout =&gt;
+「print 7」 expression =&gt; 「7」 value =&gt; 「7」
+CodeBlockPlaceholder14raku-static grammar Lang { rule TOP { ^
+<statements> $ } rule statements { <statement>+ %% ‘;’ } rule statement
+{ | <assignment> | <printout> } rule assignment { <identifier> ‘=’
+<expression> } rule printout { ‘print’ <expression> } rule expression {
+| <identifier> | <value> } token identifier { &lt;:alpha&gt;+ } token
+value { } } CodeBlockPlaceholder15</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/perl-6-at-a-glance/grammars">Grammars</a>   |   <a
+href="/raku-books/perl-6-at-a-glance/grammars/an-interpreter">An interpreter</a>
+→</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

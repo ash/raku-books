@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>36. Standard deviation — Raku Books</title>
+    <meta property="og:title" content="36. Standard deviation — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku" selected>Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/using-raku">Using Raku</a> /
+<a href="/raku-books/using-raku/numbers">Numbers</a> / <a
+href="/raku-books/using-raku/mathematical-problems">Mathematical problems</a></p>
+<h1 id="standard-deviation">36. Standard deviation</h1>
+<p><em>For the given data, calculate the standard deviation value
+(sigma).</em></p>
+<p>Standard deviation is a statistical term that shows how compact data
+distribution is. The formula is the following:</p>
+<p>5 = 6∑(89 −8̅)3 , ; −1</p>
+<p>where N is the number of elements in the array x; 8̅ is the average
+value (see</p>
+<p><em>Task 56, Average on an array).</em></p>
+<p>Let’s use some test data from Wikipedia and take the straightforward
+approach using reduction operations and avoiding explicit loops:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@data</span> = <span class="mf">727.7</span>, <span class="mf">1086.5</span>, <span class="mf">1091.0</span>, <span class="mf">1361.3</span>, <span class="mf">1490.5</span>, <span class="mf">1956.1</span>;
+
+<span class="k">my</span> <span class="nv">$avg</span> = ([+] <span class="nv">@data</span>) / <span class="nv">@data</span>.<span class="nb">elems</span>;
+<span class="k">my</span> <span class="nv">$sigma</span> = <span class="nb">sqrt</span>(
+    ([+] <span class="nb">map</span> * ** <span class="mi">2</span>, <span class="nb">map</span> * - <span class="nv">$avg</span>, <span class="nv">@data</span>) /
+    (<span class="nv">@data</span>.<span class="nb">elems</span> - <span class="mi">1</span>)
+);
+
+<span class="nb">say</span> <span class="nv">$sigma</span>; <span class="c1"># 420.962489619523</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Inside the <code>sqrt</code> function, the <code>[+]</code> reduction
+operator gets the array that is formed by the two nested runs of
+<code>map</code>. First, the constant shift has been removed by applying
+<code>* - $avg</code> to each element. Second, a square of each item has
+been calculated: <code>* ** 2</code>.</p>
+<p>In both cases, the <code>WhateverCode</code> is used. It is usually
+more expressive but may lead to constructs like <code>* ** 2</code>,
+which look a bit cryptic.</p>
+<p>The two <code>map</code>s can be merged into one:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$sigma</span> = <span class="nb">sqrt</span>(
+    ([+] <span class="nb">map</span> (* - <span class="nv">$avg</span>) ** <span class="mi">2</span>, <span class="nv">@data</span>)  / (<span class="nv">@data</span>.<span class="nb">elems</span> - <span class="mi">1</span>)
+);</pre></div>
+
+<p>Now, let’s explore the second approach that gets the same result
+using feed operators. In Raku, there are feed operators of both
+directions: <code>&lt;==</code> and <code>==&gt;</code>. Their shape
+indicates the direction of data flow, so here is another version of the
+program.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@data</span> = <span class="mf">727.7</span>, <span class="mf">1086.5</span>, <span class="mf">1091.0</span>, <span class="mf">1361.3</span>, <span class="mf">1490.5</span>, <span class="mf">1956.1</span>;
+
+<span class="k">my</span> <span class="nv">$avg</span> = ([+] <span class="nv">@data</span>) / <span class="nv">@data</span>.<span class="nb">elems</span>;
+<span class="nv">@data</span>
+    ==&gt; <span class="nb">map</span> * - <span class="nv">$avg</span>
+    ==&gt; <span class="nb">map</span> * ** <span class="mi">2</span>
+    ==&gt; <span class="nb">reduce</span> * + *
+    ==&gt; <span class="k">my</span> @σ;
+<span class="nb">say</span> <span class="nb">sqrt</span>(@σ[<span class="mi">0</span>] / (<span class="nv">@data</span>.<span class="nb">elems</span> - <span class="mi">1</span>)); <span class="c1"># 420.962489619523</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>The data flow is clearly visible now. The <code>@data</code> array
+passes the two maps, and then, it is reduced using the <code>+</code>
+operation. The call of <code>reduce * + *</code> is equivalent to using
+the reduction operator in the form of <code>[+]</code>.</p>
+<p>Notice how the <code>@σ</code> array is defined, not only the fact
+that a Unicode name is used but mostly the fact that the <code>my</code>
+declaration is placed at the end of the feed chain. An array is used
+here because the feed operator does not return a scalar value, although
+we only need one element.</p>
+<p>To make the code even closer to the original mathematical formula,
+you may choose a different name for the variable holding the average
+value (and remove the <code>elems</code> call):</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$x</span>̄ = ([+] <span class="nv">@data</span>) / <span class="nv">@data</span>;</pre></div>
+
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a
+href="/raku-books/using-raku/mathematical-problems/distance-between-two-points">35.
+Distance between two points</a>   |   <a
+href="/raku-books/using-raku/mathematical-problems/polar-coordinates">37. Polar
+coordinates</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

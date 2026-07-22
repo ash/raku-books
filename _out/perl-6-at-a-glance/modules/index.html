@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Modules — Raku Books</title>
+    <meta property="og:title" content="Modules — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance" selected>Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/perl-6-at-a-glance">Perl 6 at
+a Glance</a> / <a href="/raku-books/perl-6-at-a-glance/code-organization">Code
+Organization</a></p>
+<h1 id="modules">Modules</h1>
+<p>Basically, the Perl 6 modules are the files on disk containing the
+Perl 6 code. Modules are kept in files with the <code>.pm</code>
+extension. The disk hierarchy reflects the namespace enclosure, which
+means that a module named <code>X::Y</code> corresponds to the file
+<code>X/Y.pm</code>, which will be searched for in one of the predefined
+catalogues or in the location specified by the <code>-I</code> command
+line option. Perl 6 has more sophisticated rules for where and how to
+search for the real files (e. g., it can distinguish between different
+versions of the same module), but let us skip that for now.</p>
+<p>The keyword <code>module</code> declares a module. The name of the
+module is given after the keyword. There are two methods of scoping the
+module. Either it can be a bare directive in the beginning of a file, or
+the whole module can be scoped in the code block within the pair of
+braces.</p>
+<p>In the first option, the rest of the file is the module definition
+(note the presence of the <code>unit</code> keyword).</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">unit</span> <span class="k">module</span> <span class="n">X</span>;
+
+<span class="k">sub</span> <span class="n">x</span>() {
+    <span class="nb">say</span> <span class="s">&quot;X::x()&quot;</span>;
+}</pre></div>
+
+<p>In the second option, the code looks similar to the way you declare
+classes (more on classes in Chapter 4).</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">module</span> <span class="n">X</span> {
+    <span class="k">sub</span> <span class="n">x</span>() {
+        <span class="nb">say</span> <span class="s">&quot;X::x()&quot;</span>;
+    }
+}</pre></div>
+
+<p>CodeBlockPlaceholder3raku-static unit module X;</p>
+<p>sub x() is export { say “X::x()”; } CodeBlockPlaceholder4raku-static
+unit module Greet;</p>
+<p>sub hey($name) is export { say “Hey, $name!”; }
+CodeBlockPlaceholder5</p>
+<p>Then, let us use this module in our programme by saying
+<code>use Greet</code>.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Greet</span>;
+
+<span class="n">hey</span>(<span class="s">&quot;you&quot;</span>); <span class="c1"># Hey, you!</span></pre></div>
+
+<p>Module names can be more complicated. With <code>is export</code>,
+all the exported names will be available in the current scope after the
+module is <code>use</code>d.</p>
+<p>In the following example, the module <code>Greet::Polite</code> sits
+in the <code>Greet/Polite.pm</code> file.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">module</span> <span class="n">Greet::Polite</span> {
+    <span class="k">sub</span> <span class="n">hello</span>(<span class="nv">$name</span>) <span class="k">is</span> <span class="n">export</span> {
+        <span class="nb">say</span> <span class="s">&quot;Hello, $name!&quot;</span>;
+    }
+}</pre></div>
+
+<p>CodeBlockPlaceholder8raku-static use Greet; use Greet::Polite;</p>
+<p>hey(“you”); # a sub from Greet hello(“Mr. X”); # from Greet::Polite
+CodeBlockPlaceholder9</p>
+<p>The <code>use</code> keyword automatically imports the names from
+modules. When a module is defined in the current file in the lexical
+scope (please note that the module can be declared as local with
+<code>my module</code>), no import will be done by default. In this
+case, importing the names should be done explicitly with the
+<code>import</code> keyword.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="k">module</span> <span class="n">M</span> {
+    <span class="k">sub</span> <span class="n">f</span>(<span class="nv">$x</span>) <span class="k">is</span> <span class="n">export</span> {
+        <span class="k">return</span> <span class="nv">$x</span>;
+    }
+}
+
+<span class="k">import</span> <span class="n">M</span>;
+
+<span class="nb">say</span> <span class="n">f</span>(<span class="mi">42</span>);</pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>The <code>f</code> name will only be available for use after it is
+imported. Again, only the names marked as <code>is export</code> are
+exported.</p>
+<p>As import happens in the compile-time, the <code>import</code>
+instruction itself can be located even after some names from the module
+are used.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="k">module</span> <span class="n">M</span> {
+    <span class="k">sub</span> <span class="n">f</span>(<span class="nv">$x</span>) <span class="k">is</span> <span class="n">export</span> {
+        <span class="k">return</span> <span class="nv">$x</span>;
+    }
+}
+
+<span class="nb">say</span> <span class="n">f</span>(<span class="mi">1</span>); <span class="c1"># 1</span>
+<span class="k">import</span> <span class="n">M</span>;
+<span class="nb">say</span> <span class="n">f</span>(<span class="mi">2</span>); <span class="c1"># 2</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>CodeBlockPlaceholder12raku-static unit module N;</p>
+<p>our sub n() { say “N::n()”; } CodeBlockPlaceholder13raku-static need
+N;</p>
+<p>N::n(); CodeBlockPlaceholder14raku-static unit module Math;</p>
+<p>our sub sum(*<span class="citation" data-cites="a">@a</span>) {
+return [+] <span class="citation" data-cites="a">@a</span>; }
+CodeBlockPlaceholder15raku-static require Math;</p>
+<p>say Math::sum(24..42); # 627 CodeBlockPlaceholder16</p>
+<p>Before the <code>import Math</code> instruction, the programme will
+not be able to call <code>Math::sum()</code> because the name is not yet
+known. A single <code>import Math;</code> will not help as the import
+happens at compile-time when the module is not loaded yet.</p>
+<section id="also-in-this-section" class="topics" data-markdown="1">
+<h2>Also in this section</h2>
+<ul>
+<li><a href="/raku-books/perl-6-at-a-glance/modules/import-summary">Import
+summary</a></li>
+</ul>
+</section>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a
+href="/raku-books/perl-6-at-a-glance/function-overloading/sub-overloading-with-subtypes">Sub
+overloading with subtypes</a>   |   <a
+href="/raku-books/perl-6-at-a-glance/modules/import-summary">Import summary</a>
+→</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

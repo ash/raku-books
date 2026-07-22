@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>All the stars of Raku — Raku Books</title>
+    <meta property="og:title" content="All the stars of Raku — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners" selected>Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/raku-one-liners">Raku
+One-Liners</a> / <a href="/raku-books/raku-one-liners/raku-syntax">Raku
+Syntax</a></p>
+<h1 id="all-the-stars-of-raku">All the stars of Raku</h1>
+<p>In this section, we go through the constructs that employ the
+<code>*</code> character. In Raku, you may call it a star (or asterisk
+if you prefer) or a whatever, depending on the context.</p>
+<p>Raku is not a cryptic programming language. On the other side, some
+areas require spending time to start feeling confident in the
+syntax.</p>
+<p>Let’s go through different use cases of <code>*</code>, from the
+simplest towards the most puzzling things such as
+<code>* ** *</code>.</p>
+<p>The first two examples are trivial enough and do not require many
+comments.</p>
+<p>Multiplication operator</p>
+<p>A single star is used for multiplication. Strictly speaking, this is
+an infix operator <code>infix:&lt;*&gt;</code>, whose return value is
+<code>Numeric</code>.</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">20</span> * <span class="mi">18</span>; <span class="c1"># 360</span></pre></div>
+
+<p>Exponentiation operator</p>
+<p>The double star <code>**</code> is the exponentiation operator.
+Again, this is an <code>in-</code> <code>fix:&lt;**&gt;</code> that
+returns the <code>Numeric</code> result which is the power for the given
+two values.</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="n">pi</span> ** <span class="n">e</span>; <span class="c1"># 22.4591577183611</span></pre></div>
+
+<p>A regex repetition quantifier</p>
+<p>The same two tokens, <code>*</code> or <code>**</code>, are also used
+in regexes, where they mean different things. One of the features of
+Raku is that it can easily switch between different sub-languages inside
+itself. Both regexes and grammars are examples of such inner languages,
+where the same symbols can mean different things from what they mean in
+the ‘main’ language (if they have any meaning at all there).</p>
+<p>The <code>*</code> quantifier. This syntax item works similarly to
+its behaviour in general Perl-compatible regexes: it allows zero or more
+repetitions of the atom.</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$weather</span> = <span class="s">'*****'</span>;
+<span class="k">my</span> <span class="nv">$snow</span> = <span class="nv">$weather</span> ~~ <span class="sr">/ ('*'*) /</span>;
+
+<span class="nb">say</span> <span class="s">'Snow level is '</span> ~ <span class="nv">$snow</span>.<span class="nb">chars</span>; <span class="c1"># Snow level is 5</span></pre></div>
+
+<p>Of course, we also see here another usage of the same character, the
+<code>'*'</code> literal.</p>
+<p>Min to max repetitions</p>
+<p>The double <code>**</code> is a part of another quantifier that
+specifies the minimum and the maximum number of repetitions:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$operator</span> = <span class="s">'..'</span>;
+<span class="nb">say</span> <span class="s">&quot;'$operator' is a valid Raku operator&quot;</span>
+    <span class="k">if</span> <span class="nv">$operator</span> ~~ <span class="sr">/^ '.' ** 1..3 $/</span>;</pre></div>
+
+<p>In this example, it is expected that the dot is repeated one, two, or
+three times; not less and not more.</p>
+<p>Let’s look a bit ahead, and use a star in the role (role as in
+theatre, not in Raku’s object-oriented programming) of the
+<code>Whatever</code> symbol:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="s">'You are so uncertain...'</span>
+    <span class="k">if</span> <span class="nv">$phrase</span> ~~ <span class="sr">/ '.' ** 4..* /</span>;</pre></div>
+
+<p>The second end of the range is open, and the regex accepts all the
+phrases with more than three dots in it.</p>
+<p>Slurpy arguments</p>
+<p>A star before an array argument in a sub’s signature indicates a
+slurpy argument—the one that consumes separate scalar parameters into a
+single array.</p>
+<div class="highlight raku"><pre><span></span><span class="n">list-gifts</span>(<span class="s">'chocolade'</span>, <span class="s">'ipad'</span>, <span class="s">'camelia'</span>, <span class="s">'perl6'</span>);
+
+<span class="k">sub</span> <span class="n">list-gifts</span>(*<span class="nv">@items</span>) {
+    <span class="nb">say</span> <span class="s">'Look at my gifts this year:'</span>;
+    .<span class="nb">say</span> <span class="k">for</span> <span class="nv">@items</span>;
+}</pre></div>
+
+<p>Hashes also allow celebrating slurpy parameters:</p>
+<div class="highlight raku"><pre><span></span><span class="n">dump</span>(<span class="n">alpha</span> =&gt; <span class="s">'a'</span>, <span class="n">beta</span> =&gt; <span class="s">'b'</span>); <span class="c1"># Prints:</span>
+                                 <span class="c1"># alpha = a</span>
+                                 <span class="c1"># beta = b</span>
+
+<span class="k">sub</span> <span class="n">dump</span>(*<span class="nv">%data</span>) {
+    <span class="k">for</span> <span class="nv">%data</span>.<span class="nb">kv</span> {<span class="nb">say</span> <span class="s">&quot;$^a = $^b&quot;</span>}
+}</pre></div>
+
+<p>Notice that the code does not compile if you omit the star in the
+function signature, as Raku expects exactly what was announced for a
+subroutine:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">Too</span> <span class="n">few</span> <span class="n">positionals</span> <span class="n">passed</span>; <span class="n">expected</span> <span class="mi">1</span> <span class="n">argument</span> <span class="k">but</span> <span class="n">got</span> <span class="mi">0</span></pre></div>
+
+<p>Slurpy-slurpy</p>
+<p>The <code>**@</code> is also working but notice the difference when
+you pass arrays and lists.</p>
+<p>With a single star:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="s">&lt; chocolade ipad &gt;</span>;
+<span class="k">my</span> <span class="nv">@b</span> = <span class="s">&lt; camelia perl6 &gt;</span>;
+
+<span class="n">all-together</span>(<span class="nv">@a</span>, <span class="nv">@b</span>);
+<span class="n">all-together</span>([<span class="s">'chocolade'</span>, <span class="s">'ipad'</span>], [<span class="s">'camelia'</span>, <span class="s">'perl6'</span>]);
+<span class="n">all-together</span>(<span class="s">&lt; chocolade ipad &gt;</span>, <span class="s">&lt; camelia perl6 &gt;</span>);
+
+<span class="k">sub</span> <span class="n">all-together</span>(*<span class="nv">@items</span>) {
+    .<span class="nb">say</span> <span class="k">for</span> <span class="nv">@items</span>;
+}</pre></div>
+
+<p>Currently, each gift is printed on a separate line regardless the way
+the argument list was passed.</p>
+<p>With a double star:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">keep-groupped</span>(<span class="nv">@a</span>, <span class="nv">@b</span>);
+<span class="n">keep-groupped</span>([<span class="s">'chocolade'</span>, <span class="s">'ipad'</span>], [<span class="s">'camelia'</span>, <span class="s">'camel'</span>]);
+<span class="n">keep-groupped</span>(<span class="s">&lt; chocolade ipad &gt;</span>, <span class="s">&lt; camelia camel &gt;</span>);
+
+<span class="k">sub</span> <span class="n">keep-groupped</span>(**<span class="nv">@items</span>) {
+    .<span class="nb">say</span> <span class="k">for</span> <span class="nv">@items</span>;
+}</pre></div>
+
+<p>This time, the <code>@items</code> array gets two elements only,
+reflecting the structural types of the arguments:</p>
+<div class="highlight"><pre>[chocolade ipad]
+[camelia perl6]</pre></div>
+<p>or</p>
+<div class="highlight"><pre>(chocolade ipad)
+(camelia perl6)</pre></div>
+<p>Twigil for dynamic scope</p>
+<p>The <code>*</code> twigil, which introduces dynamic scope. It is easy
+to confuse dynamic variables with global variables, but examine the
+following code.</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">happy-new-year</span>() {
+    <span class="s">&quot;Happy new $*year year!&quot;</span>
+}
+
+<span class="k">my</span> <span class="nv">$*year</span> = <span class="mi">2020</span>;
+<span class="nb">say</span> <span class="n">happy-new-year</span>();</pre></div>
+
+<p>If you omit the star, the code cannot be run:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">Variable</span> <span class="s">'$year'</span> <span class="k">is</span> <span class="k">not</span> <span class="n">declared</span></pre></div>
+
+<p>The only way to make it correct is to move the definition of
+<code>$year</code> above the function definition. With the dynamic
+variable <code>$*year</code>, the place where the function is called
+defines the result. The <code>$*year</code> variable is not visible in
+the outer scope of the sub, but it is quite visible in the dynamic
+scope.</p>
+<p>For a dynamic variable, it is not important whether you assign a new
+value to an existing variable or create a new one:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">happy-new-year</span>() {
+    <span class="s">&quot;Happy new $*year year!&quot;</span>
+}
+
+<span class="k">my</span> <span class="nv">$*year</span> = <span class="mi">2018</span>;
+
+<span class="nb">say</span> <span class="n">happy-new-year</span>();     <span class="c1"># 2018</span>
+
+{
+    <span class="nv">$*year</span> = <span class="mi">2019</span>;        <span class="c1"># New value</span>
+    <span class="nb">say</span> <span class="n">happy-new-year</span>(); <span class="c1"># 2019</span>
+}
+
+{
+    <span class="k">my</span> <span class="nv">$*year</span> = <span class="mi">2020</span>;     <span class="c1"># New variable</span>
+    <span class="nb">say</span> <span class="n">happy-new-year</span>(); <span class="c1"># 2020</span>
+}
+
+<span class="nb">say</span> <span class="n">happy-new-year</span>();     <span class="c1"># 2019</span></pre></div>
+
+<p>Compiler variables</p>
+<p>A number of dynamic pseudo-constants come with Raku, for example:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">@*ARGS</span>;      <span class="c1"># Prints command-line arguments</span>
+<span class="nb">say</span> <span class="nv">%*ENV</span><span class="s">&lt;HOME&gt;</span>; <span class="c1"># Prints home directory</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>All methods with the given name</p>
+<p>The <code>.*</code> postfix pseudo-operator calls all the methods
+with the given name, which can be found for the given object, and
+returns a list of results. In the trivial case you get a scholastically
+absurd code:</p>
+<div class="highlight"><pre>&gt; pi.gist.say
+3.141592653589793
+
+&gt; pi.*gist.say
+(3.141592653589793 3.141592653589793e0)</pre></div>
+<p>The real power of the <code>.*</code> postfix comes with inheritance.
+It helps to reveal the truth sometimes:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">Present</span> {
+    <span class="k">method</span> <span class="n">giver</span>() {
+        <span class="s">'parents'</span>
+    }
+}
+
+<span class="k">class</span> <span class="n">ChristmasPresent</span> <span class="k">is</span> <span class="n">Present</span> {
+    <span class="k">method</span> <span class="n">giver</span>() {
+        <span class="s">'Santa Claus'</span>
+    }
+}
+
+<span class="k">my</span> <span class="n">ChristmasPresent</span> <span class="nv">$present</span>;
+
+<span class="nv">$present</span>.<span class="n">giver</span>.<span class="nb">say</span>;             <span class="c1"># Santa Claus</span>
+<span class="nv">$present</span>.*<span class="n">giver</span>.<span class="nb">join</span>(<span class="s">', '</span>).<span class="nb">say</span>; <span class="c1"># Santa Claus, parents</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Just a star but what a difference!</p>
+<ul>
+<li><ul>
+<li><ul>
+<li>Now, to the most mysterious part of the star corner of Raku. The
+next two concepts, the <code>Whatever</code> and the
+<code>WhateverCode</code> classes, are easy to mix up with each other.
+Let’s try to do it right.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>Whatever</p>
+<p>A single <code>*</code> can represent <code>Whatever</code>.
+<code>Whatever</code> is a predefined class which introduces some
+prescribed behaviour in a few useful cases.</p>
+<p>For example, in ranges and sequences, the final <code>*</code> means
+infinity. We’ve seen such examples already. Here is another one:</p>
+<div class="highlight raku no-run"><pre><span></span>.<span class="nb">say</span> <span class="k">for</span> <span class="mi">1</span> .. *;</pre></div>
+
+<p>This one-liner has a really high energy conversion efficiency as it
+generates an infinite list of increasing integers. Press
+<code>Ctrl+C</code> when you are ready to move on.</p>
+<p>The range <code>1 .. *</code> is the same as
+<code>1 .. Inf</code>.</p>
+<p>Returning to our more practical problems, let’s create our own class
+that makes use of the whatever symbol <code>*</code>. Here is a simple
+example of a class with a multi-method taking either an <code>Int</code>
+value or a <code>Whatever</code>.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">N</span> {
+    <span class="k">multi</span> <span class="k">method</span> <span class="n">display</span>(<span class="nb">Int</span> <span class="nv">$n</span>) {
+        <span class="nb">say</span> <span class="nv">$n</span>;
+    }
+
+    <span class="k">multi</span> <span class="k">method</span> <span class="n">display</span>(<span class="nb">Whatever</span>) {
+        <span class="nb">say</span> <span class="mi">2000</span> + <span class="mi">100</span>.<span class="n">rand</span>.<span class="nb">Int</span>;
+    }
+}</pre></div>
+
+<p>In the first case, the method simply prints the value. The second
+method prints a random number between 2000 and 2100 instead. As the only
+argument of the second method is <code>Whatever</code>, variable name is
+not required in the signature.</p>
+<p>Here is how you use the class:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$n</span> = <span class="n">N</span>.<span class="nb">new</span>;
+
+<span class="nv">$n</span>.<span class="n">display</span>(<span class="mi">2020</span>);
+<span class="nv">$n</span>.<span class="n">display</span>(*);</pre></div>
+
+<p>The first call echoes its argument, while the second one prints
+something random.</p>
+<p>The <code>Whatever</code> symbol can be held as a bare
+<code>Whatever</code>. Say, you create an <code>echo</code> function and
+pass the <code>*</code> to it:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">echo</span>(<span class="nv">$x</span>) {
+    <span class="nb">say</span> <span class="nv">$x</span>;
+}
+
+<span class="n">echo</span>(<span class="mi">2018</span>); <span class="c1"># 2018</span>
+<span class="n">echo</span>(*);    <span class="c1"># *</span></pre></div>
+
+<p>This time, no magic happens, the program prints a star.</p>
+<p>And now we are at a point where a tiny thing changes a lot.</p>
+<p>WhateverCode</p>
+<p>Finally, it’s time to talk about <code>WhateverCode</code>.</p>
+<p>Take an array and print the last element of it. You can’t do it by
+typing something like <code>@a[-1]</code>, as it generates an error:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">Unsupported</span> <span class="k">use</span> <span class="n">of</span> <span class="n">a</span> <span class="n">negative</span> -<span class="mi">1</span> <span class="n">subscript</span>
+<span class="n">to</span> <span class="nb">index</span> <span class="n">from</span> <span class="n">the</span> <span class="nb">end</span>; <span class="n">in</span> <span class="n">Raku</span> <span class="n">please</span>
+<span class="k">use</span> <span class="n">a</span> <span class="n">function</span> <span class="n">such</span> <span class="n">as</span> *-<span class="mi">1</span></pre></div>
+
+<p>The compiler suggests using <code>a function such as *-1</code>. Is
+it a function? Yes, more precisely, a <code>WhateverCode</code>
+block:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (*-<span class="mi">1</span>).<span class="n">WHAT</span>; <span class="c1"># (WhateverCode)</span></pre></div>
+
+<p>Now, print the second half of an array:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="s">&lt; one two three four five six &gt;</span>;
+<span class="nb">say</span> <span class="nv">@a</span>[<span class="mi">3</span>..*]; <span class="c1"># (four five six)</span></pre></div>
+
+<p>An array is indexed with the range <code>3..*</code>. The
+<code>Whatever</code> star as the right end of the range instructs to
+take all the rest from the array. The type of <code>3..*</code> is a
+<code>Range</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">3</span>..*).<span class="n">WHAT</span>; <span class="c1"># (Range)</span></pre></div>
+
+<p>Finally, take one element less. We’ve already seen that to specify
+the last element, a function such as <code>*-1</code> must be used. The
+same can be done at the right end of a range:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">@a</span>[<span class="mi">3</span> .. *-<span class="mi">2</span>]; <span class="c1"># (four five)</span></pre></div>
+
+<p>At this point, the so-called Whatever-currying happens, and a
+<code>Range</code> becomes a <code>WhateverCode</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">3</span> .. *-<span class="mi">2</span>).<span class="n">WHAT</span>; <span class="c1"># (WhateverCode)</span></pre></div>
+
+<p><code>WhateverCode</code> is a built-in class name; it can easily be
+used for method dispatching. Let’s update the code from the previous
+section and add a method variant that expects a
+<code>WhateverCode</code> argument:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">N</span> {
+    <span class="k">multi</span> <span class="k">method</span> <span class="n">display</span>(<span class="nb">Int</span> <span class="nv">$n</span>) {
+        <span class="nb">say</span> <span class="nv">$n</span>;
+    }
+    <span class="k">multi</span> <span class="k">method</span> <span class="n">display</span>(<span class="nb">Whatever</span>) {
+        <span class="nb">say</span> <span class="mi">2000</span> + <span class="mi">100</span>.<span class="n">rand</span>.<span class="nb">Int</span>;
+    }
+
+    <span class="k">multi</span> <span class="k">method</span> <span class="n">display</span>(<span class="nb">WhateverCode</span> <span class="nv">$code</span>) {
+        <span class="nb">say</span> <span class="nv">$code</span>(<span class="mi">2000</span> + <span class="mi">100</span>.<span class="n">rand</span>.<span class="nb">Int</span>);
+    }
+}</pre></div>
+
+<p>Now, the star in the argument list falls into either
+<code>display(Whatever)</code> or</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">display</span>(<span class="nb">WhateverCode</span>):
+
+<span class="n">N</span>.<span class="n">display</span>(<span class="mi">2018</span>);     <span class="c1"># display(Int $n)</span>
+<span class="n">N</span>.<span class="n">display</span>(*);        <span class="c1"># display(Whatever)</span>
+<span class="n">N</span>.<span class="n">display</span>(* <span class="sr">/ 2);    # display(WhateverCode $code)
+N.display(* - 1000); # display(WhateverCode $code)</span></pre></div>
+
+<p>Once again, look at the signature of the <code>display</code>
+method:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="k">method</span> <span class="n">display</span>(<span class="nb">WhateverCode</span> <span class="nv">$code</span>)</pre></div>
+
+<p>The <code>$code</code> argument is used as a function reference
+inside the method:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">$code</span>(<span class="mi">2000</span> + <span class="mi">100</span>.<span class="n">rand</span>.<span class="nb">Int</span>);</pre></div>
+
+<p>The function takes an argument but where is it going to? Or, in other
+words, what and where is the function body? We called the method as
+<code>N.display(*</code> <code>/ 2)</code> or
+<code>N.display(* - 1000)</code>. The answer is that both
+<code>* / 2</code> and <code>* - 1000</code> are functions! Remember the
+compiler’s hint about using <code>a function such</code></p>
+<div class="highlight"><pre>as *-1?</pre></div>
+<p>The star here becomes the first function argument, and thus
+<code>* / 2</code> is equivalent to <code>{$^a / 2}</code>, while
+<code>* - 1000</code> is equivalent to <code>{$^a - 1000}</code>.</p>
+<p>Does it mean that <code>$^b</code> can be used next to
+<code>$^a</code>? Sure! Make a <code>WhateverCode</code> block accept
+two arguments. How do you indicate the second of them? Not a surprise,
+with another star! Let us add the fourth variant of the
+<code>display</code> method to our class:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="k">method</span> <span class="n">display</span>(<span class="nb">WhateverCode</span> <span class="nv">$code</span>
+                     <span class="k">where</span> {<span class="nv">$code</span>.<span class="n">arity</span> == <span class="mi">2</span>}) {
+    <span class="nb">say</span> <span class="nv">$code</span>(<span class="mi">2000</span>, <span class="mi">100</span>.<span class="n">rand</span>.<span class="nb">Int</span>);
+}</pre></div>
+
+<p>Here, the <code>where</code> block is used to narrow the dispatching
+down to select only those <code>WhateverCode</code> blocks that have two
+arguments. Having this done, two snowflakes are allowed in the method
+call:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">N</span>.<span class="n">display</span>( * + * );
+<span class="n">N</span>.<span class="n">display</span>( * - * );</pre></div>
+
+<p>The calls define the function <code>$code</code> that is used to
+calculate the result. So, the actual operation behind
+<code>N.display( * + * )</code> is the following:
+<code>2000 +</code></p>
+<div class="highlight"><pre>100.rand.Int.</pre></div>
+<p>Need more snow? Add more stars:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">N</span>.<span class="n">display</span>( * * * );
+<span class="n">N</span>.<span class="n">display</span>( * ** * );</pre></div>
+
+<p>Similarly, the actual calculations inside are:</p>
+<div class="highlight"><pre>2000 * 100.rand.Int</pre></div>
+<p>and</p>
+<div class="highlight"><pre>2000 ** 100.rand.Int</pre></div>
+<p>Congratulations! You can now parse the <code>* ** *</code> construct
+as effortlessly as the compiler does it.</p>
+<p>Homework</p>
+<p>Let’s make an exercise and answer the following question: What does
+each star mean in the following code?</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@n</span> = ((<span class="mi">0</span>, <span class="mi">1</span>, * + * ... *).<span class="nb">grep</span>: *.<span class="n">is-prime</span>).<span class="nb">map</span>: * * * * *;
+.<span class="nb">say</span> <span class="k">for</span> <span class="nv">@n</span>[^<span class="mi">5</span>];</pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>D’oh. I suggest we start transforming the code to get rid of all the
+stars and to use a different syntax.</p>
+<p>The <code>*</code> after the sequence operator <code>...</code> means
+generating the sequence infinitely, so replace it with
+<code>Inf</code>:</p>
+<div class="highlight raku no-run"><pre><span></span>((<span class="mi">0</span>, <span class="mi">1</span>, * + * ... <span class="n">Inf</span>).<span class="nb">grep</span>: *.<span class="n">is-prime</span>).<span class="nb">map</span>: * * * * *</pre></div>
+
+<p>The two stars <code>* + *</code> in the generator function can be
+replaced with a lambda function with two explicit arguments:</p>
+<div class="highlight raku no-run"><pre><span></span>((<span class="mi">0</span>, <span class="mi">1</span>, -&gt; <span class="nv">$x</span>, <span class="nv">$y</span> {<span class="nv">$x</span> + <span class="nv">$y</span>} ... <span class="n">Inf</span>).<span class="nb">grep</span>:
+    *.<span class="n">is-prime</span>).<span class="nb">map</span>: * * * * *</pre></div>
+
+<p>Now, a simple syntax alternation. Replace the <code>.grep:</code>
+with a method call with parentheses. Its argument
+<code>*.is-prime</code> becomes a code block, and the star is replaced
+with the default variable <code>$_</code>. Notice that no curly braces
+were needed while the code was using a <code>*</code>:</p>
+<div class="highlight raku no-run"><pre><span></span>(<span class="mi">0</span>, <span class="mi">1</span>, -&gt; <span class="nv">$x</span>, <span class="nv">$y</span> {<span class="nv">$x</span> + <span class="nv">$y</span>} ... <span class="n">Inf</span>).<span class="nb">grep</span>({
+    <span class="nv">$_</span>.<span class="n">is-prime</span>
+}).<span class="nb">map</span>: * * * * *</pre></div>
+
+<p>Finally, the same trick for <code>.map:</code> but this time there
+are three arguments for this method, thus, you can write
+<code>{$^a * $^b * $^c}</code> instead of <code>* * * * *</code>, and
+here’s the new layout of the complete program:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@n</span> = (<span class="mi">0</span>, <span class="mi">1</span>, -&gt; <span class="nv">$x</span>, <span class="nv">$y</span> {<span class="nv">$x</span> + <span class="nv">$y</span>} ... <span class="n">Inf</span>).<span class="nb">grep</span>({
+        <span class="nv">$_</span>.<span class="n">is-prime</span>
+    }).<span class="nb">map</span>({
+        <span class="nv">$^a</span> * <span class="nv">$^b</span> * <span class="nv">$^c</span>
+    });
+.<span class="nb">say</span> <span class="k">for</span> <span class="nv">@n</span>[^<span class="mi">5</span>];</pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Now it is obvious that the code prints five products of the groups of
+three prime Fibonacci numbers.</p>
+<p>Additional assignments</p>
+<p>In textbooks, the most challenging tasks are marked with a *. Here
+are a couple of them for you to solve yourself.</p>
+<ol type="1">
+<li>What is the difference between <code>chdir('/')</code> and
+<code>&amp;*chdir('/')</code>? 2. Explain the following code and modify
+it to demonstrate its advantages: <code>.say for 1...**</code>.</li>
+</ol>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/raku-one-liners/reduction-operator">Reduction
+operator</a>   |   <a href="/raku-books/raku-one-liners/the-eval-routine">The EVAL
+routine</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

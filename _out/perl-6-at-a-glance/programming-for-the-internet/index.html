@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Programming for the Internet — Raku Books</title>
+    <meta property="og:title" content="Programming for the Internet — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance" selected>Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/perl-6-at-a-glance">Perl 6 at
+a Glance</a> / <a href="/raku-books/perl-6-at-a-glance/appendix">Appendix</a></p>
+<h1 id="programming-for-the-internet">Programming for the Internet</h1>
+<p>The simplest way to build a web server in Perl 6 is to use a PSGI
+server called Bailador. This is a module that you can find on the
+official page with the list of Perl 6 modules: modules.perl6.org. If you
+are using the Rakudo Star distribution, use the <code>panda</code>*
+command line utility to install the module.</p>
+<div class="highlight"><pre>$ panda install Bailador</pre></div>
+<p>Bailador copies the interface of the well-known framework Dancer for
+Perl 5. The name is the same but in Spanish.</p>
+<p>Here is the minimal programme that implements the web server.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Bailador</span>;
+
+<span class="n">get</span> <span class="s">'/'</span> =&gt; <span class="k">sub</span> {
+    <span class="s">'Hello, world!'</span>
+}
+
+<span class="n">baile</span>;</pre></div>
+
+<p>The programme describes the action, which the server does in response
+to the request to its home page. The <code>baile</code> (dance in
+Spanish) method starts the main loop of the PSGI server.</p>
+<p>Run the programme:</p>
+<div class="highlight"><pre>$ perl6 web1.pl</pre></div>
+<p>You will get the output informing you that the server is ready to
+accept requests.</p>
+<div class="highlight"><pre>Entering the development dance floor: http://0.0.0.0:3000
+[2016-12-27T20:27:34Z] Started HTTP server.</pre></div>
+<p>Open that page in a browser, and you will see the desired output:
+“Hello, world!”</p>
+<p>The next step is to parse the URL and respond accordingly. Bailador
+allows extract parameters from the URL with the colon syntax:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">get</span> <span class="s">'/:name'</span> =&gt; <span class="k">sub</span> (<span class="nv">$name</span>) {
+    <span class="s">&quot;Hello, $name!&quot;</span>
+}</pre></div>
+
+<p>Please note that you cannot omit the space after the <code>sub</code>
+keyword. There is an alternative. As the sub is anonymous, you may use
+the pointy block instead:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">get</span> <span class="s">'/:name'</span> =&gt; -&gt; <span class="nv">$name</span> {
+    <span class="s">&quot;Hello, $name!&quot;</span>
+}</pre></div>
+
+<p>Add it to the programme, restart the server, and go to, for example,
+<code>http://0.0.0.0:3000/abc</code>. You should get the “Hello, abc”
+output in the browser.</p>
+<p>Bailador is happy to accept regexes instead of the fixed URLs. For
+example, let’s create the URL <code>/square-of/N</code>, where the
+<code>N</code> can be any non-negative integer.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">get</span> / <span class="s">'square-of/'</span> (<span class="s">&lt;digit&gt;</span>+) / =&gt; <span class="k">sub</span> (<span class="nv">$n</span>) {
+    <span class="nv">$n</span> * <span class="nv">$n</span>
+}</pre></div>
+
+<p>The regex pattern <code>/ 'square-of/' (&lt;digit&gt;+) /</code>
+contains the capturing part, and so the variable <code>$n</code> will be
+set to the number from the URL. As Bailador reads the address patterns
+in the order they appear in the file, make sure to put the method above
+the handler of <code>/name</code>. Now, test how it works at
+<code>http://0.0.0.0:3000/square-of/5</code>; it should print 25.</p>
+<p>It is possible to access some environment variables in the URL
+handler. Use the <code>request</code> method and take the
+<code>request.env</code> hash from it, as is demonstrated in the
+example:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">get</span> <span class="s">'/ua'</span> =&gt; <span class="k">sub</span> {
+    <span class="n">request</span>.<span class="n">env</span><span class="s">&lt;HTTP_USER_AGENT&gt;</span> ~
+    <span class="s">'&lt;br /&gt;'</span> ~
+    <span class="n">request</span>.<span class="n">env</span><span class="s">&lt;QUERY_STRING&gt;</span>
+}</pre></div>
+
+<p>The page <code>http://0.0.0.0:3000/ua?key=value</code> will now print
+the user agent name and list the query parameters of the request.</p>
+<p>After we generate the output from the Perl code, let us move to using
+templates. Bailador will search for the template files in the
+<code>views</code> directory.</p>
+<p>Save a simple text template to <code>views/test.tt</code>, and use it
+in the server like this:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Bailador</span>;
+
+<span class="n">get</span> <span class="s">'/form'</span> =&gt; <span class="k">sub</span> {
+    <span class="n">template</span> <span class="s">'test.tt'</span>;
+}
+
+<span class="n">baile</span>;</pre></div>
+
+<p>To print something inside the template, pass the data in hash:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">get</span> <span class="s">'/form/:name'</span> =&gt; <span class="k">sub</span> (<span class="nv">$name</span>) {
+    <span class="n">template</span> <span class="s">'name.tt'</span>, {<span class="n">name</span> =&gt; <span class="nv">$name</span>}
+}</pre></div>
+
+<p>You can access the data from a template. It receives the argument
+containing everything that you just passed.</p>
+<div class="highlight"><pre></pre></div>
+<p><code>% my ($params) = @_;</code></p>
+<p><code>Hi, &lt;%= $params&lt;name&gt; %&gt;!</code></p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/perl-6-at-a-glance/files">Files</a>   |   <a
+href="/raku-books/perl-6-at-a-glance/database-access">Database access</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

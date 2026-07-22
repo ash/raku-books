@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Test runner — Raku Books</title>
+    <meta property="og:title" content="Test runner — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku" selected>Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a
+href="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</a> / <a
+href="/raku-books/creating-a-compiler-in-raku/test-suite">Test suite</a></p>
+<h1 id="test-runner">Test runner</h1>
+<p>Let us start with a simple program that creates a variable and
+assigns a numeric value to it. We have at least two ways to do that:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="n">a</span>;
+<span class="n">a</span> = <span class="mi">10</span>;
+<span class="k">my</span> <span class="n">b</span> = <span class="mi">20</span>;</pre></div>
+
+<p>This program does not print anything, so let us add a couple of
+<code>say</code> calls.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="n">a</span>;
+<span class="n">a</span> = <span class="mi">10</span>;
+<span class="nb">say</span> <span class="n">a</span>;
+
+<span class="k">my</span> <span class="n">b</span> = <span class="mi">20</span>;
+<span class="nb">say</span> <span class="n">b</span>;</pre></div>
+
+<p>Save the test in a file, for example,
+<code>variable-declaration.t</code>, in a dedicated directory
+<code>t</code> and run it. It will generate the result mixed with some
+test output (e.g., a full AST and a dump of the <code>%!var</code> hash)
+that we added to the compiler earlier. As we are still going to work on
+the compiler, let us keep the helper output but filter it out to
+<code>/dev/null</code>. The good thing is that Rakudo’s <code>dd</code>
+routine prints its output to <code>STDERR</code>, not to
+<code>STDOUT</code>.</p>
+<div class="highlight"><pre>$ ./lingua t/variable-declaration.t 2&gt;/dev/null
+OK
+10
+20</pre></div>
+<p>This looks clean, and we even can omit the OK line by using the
+<code>note</code> function instead of a conventional
+<code>say</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">if</span> <span class="nv">$ast</span> {
+    <span class="nb">note</span> <span class="s">'OK'</span>;
+    <span class="nv">$evaluator</span>.<span class="n">eval</span>(<span class="nv">$ast</span>.<span class="n">made</span>);
+}</pre></div>
+
+<p>Now, all the helper output goes to <code>STDERR</code>, and the
+program payload is printed via <code>STDOUT</code>.</p>
+<div class="highlight"><pre>$ ./lingua t/variable-declaration.t 2&gt;/dev/null
+10
+20</pre></div>
+<p>This output is what we have to compare with the correct result. The
+simplest way is to save it in another file and just compare the files.
+The other option is to type the answers in the test program itself in
+the comments. To allow other comments, which are real comments
+explaining the program, let us start our special type of comments with a
+double hash sign:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="n">a</span>;
+<span class="n">a</span> = <span class="mi">10</span>;
+<span class="nb">say</span> <span class="n">a</span>; <span class="c1">## 10</span>
+
+<span class="k">my</span> <span class="n">b</span> = <span class="mi">20</span>;
+<span class="nb">say</span> <span class="n">b</span>; <span class="c1">## 20</span></pre></div>
+
+<p>The task is now trivial. We need to create a script that run all the
+files in the <code>t</code> directory, extracts the comments from them,
+and compares the expected data with the real output. To simplify the
+task even more, let us assume that the test files are small programs, so
+if something goes wrong, you can easily spot the line where the error
+happened.</p>
+<p>Let us create another executable program, <code>run-tests</code>. It
+scans the <code>t</code> directory and runs the tests one by one.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="c1">#!/usr/bin/env raku</span>
+
+<span class="k">my</span> <span class="nv">@errors</span>;
+
+<span class="n">test-file</span>(<span class="nv">$_</span>) <span class="k">for</span> <span class="n">dir</span>(<span class="s">'t'</span>).<span class="nb">sort</span>;
+
+<span class="nb">say</span> <span class="s">'-'</span> <span class="n">x</span> <span class="mi">9</span>, <span class="s">' Summary '</span>, <span class="s">'-'</span> <span class="n">x</span> <span class="mi">9</span>;
+<span class="k">if</span> <span class="nv">@errors</span> {
+    <span class="k">my</span> <span class="nv">$n</span> = <span class="nv">@errors</span>.<span class="nb">elems</span>;
+    <span class="k">my</span> <span class="nv">$s</span> = <span class="nv">$n</span> &gt; <span class="mi">1</span> ?? <span class="s">'s'</span> !! <span class="s">''</span>;
+    <span class="nb">say</span> <span class="s">&quot;$n test file$s failed:&quot;</span>;
+    <span class="nb">say</span> <span class="s">&quot;\t$_&quot;</span> <span class="k">for</span> <span class="nv">@errors</span>;
+}
+<span class="k">else</span> {
+    <span class="nb">say</span> <span class="s">&quot;All tests successfully ran.&quot;</span>;
+}</pre></div>
+
+<p>If there were tests with errors, their list will be printed at the
+end of the output.</p>
+<p>Running a single test is quite straightforward. The following
+function does the job using the built-in run function, that places the
+output from <code>STDOUT</code> and <code>STDERR</code> to the
+<code>out</code> and <code>err</code> attributes.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">test-file</span>(<span class="nv">$file</span>) {
+    <span class="k">my</span> <span class="nv">$path</span> = <span class="nv">$file</span>.<span class="n">path</span>;
+    <span class="nb">print</span> <span class="s">&quot;$path... &quot;</span>;
+    
+    <span class="k">my</span> <span class="nv">$proc</span> = <span class="nb">run</span>(<span class="s">'./lingua'</span>, <span class="nv">$path</span>, :<span class="n">out</span>, :<span class="n">err</span>);
+    <span class="k">my</span> <span class="nv">$out</span> = <span class="nv">$proc</span>.<span class="n">out</span>.<span class="nb">slurp</span>;
+    <span class="k">my</span> <span class="nv">$err</span> = <span class="nv">$proc</span>.<span class="n">err</span>.<span class="nb">slurp</span>;
+
+    <span class="k">my</span> <span class="nv">$ok</span> = <span class="mi">1</span>;
+    <span class="k">if</span> <span class="nv">$err</span> ~~ <span class="sr">/^Error/</span> {
+        <span class="nv">$ok</span> = <span class="mi">0</span>;
+    }
+    <span class="k">else</span> {
+        <span class="k">my</span> <span class="nv">$expected</span> = <span class="n">expected</span>(<span class="nv">$path</span>);
+        <span class="k">if</span> <span class="nv">$expected</span> <span class="n">ne</span> <span class="nv">$out</span> {
+            <span class="nb">say</span> <span class="s">&quot;\nGOT: $out&quot;</span>;
+            <span class="nb">say</span> <span class="s">&quot;EXPECTED: $expected&quot;</span>;
+            <span class="nv">$ok</span> = <span class="mi">0</span>;
+        }
+    }
+
+    <span class="k">if</span> <span class="nv">$ok</span> {
+        <span class="nb">say</span> <span class="s">&quot;\e[32mOK\e[39m&quot;</span>;
+    }
+    <span class="k">else</span> {
+        <span class="nb">say</span> <span class="s">&quot;\e[31mFAIL\e[39m&quot;</span>;
+        <span class="nv">$err</span> ~~ <span class="sr">s:g/^^/# /</span>;
+        <span class="nb">say</span> <span class="nv">$err</span>;
+        <span class="nb">push</span> <span class="nv">@errors</span>, <span class="nv">$path</span>;
+    }
+}</pre></div>
+
+<p>Escape sequences in the output add colours so that you can
+immediately see red <code>FAIL</code>s or green <code>OK</code>s.</p>
+<p>There are two possibilities to fail a test: either the file was not
+parsed, or it generated the output, which differs from expectations. The
+expected output string is computed from the <code>##</code>
+comments:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">expected</span>(<span class="nv">$path</span>) {
+    <span class="k">my</span> <span class="nv">$expected</span>;
+    <span class="k">for</span> <span class="nv">$path</span>.<span class="nb">IO</span>.<span class="nb">lines</span> -&gt; <span class="nv">$line</span> {
+        <span class="nv">$line</span> ~~ <span class="sr">/'##'\s*(\N*)/</span>;
+        <span class="k">next</span> <span class="k">unless</span> <span class="nv">$0</span>;
+        <span class="nv">$expected</span> ~= <span class="s">&quot;$0\n&quot;</span>;
+    }
+
+    <span class="k">return</span> <span class="nv">$expected</span>;
+}</pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>Run the program and you should see the following output:</p>
+<div class="highlight"><pre>$ ./run-tests 
+t/variable-declaration.t... OK
+--------- Summary ---------
+All tests successfully ran.</pre></div>
+<p>Now we can add more tests to cover more features of Lingua.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/creating-a-compiler-in-raku/test-suite">Test suite</a>
+  |   <a href="/raku-books/creating-a-compiler-in-raku/tests">Tests</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

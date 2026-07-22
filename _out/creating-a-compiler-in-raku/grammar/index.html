@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Grammar — Raku Books</title>
+    <meta property="og:title" content="Grammar — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/the-raku-course">The Raku Course</option>
+<option value="/raku-one-liners">Raku One-Liners</option>
+<option value="/using-raku">Using Raku</option>
+<option value="/creating-a-compiler-in-raku" selected>Creating a Compiler in Raku</option>
+<option value="/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a
+href="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</a> / <a
+href="/raku-books/creating-a-compiler-in-raku/creating-a-simple-translator">Creating
+a Simple Translator</a></p>
+<h1 id="grammar">Grammar</h1>
+<p>Now it is time to involve Raku grammars and parse the program.
+Syntactically, grammars are classes, but they use regexes to describe
+the behaviour of their methods, which are in its turn called rules and
+tokens. The first rule which is applied usually has the name
+<code>TOP</code>; it is chosen by Raku as the default starting rule.
+Grammars are meant to parse some text, so just call the
+<code>parse</code> method on the defined grammar and pass the text to
+it. All that is demonstrated in our first program:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">grammar</span> <span class="n">Lingua</span> {
+    <span class="k">rule</span> <span class="n">TOP</span> {
+        .*
+    }
+}
+
+<span class="k">my</span> <span class="nv">$code</span> = <span class="s">'test.lng'</span>.<span class="nb">IO</span>.<span class="nb">slurp</span>();
+<span class="k">my</span> <span class="nv">$result</span> = <span class="n">Lingua</span>.<span class="n">parse</span>(<span class="nv">$code</span>);
+<span class="nb">say</span> <span class="nv">$result</span>;</pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>Here, the grammar <code>Lingua</code> is defined. It will describe
+our target language, and currently it only has a single rule, which is
+the first and the last that is applied to the Lingua code contained in
+<code>$code</code>.</p>
+<p>The body of the <code>TOP</code> rule is a regex that matches any
+line: the dot matches any character, and a star quantifier allows any
+number of repetitions of it. The <code>TOP</code> method silently
+anchors the regex to the beginning and the end of the string, so it
+actually is equivalent to <code>^ .* $</code>.</p>
+<p>Run <code>lingua.pl</code> again and you’ll see that the parser
+managed to read all the program. This is what is printed in the
+console:</p>
+<div class="highlight raku no-run"><pre><span></span>｢<span class="k">my</span> <span class="n">x</span>;
+<span class="n">x</span> = <span class="mi">42</span>;
+<span class="nb">say</span> <span class="n">x</span>;
+｣</pre></div>
+
+<p>Those square angle brackets indicate that this is not a regular
+string that was printed. In our case, the <code>$result</code> variable
+contains an object of the <code>Lingua</code> class.</p>
+<p>As you may see from the program in Lingua, its statements are
+separated by semicolon. To be precise at this point, you have to decide
+whether the statements are separated by semicolon or they should end
+with it. The difference is that in the first case, you don’t have to put
+semicolon after the last statement, for example, at the end of the
+program. Raku grammars allow to implement both options.</p>
+<p>So, the program consists of a number of statements separated by
+semicolon. In the Raku grammar, you express this in the following
+way:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">TOP</span> {
+    <span class="s">&lt;statement&gt;</span>* %% <span class="s">';'</span>
+}</pre></div>
+
+<p>Now, the <code>TOP</code> rule is described using another entity,
+<code>statement</code>. It can be repeated any number of times
+(including none) and if there are more than one statement, they have to
+be separated by the <code>';'</code> character. If you change the
+definition and type <code>%</code> instead of <code>%%</code>, the rule
+will demand to have semicolons after each statement.</p>
+<p>A <code>statement</code> itself is another rule, which we can first
+define to be really vague:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">statement</span> {
+    <span class="s">&lt;-[;]&gt;</span>*
+}</pre></div>
+
+<p>It will match everything except the semicolon character. Empty
+statements pass this filter too.</p>
+<p>With this change, the translator will now split the statements and
+emit the following output:</p>
+<div class="highlight raku no-run"><pre><span></span>｢<span class="k">my</span> <span class="n">x</span>;
+<span class="n">x</span> = <span class="mi">42</span>;
+<span class="nb">say</span> <span class="n">x</span>;
+｣
+ <span class="n">statement</span> =&gt; ｢<span class="k">my</span> <span class="n">x</span>｣
+ <span class="n">statement</span> =&gt; ｢<span class="n">x</span> = <span class="mi">42</span>｣
+ <span class="n">statement</span> =&gt; ｢<span class="nb">say</span> <span class="n">x</span>｣
+ <span class="n">statement</span> =&gt; ｢｣</pre></div>
+
+<p>The first block displays the whole text of the input program (it was
+all matched and consumed) and then the four separate statements. The
+last statement is empty because the original file contained a newline
+character after the last non-empty character, and the
+<code>statement</code> rule allows empty statements.</p>
+<p>There are three different types of statements in our code. They are
+variable declaration, assignment, and calling a built-in function. It
+can be easily expressed by the grammar:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">statement</span> {
+    | <span class="s">&lt;variable-declaration&gt;</span>
+    | <span class="s">&lt;assignment&gt;</span>
+    | <span class="s">&lt;function-call&gt;</span>
+}</pre></div>
+
+<p>Vertical bars delimit alternative branches of the rule. Formally,
+only two bars are required to list three options, but for the sake of
+making the code beautiful, you may add one more bar so that they form a
+long vertical line in the code outline. If you do that, the grammar will
+not add an empty match as the first alternative. By the way, another
+good side of Raku is that it allows hyphens in the names of the
+variables and methods, and I prefer <code>variable-declaration</code>
+over <code>variable_declaration</code>.</p>
+<p>Looking at the test program residing in <code>test.lng</code>, we can
+define the new rules to the grammar:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">variable-declaration</span> {
+    <span class="s">'my'</span> <span class="s">&lt;variable-name&gt;</span>
+}
+
+<span class="k">rule</span> <span class="n">assignment</span> {
+    <span class="s">&lt;variable-name&gt;</span> <span class="s">'='</span> <span class="s">&lt;value&gt;</span>
+}
+
+<span class="k">rule</span> <span class="n">function-call</span> {
+    <span class="s">&lt;function-name&gt;</span> <span class="s">&lt;variable-name&gt;</span>
+}</pre></div>
+
+<p>Quoted strings such as <code>'my'</code> and <code>'='</code> match
+literary with the corresponding syntax items in the target language. The
+names in angle brackets are references to other rules or tokens that we
+need to define to complete the grammar. And here we come to our first
+token:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">variable-name</span> {
+    \<span class="n">w</span>+
+}</pre></div>
+
+<p>It matches a sequence of characters that can form a word (so it
+includes at least letters, digits and underscores). Also notice that
+there should be at least one character in the name of a variable.</p>
+<p>The main difference between rules and tokens is how Raku deals with
+whitespaces. Look, for example, at the body of the
+<code>variable-declaration</code> rule:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="s">'my'</span> <span class="s">&lt;variable-name&gt;</span></pre></div>
+
+<p>It matches both of the following texts:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="n">x</span>
+<span class="k">my</span>    <span class="n">x</span></pre></div>
+
+<p>Would you create a token instead of a rule, only <code>myx</code> can
+be matched. As you see, tokens in the grammar are perfect for terminals
+such as variable names or keywords.</p>
+<p>Here’s another example of a token:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">value</span> {
+    \<span class="n">d</span>+
+}</pre></div>
+
+<p>At our first approach, we limit the possible values with non-negative
+integer numbers only. Later, we will extend the token to include the
+numbers of other types.</p>
+<p>Finally, the token for the function name. There is only one built-in
+function now, so the rule (it can be a token in this case) is
+straightforward:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">rule</span> <span class="n">function-name</span> {
+    <span class="s">'say'</span>
+}</pre></div>
+
+<p>That’s it. Run the program, and here is what it finds (let me omit
+the first part of the output that duplicates the whole text of the
+program):</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">statement</span> =&gt; ｢<span class="k">my</span> <span class="n">x</span>｣
+  <span class="n">variable-declaration</span> =&gt; ｢<span class="k">my</span> <span class="n">x</span>｣
+   <span class="n">variable-name</span> =&gt; ｢<span class="n">x</span>｣
+ <span class="n">statement</span> =&gt; ｢<span class="n">x</span> = <span class="mi">42</span>｣
+  <span class="n">assignment</span> =&gt; ｢<span class="n">x</span> = <span class="mi">42</span>｣
+   <span class="n">variable-name</span> =&gt; ｢<span class="n">x</span>｣
+   <span class="n">value</span> =&gt; ｢<span class="mi">42</span>｣
+ <span class="n">statement</span> =&gt; ｢<span class="nb">say</span> <span class="n">x</span>｣
+  <span class="n">function-call</span> =&gt; ｢<span class="nb">say</span> <span class="n">x</span>｣
+   <span class="n">function-name</span> =&gt; ｢<span class="nb">say</span> ｣
+   <span class="n">variable-name</span> =&gt; ｢<span class="n">x</span>｣</pre></div>
+
+<p>The output reflects the structure of the parsed program as the
+grammar understands it. The indentation helps to see the nested
+structure and its elements. The right side of each line reveals what
+part of the source code matched.</p>
+<p>For example, the first line of the program, <code>my x;</code>, is a
+statement that contains a variable declaration <code>my</code>
+<code>x</code> and the variable name <code>x</code>. The semicolon was
+consumed by the separator of the TOP rule and did not go to the output
+tree. Similarly, the second statement, <code>x = 42</code>, is an
+assignment of the value <code>42</code> to a variable name
+<code>x</code>.</p>
+<p>If you examine the output generated for the third line,
+<code>say x;</code>, you’ll see that the function name contains an extra
+space after the function name: <code>｢say ｣</code>. This is easy to fix
+by making the rule a token:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">token</span> <span class="n">function-name</span> {
+    <span class="s">'say'</span>
+}</pre></div>
+
+<p>After this change, the result is cleaner:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">statement</span> =&gt; ｢<span class="nb">say</span> <span class="n">x</span>｣
+  <span class="n">function-call</span> =&gt; ｢<span class="nb">say</span> <span class="n">x</span>｣
+   <span class="n">function-name</span> =&gt; ｢<span class="nb">say</span>｣
+   <span class="n">variable-name</span> =&gt; ｢<span class="n">x</span>｣</pre></div>
+
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a
+href="/raku-books/creating-a-compiler-in-raku/creating-a-simple-translator">Creating
+a Simple Translator</a>   |   <a
+href="/raku-books/creating-a-compiler-in-raku/actions">Actions</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>
