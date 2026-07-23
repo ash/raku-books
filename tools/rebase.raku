@@ -6,8 +6,10 @@
 # at, say, andrewshitov.com/raku-books, every such link needs the prefix. This
 # walks the built output and prefixes:
 #
-#   * HTML  — href="/…", src="/…", content="/…"   (skips external, protocol-
+#   * HTML  — href/src/content/value="/…"          (skips external, protocol-
 #             relative, anchors, and links already carrying the prefix)
+#             `value` covers the book-switcher <option>s, whose onchange sets
+#             location.href to the option value — the only value="/…" on the site.
 #   * JSON  — the "u" URL field in search-index.json
 #
 # Assets resolve themselves at runtime: raku.js loads its WASM relative to its own
@@ -36,7 +38,7 @@ sub MAIN($out = '_out', $prefix is copy = '/raku-books') {
         if $f.extension eq 'html' {
             my $html = $f.slurp;
             my $new  = $html.subst(
-                / $<a>=[ 'href' | 'src' | 'content' ] '="' '/'
+                / $<a>=[ 'href' | 'src' | 'content' | 'value' ] '="' '/'
                   <!before '/'> <!before $pfx-slash> /,
                 { $<a> ~ '="' ~ $prefix ~ '/' }, :g);
             if $new ne $html { $f.spurt($new); $n-html++ }
