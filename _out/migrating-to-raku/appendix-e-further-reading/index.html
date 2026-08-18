@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Appendix E — Further Reading — Raku Books</title>
+    <meta property="og:title" content="Appendix E — Further Reading — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/appendices">Appendices</a></p>
+<h1 id="appendix-e-further-reading">Appendix E — Further Reading</h1>
+<p>This book gets you across the bridge from Perl; the Raku community
+keeps you moving once you are on the other side. What follows is a
+curated set of starting points — the official documentation, the
+tooling, the places people gather, and the books worth owning — accurate
+as of 2026. Links change over the years, so when one has moved, a quick
+search for its name will usually find its new home.</p>
+<h2 id="official-documentation-and-language-sites">Official
+documentation and language sites</h2>
+<ul>
+<li><strong>The Raku documentation</strong> — <a
+href="https://docs.raku.org" class="uri">https://docs.raku.org</a> — the
+reference for the language, its types, and its built-in routines. The
+type-reference pages and the “Language” tutorials are where you will
+spend most of your time. The whole site is searchable and can be
+installed offline.</li>
+<li><strong>raku.org</strong> — <a href="https://raku.org"
+class="uri">https://raku.org</a> — the language’s home page, with
+pointers to everything else and a gentle overview for newcomers.</li>
+<li><strong>The Raku design documents</strong> — <a
+href="https://design.raku.org" class="uri">https://design.raku.org</a> —
+the historical “Synopses” and “Apocalypses”. Not a tutorial, but useful
+when you want to understand <em>why</em> a corner of the language is
+shaped as it is.</li>
+</ul>
+<h2 id="compiler-and-tooling">Compiler and tooling</h2>
+<ul>
+<li><strong>Rakudo</strong> — <a href="https://rakudo.org"
+class="uri">https://rakudo.org</a> — the reference compiler you have
+been running throughout this book, with download and build instructions
+for every platform. The recommended distribution bundles Rakudo with the
+<code>zef</code> installer.</li>
+<li><strong>zef</strong> — the module installer
+(<code>zef install Foo</code>, <code>zef update</code>). It ships with
+the standard distribution; its project page documents the full command
+set (Chapter 25).</li>
+<li><strong>Comma / editor support</strong> — plugins exist for the
+major editors; syntax highlighting and a REPL cover most day-to-day
+needs.</li>
+</ul>
+<h2 id="the-module-ecosystem">The module ecosystem</h2>
+<ul>
+<li><strong>raku.land</strong> — <a href="https://raku.land"
+class="uri">https://raku.land</a> — the modern, searchable front end to
+the Raku module ecosystem. Browse here before writing something from
+scratch; much of what you reached for on CPAN has a counterpart.</li>
+<li><strong>The Raku ecosystem</strong> is where <code>zef</code> pulls
+modules from; <code>META6.json</code> is the metadata file that
+describes each distribution (Chapter 25).</li>
+<li><strong>Inline::Perl5</strong> — when a Raku equivalent does not yet
+exist, this module lets you call straight into CPAN from Raku, so the
+whole of Perl remains within reach (Chapter 25).</li>
+</ul>
+<h2 id="community">Community</h2>
+<p>Raku’s community is small, friendly, and unusually welcoming to
+questions from Perl programmers — many of its members made the same move
+you are making.</p>
+<ul>
+<li><strong>IRC</strong> — the <code>#raku</code> channel on
+<strong>Libera.Chat</strong> (<a href="https://libera.chat"
+class="uri">https://libera.chat</a>) is the historical heart of the
+community and still active. A companion <code>#raku-beginner</code>
+channel exists for gentler questions.</li>
+<li><strong>Discord</strong> — a bridged Raku server carries the same
+conversations for those who prefer it.</li>
+<li><strong>Stack Overflow</strong> — the <code>[raku]</code> tag (<a
+href="https://stackoverflow.com/questions/tagged/raku"
+class="uri">https://stackoverflow.com/questions/tagged/raku</a>) is well
+tended; answers often come from core developers.</li>
+<li><strong>Reddit</strong> — <a href="https://reddit.com/r/rakulang"
+class="uri">https://reddit.com/r/rakulang</a> — announcements, blog
+posts, and discussion.</li>
+</ul>
+<h2 id="learning-resources-and-regular-reading">Learning resources and
+regular reading</h2>
+<ul>
+<li><strong>Raku Advent Calendar</strong> — <a
+href="https://raku-advent.blog" class="uri">https://raku-advent.blog</a>
+— a new article every day through December each year, ranging from
+beginner tutorials to deep dives. Its back catalogue is one of the best
+free libraries of Raku writing anywhere.</li>
+<li><strong>Rakudo Weekly News</strong> — <a
+href="https://rakudoweekly.blog"
+class="uri">https://rakudoweekly.blog</a> — a weekly digest of what
+happened in the ecosystem: releases, blog posts, and discussions. The
+fastest way to stay current.</li>
+<li><strong>Exercism — Raku track</strong> — <a
+href="https://exercism.org/tracks/raku"
+class="uri">https://exercism.org/tracks/raku</a> — graded exercises with
+mentor feedback, an excellent way to build fluency by writing small
+programs.</li>
+<li><strong>Rosetta Code</strong> — <a href="https://rosettacode.org"
+class="uri">https://rosettacode.org</a> — hundreds of tasks solved in
+Raku alongside other languages, including Perl, so you can compare
+idioms side by side.</li>
+</ul>
+<h2 id="books">Books</h2>
+<p>Several good books cover Raku in more depth or from a different angle
+than this one.</p>
+<p>By <strong>Andrew Shitov</strong> (the author of this book), whose
+titles span the language’s Perl 6 and Raku eras:</p>
+<ul>
+<li><strong>Using Raku</strong> — a collection of one hundred worked
+problems and their solutions, a practical companion for building
+everyday fluency.</li>
+<li><strong>Raku One-Liners</strong> — short, self-contained programs
+that show the language’s expressive power in a line or two; a natural
+follow-on to Chapter 29.</li>
+<li><strong>Perl 6 Deep Dive</strong> — a broad, example-driven tour of
+the language from its Perl 6 days; still relevant, allowing for the
+rename to Raku.</li>
+<li><strong>Course of Raku</strong> — the companion course to this book,
+a structured, ground-up path through the language for those who want a
+full curriculum rather than a migration guide.</li>
+</ul>
+<p>By other authors:</p>
+<ul>
+<li><strong>Learning Perl 6 / Learning Raku</strong>, by <em>brian d
+foy</em> (O’Reilly) — a from-scratch introduction; published under both
+names across editions.</li>
+<li><strong>Perl 6 Fundamentals</strong> and <strong>Parsing with Perl 6
+Regexes and Grammars</strong>, by <em>Moritz Lenz</em> (Apress) — the
+second is the book to read after Chapter 19 if grammars catch your
+interest.</li>
+<li><strong>Think Perl 6 / Think Raku</strong>, by <em>Laurent Rosenfeld
+with Allen Downey</em> (O’Reilly) — a computer-science introduction
+using Raku, available free online.</li>
+</ul>
+<p>Where a title has been reissued under both the “Perl 6” and “Raku”
+names, the content is the same language — only the branding changed.
+When in doubt about which edition is current, check the author’s site or
+the publisher’s page.</p>
+<p>That is the end of the appendices, and of the book. You came in
+fluent in Perl; you leave able to read, write, and reason about Raku.
+The rest is practice — and the community above is there for the
+questions this book did not anticipate. Welcome to Raku.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/appendix-d-glossary">Appendix D —
+Glossary</a>   |   <a href="/raku-books/the-raku-course">The Raku Course</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

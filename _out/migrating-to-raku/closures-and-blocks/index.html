@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Closures and Blocks — Raku Books</title>
+    <meta property="og:title" content="Closures and Blocks — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a
+href="/raku-books/migrating-to-raku/subroutines-and-functions">Subroutines and
+Functions</a></p>
+<h1 id="closures-and-blocks">Closures and Blocks</h1>
+<p>Perl already has anonymous subroutines and closures, and they behave
+much as you remember. What Raku adds is <em>sugar</em> — a handful of
+lighter ways to write a block of code, each suited to a different
+situation — and a proper sigil, <code>&amp;</code>, for treating code as
+data. Once these are in your fingers, callbacks, iterators, and the
+whole <code>map</code>/<code>grep</code>/<code>sort</code> family
+(Chapter 27) read far more cleanly than their Perl counterparts.</p>
+<h2 id="anonymous-subs-and-closures-carry-over">Anonymous subs and
+closures carry over</h2>
+<p>The Perl idiom transfers almost verbatim. An anonymous sub is a
+value; a closure is one that captures a variable from its surrounding
+scope. Here is the classic counter in Perl:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+
+sub make_counter {
+    my $n = shift;
+    return sub { $n++ };
+}
+my $c = make_counter(10);
+say $c-&gt;();   # 10
+say $c-&gt;();   # 11
+say $c-&gt;();   # 12</pre></div>
+<p>And in Raku — note two changes only: the <code>sub</code> takes a
+signature (Chapter 15), and you call it with <code>$c()</code> rather
+than <code>$c-&gt;()</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">make-counter</span>(<span class="nv">$start</span>) {
+    <span class="k">my</span> <span class="nv">$n</span> = <span class="nv">$start</span>;
+    <span class="k">return</span> { <span class="nv">$n</span>++ };
+}
+<span class="k">my</span> <span class="nv">$c</span> = <span class="n">make-counter</span>(<span class="mi">10</span>);
+<span class="nb">say</span> <span class="nv">$c</span>();     <span class="c1"># 10</span>
+<span class="nb">say</span> <span class="nv">$c</span>();     <span class="c1"># 11</span>
+<span class="nb">say</span> <span class="nv">$c</span>();     <span class="c1"># 12</span></pre></div>
+
+<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>
+<p>The arrow is gone: a code value stored in a scalar is invoked with
+plain parentheses. That single change removes most of the
+<code>-&gt;</code> noise from Perl callback code.</p>
+<h2 id="pointy-blocks---x-...">Pointy blocks:
+<code>-&gt; $x { ... }</code></h2>
+<p>Where you wrote <code>sub ($x) { ... }</code>, Raku offers a lighter
+spelling — the <em>pointy block</em>. It is an anonymous block with a
+signature, minus the <code>sub</code> keyword:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$add</span> = -&gt; <span class="nv">$a</span>, <span class="nv">$b</span> { <span class="nv">$a</span> + <span class="nv">$b</span> };
+<span class="nb">say</span> <span class="nv">$add</span>(<span class="mi">3</span>, <span class="mi">4</span>);       <span class="c1"># 7</span></pre></div>
+
+<p>You will see pointy blocks everywhere a block needs named parameters:
+after <code>for</code>, <code>if</code>-style constructs, and as
+arguments to routines. They are the everyday way to write “a block that
+takes arguments”.</p>
+<h2 id="bare-blocks-and-the-implicit-_">Bare blocks and the implicit
+<code>$_</code></h2>
+<p>A bare <code>{ ... }</code> block with no signature still takes an
+argument — it lands in the topic variable <code>$_</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$sq</span> = { <span class="nv">$_</span> ** <span class="mi">2</span> };
+<span class="nb">say</span> <span class="nv">$sq</span>(<span class="mi">9</span>);           <span class="c1"># 81</span></pre></div>
+
+<p>This is why <code>.map({ .uc })</code> works: inside the block, the
+leading-dot method call acts on <code>$_</code> (Chapter 3). The bare
+block is the terse choice when there is exactly one argument and naming
+it would only add clutter.</p>
+<h2 id="placeholder-parameters-a-b">Placeholder parameters:
+<code>$^a</code>, <code>$^b</code></h2>
+<p>Sometimes you want more than one argument but still do not want to
+write a signature. Use <em>placeholder</em> parameters — variables with
+the <code>^</code> twigil. They declare themselves just by appearing,
+and — this is the part to remember — they bind to the arguments <em>in
+alphabetical order</em>, not in the order they are written:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$combine</span> = { <span class="s">&quot;$^first-$^second&quot;</span> };
+<span class="nb">say</span> <span class="nv">$combine</span>(<span class="s">'a'</span>, <span class="s">'b'</span>);   <span class="c1"># a-b</span>
+
+<span class="k">my</span> <span class="nv">$rev</span> = { <span class="s">&quot;$^b $^a&quot;</span> };
+<span class="nb">say</span> <span class="nv">$rev</span>(<span class="s">'x'</span>, <span class="s">'y'</span>);       <span class="c1"># y x</span></pre></div>
+
+<p>Look carefully at <code>$rev</code>. Even though <code>$^b</code> is
+written first, <code>$^a</code> sorts earlier, so the arguments bind as
+<code>$^a = 'x'</code> and <code>$^b = 'y'</code> — and the block, which
+names <code>$^b</code> first, prints <code>y x</code>. Writing the
+placeholders in reverse is how you swap two arguments. Placeholders are
+elegant for symmetric two-argument blocks —
+<code>{ $^a &lt;=&gt; $^b }</code> for a sort, say — but the
+alphabetical rule surprises everyone once. When order matters and is not
+alphabetical, reach for a pointy block instead.</p>
+<h2 id="the-sigil-code-as-a-named-thing">The <code>&amp;</code> sigil:
+code as a named thing</h2>
+<p>Perl uses <code>&amp;</code> to talk about a subroutine as a value
+(<code>\&amp;foo</code>, <code>&amp;$code</code>). Raku promotes
+<code>&amp;</code> to a full sigil, on the same footing as
+<code>$</code>, <code>@</code>, and <code>%</code>. A variable declared
+with <code>&amp;</code> holds code and can be <em>called by its bare
+name</em>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">&amp;double</span> = -&gt; <span class="nv">$n</span> { <span class="nv">$n</span> * <span class="mi">2</span> };
+<span class="nb">say</span> <span class="n">double</span>(<span class="mi">10</span>);       <span class="c1"># 20</span></pre></div>
+
+<p>Because <code>&amp;double</code> is callable by name, it reads just
+like an ordinary sub — the difference is that you defined it as a value
+and can pass it around.</p>
+<p>To <em>accept</em> a piece of code as a parameter, declare the
+parameter with <code>&amp;</code> too. Inside the body it is callable by
+name, no dereferencing required:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">apply</span>(<span class="nv">&amp;code</span>, <span class="nv">$val</span>) { <span class="n">code</span>(<span class="nv">$val</span>) }
+<span class="nb">say</span> <span class="n">apply</span>({ <span class="nv">$_</span> + <span class="mi">100</span> }, <span class="mi">5</span>);   <span class="c1"># 105</span>
+<span class="nb">say</span> <span class="n">apply</span>(<span class="nv">&amp;double</span>, <span class="mi">7</span>);        <span class="c1"># 14</span></pre></div>
+
+<p>Passing <code>&amp;double</code> hands over the existing routine by
+name; the <code>&amp;</code> says “the code itself, do not call it”.
+This is the clean replacement for Perl’s <code>\&amp;subname</code>.</p>
+<h2 id="whatever-the-that-builds-a-closure"><code>Whatever</code>: the
+<code>*</code> that builds a closure</h2>
+<p>One of Raku’s most quietly useful tricks: a bare <code>*</code> in an
+expression turns that expression into a one-argument closure.
+<code>* + 1</code> <em>is</em> a function that adds one:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$inc</span> = * + <span class="mi">1</span>;
+<span class="nb">say</span> <span class="nv">$inc</span>(<span class="mi">41</span>);         <span class="c1"># 42</span>
+
+<span class="k">my</span> <span class="nv">$half</span> = * <span class="sr">/ 2;
+say $half(10);        # 5</span></pre></div>
+
+<p>This is called <code>Whatever</code>-currying, and it produces a
+<code>WhateverCode</code>. It shines as an argument to higher-order
+routines, where it removes the ceremony of a full block:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.5</span>).<span class="nb">map</span>(* ** <span class="mi">2</span>).<span class="nb">join</span>(<span class="s">','</span>);   <span class="c1"># 1,4,9,16,25</span></pre></div>
+
+<p><code>* ** 2</code> reads as “square of whatever” and needs neither
+<code>$_</code> nor <code>-&gt; $x</code>. Each <code>*</code> in an
+expression becomes one parameter, in left-to-right order — so
+<code>* - *</code> is a two-argument subtraction.</p>
+<h2 id="currying-with-.assuming">Currying with
+<code>.assuming</code></h2>
+<p>To fix <em>some</em> of a routine’s arguments and leave the rest
+open, call <code>.assuming</code> on it. It returns a new routine with
+those arguments pre-supplied — partial application, built in:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">power</span>(<span class="nv">$base</span>, <span class="nv">$exp</span>) { <span class="nv">$base</span> ** <span class="nv">$exp</span> }
+
+<span class="k">my</span> <span class="nv">$cube</span> = <span class="nv">&amp;power</span>.<span class="n">assuming</span>(*, <span class="mi">3</span>);   <span class="c1"># fix the exponent</span>
+<span class="nb">say</span> <span class="nv">$cube</span>(<span class="mi">2</span>);                       <span class="c1"># 8</span>
+
+<span class="k">my</span> <span class="nv">$two-to</span> = <span class="nv">&amp;power</span>.<span class="n">assuming</span>(<span class="mi">2</span>);    <span class="c1"># fix the base</span>
+<span class="nb">say</span> <span class="nv">$two-to</span>(<span class="mi">10</span>);                    <span class="c1"># 1024</span></pre></div>
+
+<p>The <code>*</code> in <code>.assuming(*, 3)</code> marks the slot to
+leave open. This is the tidy alternative to hand-writing a wrapper
+closure that just forwards one argument.</p>
+<h2 id="state-inside-a-closure"><code>state</code> inside a closure</h2>
+<p><code>state</code> variables (Chapter 3) work inside any block, which
+gives a counter even lighter than the <code>make-counter</code> version
+above — the state lives in the block itself:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$ticker</span> = { <span class="k">state</span> <span class="nv">$n</span> = <span class="mi">0</span>; ++<span class="nv">$n</span> };
+<span class="nb">say</span> <span class="nv">$ticker</span>();        <span class="c1"># 1</span>
+<span class="nb">say</span> <span class="nv">$ticker</span>();        <span class="c1"># 2</span>
+<span class="nb">say</span> <span class="nv">$ticker</span>();        <span class="c1"># 3</span></pre></div>
+
+<p>The <code>state $n = 0</code> runs its initialiser once; every later
+call sees the value left behind. Where the closure version captures an
+<em>outer</em> <code>my</code> variable, the <code>state</code> version
+keeps its memory <em>inside</em>.</p>
+<h2 id="blocks-feed-the-functional-routines">Blocks feed the functional
+routines</h2>
+<p>All of this comes together when you pass blocks to <code>map</code>,
+<code>grep</code>, <code>sort</code>, and friends — the subject of
+Chapter 27. Any of the block forms above will do, whichever reads
+best:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.10</span>).<span class="nb">grep</span>(* %% <span class="mi">2</span>).<span class="nb">join</span>(<span class="s">','</span>);           <span class="c1"># 2,4,6,8,10</span>
+<span class="nb">say</span> &lt;<span class="n">apple</span> <span class="n">banana</span> <span class="n">cherry</span>&gt;.<span class="nb">map</span>({ .<span class="nb">uc</span> }).<span class="nb">join</span>(<span class="s">' '</span>);
+                                              <span class="c1"># APPLE BANANA CHERRY</span></pre></div>
+
+<p>Compare the Perl originals, which are close but carry more
+punctuation:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+say join ',', grep { $_ % 2 == 0 } 1..10;     # 2,4,6,8,10
+say join ',', map { $_ ** 2 } 1..5;           # 1,4,9,16,25</pre></div>
+<p>(<code>%%</code> is Raku’s “is divisible by” operator, from Chapter
+11 — <code>* %% 2</code> is a neat “is even?”.)</p>
+<p>The through-line of this chapter is that Raku treats a block as an
+ordinary value: name it with <code>&amp;</code>, pass it, partially
+apply it, or write it inline with the lightest syntax the situation
+allows. That same idea — small pieces of matching logic composed
+together — is exactly what powers the next part of the book, where we
+leave subroutines behind and take on the largest syntactic change of
+all: regular expressions.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/multiple-dispatch">Multiple
+Dispatch</a>   |   <a
+href="/raku-books/migrating-to-raku/regular-expressions">Regular Expressions</a>
+→</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Types and the Type System — Raku Books</title>
+    <meta property="og:title" content="Types and the Type System — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/variables-and-data">Variables
+and Data</a></p>
+<h1 id="types-and-the-type-system">Types and the Type System</h1>
+<p>Perl has essentially one rule about the type of a variable: there is
+no rule. A scalar holds a number now and a string later, and the
+language sorts out the difference when you use it. That freedom is
+wonderful for quick work and occasionally the source of a bug that hides
+for months.</p>
+<p>Raku keeps the freedom and adds a dial you can turn. Write no types
+and the language behaves much as Perl does. Add a type where it earns
+its keep and Raku enforces it, turning a class of silent misbehaviour
+into a loud, immediate error. This is <em>gradual typing</em>, and
+getting comfortable with it — especially the distinction between a type
+and an instance of it — unlocks signatures (Chapter 15) and multiple
+dispatch (Chapter 16) later on.</p>
+<h2 id="untyped-by-default">Untyped by default</h2>
+<p>Nothing forces you to annotate anything. A plain scalar is as free as
+ever:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$x</span> = <span class="mi">5</span>;
+<span class="nv">$x</span> = <span class="s">'now a string'</span>;
+<span class="nv">$x</span> = [<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>];       <span class="c1"># all fine</span></pre></div>
+
+<p>This is the baseline. Everything that follows is opt-in.</p>
+<h2 id="constraining-a-variable">Constraining a variable</h2>
+<p>Put a type between <code>my</code> and the variable and Raku holds
+the container to it:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nb">Int</span> <span class="nv">$n</span> = <span class="mi">5</span>;
+<span class="nb">say</span> <span class="nv">$n</span>;               <span class="c1"># 5</span>
+<span class="nv">$n</span> = <span class="s">'oops'</span>;          <span class="c1"># Type check failed in assignment to $n;</span>
+                      <span class="c1">#   expected Int but got Str (&quot;oops&quot;)</span></pre></div>
+
+<p>The type sits where you already put <code>my</code>, so the change
+from Perl is purely additive. A typed variable that you do not
+initialise does not hold <code>undef</code>; it holds the <em>type
+itself</em> as a sensible default:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nb">Int</span> <span class="nv">$n</span>;  <span class="nb">say</span> <span class="nv">$n</span>.<span class="nb">raku</span>;    <span class="c1"># Int</span>
+<span class="k">my</span> <span class="nb">Str</span> <span class="nv">$s</span>;  <span class="nb">say</span> <span class="nv">$s</span>.<span class="nb">raku</span>;    <span class="c1"># Str</span>
+<span class="k">my</span> <span class="nv">@a</span>;      <span class="nb">say</span> <span class="nv">@a</span>.<span class="nb">raku</span>;    <span class="c1"># []</span>
+<span class="k">my</span> <span class="nv">%h</span>;      <span class="nb">say</span> <span class="nv">%h</span>.<span class="nb">raku</span>;    <span class="c1"># {}</span></pre></div>
+
+<p>That <code>Int</code> sitting in <code>$n</code> is the heart of the
+whole system, and it deserves a proper introduction.</p>
+<h2 id="type-objects-versus-instances">Type objects versus
+instances</h2>
+<p>In Raku every type is <em>also a value</em>. <code>Int</code> is not
+just an annotation you write in a declaration; it is an object you can
+pass around, print, and test. It is called a <em>type object</em>, and
+it stands for “an <code>Int</code>, but not any particular one”:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="nb">Int</span>.<span class="n">WHAT</span>;         <span class="c1"># (Int)</span>
+<span class="nb">say</span> <span class="nb">Int</span>.<span class="nb">defined</span>;      <span class="c1"># False</span>
+<span class="nb">say</span> <span class="mi">42</span>.<span class="nb">defined</span>;       <span class="c1"># True</span></pre></div>
+
+<p>This is the cleanest replacement for Perl’s overloaded
+<code>undef</code>. In Perl an uninitialised value and “no value” are
+the same murky thing. In Raku they split cleanly: <code>42</code> is a
+<em>defined instance</em> of <code>Int</code>; the bare <code>Int</code>
+type object is <em>undefined</em>. <code>.defined</code> tells them
+apart, and an unassigned typed variable holds the undefined type object
+rather than a generic <code>undef</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nb">Int</span> <span class="nv">$x</span>;
+<span class="nb">say</span> <span class="nv">$x</span>.<span class="nb">defined</span>;       <span class="c1"># False</span>
+<span class="nb">say</span> <span class="nv">$x</span>.<span class="n">WHAT</span>;          <span class="c1"># (Int)</span></pre></div>
+
+<p>The parentheses that <code>.WHAT</code> prints — <code>(Int)</code> —
+are Raku’s way of showing you a type object rather than an instance. You
+have been seeing them since Chapter 2.</p>
+<h2 id="definiteness-d-and-u">Definiteness: <code>:D</code> and
+<code>:U</code></h2>
+<p>Because “the type” and “an instance of the type” are different
+values, you often want to say <em>which</em> you will accept. That is
+the definiteness smiley: <code>:D</code> for a <strong>d</strong>efined
+instance, <code>:U</code> for an <strong>u</strong>ndefined type
+object:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nb">Int</span>:<span class="n">U</span> <span class="nv">$t</span> = <span class="nb">Int</span>;    <span class="c1"># a type object, fine</span>
+<span class="nb">say</span> <span class="nv">$t</span>.<span class="n">WHAT</span>;          <span class="c1"># (Int)</span></pre></div>
+
+<p>A <code>:D</code> constraint demands a real value and, tellingly,
+refuses to be left empty:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nb">Int</span>:<span class="n">D</span> <span class="nv">$y</span>;          <span class="c1"># compile error:</span>
+                      <span class="c1">#   Variable definition of type Int:D</span>
+                      <span class="c1">#   needs to be given an initializer</span></pre></div>
+
+<p>The same annotation on a parameter is where you will use it most — it
+lets a routine insist on a genuine object and reject a bare type by
+mistake, which is covered in Chapter 15.</p>
+<h2 id="the-top-of-the-hierarchy-mu-any-cool">The top of the hierarchy:
+Mu, Any, Cool</h2>
+<p>Perl has no type hierarchy to speak of. Raku’s types form a tree, and
+it is worth knowing the three names near the root because they explain a
+lot of default behaviour. Ask any type for its method resolution
+order:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nb">Int</span>.^<span class="n">mro</span>;         <span class="c1"># ((Int) (Cool) (Any) (Mu))</span>
+<span class="nb">say</span> <span class="nb">Bool</span>.^<span class="n">mro</span>;        <span class="c1"># ((Bool) (Int) (Cool) (Any) (Mu))</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Reading right to left: <strong><code>Mu</code></strong> is the
+absolute root, the “most undefined” type — its name is a nod to the Zen
+answer meaning “un-ask the question”. Almost nothing you write is typed
+as <code>Mu</code> directly. <strong><code>Any</code></strong> sits just
+below it and is the <em>default</em> type of everything and the default
+constraint on parameters; when you write an untyped variable,
+<code>Any</code> is what constrains it.
+<strong><code>Cool</code></strong> (“Convenient Object-Oriented Loop”, a
+deliberately silly acronym) is the layer that lets a number behave like
+a string and vice versa — it is why <code>"42".succ</code> and
+<code>42.chars</code> both work.</p>
+<p>Because <code>Any</code> is the default, ordinary smartmatches
+against it succeed, while the even-more-basic <code>Mu</code> sits
+outside it:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="mi">42</span> ~~ <span class="nb">Any</span>;        <span class="c1"># True</span>
+<span class="nb">say</span> <span class="nb">Mu</span> ~~ <span class="nb">Any</span>;        <span class="c1"># False</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Two special citizens sit deliberately <em>off</em> this main line.
+<strong><code>Nil</code></strong> is the absence of a value — assigning
+<code>Nil</code> to a typed variable resets it to its default type
+object rather than storing anything:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nb">Int</span> <span class="nv">$z</span> = <span class="mi">5</span>;
+<span class="nv">$z</span> = <span class="nb">Nil</span>;
+<span class="nb">say</span> <span class="nv">$z</span>.<span class="nb">raku</span>;          <span class="c1"># Int   — reset to the default, not undef</span></pre></div>
+
+<p>And <strong><code>Junction</code></strong> — the superposition type
+behind <code>1 | 2 | 3</code> — descends straight from <code>Mu</code>,
+bypassing <code>Any</code> entirely:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$j</span> = <span class="mi">1</span> | <span class="mi">2</span> | <span class="mi">3</span>;
+<span class="nb">say</span> <span class="nv">$j</span>.<span class="n">WHAT</span>;          <span class="c1"># (Junction)</span>
+<span class="nb">say</span> <span class="nv">$j</span>.^<span class="n">mro</span>;          <span class="c1"># ((Junction) (Mu))</span>
+<span class="nb">say</span> <span class="mi">2</span> ~~ <span class="nv">$j</span>;          <span class="c1"># True</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>That placement is not an accident: sitting below <code>Any</code>
+would let junctions be caught by ordinary <code>Any</code> parameters,
+whereas descending from <code>Mu</code> lets them slip <em>through</em>
+most routines and auto-distribute over the values inside. Junctions get
+their own treatment in Chapter 27.</p>
+<h2 id="your-own-types-subset">Your own types: <code>subset</code></h2>
+<p>You are not limited to the built-in types. A <code>subset</code>
+carves a named type out of an existing one by attaching a
+<code>where</code> clause — an arbitrary predicate the value must
+satisfy:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">subset</span> <span class="n">Even</span> <span class="n">of</span> <span class="nb">Int</span> <span class="k">where</span> * %% <span class="mi">2</span>;    <span class="c1"># %% is &quot;divisible by&quot;</span>
+<span class="k">my</span> <span class="n">Even</span> <span class="nv">$x</span> = <span class="mi">4</span>;                     <span class="c1"># fine</span>
+<span class="k">my</span> <span class="n">Even</span> <span class="nv">$y</span> = <span class="mi">3</span>;                     <span class="c1"># Type check failed ... expected</span>
+                                    <span class="c1">#   Even but got Int (3)</span></pre></div>
+
+<p>The <code>*</code> is the whatever-star standing in for the value
+under test (Chapter 17), and <code>%%</code> is Raku’s divisibility
+operator. A subset is a first-class type, so it works anywhere a type
+does — including smartmatch, which we meet next:</p>
+<div class="highlight raku"><pre><span></span><span class="k">subset</span> <span class="n">Positive</span> <span class="n">of</span> <span class="nb">Real</span> <span class="k">where</span> * &gt; <span class="mi">0</span>;
+<span class="nb">say</span>  <span class="mi">5</span> ~~ <span class="n">Positive</span>;   <span class="c1"># True</span>
+<span class="nb">say</span> -<span class="mi">2</span> ~~ <span class="n">Positive</span>;   <span class="c1"># False</span></pre></div>
+
+<h2 id="coercion-types-intstr">Coercion types:
+<code>Int(Str)</code></h2>
+<p>Sometimes you do not want to <em>reject</em> the wrong type but to
+<em>convert</em> it. A coercion type, written
+<code>TargetType(FromType)</code>, accepts the source type and hands you
+the target:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nb">Int</span>(<span class="nb">Str</span>) <span class="nv">$n</span> = <span class="s">'42'</span>;
+<span class="nb">say</span> <span class="nv">$n</span>.<span class="n">WHAT</span>;          <span class="c1"># (Int)</span>
+<span class="nb">say</span> <span class="nv">$n</span>;               <span class="c1"># 42</span></pre></div>
+
+<p>The variable took a string and stored an integer. This shines in
+signatures — <code>sub f(Int(Str) $x)</code> accepts a string argument
+and gives the body a ready-made <code>Int</code> — and on return types,
+where <code>--&gt; Int()</code> coerces the returned value (whereas a
+plain <code>--&gt; Int</code> would merely check it):</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">floorish</span>(--&gt; <span class="nb">Int</span>()) { <span class="mf">3.7</span> }
+<span class="nb">say</span> <span class="n">floorish</span>();       <span class="c1"># 3</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<h2 id="smartmatching-against-types">Smartmatching against types</h2>
+<p>The smartmatch operator <code>~~</code>, which you have already used
+against subsets, works against any type and reads like plain English —
+“does this value match this type?”:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">42</span>   ~~ <span class="nb">Int</span>;      <span class="c1"># True</span>
+<span class="nb">say</span> <span class="s">'x'</span>  ~~ <span class="nb">Int</span>;      <span class="c1"># False</span>
+<span class="nb">say</span> <span class="mf">3.14</span> ~~ <span class="nb">Real</span>;     <span class="c1"># True</span>
+<span class="nb">say</span> <span class="mi">42</span>   ~~ <span class="nb">Cool</span>;     <span class="c1"># True</span></pre></div>
+
+<p>This is the idiomatic Raku replacement for the Perl pattern of poking
+at <code>ref()</code> or <code>Scalar::Util::looks_like_number</code> —
+or, in modern Perl, the newer <code>builtin::</code> helpers:</p>
+<div class="highlight perl-code"><pre>use v5.36;
+use builtin qw(blessed reftype);
+no warnings 'experimental::builtin';
+
+my $obj = bless {}, 'Foo';
+say blessed($obj) // 'not an object';   # Foo
+say reftype($obj);                      # HASH</pre></div>
+<p>It is also the mechanism <code>given</code>/<code>when</code> uses
+under the hood, as Chapter 13 shows.</p>
+<h2 id="enum-and-constant"><code>enum</code> and
+<code>constant</code></h2>
+<p>Two smaller declarators round out the picture. An <code>enum</code>
+defines a set of named, typed constants — closer to a real enumerated
+type than the <code>use constant</code> list Perl programmers reach
+for:</p>
+<div class="highlight raku"><pre><span></span><span class="k">enum</span> <span class="n">Suit</span> &lt;<span class="n">hearts</span> <span class="n">diamonds</span> <span class="n">clubs</span> <span class="n">spades</span>&gt;;
+<span class="nb">say</span> <span class="n">hearts</span>;           <span class="c1"># hearts</span>
+<span class="nb">say</span> <span class="n">clubs</span>.<span class="nb">Int</span>;        <span class="c1"># 2      — enum values carry an ordinal</span>
+<span class="nb">say</span> <span class="n">clubs</span> ~~ <span class="n">Suit</span>;    <span class="c1"># True   — and are a genuine type</span></pre></div>
+
+<p>Each name is a value of type <code>Suit</code>, so it can constrain a
+variable or a parameter, giving you compile-checked “one of these”
+arguments for free. Even the built-in <code>Bool</code> is an enum:
+<code>True.Int</code> is <code>1</code>.</p>
+<p>For a single unchanging value, <code>constant</code> (met briefly in
+Chapter 3) needs no sigil ceremony and works with any sigil:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">constant</span> <span class="n">PI</span> = <span class="mf">3.14159</span>;
+<span class="k">constant</span> <span class="nv">@primes</span> = <span class="mi">2</span>, <span class="mi">3</span>, <span class="mi">5</span>, <span class="mi">7</span>;
+<span class="nb">say</span> <span class="n">PI</span>;               <span class="c1"># 3.14159</span>
+<span class="nb">say</span> <span class="nv">@primes</span>;          <span class="c1"># (2 3 5 7)</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<h2 id="why-this-matters-dispatch-and-signatures">Why this matters:
+dispatch and signatures</h2>
+<p>Everything in this chapter converges on two features you will use
+constantly. First, signatures (Chapter 15) can constrain each parameter
+by type, definiteness, and even a <code>where</code> clause, so a
+routine documents and enforces its own contract:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">factorial</span>(<span class="nb">Int</span> <span class="nv">$n</span> <span class="k">where</span> * &gt;= <span class="mi">0</span>) { [*] <span class="mi">1</span> .. <span class="nv">$n</span> }
+<span class="nb">say</span> <span class="n">factorial</span>(<span class="mi">5</span>);     <span class="c1"># 120</span>
+<span class="nb">say</span> <span class="n">factorial</span>(-<span class="mi">1</span>);    <span class="c1"># Constraint type check failed ...</span></pre></div>
+
+<p>Second, those same type constraints let you write <em>several</em>
+routines of the same name and have Raku pick the right one by the types
+of the arguments — multiple dispatch, the subject of Chapter 16:</p>
+<div class="highlight raku"><pre><span></span><span class="k">multi</span> <span class="n">greet</span>(<span class="nb">Int</span> <span class="nv">$x</span>) { <span class="s">&quot;an integer: $x&quot;</span> }
+<span class="k">multi</span> <span class="n">greet</span>(<span class="nb">Str</span> <span class="nv">$x</span>) { <span class="s">&quot;a string: $x&quot;</span>  }
+<span class="nb">say</span> <span class="n">greet</span>(<span class="mi">42</span>);        <span class="c1"># an integer: 42</span>
+<span class="nb">say</span> <span class="n">greet</span>(<span class="s">'hi'</span>);      <span class="c1"># a string: hi</span></pre></div>
+
+<p>That is a large part of why Raku bothered to build a real type
+system: not to make you annotate everything, but to let types do useful
+work — checking, converting, and dispatching — precisely where you
+decide they should.</p>
+<p>With variables, containers, and types behind us, Part II is complete.
+Next we turn to operators, starting with the many that work exactly as
+you already expect.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/references-and-context">References,
+Containers, and Context</a>   |   <a
+href="/raku-books/migrating-to-raku/operators-and-expressions">Operators and
+Expressions</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

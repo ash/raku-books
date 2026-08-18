@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>From @ to Signatures — Raku Books</title>
+    <meta property="og:title" content="From @ to Signatures — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a
+href="/raku-books/migrating-to-raku/subroutines-and-functions">Subroutines and
+Functions</a></p>
+<h1 id="from-_-to-signatures">From <span class="citation"
+data-cites="_">@_</span> to Signatures</h1>
+<p>Here is where the day-to-day feel of writing subroutines changes the
+most. Traditionally a Perl subroutine receives its arguments in a single
+flat array, <code>@_</code>, and it is your job to pull them apart, name
+them, check their count, and validate their types by hand. Modern Perl
+has gained basic subroutine signatures of its own —
+<code>sub add($a, $b) { … }</code>, with defaults and a slurpy — so this
+is now partly shared ground. Raku takes the idea considerably further:
+its signature also carries named parameters, type constraints,
+<code>is rw</code>/<code>is copy</code>, return types, and
+destructuring, and it is what makes multiple dispatch (Chapter 16)
+possible. The compiler does the unpacking and the checking for you.</p>
+<p>This one change ripples outward. Signatures are also what make
+multiple dispatch (Chapter 16) possible, and they turn up again in
+pointy blocks, <code>given</code>/<code>when</code>, and object
+construction. Learn them well here and much of the rest of the book
+falls into place.</p>
+<h2 id="the-_-world">The <code>@_</code> world</h2>
+<p>In Perl, the first line of almost every subroutine is a bit of
+ceremony to give the arguments names:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+
+sub add {
+    my ($a, $b) = @_;
+    return $a + $b;
+}
+say add(2, 3);        # 5</pre></div>
+<p>If you want the arguments to be mandatory, or to be numbers, or to
+have defaults, you write that yourself:</p>
+<div class="highlight perl-code"><pre>sub greet {
+    my ($name, $greeting) = @_;
+    die "name required" unless defined $name;
+    $greeting //= 'Hello';
+    return "$greeting, $name!";
+}</pre></div>
+<p>Everyone writes this code, and everyone writes it slightly
+differently.</p>
+<h3 id="perl-prototypes-an-older-attempt">Perl prototypes: an older
+attempt</h3>
+<p>Long before signatures, Perl offered <em>prototypes</em> — a
+parenthesised run of sigils after the sub name that constrains how many
+arguments a sub takes, and in what context. They are a compile-time
+check on the <em>shape</em> of the call, not real parameter names:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+
+sub add ($$) { $_[0] + $_[1] }   # exactly two scalars
+
+say add(2, 3);        # 5
+say add(2, 3, 4);     # compile error: Too many arguments for main::add</pre></div>
+<p>The <code>$$</code> means “two scalar arguments”; <code>@</code>
+slurps the rest as a list, <code>;</code> marks what follows as
+optional, <code>\@</code> demands an array reference, and so on.
+Prototypes pin down arity and argument context, but you still unpack
+<code>@_</code> by hand inside, and nothing here is a <em>name</em> or a
+<em>type</em>. They linger on for mimicking built-in functions, but for
+everyday code, signatures superseded them.</p>
+<h3 id="perls-own-signatures">Perl’s own signatures</h3>
+<p>Modern Perl (under <code>use v5.36</code>, or
+<code>use feature 'signatures'</code>) names the parameters directly,
+with defaults and a slurpy — much of what the <code>@_</code> ceremony
+did by hand:</p>
+<div class="highlight perl-code"><pre>use v5.36;
+
+sub greet ($name, $greeting = 'Hello') {
+    return "$greeting, $name!";
+}
+
+say greet('John');          # Hello, John!
+say greet('Jo', 'Hi');      # Hi, Jo!</pre></div>
+<p>This is a real step up and covers a good share of everyday needs.
+What it does <em>not</em> offer is named parameters, type constraints,
+<code>is rw</code>/<code>is copy</code>, return-type checks,
+destructuring, or multiple dispatch — all of which Raku’s signatures do,
+and which the rest of this chapter explores.</p>
+<h2 id="positional-parameters">Positional parameters</h2>
+<p>The Raku equivalent of <code>my ($a, $b) = @_;</code> is to name the
+parameters in the signature. There is no <code>@_</code> to unpack,
+because the unpacking has already happened:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">add</span>(<span class="nv">$a</span>, <span class="nv">$b</span>) { <span class="nv">$a</span> + <span class="nv">$b</span> }
+<span class="nb">say</span> <span class="n">add</span>(<span class="mi">2</span>, <span class="mi">3</span>);        <span class="c1"># 5</span></pre></div>
+
+<p>The parameters are declared in the order they arrive — these are
+<em>positional</em> parameters. By default they are also
+<em>required</em>: call <code>add</code> with the wrong number of
+arguments and you get an error at the call site, not a silent
+<code>undef</code> three lines later.</p>
+<p>Note also that we dropped <code>return</code>. The last expression in
+a Raku block is its value, so a one-liner rarely needs it — though
+<code>return</code> is there when you want to leave early.</p>
+<h2 id="type-constraints">Type constraints</h2>
+<p>Write a type before a parameter and Raku enforces it, exactly as it
+does for a typed variable (Chapter 2):</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">square</span>(<span class="nb">Int</span> <span class="nv">$n</span>) { <span class="nv">$n</span> * <span class="nv">$n</span> }
+<span class="nb">say</span> <span class="n">square</span>(<span class="mi">5</span>);        <span class="c1"># 25</span></pre></div>
+
+<p>Pass something that is not an <code>Int</code> and the call fails
+before the body runs. This is the declarative replacement for the
+hand-written <code>die unless looks_like_number</code> checks that
+litter defensive Perl.</p>
+<h2 id="optional-parameters-and-defaults">Optional parameters and
+defaults</h2>
+<p>A trailing <code>?</code> makes a parameter optional; inside the body
+you test it with <code>.defined</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">maybe</span>(<span class="nv">$x</span>?) { <span class="nv">$x</span>.<span class="nb">defined</span> ?? <span class="s">&quot;got $x&quot;</span> !! <span class="s">&quot;nothing&quot;</span> }
+<span class="nb">say</span> <span class="n">maybe</span>();          <span class="c1"># nothing</span>
+<span class="nb">say</span> <span class="n">maybe</span>(<span class="mi">42</span>);        <span class="c1"># got 42</span></pre></div>
+
+<p>More often you want a <em>default value</em>. Give one with
+<code>=</code>, and the parameter becomes optional automatically — this
+is the tidy form of Perl’s <code>//=</code> dance:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">greet</span>(<span class="nv">$name</span>, <span class="nv">$greeting</span> = <span class="s">'Hello'</span>) { <span class="s">&quot;$greeting, $name!&quot;</span> }
+<span class="nb">say</span> <span class="n">greet</span>(<span class="s">'John'</span>);            <span class="c1"># Hello, John!</span>
+<span class="nb">say</span> <span class="n">greet</span>(<span class="s">'John'</span>, <span class="s">'Hi'</span>);      <span class="c1"># Hi, John!</span></pre></div>
+
+<p>Defaults may even refer to earlier parameters, and are computed at
+call time.</p>
+<h2 id="named-parameters">Named parameters</h2>
+<p>Perl fakes named arguments by passing a list of pairs and slurping
+them into a hash: <code>my %args = @_;</code>. Raku has them for real. A
+parameter written with a leading colon is <em>named</em> — the caller
+supplies it by name, in any order:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">connect</span>(:<span class="nv">$host</span>!, :<span class="nv">$port</span> = <span class="mi">80</span>) { <span class="s">&quot;$host:$port&quot;</span> }
+<span class="nb">say</span> <span class="n">connect</span>(<span class="n">host</span> =&gt; <span class="s">'localhost'</span>);             <span class="c1"># localhost:80</span>
+<span class="nb">say</span> <span class="n">connect</span>(:<span class="n">host</span>&lt;<span class="n">example</span>.<span class="n">com</span>&gt;, :<span class="n">port</span>(<span class="mi">8080</span>)); <span class="c1"># example.com:8080</span></pre></div>
+
+<p>Two things to notice. A named parameter is <em>optional</em> by
+default — the opposite of positional — so we added <code>!</code> to
+make <code>:$host!</code> required. And <code>:$port = 80</code>
+combines named with a default, the common case for configuration-style
+arguments.</p>
+<p>When the value is already in a variable of the same name, the
+<code>:$port</code> colon-pair shorthand passes it without
+repetition:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$port</span> = <span class="mi">22</span>;
+<span class="k">sub</span> <span class="n">srv</span>(:<span class="nv">$port</span>) { <span class="s">&quot;port $port&quot;</span> }
+<span class="nb">say</span> <span class="n">srv</span>(:<span class="nv">$port</span>);      <span class="c1"># port 22</span></pre></div>
+
+<h3 id="renaming-a-named-parameter">Renaming a named parameter</h3>
+<p>Sometimes the name the caller uses should differ from the variable
+name inside the body. Write <code>:external($internal)</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">log-it</span>(:<span class="n">message</span>(<span class="nv">$text</span>)) { <span class="s">&quot;LOG: $text&quot;</span> }
+<span class="nb">say</span> <span class="n">log-it</span>(<span class="n">message</span> =&gt; <span class="s">'hi'</span>);   <span class="c1"># LOG: hi</span></pre></div>
+
+<p>The caller says <code>message =&gt;</code>, the body works with
+<code>$text</code>.</p>
+<h2 id="slurpy-parameters">Slurpy parameters</h2>
+<p>To collect “everything else”, Perl leans on <code>@_</code> directly.
+Raku has <em>slurpy</em> parameters, marked with <code>*</code>. A
+slurpy array mops up the remaining positional arguments; a slurpy hash
+mops up the remaining named ones:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">total</span>(*<span class="nv">@nums</span>) { [+] <span class="nv">@nums</span> }
+<span class="nb">say</span> <span class="n">total</span>(<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>, <span class="mi">4</span>);         <span class="c1"># 10</span>
+
+<span class="k">sub</span> <span class="n">opts</span>(*<span class="nv">%h</span>) { <span class="nv">%h</span>.<span class="nb">keys</span>.<span class="nb">sort</span>.<span class="nb">join</span>(<span class="s">','</span>) }
+<span class="nb">say</span> <span class="n">opts</span>(<span class="n">a</span> =&gt; <span class="mi">1</span>, <span class="n">b</span> =&gt; <span class="mi">2</span>);      <span class="c1"># a,b</span></pre></div>
+
+<p>(The <code>[+]</code> is the reduction meta-operator from Chapter 11
+— it sums the list.)</p>
+<p>There are, in fact, two flavours of slurpy array, and they differ in
+whether they <em>flatten</em> nested lists. The single-star
+<code>*@a</code> flattens; the double-star <code>**@a</code> preserves
+structure:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">flat</span>(*<span class="nv">@a</span>)     { <span class="nv">@a</span>.<span class="nb">elems</span> }
+<span class="k">sub</span> <span class="n">nested</span>(**<span class="nv">@a</span>)  { <span class="nv">@a</span>.<span class="nb">elems</span> }
+<span class="nb">say</span> <span class="nb">flat</span>(<span class="mi">1</span>, (<span class="mi">2</span>, <span class="mi">3</span>), [<span class="mi">4</span>, <span class="mi">5</span>]);     <span class="c1"># 5   — flattened</span>
+<span class="nb">say</span> <span class="n">nested</span>(<span class="mi">1</span>, (<span class="mi">2</span>, <span class="mi">3</span>), [<span class="mi">4</span>, <span class="mi">5</span>]);   <span class="c1"># 3   — kept as three items</span></pre></div>
+
+<p>If you have met the two spellings before and misremembered which is
+which, this is worth a second look: it is the <em>single</em> star that
+flattens, and the <em>double</em> star that leaves the arguments alone.
+The double-star form is the one you want when a nested list is
+meaningful data rather than a bag of arguments.</p>
+<h2 id="traits-is-rw-and-is-copy">Traits: <code>is rw</code> and
+<code>is copy</code></h2>
+<p>By default a parameter is read-only — you may look at it but not
+assign to it. This is safer than Perl, where <code>@_</code> aliases the
+caller’s data and an accidental <code>$_[0] = ...</code> reaches back
+out.</p>
+<p>When you <em>do</em> want to modify the caller’s variable, ask for it
+explicitly with <code>is rw</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">incr</span>(<span class="nv">$x</span> <span class="k">is</span> <span class="n">rw</span>) { <span class="nv">$x</span>++ }
+<span class="k">my</span> <span class="nv">$n</span> = <span class="mi">10</span>;
+<span class="n">incr</span>(<span class="nv">$n</span>);
+<span class="nb">say</span> <span class="nv">$n</span>;               <span class="c1"># 11</span></pre></div>
+
+<p>When you want a private, modifiable copy that does <em>not</em>
+affect the caller, use <code>is copy</code> — the equivalent of Perl’s
+habit of copying <code>@_</code> into <code>my</code> variables just to
+be able to change them:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">tweak</span>(<span class="nv">$x</span> <span class="k">is</span> <span class="n">copy</span>) { <span class="nv">$x</span>++; <span class="nv">$x</span> }
+<span class="k">my</span> <span class="nv">$m</span> = <span class="mi">5</span>;
+<span class="nb">say</span> <span class="n">tweak</span>(<span class="nv">$m</span>);        <span class="c1"># 6</span>
+<span class="nb">say</span> <span class="nv">$m</span>;               <span class="c1"># 5  — untouched</span></pre></div>
+
+<h2 id="return-types">Return types</h2>
+<p>You can constrain what a routine returns, too. Put
+<code>--&gt; Type</code> at the end of the signature, or use the
+<code>returns</code> trait:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">pi</span>(--&gt; <span class="nb">Rat</span>) { <span class="mf">3.14</span> }
+<span class="nb">say</span> <span class="n">pi</span>();             <span class="c1"># 3.14</span>
+
+<span class="k">sub</span> <span class="n">e</span>() <span class="n">returns</span> <span class="nb">Num</span> { <span class="mf">2.718e0</span> }
+<span class="nb">say</span> <span class="n">e</span>();              <span class="c1"># 2.718</span></pre></div>
+
+<p>A returned value that violates the constraint is an error, caught at
+the boundary rather than downstream:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">bad</span>(--&gt; <span class="nb">Int</span>) { <span class="s">&quot;x&quot;</span> }
+<span class="nb">say</span> (<span class="k">try</span> <span class="n">bad</span>()) // <span class="s">&quot;type error caught&quot;</span>;   <span class="c1"># type error caught</span></pre></div>
+
+<h2 id="destructuring-in-the-signature">Destructuring in the
+signature</h2>
+<p>A signature can take an argument apart <em>as it binds it</em>. Give
+a nested signature in square brackets to unpack an incoming array:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">first-rest</span>(<span class="nv">@a</span> [<span class="nv">$first</span>, *<span class="nv">@rest</span>]) { <span class="s">&quot;first=$first rest=@rest[]&quot;</span> }
+<span class="nb">say</span> <span class="n">first-rest</span>([<span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>]);   <span class="c1"># first=10 rest=20 30</span></pre></div>
+
+<p>The parameter <code>@a</code> is still the whole array, but
+<code>$first</code> and <code>@rest</code> are bound to its head and
+tail in the same breath. Named parameters <code>:$x, :$y</code>
+similarly destructure a hash-shaped argument by key:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">point</span>(:<span class="nv">$x</span>, :<span class="nv">$y</span>) { <span class="s">&quot;($x, $y)&quot;</span> }
+<span class="nb">say</span> <span class="n">point</span>(<span class="n">x</span> =&gt; <span class="mi">1</span>, <span class="n">y</span> =&gt; <span class="mi">2</span>);      <span class="c1"># (1, 2)</span></pre></div>
+
+<h2 id="the-whole-argument-list-capture">The whole argument list:
+<code>|capture</code></h2>
+<p>Occasionally you want the entire bundle of arguments as one object —
+every positional and every named — for instance to forward them
+untouched. That object is a <code>Capture</code>, and you bind it with
+<code>|</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">inspect</span>(|<span class="n">c</span>) { <span class="n">c</span>.<span class="nb">list</span>.<span class="nb">elems</span> ~ <span class="s">&quot; pos, &quot;</span> ~ <span class="n">c</span>.<span class="n">hash</span>.<span class="nb">elems</span> ~ <span class="s">&quot; named&quot;</span> }
+<span class="nb">say</span> <span class="n">inspect</span>(<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>, <span class="n">a</span> =&gt; <span class="mi">4</span>);   <span class="c1"># 3 pos, 1 named</span></pre></div>
+
+<p>The same <code>|</code> <em>flattens a Capture back out</em> at a
+call site, which is how you forward arguments verbatim — the clean
+replacement for <code>goto &amp;sub</code> and <code>@_</code>-passing
+tricks:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">inner</span>(<span class="nv">$a</span>, <span class="nv">$b</span>) { <span class="nv">$a</span> + <span class="nv">$b</span> }
+<span class="k">sub</span> <span class="n">outer</span>(|<span class="n">args</span>) { <span class="n">inner</span>(|<span class="n">args</span>) }
+<span class="nb">say</span> <span class="n">outer</span>(<span class="mi">4</span>, <span class="mi">5</span>);      <span class="c1"># 9</span></pre></div>
+
+<h2 id="still-exists"><code>@_</code> still exists</h2>
+<p>None of this abolishes <code>@_</code>. A block or a signatureless
+<code>sub</code> still gets its arguments there, so the old idiom keeps
+working:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">old-style</span> { <span class="nv">@_</span>.<span class="nb">join</span>(<span class="s">&quot;, &quot;</span>).<span class="nb">say</span> }
+<span class="n">old-style</span>(<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>);   <span class="c1"># 1, 2, 3</span></pre></div>
+
+<p>But the moment you write a signature, <code>@_</code> steps aside and
+the named parameters take over. In new code, signatures are simply the
+way: they document the interface, check it, and unpack it, all at
+once.</p>
+<p>A signature also unlocks something Perl could only imitate with
+tangled <code>if</code>-chains: writing <em>several</em> versions of the
+same routine and letting the argument types decide which one runs. That
+is multiple dispatch, and it is next.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/subroutines-and-functions">Subroutines
+and Functions</a>   |   <a
+href="/raku-books/migrating-to-raku/multiple-dispatch">Multiple Dispatch</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

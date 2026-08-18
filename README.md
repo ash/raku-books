@@ -139,12 +139,32 @@ Books appear newest-first on the home page (by the `date:` field). Each has an
 | **Creating a Compiler in Raku** (2018) | **.docx** | Heading3/4/5 headings, TIFF diagrams extracted → PNG; still under proofreading (`banner:`) |
 | **Perl 6 Calendar 2019** | PDF, `source: calendar` + `gallery: true` | 12 month pages: image + a runnable version of the puzzle; landing is a thumbnail gallery |
 | **Perl 6 at a Glance** (2017) | **.docx** | the PDF's code font conflates space and `!`, so text comes from the Word file (`cover_pdf` supplies the cover) |
+| **Migrating to Raku** | **Markdown**, `source: markdown` | written as Markdown, so nothing is recovered: `md_root` points at the manuscript repo and `manifest.txt` gives the reading order. `unlisted: true` — built and reachable, but absent from every index |
 
-The extractor picks the path from the config: `source: calendar` →
-`build_calendar`, a `.docx` source → `build_docx` (heading styles configurable
-per book; `Code` → code, `HTMLPreformatted`/`Cmdline` → output, `CodeChar` runs →
-inline code, embedded images extracted), `static: true` → skipped (hand-written),
-otherwise the PDF `build` (font-size heading detection).
+The extractor picks the path from the config: `source: markdown` →
+`build_markdown` (a manuscript that is already Markdown — the book's
+`manifest.txt` gives the reading order, each book part becomes a TOC grouping and
+each chapter one page, and only the code fences are rewritten so Raku blocks earn
+their Run-button verdicts), `source: calendar` → `build_calendar`, a `.docx`
+source → `build_docx` (heading styles configurable per book; `Code` → code,
+`HTMLPreformatted`/`Cmdline` → output, `CodeChar` runs → inline code, embedded
+images extracted), `static: true` → skipped (hand-written), otherwise the PDF
+`build` (font-size heading detection).
+
+### Unlisted books
+
+`unlisted: true` builds a book and serves it at its URL, but keeps it out of the
+home page, the shelf statistics, the book switcher, the search index, and the
+Tested-programs register — for a book that is readable online before it is
+announced. Remove the flag (and rebuild) to publish it.
+
+### Perl blocks
+
+A migration book quotes as much Perl as Raku. A ` ```perl ` fence renders with a
+steel-blue rule and a small **Perl** label (`.highlight.perl-code`) so it reads
+as neither Raku nor program output, and never carries a Run button — the
+in-browser engine runs Raku. Under `--highlighter=pygments` it is syntax-coloured
+as Perl; `rakupp` is a Raku lexer, so under it Perl blocks stay plain.
 
 ## Run-button verdicts, recap
 

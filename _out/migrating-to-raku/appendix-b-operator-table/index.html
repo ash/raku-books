@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Appendix B — Operator Translation Table — Raku Books</title>
+    <meta property="og:title" content="Appendix B — Operator Translation Table — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/appendices">Appendices</a></p>
+<h1 id="appendix-b-operator-translation-table">Appendix B — Operator
+Translation Table</h1>
+<p>Most Perl operators survive into Raku untouched:
+<code>+ - * / **</code>, the string comparisons
+<code>eq ne lt gt le ge</code>, the numeric ones
+<code>== != &lt; &gt; &lt;= &gt;=</code>, and the logical
+<code>and or not &amp;&amp; || !</code>. This appendix concentrates on
+the ones that <em>changed</em>, and then lists the genuinely new
+operators that Perl has no word for. Everything here was run under
+Rakudo v2026.07.</p>
+<h2 id="operators-that-changed">Operators that changed</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.</code> (concatenation)</td>
+<td><code>~</code></td>
+<td>the dot is now the method-call operator</td>
+</tr>
+<tr>
+<td><code>.=</code></td>
+<td><code>~=</code></td>
+<td>append-assign</td>
+</tr>
+<tr>
+<td><code>x</code> (repetition)</td>
+<td><code>x</code> (string) / <code>xx</code> (list)</td>
+<td><code>"ab" x 3</code>; <code>@a xx 3</code> repeats the list</td>
+</tr>
+<tr>
+<td><code>? :</code> (ternary)</td>
+<td><code>?? !!</code></td>
+<td><code>$ok ?? "yes" !! "no"</code></td>
+</tr>
+<tr>
+<td><code>..</code> (range)</td>
+<td><code>..</code></td>
+<td>plus <code>^..</code>, <code>..^</code>, <code>^..^</code> for
+exclusive ends</td>
+</tr>
+<tr>
+<td><code>...</code> (flip-flop)</td>
+<td><code>ff</code> / <code>fff</code></td>
+<td><code>...</code> is now the sequence operator (below)</td>
+</tr>
+<tr>
+<td><code>&lt;=&gt;</code></td>
+<td><code>&lt;=&gt;</code></td>
+<td>now returns <code>Order::Less/Same/More</code>, not
+<code>-1/0/1</code></td>
+</tr>
+<tr>
+<td><code>cmp</code></td>
+<td><code>cmp</code></td>
+<td>smart comparison; <code>leg</code> forces string semantics</td>
+</tr>
+<tr>
+<td><code>//</code> (defined-or)</td>
+<td><code>//</code></td>
+<td>unchanged; <code>//=</code> also works</td>
+</tr>
+<tr>
+<td><code>=~</code></td>
+<td><code>~~</code></td>
+<td>smartmatch drives regex matching</td>
+</tr>
+<tr>
+<td><code>!~</code></td>
+<td><code>!~~</code></td>
+<td>negated smartmatch</td>
+</tr>
+<tr>
+<td><code>&amp;</code> (bitwise and)</td>
+<td><code>+&amp;</code></td>
+<td>numeric-and; <code>~&amp;</code> for the string/buffer version</td>
+</tr>
+<tr>
+<td><code>\|</code> (bitwise or)</td>
+<td><code>+\|</code></td>
+<td>numeric-or; <code>~\|</code> for strings</td>
+</tr>
+<tr>
+<td><code>^</code> (bitwise xor)</td>
+<td><code>+^</code></td>
+<td>numeric-xor; <code>~^</code> for strings; also unary <code>+^</code>
+= <code>~</code> in Perl</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code> (left shift)</td>
+<td><code>+&lt;</code></td>
+<td><code>1 +&lt; 4</code> is <code>16</code></td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code> (right shift)</td>
+<td><code>+&gt;</code></td>
+<td><code>32 +&gt; 2</code> is <code>8</code></td>
+</tr>
+<tr>
+<td><code>%</code> (modulo)</td>
+<td><code>%</code></td>
+<td>unchanged; see also <code>%%</code> below</td>
+</tr>
+<tr>
+<td><code>-&gt;</code> (deref / method)</td>
+<td><code>.</code></td>
+<td><code>$obj.method</code>, <code>$ref[0]</code></td>
+</tr>
+</tbody>
+</table>
+<p>The bitwise renaming is the one to internalise. Perl overloads
+<code>&amp; | ^</code> for both numbers and strings and works out which
+you meant from context; Raku splits them so intent is explicit. The
+<code>+</code>-prefixed forms (<code>+&amp;</code>, <code>+|</code>,
+<code>+^</code>, <code>+&lt;</code>, <code>+&gt;</code>) operate on
+numbers, and the <code>~</code>-prefixed forms (<code>~&amp;</code>,
+<code>~|</code>, <code>~^</code>) operate on strings and buffers:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">6</span> +&amp; <span class="mi">3</span>;                <span class="c1"># 2     (numeric AND)</span>
+<span class="nb">say</span> <span class="mi">6</span> +| <span class="mi">1</span>;                <span class="c1"># 7     (numeric OR)</span>
+<span class="nb">say</span> <span class="mi">1</span> +&lt; <span class="mi">4</span>;                <span class="c1"># 16    (left shift)</span>
+<span class="nb">say</span> (<span class="s">&quot;AB&quot;</span> ~&amp; <span class="s">&quot;  &quot;</span>).<span class="nb">raku</span>;   <span class="c1"># &quot;\0\0&quot;  (character-wise string AND)</span></pre></div>
+
+<p>And <code>&lt;=&gt;</code> / <code>cmp</code> now hand back an
+<code>Order</code> enum rather than a signed integer, which reads better
+and still sorts correctly:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">1</span> &lt;=&gt; <span class="mi">2</span>;       <span class="c1"># Less</span>
+<span class="nb">say</span> <span class="s">&quot;b&quot;</span> <span class="n">cmp</span> <span class="s">&quot;a&quot;</span>;   <span class="c1"># More</span>
+<span class="nb">say</span> <span class="mi">3</span> &lt;=&gt; <span class="mi">3</span>;       <span class="c1"># Same</span></pre></div>
+
+<h2 id="new-operators-with-no-perl-equivalent">New operators with no
+Perl equivalent</h2>
+<p>Raku adds a family of operators that Perl programmers had to write
+loops or reach for modules to express. These are covered in full in
+Chapter 11.</p>
+<h3 id="equality-and-identity">Equality and identity</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 24%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Meaning</th>
+<th>Example → result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eqv</code></td>
+<td>equivalence: same type <strong>and</strong> value, structurally</td>
+<td><code>(1,2) eqv (1,2)</code> → <code>True</code></td>
+</tr>
+<tr>
+<td><code>===</code></td>
+<td>value identity (same immutable value / same object)</td>
+<td><code>[1] === [1]</code> → <code>False</code></td>
+</tr>
+<tr>
+<td><code>=:=</code></td>
+<td>container identity: do two names share one container?</td>
+<td><code>$x =:= $x</code> → <code>True</code></td>
+</tr>
+<tr>
+<td><code>=~=</code></td>
+<td>approximate numeric equality (within tolerance)</td>
+<td><code>1.0 =~= 1.0000001</code> → <code>False</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>===</code> and <code>=:=</code> are the subtle pair:
+<code>===</code> asks “are these the <em>same value</em>?” (two freshly
+built arrays are not), while <code>=:=</code> asks “are these the
+<em>same box</em>?” — the tool for checking whether a binding actually
+aliased.</p>
+<h3 id="meta-operators-and-list-operators">Meta-operators and list
+operators</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 24%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Meaning</th>
+<th>Example → result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[ ]</code> reduction</td>
+<td>fold an infix operator across a list</td>
+<td><code>[+] 1..5</code> → <code>15</code>; <code>[*] 1..5</code> →
+<code>120</code></td>
+</tr>
+<tr>
+<td><code>»op«</code> / <code>&gt;&gt;op&lt;&lt;</code></td>
+<td>hyper: apply an operator element-wise</td>
+<td><code>(1,2,3) »+» 10</code> → <code>(11 12 13)</code></td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>cross product of lists</td>
+<td><code>&lt;a b&gt; X &lt;1 2&gt;</code> →
+<code>((a 1)(a 2)(b 1)(b 2))</code></td>
+</tr>
+<tr>
+<td><code>Z</code></td>
+<td>zip lists together</td>
+<td><code>&lt;a b&gt; Z &lt;1 2&gt;</code> →
+<code>((a 1)(b 2))</code></td>
+</tr>
+<tr>
+<td><code>...</code></td>
+<td>sequence: generate a series by pattern</td>
+<td><code>1, 2, 4 ... 32</code> → <code>(1 2 4 8 16 32)</code></td>
+</tr>
+<tr>
+<td><code>==&gt;</code></td>
+<td>feed: pipe a list into the next expression</td>
+<td><code>1..10 ==&gt; grep(* %% 2) ==&gt; sum()</code> →
+<code>30</code></td>
+</tr>
+<tr>
+<td><code>&lt;==</code></td>
+<td>leftward feed: same, other direction</td>
+<td><code>sum() &lt;== grep(*%%2) &lt;== 1..10</code></td>
+</tr>
+<tr>
+<td><code>%%</code></td>
+<td>divisibility test</td>
+<td><code>10 %% 5</code> → <code>True</code>; <code>10 %% 3</code> →
+<code>False</code></td>
+</tr>
+</tbody>
+</table>
+<p>The meta-operators combine with almost any infix: <code>[~]</code>
+concatenates a list of strings, <code>[&lt;]</code> tests whether a list
+is strictly increasing, <code>»*»</code> scales every element. This
+composability is why a great many Perl loops collapse to a single Raku
+expression.</p>
+<h3 id="the-whatever-star">The Whatever star</h3>
+<p><code>*</code> on its own is the <strong>Whatever</strong> value. In
+an expression it builds a closure, so <code>* + 1</code> is shorthand
+for <code>-&gt; $x { $x + 1 }</code>; in a subscript <code>*-1</code>
+means “the last element”; in a range <code>0..*</code> means “to
+infinity”.</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.5</span>).<span class="nb">map</span>(* ** <span class="mi">2</span>);   <span class="c1"># (1 4 9 16 25)</span>
+<span class="k">my</span> <span class="nv">@a</span> = <span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>;
+<span class="nb">say</span> <span class="nv">@a</span>[*-<span class="mi">1</span>];              <span class="c1"># 30</span></pre></div>
+
+<p>For the full treatment of these operators — including precedence, the
+reduction of non-associative operators, and lazy sequences — see
+Chapters 10 and 11.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/appendix-a-cheat-sheet">Appendix A —
+Perl to Raku Cheat Sheet</a>   |   <a
+href="/raku-books/migrating-to-raku/appendix-c-special-variables">Appendix C —
+Special Variables</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

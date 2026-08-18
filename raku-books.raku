@@ -69,6 +69,10 @@ sub get-toc($lang, $is-silent) returns Hash {
                 gallery => $part<gallery>,
                 banner => $part<banner>,
                 get-url => $part<get_url>,
+                # An unlisted book is reachable by URL but stays out of every
+                # index: the home page, the stats, the book switcher, and the
+                # search index. Set `unlisted: true` in tools/books.yaml.
+                unlisted => $part<unlisted>,
             };
             $prev-url = $part-url;
 
@@ -212,6 +216,15 @@ sub get-toc($lang, $is-silent) returns Hash {
 
 sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $workers) {
     my $nw = (+$workers) max 1;   # number of parallel page-rendering workers (>= 1)
+
+    # The first path segment names the book. A book flagged `unlisted` in the TOC
+    # (`unlisted: true` in tools/books.yaml) still gets its pages built and is
+    # reachable by URL, but it is kept out of every index the site offers.
+    sub unlisted-url($url) {
+        my $book = ($url // '').split('/')[0] // '';
+        return False unless $book;
+        return so %toc{$book}<unlisted>;
+    }
     # Resolve the requested highlighter to a runnable command (or nothing, e.g.
     # under --highlighter=none, or if the chosen tool isn't installed).
     my %hl = find-highlighter($highlighter);
@@ -386,7 +399,7 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
         # Collect this page for the full-text search index (skip the home page —
         # its text is just the table of contents).
         my $search-doc = Nil;
-        if $dir {
+        if $dir && !unlisted-url($dir) {
             my $text = index-text($md);
             $search-doc = {
                 u => ($lang eq 'en' ?? "/$dir" !! "/$lang/$dir"),
@@ -514,6 +527,10 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
                                              'raku-nobrowser', 'perl6-nobrowser',
                                              'raku-local', 'perl6-local',
                                              'raku-async', 'perl6-async');
+            # Perl 5 — the "before" half of a migration book. Never runnable here
+            # (the browser engine is Raku), but it must not be mistaken for
+            # program output, so it gets its own class and a Perl label.
+            my $is-perl    = so $lang eq any('perl', 'perl5');
             my $static     = $lang.ends-with('-static');
             my $nobrowser  = $lang.ends-with('-nobrowser');
             my $local      = $lang.ends-with('-local');
@@ -528,7 +545,9 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
             my $raku-class = ('highlight', 'raku',
                               ($no-run  ?? 'no-run'      !! Empty),
                               ($flagged ?? 'code-flagged' !! Empty)).join(' ');
-            my $wrapper = $is-raku ?? $raku-class !! 'highlight';
+            my $wrapper = $is-raku ?? $raku-class
+                       !! $is-perl ?? 'highlight perl-code'
+                       !! 'highlight';
             # A no-run block that a reader might expect to run gets an explanatory note.
             my $note =
                 $async     ?? qq[\n<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>]
@@ -543,10 +562,12 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
 
             return $plain ~ $note unless %hl<exe>;
 
-            # Only Raku code is syntax-highlighted. Everything else — program
-            # output (whether bare or marked ```console), JSON, etc. — stays
-            # plain, so it is never coloured as if it were Raku code.
-            return $plain ~ $note unless $is-raku;
+            # Only code is syntax-highlighted. Program output (whether bare or
+            # marked ```console), JSON, etc. stays plain, so it is never coloured
+            # as if it were code. Perl goes to pygments when that is the chosen
+            # highlighter; rakupp is a Raku lexer, so under it Perl stays plain.
+            return $plain ~ $note unless $is-raku
+                                      || ($is-perl && %hl<name> eq 'pygments');
 
             # Pipe the code through the highlighter via stdin/stdout. (Using a shared
             # temp file here races: an async read can pick up another block's output.)
@@ -556,7 +577,8 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
             # stylesheet. Only pygments needs the -l language flag.
             my $proc = %hl<name> eq 'rakupp'
                 ?? run(%hl<exe>, '--highlight', '--html', :in, :out, :err)
-                !! run(%hl<exe>, '-f', 'html', '-l', $language, :in, :out, :err);
+                !! run(%hl<exe>, '-f', 'html', '-l', ($is-perl ?? 'perl' !! $language),
+                       :in, :out, :err);
             $proc.in.spurt($code, :close);
             my $html = $proc.out.slurp(:close);
             $proc.err.slurp(:close);
@@ -565,7 +587,8 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
 
             # The highlighter emits <div class="highlight">; add the `raku` marker
             # class so the copy button hooks onto highlighted blocks too.
-            return $html.subst('<div class="highlight">', qq[<div class="$raku-class">]) ~ $note;
+            return $html.subst('<div class="highlight">',
+                               qq[<div class="{ $is-perl ?? 'highlight perl-code' !! $raku-class }">]) ~ $note;
         }
 
         sub format-quiz($class is copy, $body) {
@@ -594,13 +617,15 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
             # Shelf-size figures for the home page, counted live from the TOC so
             # they never go stale: books (top-level parts with content), chapters
             # (their subparts), and total content pages that have a real index.md.
-            my @v = %toc.values;
-            my $books    = @v.grep({ .<type> == Part && .<items> }).elems;
-            my $chapters = @v.grep({ .<type> == Subpart }).elems;
+            # A section's node knows only its own slug, so read the full path
+            # from the TOC key when deciding whether its book is unlisted.
+            my @listed = %toc.pairs.grep({ !unlisted-url(.key) }).map(*.value);
+            my $books    = @listed.grep({ .<type> == Part && .<items> }).elems;
+            my $chapters = @listed.grep({ .<type> == Subpart }).elems;
 
             # Topics — the content pages a reader reads (sections and topics),
             # excluding the home page, the register, and navigation landings.
-            my $topics = @v.grep({ .<type> == Section | Topic }).elems;
+            my $topics = @listed.grep({ .<type> == Section | Topic }).elems;
 
             sub stat($n, $label) {
                 # {$n}/{$label} braces stop Raku reading `$n<...>` as a subscript.
@@ -646,7 +671,7 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
         # Navigation is done with a tiny inline onchange handler so no extra JS
         # file is needed.
         sub book-switcher(%content) {
-            my @books = @(%toc{''}<parts> // []).grep({ .<items> || .<covers> });
+            my @books = @(%toc{''}<parts> // []).grep({ (.<items> || .<covers>) && !.<unlisted> });
             return '' unless @books;
 
             my $current = (%content<url> // '').split('/')[0] // '';
@@ -1003,7 +1028,9 @@ sub generate-pages(%toc, $lang, $destination, $filter, $uri, $highlighter, $work
             # An "expand all" button on the part header opens/closes every
             # subpart in the card at once.
             if $url eq '' {
-                my @content-parts = @(%toc{''}<parts> // []).grep({ .<items> || .<pseudo> || .<covers> });
+                my @content-parts = @(%toc{''}<parts> // []).grep({
+                    (.<items> || .<pseudo> || .<covers>) && !.<unlisted>
+                });
                 my $expand-ico = '<svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">'
                     ~ '<path d="M5 6.5 8 3.5l3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
                     ~ '<path d="M5 9.5 8 12.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';

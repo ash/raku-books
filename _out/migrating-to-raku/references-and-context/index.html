@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>References, Containers, and Context — Raku Books</title>
+    <meta property="og:title" content="References, Containers, and Context — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/variables-and-data">Variables
+and Data</a></p>
+<h1 id="references-containers-and-context">References, Containers, and
+Context</h1>
+<p>If one chapter in this book is going to make you pause, it may be
+this one. Not because Raku made things harder here, but because it
+quietly retired two of the concepts you lean on most in Perl: the
+<em>reference</em> and the notion of <em>context</em> as a global,
+invisible force. Both are still present in spirit, but they have been
+replaced by something more explicit — the <em>container</em> — and by
+rules that are decided locally rather than guessed at a distance.</p>
+<p>The good news is that most of the time you write <em>less</em>
+punctuation, not more. The arrows go away. This chapter explains what
+took their place.</p>
+<h2 id="why-the-backslash-mostly-disappears">Why the backslash mostly
+disappears</h2>
+<p>In Perl, you cannot put an array inside a scalar. You put a
+<em>reference</em> to it, and you dereference it — with a backslash
+going in and an arrow coming out:</p>
+<div class="highlight perl-code"><pre>my @a = (1, 2, 3);
+my $ref = \@a;
+say $ref-&gt;[0];        # 1
+say scalar @$ref;     # 3
+say $$ref[1];         # 2</pre></div>
+<p>That machinery — <code>\</code>, <code>-&gt;</code>, <code>@$</code>,
+<code>$$</code> — is the connective tissue of every non-trivial Perl
+data structure. In Raku almost all of it is gone. You assign the array
+straight into the scalar, no backslash, and you index it with no
+arrow:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="k">my</span> <span class="nv">$ref</span> = <span class="nv">@a</span>;         <span class="c1"># no backslash</span>
+<span class="nb">say</span> <span class="nv">$ref</span>[<span class="mi">0</span>];          <span class="c1"># 1</span>
+<span class="nb">say</span> <span class="nv">$ref</span>.<span class="nb">elems</span>;       <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="nv">$ref</span>.<span class="n">WHAT</span>;        <span class="c1"># (Array)</span></pre></div>
+
+<p>Ask <code>$ref</code> what it holds and it says <code>(Array)</code>
+— an actual array, living happily inside a scalar. The reason you no
+longer need <code>\</code> is that a Raku scalar was <em>already</em> a
+reference-like thing all along. To see why, we have to name the box.</p>
+<h2 id="the-scalar-container">The Scalar container</h2>
+<p>In Chapter 3 we called a variable a “box holding a value”. That box
+has a type, and its name is <code>Scalar</code>. Every <code>$</code>
+variable is a <code>Scalar</code> container, and the value lives
+<em>inside</em> it:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$x</span> = <span class="mi">42</span>;
+<span class="nb">say</span> <span class="nv">$x</span>.<span class="n">VAR</span>.<span class="n">WHAT</span>;      <span class="c1"># (Scalar)</span></pre></div>
+
+<p><code>.VAR</code> asks for the container rather than the value;
+<code>.WHAT</code> on it confirms the box is a <code>Scalar</code>. This
+is the object that Perl’s references were reaching for without a name.
+Because a <code>$</code> variable is inherently a container, you can
+store anything in it — including an <code>Array</code> or a
+<code>Hash</code> — and reach inside without an arrow:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$arr</span>  = [<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>];
+<span class="k">my</span> <span class="nv">$hash</span> = {<span class="n">a</span> =&gt; <span class="mi">1</span>, <span class="n">b</span> =&gt; <span class="mi">2</span>};
+<span class="nb">say</span> <span class="nv">$arr</span>[<span class="mi">0</span>];          <span class="c1"># 1</span>
+<span class="nb">say</span> <span class="nv">$hash</span><span class="s">&lt;a&gt;</span>;         <span class="c1"># 1</span>
+<span class="nb">say</span> <span class="nv">$arr</span>.<span class="nb">elems</span>;       <span class="c1"># 3</span></pre></div>
+
+<p>Compare that with Perl’s <code>$arr-&gt;[0]</code> and
+<code>$hash-&gt;{a}</code>. The arrow is redundant in Raku because there
+is nothing to dereference: the sigil already told the compiler this is
+one item, and <code>[…]</code> or <code>{…}</code> says you want to look
+inside it.</p>
+<h2 id="assignment-binding-and-the-container">Assignment, binding, and
+the container</h2>
+<p>Chapter 3 introduced binding with <code>:=</code>. Now that we have a
+name for the box, the distinction is sharp. <strong>Assignment
+(<code>=</code>) puts a value into the container. Binding
+(<code>:=</code>) replaces the container itself</strong> — it makes a
+name an alias for another box, or ties it directly to a value with no
+box at all:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$a</span> = <span class="mi">5</span>;
+<span class="k">my</span> <span class="nv">$b</span> := <span class="nv">$a</span>;          <span class="c1"># $b and $a are now the same container</span>
+<span class="nv">$b</span> = <span class="mi">99</span>;
+<span class="nb">say</span> <span class="nv">$a</span>;               <span class="c1"># 99</span></pre></div>
+
+<p>Bind to a bare value and there is no container to assign into, so the
+name becomes read-only:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$c</span> := <span class="mi">10</span>;
+<span class="nv">$c</span> = <span class="mi">20</span>;              <span class="c1"># Cannot assign to an immutable value</span></pre></div>
+
+<p>This is not a party trick. It is exactly how a signature ties a
+parameter to its argument (Chapter 15), and it is why arguments are
+read-only by default.</p>
+<h2 id="the-backslash-that-remains-capture">The backslash that remains:
+Capture</h2>
+<p>Raku does keep <code>\</code>, but it means something new: it builds
+a <code>Capture</code> — a frozen bundle of positional and named
+arguments, the raw material of every subroutine call:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$c</span> = \(<span class="mi">1</span>, <span class="mi">2</span>, <span class="n">foo</span> =&gt; <span class="mi">3</span>);
+<span class="nb">say</span> <span class="nv">$c</span>.<span class="n">WHAT</span>;          <span class="c1"># (Capture)</span>
+<span class="nb">say</span> <span class="nv">$c</span>.<span class="nb">list</span>;          <span class="c1"># (1 2)</span>
+<span class="nb">say</span> <span class="nv">$c</span>.<span class="n">hash</span>;          <span class="c1"># Map.new((foo =&gt; 3))</span></pre></div>
+
+<p>You will rarely construct one by hand, but recognising
+<code>\(…)</code> as “a captured argument list” saves confusion when you
+meet it in Chapter 15.</p>
+<h2 id="itemisation-treating-a-list-as-one-thing">Itemisation: treating
+a list as one thing</h2>
+<p>Here is the first behaviour that catches Perl programmers out. In
+Perl a list in list context flattens; you expect <code>(@a, @b)</code>
+to spill into one long list. In Raku it does not:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="nb">say</span> (<span class="nv">@a</span>, <span class="nv">@a</span>).<span class="nb">elems</span>;   <span class="c1"># 2   — two arrays, not six numbers</span></pre></div>
+
+<p>Each <code>@a</code> counts as a <em>single item</em>. A
+<code>@</code> variable is already “itemised”: it puts itself into a
+surrounding list as one element, not as its contents. This is the same
+principle as the invariant sigil — the array is one thing until you
+explicitly ask otherwise.</p>
+<p>When you <em>want</em> a list to behave as a single item, you itemise
+it deliberately with <code>$(…)</code> or the <code>.item</code> method.
+The clearest demonstration is a <code>for</code> loop, which normally
+iterates a list element by element:</p>
+<div class="highlight raku"><pre><span></span><span class="k">for</span> (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>) { .<span class="nb">say</span> }    <span class="c1"># three lines: 1, 2, 3</span>
+<span class="k">for</span> $(<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>) { .<span class="nb">say</span> }   <span class="c1"># one line:  (1 2 3)</span></pre></div>
+
+<p><code>$(…)</code> wrapped the list into a single scalar item, so the
+loop ran once. Reading a <code>$</code> sigil as “one thing, whatever
+its shape” makes this consistent rather than surprising.</p>
+<h2 id="flattening-and-the-slip">Flattening and the Slip</h2>
+<p>If itemisation makes many into one, <em>flattening</em> makes one
+into many. When you do want an array’s elements to spill into a
+surrounding list, prefix it with <code>|</code>, which produces a
+<code>Slip</code> — a list that dissolves into its context:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="k">my</span> <span class="nv">@b</span> = <span class="mi">0</span>,  <span class="nv">@a</span>, <span class="mi">4</span>;    <span class="c1"># [0 [1 2 3] 4]   — @a stays nested</span>
+<span class="k">my</span> <span class="nv">@c</span> = <span class="mi">0</span>, |<span class="nv">@a</span>, <span class="mi">4</span>;    <span class="c1"># [0 1 2 3 4]     — |@a flattens in</span>
+<span class="nb">say</span> <span class="nv">@b</span>.<span class="nb">elems</span>;         <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="nv">@c</span>.<span class="nb">elems</span>;         <span class="c1"># 5</span>
+<span class="nb">say</span> (|<span class="nv">@a</span>, |<span class="nv">@a</span>).<span class="nb">elems</span>; <span class="c1"># 6</span></pre></div>
+
+<p>A <code>Slip</code> is a real type — <code>slip(1, 2, 3).WHAT</code>
+is <code>(Slip)</code> — and the <code>|</code> prefix and the
+<code>.flat</code> method are the everyday ways to make one:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> ((<span class="mi">1</span>, <span class="mi">2</span>), (<span class="mi">3</span>, <span class="mi">4</span>)).<span class="nb">flat</span>;   <span class="c1"># (1 2 3 4)</span></pre></div>
+
+<p>The other side of the coin is <code>Empty</code>, the slip of
+nothing. Dropping it into a list contributes zero elements — a tidy way
+to conditionally omit a value:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@d</span> = <span class="mi">1</span>, <span class="n">Empty</span>, <span class="mi">2</span>;
+<span class="nb">say</span> <span class="nv">@d</span>;               <span class="c1"># [1 2]</span>
+<span class="nb">say</span> <span class="nv">@d</span>.<span class="nb">elems</span>;         <span class="c1"># 2</span></pre></div>
+
+<h2 id="a-versus-a-versus-a"><code>@a</code> versus <code>@a[]</code>
+versus <code>$@a</code></h2>
+<p>Three forms that look alike but signal intent:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="nb">say</span> <span class="nv">@a</span>.<span class="n">WHAT</span>;          <span class="c1"># (Array)</span>
+<span class="nb">say</span> <span class="nv">@a</span>[].<span class="n">WHAT</span>;        <span class="c1"># (Array)   — the empty slice, all elements</span>
+<span class="nb">say</span> $<span class="nv">@a</span>.<span class="n">WHAT</span>;         <span class="c1"># (Array)</span></pre></div>
+
+<p>They report the same type, but they differ in how they <em>behave in
+a list</em>. Plain <code>@a</code> is the array. <code>@a[]</code> is
+the “zen slice” — every element, useful mostly inside string
+interpolation where a bare <code>@a</code> will not interpolate:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="nb">say</span> <span class="s">&quot;list: @a[]&quot;</span>;     <span class="c1"># list: 1 2 3</span></pre></div>
+
+<p>And <code>$@a</code> itemises the array, the scalar-sigil equivalent
+of <code>@a.item</code> — it packs the array so it counts as one element
+in an enclosing list. Reach for it only when you specifically need that
+packing.</p>
+<h2 id="context-decided-locally-not-guessed">Context: decided locally,
+not guessed</h2>
+<p>Perl’s context is a property of the <em>place</em> an expression
+sits. The same subroutine returns different things depending on whether
+it was called in scalar or list context, and it inspects that context
+with <code>wantarray</code>:</p>
+<div class="highlight perl-code"><pre>sub ctx { return wantarray ? 'list' : 'scalar' }
+my @x = ctx();        # list
+my $y = ctx();        # scalar</pre></div>
+<p>Raku has no <code>wantarray</code>, and a routine does not change
+what it returns based on where it was called. It returns one value; the
+<em>receiving</em> side decides the shape, driven by the sigil of the
+variable and the signatures involved:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">items</span> { <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span> }
+<span class="k">my</span> <span class="nv">@x</span> = <span class="n">items</span>();      <span class="c1"># 3 elements</span>
+<span class="k">my</span> <span class="nv">$y</span> = <span class="n">items</span>();      <span class="c1"># one List</span>
+<span class="nb">say</span> <span class="nv">@x</span>.<span class="nb">elems</span>;         <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="nv">$y</span>.<span class="n">WHAT</span>;          <span class="c1"># (List)</span>
+<span class="nb">say</span> <span class="nv">$y</span>.<span class="nb">elems</span>;         <span class="c1"># 3</span></pre></div>
+
+<p>The routine ran identically both times. <code>@x</code> unpacked the
+returned list into an array; <code>$y</code> kept it whole as a single
+<code>List</code>. Nothing was guessed at a distance.</p>
+<p>Where Perl used scalar context to <em>count</em>, Raku is explicit.
+Numeric context is the <code>+</code> prefix, and there is always
+<code>.elems</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>;
+<span class="nb">say</span> +<span class="nv">@a</span>;              <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="nv">@a</span>.<span class="nb">elems</span>;         <span class="c1"># 3</span></pre></div>
+
+<h2 id="decontainerisation">Decontainerisation</h2>
+<p>Occasionally a value arrives wrapped in a container you want to peel
+away. The postfix <code>&lt;&gt;</code> operator (or <code>.list</code>
+/ <code>@$x</code>) decontainerises. The clearest case is iterating an
+array held in a scalar: because the scalar is one item, <code>for</code>
+treats it as one:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="k">my</span> <span class="nv">$x</span> = <span class="nv">@a</span>;
+<span class="k">for</span> <span class="nv">$x</span>  { .<span class="nb">say</span> }      <span class="c1"># one iteration: [1 2 3]</span>
+<span class="k">for</span> @<span class="nv">$x</span> { .<span class="nb">say</span> }      <span class="c1"># three iterations: 1, 2, 3</span></pre></div>
+
+<p><code>@$x</code> (short for <code>@($x)</code>) says “look at the
+value inside <code>$x</code> as a list”, the Perl <code>@$ref</code>
+idiom surviving almost verbatim.</p>
+<h2 id="sink-context">Sink context</h2>
+<p>One last context worth naming. When an expression’s value is not used
+at all — a statement evaluated purely for its position — it is in
+<em>sink</em> context, Raku’s word for what Perl would call void
+context. Raku actively warns when you compute something and then throw
+it away:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="nv">@a</span>;                   <span class="c1"># WARNING: Useless use of @a in sink context</span></pre></div>
+
+<p>That warning has caught many a real bug where a programmer meant to
+<em>do</em> something with a value and forgot. If a loop or a lazy
+sequence needs to run for its side effects, calling it in sink context
+is exactly right; the warning only fires for values that are plainly
+inert.</p>
+<p>References gave way to containers; context moved from a guess to a
+rule. The other place Raku made the implicit explicit is the type of a
+value — which is where we turn next.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/strings">Strings</a>   |   <a
+href="/raku-books/migrating-to-raku/types">Types and the Type System</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

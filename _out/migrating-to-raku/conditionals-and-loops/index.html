@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Conditionals and Loops — Raku Books</title>
+    <meta property="og:title" content="Conditionals and Loops — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/control-flow">Control
+Flow</a></p>
+<h1 id="conditionals-and-loops">Conditionals and Loops</h1>
+<p>This is friendly territory. <code>if</code>, <code>while</code>,
+<code>for</code> — the words are the same, and most programs you have
+written keep working with only cosmetic edits. The two changes worth
+internalising are small but pervasive: the parentheses around a
+condition become optional (and idiomatically disappear), and the C-style
+three-part <code>for</code> loop moves out of <code>for</code> and into
+a keyword of its own called <code>loop</code>. Everything else is a
+refinement of habits you already have.</p>
+<h2 id="if-elsif-else"><code>if</code>, <code>elsif</code>,
+<code>else</code></h2>
+<p>In Perl the condition lives in parentheses:</p>
+<div class="highlight perl-code"><pre>my $n = 7;
+if ($n &gt; 10)   { say 'big' }
+elsif ($n &gt; 5) { say 'medium' }
+else           { say 'small' }</pre></div>
+<p>In Raku the parentheses are optional, and leaving them off is the
+common style. The block braces are now mandatory, so there is no
+ambiguity to resolve:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$n</span> = <span class="mi">7</span>;
+<span class="k">if</span> <span class="nv">$n</span> &gt; <span class="mi">10</span>    { <span class="nb">say</span> <span class="s">'big'</span> }
+<span class="k">elsif</span> <span class="nv">$n</span> &gt; <span class="mi">5</span>  { <span class="nb">say</span> <span class="s">'medium'</span> }
+<span class="k">else</span>          { <span class="nb">say</span> <span class="s">'small'</span> }
+<span class="c1"># medium</span></pre></div>
+
+<p>You may still write the parentheses if you like them, but note the
+lesson from Chapter 1: a space between a function name and a parenthesis
+is meaningful. With control keywords there is no such trap —
+<code>if ($n &gt; 10)</code> and <code>if $n &gt; 10</code> mean the
+same thing — but the habit of dropping them keeps your Raku
+consistent.</p>
+<h2 id="unless"><code>unless</code></h2>
+<p><code>unless</code> negates its condition, exactly as before:</p>
+<div class="highlight perl-code"><pre>unless ($n &gt; 10) { say 'not big' }</pre></div>
+<div class="highlight raku no-run"><pre><span></span><span class="k">unless</span> <span class="nv">$n</span> &gt; <span class="mi">10</span> { <span class="nb">say</span> <span class="s">'not big'</span> }   <span class="c1"># not big</span></pre></div>
+
+<p>One rule is now enforced rather than merely discouraged:
+<strong><code>unless</code> may not take an <code>else</code>.</strong>
+In Perl <code>unless/else</code> was legal but widely considered
+confusing; Raku turns that style guideline into a compile-time
+error:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">unless</span> <span class="mi">1</span> &gt; <span class="mi">2</span> { <span class="nb">say</span> <span class="s">'ok'</span> } <span class="k">else</span> { <span class="nb">say</span> <span class="s">'never'</span> }</pre></div>
+
+<div class="highlight"><pre>===SORRY!===
+"unless" does not take "else", please rewrite using "if"</pre></div>
+<p>If you find yourself wanting the <code>else</code>, you wanted
+<code>if</code> all along.</p>
+<h2 id="while-and-until"><code>while</code> and <code>until</code></h2>
+<p>Both loops carry over unchanged apart from the optional
+parentheses:</p>
+<div class="highlight perl-code"><pre>my $i = 0;
+while ($i &lt; 3) { print $i; $i++ }   # 012</pre></div>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$i</span> = <span class="mi">0</span>;
+<span class="k">while</span> <span class="nv">$i</span> &lt; <span class="mi">3</span> { <span class="nb">print</span> <span class="nv">$i</span>; <span class="nv">$i</span>++ }     <span class="c1"># 012</span></pre></div>
+
+<p><code>until</code> is the negated form, looping while the condition
+is <em>false</em>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$i</span> = <span class="mi">0</span>;
+<span class="k">until</span> <span class="nv">$i</span> &gt;= <span class="mi">3</span> { <span class="nb">print</span> <span class="nv">$i</span>; <span class="nv">$i</span>++ }    <span class="c1"># 012</span></pre></div>
+
+<p>Both also work as postfix statement modifiers, which we return to
+below:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$i</span> = <span class="mi">3</span>;
+<span class="nb">print</span> <span class="nv">$i</span>-- <span class="k">while</span> <span class="nv">$i</span> &gt; <span class="mi">0</span>;            <span class="c1"># 321</span></pre></div>
+
+<h2 id="the-c-style-for-is-now-loop">The C-style <code>for</code> is now
+<code>loop</code></h2>
+<p>Here is the one structural change. In Perl the same keyword,
+<code>for</code>, does two unrelated jobs: the three-part C-style
+counter and the list iterator. Raku splits them. The C-style form gets
+its own keyword, <code>loop</code>, and <code>for</code> is reserved
+purely for iterating over lists.</p>
+<p>The Perl counter:</p>
+<div class="highlight perl-code"><pre>for (my $i = 0; $i &lt; 3; $i++) { print $i }   # 012</pre></div>
+<p>becomes, verbatim apart from the keyword:</p>
+<div class="highlight raku"><pre><span></span><span class="k">loop</span> (<span class="k">my</span> <span class="nv">$j</span> = <span class="mi">0</span>; <span class="nv">$j</span> &lt; <span class="mi">3</span>; <span class="nv">$j</span>++) { <span class="nb">print</span> <span class="nv">$j</span> }  <span class="c1"># 012</span></pre></div>
+
+<p>With no parentheses at all, <code>loop</code> is an infinite loop —
+the clearest possible spelling of “repeat forever”, which you break out
+of with <code>last</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$count</span> = <span class="mi">0</span>;
+<span class="k">loop</span> {
+    <span class="k">last</span> <span class="k">if</span> <span class="nv">$count</span> == <span class="mi">3</span>;
+    <span class="nb">say</span> <span class="s">&quot;tick $count&quot;</span>;
+    <span class="nv">$count</span>++;
+}
+<span class="c1"># tick 0</span>
+<span class="c1"># tick 1</span>
+<span class="c1"># tick 2</span></pre></div>
+
+<p>If you write a bare C-style <code>for</code> in Raku out of habit, it
+will not do what you expect — <code>for</code> now always treats its
+argument as a list to iterate. Keep the two keywords straight:
+<strong><code>loop</code> counts, <code>for</code>
+iterates.</strong></p>
+<h2 id="for-iterates-lists-with-pointy-blocks"><code>for</code> iterates
+lists, with pointy blocks</h2>
+<p>The list-iterating <code>for</code> gains a tidy new spelling. In
+Perl you name the loop variable before the list:</p>
+<div class="highlight perl-code"><pre>my @a = (10, 20, 30);
+foreach my $x (@a) { print "$x " }   # 10 20 30</pre></div>
+<p>In Raku the loop variable moves to the <em>right</em> of the list,
+introduced by a <em>pointy block</em> <code>-&gt;</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>;
+<span class="k">for</span> <span class="nv">@a</span> -&gt; <span class="nv">$x</span> { <span class="nb">print</span> <span class="s">&quot;$x &quot;</span> }         <span class="c1"># 10 20 30</span></pre></div>
+
+<p>The <code>-&gt; $x { ... }</code> is a block with a signature — the
+same signature machinery that powers subroutines (Chapter 15). Ranges
+iterate the same way, and if you do not name a variable, the topic
+<code>$_</code> is used, so the leading-dot method call from Chapter 3
+shines:</p>
+<div class="highlight raku"><pre><span></span><span class="k">for</span> <span class="mi">1</span>.<span class="mf">.3</span> { .<span class="nb">say</span> }        <span class="c1"># .say means $_.say</span></pre></div>
+
+<h3 id="read-write-loop-variables">Read-write loop variables</h3>
+<p>By default the loop variable is <em>read-only</em> — assigning to
+<code>$x</code> above would be an error. This catches a whole class of
+accidental mutations. When you genuinely want to modify the array in
+place, mark the variable <code>is rw</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>;
+<span class="k">for</span> <span class="nv">@a</span> -&gt; <span class="nv">$x</span> <span class="k">is</span> <span class="n">rw</span> { <span class="nv">$x</span> *= <span class="mi">2</span> }
+<span class="nb">say</span> <span class="nv">@a</span>;                  <span class="c1"># [20 40 60]</span></pre></div>
+
+<p>There is also a shorthand for exactly this case, the double-pointy
+<code>&lt;-&gt;</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">for</span> <span class="nv">@a</span> &lt;-&gt; <span class="nv">$x</span> { <span class="nv">$x</span>++ }   <span class="c1"># each element aliased read-write</span></pre></div>
+
+<h3 id="taking-several-items-at-a-time">Taking several items at a
+time</h3>
+<p>A pointy block may declare more than one variable, and
+<code>for</code> will then consume the list that many elements at a
+stride. Modern Perl gained the same ability:</p>
+<div class="highlight perl-code"><pre>use v5.36;
+
+my @pairs = (1, 2, 3, 4);
+for my ($a, $b) (@pairs) { say "$a-$b" }
+# 1-2
+# 3-4</pre></div>
+<p>Raku expresses it with the pointy-block syntax used everywhere else
+in the book, and either way it retires the old dance of iterating over
+indices in steps of two:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@pairs</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>, <span class="mi">4</span>;
+<span class="k">for</span> <span class="nv">@pairs</span> -&gt; <span class="nv">$a</span>, <span class="nv">$b</span> { <span class="nb">say</span> <span class="s">&quot;$a-$b&quot;</span> }
+<span class="c1"># 1-2</span>
+<span class="c1"># 3-4</span></pre></div>
+
+<p>The same technique reads a flat list of key/value data, or steps a
+grid two rows at a time — anywhere you would previously have written
+<code>for (my $i = 0; ...; $i += 2)</code>.</p>
+<h2 id="last-next-redo-and-labels"><code>last</code>, <code>next</code>,
+<code>redo</code>, and labels</h2>
+<p>The loop-control words are unchanged in name and meaning:
+<code>last</code> leaves the loop, <code>next</code> skips to the next
+iteration, <code>redo</code> restarts the current iteration without
+re-evaluating the condition.</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$tries</span> = <span class="mi">0</span>;
+<span class="k">for</span> <span class="s">'a'</span>, <span class="s">'b'</span> -&gt; <span class="nv">$c</span> {
+    <span class="nv">$tries</span>++;
+    <span class="k">redo</span> <span class="k">if</span> <span class="nv">$c</span> <span class="n">eq</span> <span class="s">'a'</span> &amp;&amp; <span class="nv">$tries</span> &lt; <span class="mi">3</span>;
+    <span class="nb">say</span> <span class="s">&quot;$c ($tries)&quot;</span>;
+}
+<span class="c1"># a (3)</span>
+<span class="c1"># b (4)</span></pre></div>
+
+<p>To break out of an <em>outer</em> loop from within an inner one,
+label the loop and name it. The label goes before the loop, and the
+control word takes it as an argument:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">LINES</span>: <span class="k">for</span> <span class="nv">@matrix</span> -&gt; <span class="nv">@row</span> {
+    <span class="k">for</span> <span class="nv">@row</span> -&gt; <span class="nv">$cell</span> {
+        <span class="k">last</span> <span class="n">LINES</span> <span class="k">if</span> <span class="nv">$cell</span> <span class="n">eq</span> <span class="s">'e'</span>;
+        <span class="nb">say</span> <span class="nv">$cell</span>;
+    }
+}</pre></div>
+
+<p>A word of warning learned the hard way: <strong>do not name a label
+<code>OUTER</code>.</strong> Raku reserves <code>OUTER::</code> as a
+pseudo-package for the enclosing lexical scope, so
+<code>last OUTER</code> is parsed as a type name and fails with a
+baffling “Cannot resolve caller” error. Any other name —
+<code>LINES</code>, <code>SCAN</code>, <code>ROWS</code> — is fine.</p>
+<h2 id="postfix-statement-modifiers">Postfix statement modifiers</h2>
+<p>Every conditional and loop keyword also works as a postfix modifier
+on a single statement, just as in Perl. This is where idiomatic Raku is
+at its most compact:</p>
+<div class="highlight raku no-run"><pre><span></span>.<span class="nb">say</span> <span class="k">for</span> <span class="mi">1</span>.<span class="mf">.3</span>;           <span class="c1"># 1 2 3, each on its own line</span>
+<span class="nb">say</span> <span class="s">'yes'</span> <span class="k">if</span> <span class="mi">5</span> &gt; <span class="mi">3</span>;      <span class="c1"># yes</span>
+<span class="nb">print</span> <span class="nv">$i</span>-- <span class="k">while</span> <span class="nv">$i</span> &gt; <span class="mi">0</span>;</pre></div>
+
+<p>Read them right to left: “say each of 1..3”, “say yes if the
+condition holds”. The modifier form takes no braces and no block — it is
+one statement governed by one condition — which is exactly what makes it
+read like English.</p>
+<h2 id="do-blocks-that-return-a-value"><code>do</code>: blocks that
+return a value</h2>
+<p>A bare block in Raku is a first-class thing that produces the value
+of its last statement. Prefix it with <code>do</code> to use that value
+in a larger expression — the direct descendant of Perl’s
+<code>do { ... }</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$r</span> = <span class="k">do</span> { <span class="k">my</span> <span class="nv">$t</span> = <span class="mi">2</span> + <span class="mi">3</span>; <span class="nv">$t</span> * <span class="mi">2</span> };
+<span class="nb">say</span> <span class="nv">$r</span>;                  <span class="c1"># 10</span></pre></div>
+
+<p><code>do</code> also lets you use a control structure as an
+expression. On its own, <code>if</code> is a statement;
+<code>do if</code> yields the value of the branch that ran:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$x</span> = <span class="mi">5</span>;
+<span class="k">my</span> <span class="nv">$label</span> = <span class="k">do</span> <span class="k">if</span> <span class="nv">$x</span> &gt; <span class="mi">3</span> { <span class="s">'big'</span> } <span class="k">else</span> { <span class="s">'small'</span> };
+<span class="nb">say</span> <span class="nv">$label</span>;              <span class="c1"># big</span></pre></div>
+
+<p>And <code>do for</code> gathers the values of every iteration into a
+list — a compact alternative to <code>map</code> when the body is a
+block:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@squares</span> = <span class="k">do</span> <span class="k">for</span> <span class="mi">1</span>.<span class="mf">.3</span> { <span class="nv">$_</span> * <span class="nv">$_</span> };
+<span class="nb">say</span> <span class="nv">@squares</span>;            <span class="c1"># [1 4 9]</span></pre></div>
+
+<h2 id="repeat-the-do-while-loop"><code>repeat</code>: the do-while
+loop</h2>
+<p>Perl’s <code>do { ... } while</code> runs the body once before
+testing the condition. That idiom is subtly broken —
+<code>do BLOCK</code> is not really a loop, so <code>last</code> and
+<code>next</code> do not work inside it. Raku fixes this with a
+dedicated keyword, <code>repeat</code>, which comes in both
+<code>while</code> and <code>until</code> flavours:</p>
+<div class="highlight perl-code"><pre>my $k = 0;
+do { print $k; $k++ } while ($k &lt; 3);   # 012 (Perl)</pre></div>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$k</span> = <span class="mi">5</span>;
+<span class="k">repeat</span> { <span class="nb">say</span> <span class="s">&quot;k=$k&quot;</span>; <span class="nv">$k</span>++ } <span class="k">while</span> <span class="nv">$k</span> &lt; <span class="mi">5</span>;
+<span class="c1"># k=5      — the body always runs at least once</span></pre></div>
+
+<p>The body executes, <em>then</em> the condition is checked, so the
+loop above runs once even though <code>$k &lt; 5</code> is already
+false. The <code>until</code> form negates the test:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$m</span> = <span class="mi">0</span>;
+<span class="k">repeat</span> { <span class="nb">say</span> <span class="s">&quot;m=$m&quot;</span>; <span class="nv">$m</span>++ } <span class="k">until</span> <span class="nv">$m</span> &gt;= <span class="mi">2</span>;
+<span class="c1"># m=0</span>
+<span class="c1"># m=1</span></pre></div>
+
+<p>Unlike the Perl <code>do</code>-block idiom, <code>repeat</code> is a
+real loop, so <code>last</code>, <code>next</code>, and loop phasers all
+behave inside it.</p>
+<p>With the imperative control structures in hand, we can turn to the
+one piece of control flow that is genuinely new to a Perl programmer:
+<code>given</code>/<code>when</code>, Raku’s answer to the switch
+statement, and the topicalisation that powers it.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/control-flow">Control Flow</a>   |   <a
+href="/raku-books/migrating-to-raku/given-when">given/when and Topicalization</a>
+→</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Appendix D — Glossary — Raku Books</title>
+    <meta property="og:title" content="Appendix D — Glossary — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/appendices">Appendices</a></p>
+<h1 id="appendix-d-glossary">Appendix D — Glossary</h1>
+<p>A short, opinionated dictionary of the Raku words that a Perl
+programmer meets for the first time in this book. Definitions are
+deliberately brief; the chapter that treats each term in full is named
+where it helps.</p>
+<p><strong>Adverb</strong> — a named argument written with a colon that
+tunes an operator, routine, or quote construct, such as <code>:g</code>
+on a substitution or <code>:exists</code> on a hash subscript.
+<code>:g</code> is short for <code>:g(True)</code>; <code>:!g</code>
+means <code>False</code>.</p>
+<p><strong>Any</strong> — the base type of nearly every ordinary value.
+Type constraints default to <code>Any</code>, and most built-in methods
+live here. Its parent is <code>Mu</code>.</p>
+<p><strong>Array vs List</strong> — a <strong>List</strong> is an
+ordered, immutable sequence of values; an <strong>Array</strong> (the
+<code>@</code> variable) is a mutable container whose elements each sit
+in their own scalar container. Assigning a List to an <code>@</code>
+variable copies its values into fresh containers (Chapter 4).</p>
+<p><strong>Binding</strong> — associating a name directly with a value
+or container using <code>:=</code>, rather than copying a value in with
+<code>=</code>. Bound names share one container, so changing one changes
+the other (Chapter 3).</p>
+<p><strong>Capture</strong> — the object that bundles the positional and
+named arguments of a call, produced by <code>\(…)</code>. It is the raw
+material a signature is matched against (Chapter 8).</p>
+<p><strong>Container</strong> — the box a variable name refers to, which
+in turn holds a value. Scalars are containers you can assign to; List
+elements are not. Understanding containers explains assignment, binding,
+and context (Chapter 8).</p>
+<p><strong>Decontainerisation</strong> — stripping the container off a
+value so only the value remains, written with the <code>&lt;&gt;</code>
+postfix or <code>.self</code>/<code>.List</code>. It is what stops a
+nested array from behaving like a single item.</p>
+<p><strong>Definiteness (<code>:D</code> / <code>:U</code>)</strong> — a
+type smiley marking whether a value must be a <em>defined</em> instance
+(<code>Int:D</code>) or an <em>undefined</em> type object
+(<code>Int:U</code>). <code>:_</code> accepts either. Used heavily in
+signatures to reject uninitialised values (Chapter 9).</p>
+<p><strong>Fatarrow</strong> — the <code>=&gt;</code> operator, which
+builds a <code>Pair</code> and autoquotes a bare identifier on its left:
+<code>a =&gt; 1</code> is the same as <code>'a' =&gt; 1</code>.</p>
+<p><strong>gather / take</strong> — a pair that builds a (lazy)
+sequence: code inside a <code>gather</code> block emits values with
+<code>take</code>, and they are produced on demand (Chapter 27).</p>
+<p><strong>Grapheme</strong> — a user-visible character, possibly
+composed of several Unicode codepoints. Raku strings are measured and
+indexed by grapheme, so <code>.chars</code> counts what a human would
+call letters (Chapter 7).</p>
+<p><strong>Hyper operator</strong> — a meta-operator (<code>»op«</code>)
+that applies an operator to each element of a list, potentially in
+parallel, e.g. <code>@a »+» 1</code> (Chapter 11).</p>
+<p><strong>Itemisation</strong> — placing a value into a single scalar
+container so context treats it as one item, written <code>$(…)</code>.
+The inverse of decontainerisation.</p>
+<p><strong>Junction</strong> — a single value that superimposes several,
+combined with <code>any</code>, <code>all</code>, <code>one</code>, or
+<code>none</code>: <code>if $x == 1|2|3 {…}</code>. Comparisons
+distribute over it automatically (Chapter 27).</p>
+<p><strong>lazy / Seq</strong> — a <strong>Seq</strong> is a one-shot,
+on-demand sequence; laziness means values are computed only when
+consumed, which is how infinite ranges like <code>1..*</code> are usable
+(Chapter 4).</p>
+<p><strong>Match</strong> — the object returned by a successful regex
+match, stored in <code>$/</code>. It stringifies to the matched text and
+holds the captures <code>$0</code>, <code>$1</code>,
+<code>$&lt;name&gt;</code> (Chapter 18).</p>
+<p><strong>Meta-operator</strong> — an operator that takes another
+operator and builds a new one: reduction <code>[+]</code>, hyper
+<code>»+«</code>, cross <code>X</code>, zip <code>Z</code>, and the
+negation and reversal meta-operators (Chapter 11).</p>
+<p><strong>Multi dispatch</strong> — defining several routines with the
+same name (<code>multi</code>) and letting Raku pick one at call time by
+the number and types of the arguments (Chapter 16).</p>
+<p><strong>Mu</strong> — the root of the type hierarchy, the ancestor of
+every type including <code>Any</code>. You reach for it rarely, mostly
+to accept truly anything.</p>
+<p><strong>Phaser</strong> — a block that runs at a defined moment in a
+program’s life: <code>BEGIN</code>, <code>END</code>,
+<code>ENTER</code>, <code>LEAVE</code>, <code>FIRST</code>,
+<code>LAST</code>, <code>KEEP</code>, <code>UNDO</code>, and others
+(Chapter 14).</p>
+<p><strong>Pair</strong> — an immutable key-and-value object built by
+<code>=&gt;</code>. Hashes are made of Pairs, and named arguments are
+passed as Pairs (Chapter 5).</p>
+<p><strong>proto</strong> — an optional declaration that defines the
+shared shape and dispatch frame for a set of <code>multi</code> routines
+(Chapter 16).</p>
+<p><strong>Rat</strong> — a rational number stored as an exact
+numerator-over-denominator pair, which is why
+<code>0.1 + 0.2 == 0.3</code> holds in Raku (Chapter 6).</p>
+<p><strong>Role</strong> — a reusable bundle of methods and attributes
+that is <em>composed</em> into a class (with <code>does</code>) rather
+than inherited, avoiding many multiple-inheritance problems; comparable
+to Moose roles (Chapter 23).</p>
+<p><strong>Sigil</strong> — the leading symbol on a variable name
+(<code>$</code>, <code>@</code>, <code>%</code>, <code>&amp;</code>)
+that names its structural kind. In Raku the sigil is invariant: it does
+not change when you index into the variable (Chapter 2).</p>
+<p><strong>Sink context</strong> — the “void” context of a statement
+whose result is not used. A value evaluated in sink context is
+discarded, and some lazy things are forced to run for their side
+effects.</p>
+<p><strong>Slip</strong> — a list that flattens itself into the
+surrounding list, produced by <code>slip(…)</code> or the <code>|</code>
+prefix. It is how you splice one list into another on purpose, given
+that plain lists no longer auto-flatten.</p>
+<p><strong>Smartmatch</strong> — the <code>~~</code> operator, which
+compares a value against a pattern (a regex, a type, a range, a
+junction, a value) and does the sensible thing for each. It replaces
+Perl’s <code>=~</code> for regexes (Chapters 13, 18).</p>
+<p><strong>subset</strong> — a named type that narrows an existing type
+with a <code>where</code> clause,
+e.g. <code>subset Even of Int where * %% 2</code> (Chapter 9).</p>
+<p><strong>token / rule</strong> — named, reusable pieces of a regex. A
+<code>token</code> is a regex with backtracking switched off; a
+<code>rule</code> is a <code>token</code> that also makes whitespace
+significant. They are the building blocks of grammars (Chapter 19).</p>
+<p><strong>Topic</strong> — the current default value, held in
+<code>$_</code>. <code>for</code>, <code>given</code>, <code>map</code>,
+and a leading-dot method call all operate on the topic (Chapters 3,
+13).</p>
+<p><strong>Twigil</strong> — a second character after the sigil that
+marks a variable’s scope or origin: <code>$*dynamic</code>,
+<code>$?compile-time</code>, <code>$!private</code>,
+<code>$.public</code>, <code>$^placeholder</code> (Chapter 3).</p>
+<p><strong>Whatever</strong> — the <code>*</code> value, which builds a
+closure in an expression (<code>* + 1</code>), means “last” in a
+subscript (<code>*-1</code>), and “unbounded” in a range
+(<code>1..*</code>). Its explicit cousin is the Whatever code object
+<code>{ * }</code> (Chapter 17).</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/appendix-c-special-variables">Appendix
+C — Special Variables</a>   |   <a
+href="/raku-books/migrating-to-raku/appendix-e-further-reading">Appendix E —
+Further Reading</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

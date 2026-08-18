@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Functional Raku — Raku Books</title>
+    <meta property="og:title" content="Functional Raku — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/robust-and-modern-raku">Robust
+and Modern Raku</a></p>
+<h1 id="functional-raku">Functional Raku</h1>
+<p>You have been writing functional Perl for years without necessarily
+calling it that. Every <code>map</code>, <code>grep</code>, and
+<code>sort { $a &lt;=&gt; $b }</code> is a higher-order function taking
+a block; <code>List::Util</code> gives you <code>first</code> and
+<code>reduce</code>. Raku takes this style and makes it central: the
+list toolkit is richer, blocks gain real signatures, lists can be lazy
+and infinite, and there are new ideas — junctions, composition
+operators, and feed pipelines — that let you say more with less. This
+chapter gathers the functional threads that ran through earlier chapters
+and adds the pieces unique to Raku.</p>
+<h2 id="map-grep-sort-the-recap"><code>map</code>, <code>grep</code>,
+<code>sort</code> — the recap</h2>
+<p>The trio you know are all methods now (Chapter 4), and the block can
+be a bare <code>{…}</code>, a pointy block with a signature (Chapter
+17), or the <code>*</code> whatever-star.</p>
+<div class="highlight perl-code"><pre>use v5.10;
+my @n = (3, 11, 2, 100, 1);
+say join ',', map  { $_ * $_ }  @n;    # 9,121,4,10000,1
+say join ',', grep { $_ &gt; 3 }   @n;    # 11,100
+say join ',', sort { $a &lt;=&gt; $b } @n;   # 1,2,3,11,100</pre></div>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@n</span> = <span class="mi">3</span>, <span class="mi">11</span>, <span class="mi">2</span>, <span class="mi">100</span>, <span class="mi">1</span>;
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">map</span>(-&gt; <span class="nv">$x</span> { <span class="nv">$x</span> * <span class="nv">$x</span> });         <span class="c1"># (9 121 4 10000 1)</span>
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">grep</span>(* &gt; <span class="mi">3</span>);                    <span class="c1"># (11 100)</span>
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">sort</span>;                           <span class="c1"># (1 2 3 11 100)  — numeric by default</span></pre></div>
+
+<p>Recall from Chapter 4 that Raku’s <code>sort</code> compares with
+<code>cmp</code>, so numbers sort numerically without a block. When you
+<em>do</em> want a custom order, the tidy form is to pass a
+<strong>key</strong>: a one-argument block that maps each element to the
+value to sort on. <code>sort(*.abs)</code> sorts by magnitude while
+keeping the originals:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (-<span class="mi">3</span>, <span class="mi">1</span>, -<span class="mi">2</span>, <span class="mi">5</span>).<span class="nb">sort</span>(*.<span class="nb">abs</span>);        <span class="c1"># (1 -2 -3 5)</span></pre></div>
+
+<p>That single-argument key form is far clearer than the two-argument
+comparator, and Raku is clever enough to call it once per element rather
+than on every comparison.</p>
+<h2 id="first-reduce-produce"><code>first</code>, <code>reduce</code>,
+<code>produce</code></h2>
+<p>Perl reaches into <code>List::Util</code> for these; in Raku they are
+built-in methods. <code>first</code> returns the first matching
+element:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@n</span> = <span class="mi">3</span>, <span class="mi">11</span>, <span class="mi">2</span>, <span class="mi">100</span>, <span class="mi">1</span>;
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">first</span>(* &gt; <span class="mi">10</span>);                  <span class="c1"># 11</span></pre></div>
+
+<p><code>reduce</code> folds a list down to a single value with a
+two-argument block:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">reduce</span>(* + *);                  <span class="c1"># 117</span>
+<span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.5</span>).<span class="nb">reduce</span>(* * *);              <span class="c1"># 120   — 5!</span></pre></div>
+
+<p>Each <code>*</code> is a separate parameter here, so
+<code>* + *</code> is “add my two arguments”. (Chapter 11 introduced the
+reduction meta-operator <code>[+]</code>, which is the same idea written
+even more tightly: <code>[+] @n</code>.)</p>
+<p><code>produce</code> is <code>reduce</code>’s cousin that keeps every
+intermediate result — the running totals rather than just the final
+one:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.5</span>).<span class="nb">produce</span>(* + *);             <span class="c1"># (1 3 6 10 15)</span></pre></div>
+
+<h2 id="gathertake"><code>gather</code>/<code>take</code></h2>
+<p>Perl builds a list by pushing onto an array. Raku offers a more
+declarative route: <code>gather</code> runs a block, and every
+<code>take</code> inside it — however deeply nested — contributes a
+value to the resulting sequence.</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@evens</span> = <span class="k">gather</span> <span class="k">for</span> <span class="mi">1</span>.<span class="mf">.10</span> { <span class="k">take</span> <span class="nv">$_</span> <span class="k">if</span> <span class="nv">$_</span> %% <span class="mi">2</span> };
+<span class="nb">say</span> <span class="nv">@evens</span>;                            <span class="c1"># [2 4 6 8 10]</span></pre></div>
+
+<p>The <code>%%</code> there is the “divisible by” operator (Chapter
+11). The real power of <code>gather</code>/<code>take</code> is that it
+produces values <em>lazily</em> and can therefore describe an infinite
+generator without looping forever:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$fib</span> = <span class="k">gather</span> {
+    <span class="k">my</span> (<span class="nv">$a</span>, <span class="nv">$b</span>) = <span class="mi">0</span>, <span class="mi">1</span>;
+    <span class="k">loop</span> { <span class="k">take</span> <span class="nv">$a</span>; (<span class="nv">$a</span>, <span class="nv">$b</span>) = <span class="nv">$b</span>, <span class="nv">$a</span> + <span class="nv">$b</span>; }
+}
+<span class="nb">say</span> <span class="nv">$fib</span>[^<span class="mi">10</span>];                         <span class="c1"># (0 1 1 2 3 5 8 13 21 34)</span></pre></div>
+
+<p>Nothing in that <code>loop</code> runs until you ask for elements,
+and only enough runs to satisfy the ten you requested. This is
+impossible in Perl without an explicit iterator object.</p>
+<h2 id="lazy-and-infinite-lists">Lazy and infinite lists</h2>
+<p>Laziness is not confined to <code>gather</code>. Ranges are lazy, and
+<code>map</code>/<code>grep</code> over a lazy source stay lazy, so
+<code>1..Inf</code> is an ordinary value you can transform:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>..<span class="n">Inf</span>).<span class="nb">map</span>(* ** <span class="mi">2</span>).<span class="nb">head</span>(<span class="mi">5</span>);       <span class="c1"># (1 4 9 16 25)</span>
+<span class="nb">say</span> (<span class="mi">1</span>..<span class="n">Inf</span>).<span class="nb">grep</span>(*.<span class="n">is-prime</span>).<span class="nb">head</span>(<span class="mi">5</span>);  <span class="c1"># (2 3 5 7 11)</span></pre></div>
+
+<p><code>.head(n)</code> takes the first <em>n</em> elements; you can
+also bind the lazy list to a <code>@</code> variable and subscript it,
+and only the elements you touch are computed:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@squares</span> = (<span class="mi">1</span>..<span class="n">Inf</span>).<span class="nb">map</span>(* ** <span class="mi">2</span>);
+<span class="nb">say</span> <span class="nv">@squares</span>[^<span class="mi">5</span>];                        <span class="c1"># (1 4 9 16 25)</span></pre></div>
+
+<p>Think of laziness as “describe the whole computation, pay only for
+the part you read”. It turns many loops into a single declarative
+expression.</p>
+<h2 id="junctions">Junctions</h2>
+<p>Here is an idea with no Perl equivalent. A <em>junction</em> is a
+single value that superimposes several values at once, combined with
+<code>any</code>, <code>all</code>, <code>one</code>, or
+<code>none</code>. You build them with the infix forms <code>|</code>
+(any), <code>&amp;</code> (all), and <code>^</code> (one):</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="k">so</span> <span class="mi">3</span> == (<span class="mi">1</span>|<span class="mi">2</span>|<span class="mi">3</span>);                    <span class="c1"># True</span>
+<span class="nb">say</span> <span class="k">so</span> <span class="mi">5</span> == (<span class="mi">1</span>|<span class="mi">2</span>|<span class="mi">3</span>);                    <span class="c1"># False</span></pre></div>
+
+<p>The <code>so</code> coerces the result to a plain Boolean. What makes
+junctions magical is <strong>autothreading</strong>: apply an ordinary
+operator or function to a junction and it distributes across every
+branch, returning a new junction.</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>|<span class="mi">2</span>|<span class="mi">3</span>) + <span class="mi">10</span>;                        <span class="c1"># any(11, 12, 13)</span></pre></div>
+
+<p>That means a whole family of loops collapses into one comparison. “Is
+15 present in the array?” and “are all the values positive?” become:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">4</span>, <span class="mi">8</span>, <span class="mi">15</span>, <span class="mi">16</span>, <span class="mi">23</span>, <span class="mi">42</span>;
+<span class="nb">say</span> <span class="k">so</span> <span class="mi">15</span> == <span class="n">any</span>(<span class="nv">@a</span>);                    <span class="c1"># True</span>
+<span class="nb">say</span> <span class="k">so</span> <span class="n">all</span>(<span class="nv">@a</span>) &gt; <span class="mi">0</span>;                      <span class="c1"># True</span></pre></div>
+
+<p>Use the named forms
+<code>any</code>/<code>all</code>/<code>one</code>/<code>none</code> for
+readability over lists, and the
+<code>|</code>/<code>&amp;</code>/<code>^</code> operators for quick
+inline junctions. One caution: because a junction is not a single
+definite value, do not use one where you need a concrete result — it is
+a device for <em>asking questions</em>, not for carrying data.</p>
+<h2 id="function-composition-and-partial-application">Function
+composition and partial application</h2>
+<p>Raku treats subroutines as values (<code>&amp;name</code> refers to
+the routine itself), and it gives you an operator to <em>compose</em>
+two of them. The composition operator is <code>∘</code> (U+2218) with
+the ASCII alias <code>o</code>; <code>f o g</code> means “apply
+<code>g</code>, then <code>f</code>”.</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">&amp;inc</span>    = * + <span class="mi">1</span>;
+<span class="k">my</span> <span class="nv">&amp;double</span> = * * <span class="mi">2</span>;
+<span class="k">my</span> <span class="nv">&amp;f</span> = <span class="nv">&amp;double</span> <span class="n">o</span> <span class="nv">&amp;inc</span>;                  <span class="c1"># double(inc(x))</span>
+<span class="nb">say</span> <span class="n">f</span>(<span class="mi">5</span>);                                <span class="c1"># 12</span>
+<span class="k">my</span> <span class="nv">&amp;g</span> = <span class="nv">&amp;inc</span> ∘ <span class="nv">&amp;double</span>;                  <span class="c1"># inc(double(x))</span>
+<span class="nb">say</span> <span class="n">g</span>(<span class="mi">5</span>);                                <span class="c1"># 11</span></pre></div>
+
+<p>Partial application — fixing some arguments now and the rest later —
+is the <code>.assuming</code> method. Pass <code>*</code> for the
+arguments you want to leave open:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">power</span>(<span class="nv">$base</span>, <span class="nv">$exp</span>) { <span class="nv">$base</span> ** <span class="nv">$exp</span> }
+<span class="k">my</span> <span class="nv">&amp;square</span> = <span class="nv">&amp;power</span>.<span class="n">assuming</span>(*, <span class="mi">2</span>);      <span class="c1"># exp fixed at 2</span>
+<span class="nb">say</span> <span class="n">square</span>(<span class="mi">9</span>);                           <span class="c1"># 81</span>
+<span class="k">my</span> <span class="nv">&amp;two-to</span> = <span class="nv">&amp;power</span>.<span class="n">assuming</span>(<span class="mi">2</span>);         <span class="c1"># base fixed at 2</span>
+<span class="nb">say</span> <span class="n">two-to</span>(<span class="mi">3</span>);                           <span class="c1"># 8</span></pre></div>
+
+<p>These are Perl’s home-grown closures-returning-closures made into
+first-class operations.</p>
+<h2 id="feed-operators">Feed operators</h2>
+<p>Method chaining already reads left to right, but for a pipeline of
+<em>list</em> operations Raku offers the feed operators
+<code>==&gt;</code> and <code>&lt;==</code>, which make the flow of data
+explicit — think of them as a shell pipe. The rightward feed reads
+top-to-bottom, and its final term is the destination:</p>
+<div class="highlight raku"><pre><span></span>(<span class="mi">1</span>.<span class="mf">.10</span>)
+    ==&gt; <span class="nb">grep</span>(* %% <span class="mi">2</span>)
+    ==&gt; <span class="nb">map</span>(* ** <span class="mi">2</span>)
+    ==&gt; <span class="nb">sort</span>()
+    ==&gt; <span class="k">my</span> <span class="nv">@result</span>;
+<span class="nb">say</span> <span class="nv">@result</span>;                             <span class="c1"># [4 16 36 64 100]</span></pre></div>
+
+<p>The leftward feed <code>&lt;==</code> reads bottom-to-top, mirroring
+the way nested function calls actually evaluate — the source is at the
+far right:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@r2</span> &lt;== <span class="nb">sort</span>() &lt;== <span class="nb">map</span>(* + <span class="mi">1</span>) &lt;== (<span class="mi">5</span>, <span class="mi">3</span>, <span class="mi">1</span>);
+<span class="nb">say</span> <span class="nv">@r2</span>;                                 <span class="c1"># [2 4 6]</span></pre></div>
+
+<p>Note that the feed’s destination is a <em>container</em> at the end
+of the chain, not the left-hand side of an ordinary <code>=</code>.
+Reach for feeds when a pipeline reads more clearly as a sequence of
+stages than as a chain of dots — many Raku programmers prefer plain
+method chaining, and both are fine.</p>
+<h2 id="a-pure-function-style">A pure-function style</h2>
+<p>Threaded through all of this is a habit worth cultivating: prefer
+functions that take values and return values over subroutines that
+mutate the world. <code>map</code> instead of a loop that pushes;
+<code>reduce</code> instead of an accumulator; a lazy sequence instead
+of a growing array. Raku’s immutable <code>List</code>, its rich method
+set, and its laziness all nudge you gently in that direction — the code
+that results is usually shorter, easier to test, and readier for the
+next chapter, where running things <em>in parallel</em> becomes almost
+free.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/exceptions-and-failures">Errors,
+Exceptions, and Failures</a>   |   <a
+href="/raku-books/migrating-to-raku/concurrency">Concurrency and Parallelism</a>
+→</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

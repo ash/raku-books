@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Roles and Inheritance — Raku Books</title>
+    <meta property="og:title" content="Roles and Inheritance — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a
+href="/raku-books/migrating-to-raku/object-oriented-programming">Object-Oriented
+Programming</a></p>
+<h1 id="roles-and-inheritance">Roles and Inheritance</h1>
+<p>Chapter 22 built a single class. Real programs have many, and they
+share code. Perl has one main mechanism for that — inheritance, via
+<code>@ISA</code> (usually spelled <code>use parent</code>) — and a
+scattering of add-ons for the cases where inheritance is the wrong
+shape: <code>Role::Tiny</code>, Moose roles, mixin modules. Raku ships
+all of this in the core language, and it nudges you towards the tool the
+Perl community spent two decades learning to prefer:
+<strong>roles</strong> over deep inheritance.</p>
+<p>We will start with inheritance, because it maps most directly, then
+spend the larger half of the chapter on roles, which is where the
+interesting migration advice lives.</p>
+<h2 id="inheritance-with-is">Inheritance with <code>is</code></h2>
+<p>A Perl subclass declares its parent and overrides methods:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+
+package Animal;
+sub new { my ($c, %a) = @_; bless {%a}, $c }
+sub name  { $_[0]{name} }
+sub sound { '...' }
+sub speak {
+    my $self = shift;
+    return $self-&gt;name . " says " . $self-&gt;sound;
+}
+
+package Dog;
+use parent -norequire, 'Animal';
+sub sound { 'Woof' }
+
+package main;
+my $d = Dog-&gt;new(name =&gt; 'Rex');
+say $d-&gt;speak;             # Rex says Woof</pre></div>
+<p><code>Dog</code> inherits <code>new</code>, <code>name</code>, and
+<code>speak</code>, and overrides <code>sound</code>. When
+<code>speak</code> calls <code>$self-&gt;sound</code>, method resolution
+finds <code>Dog</code>’s version. The same design in Raku, using
+<code>is</code> to name the parent:</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">Animal</span> {
+    <span class="k">has</span> <span class="nv">$.name</span>;
+    <span class="k">method</span> <span class="n">sound</span> { <span class="s">'...'</span> }
+    <span class="k">method</span> <span class="n">speak</span> { <span class="s">&quot;$.name says {self.sound}&quot;</span> }
+}
+
+<span class="k">class</span> <span class="n">Dog</span> <span class="k">is</span> <span class="n">Animal</span> {
+    <span class="k">method</span> <span class="n">sound</span> { <span class="s">'Woof'</span> }
+}
+
+<span class="k">my</span> <span class="nv">$d</span> = <span class="n">Dog</span>.<span class="nb">new</span>(<span class="n">name</span> =&gt; <span class="s">'Rex'</span>);
+<span class="nb">say</span> <span class="nv">$d</span>.<span class="n">speak</span>;              <span class="c1"># Rex says Woof</span>
+<span class="nb">say</span> <span class="nv">$d</span> ~~ <span class="n">Animal</span>;          <span class="c1"># True   — an &quot;isa&quot; test</span></pre></div>
+
+<p><code>is Animal</code> is Raku’s <code>use parent 'Animal'</code>.
+<code>Dog</code> inherits the attribute <code>$.name</code>, the
+generated <code>new</code>, and <code>speak</code>; it overrides
+<code>sound</code>. The smartmatch <code>$d ~~ Animal</code> is the
+idiomatic “is this an Animal?” test, replacing Perl’s
+<code>$d-&gt;isa('Animal')</code>.</p>
+<p>For the Moose/Moo crowd: <code>is Animal</code> is Moose’s
+<code>extends 'Animal'</code>. There is no separate keyword to import —
+<code>is</code> is built in.</p>
+<h2 id="calling-the-parent-callsame-nextsame-callwith">Calling the
+parent: <code>callsame</code>, <code>nextsame</code>,
+<code>callwith</code></h2>
+<p>In Perl you reach the overridden method with
+<code>SUPER::</code>:</p>
+<div class="highlight perl-code"><pre>sub greet {
+    my $self = shift;
+    return $self-&gt;SUPER::greet() . ", from Child";
+}</pre></div>
+<p>Raku replaces the <code>SUPER::</code> name with a small family of
+redispatch routines. They share a naming logic: <code>call*</code> runs
+the next candidate and returns to you; <code>next*</code> hands off and
+does not come back. <code>*same</code> reuses your arguments;
+<code>*with</code> lets you supply new ones.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">Base</span> {
+    <span class="k">method</span> <span class="n">greet</span> { <span class="s">&quot;Hello&quot;</span> }
+}
+
+<span class="k">class</span> <span class="n">Child</span> <span class="k">is</span> <span class="n">Base</span> {
+    <span class="k">method</span> <span class="n">greet</span> {
+        <span class="k">my</span> <span class="nv">$parent</span> = <span class="n">callsame</span>;         <span class="c1"># run Base.greet, same args, return here</span>
+        <span class="s">&quot;$parent, from Child&quot;</span>;
+    }
+}
+<span class="nb">say</span> <span class="n">Child</span>.<span class="nb">new</span>.<span class="n">greet</span>;                   <span class="c1"># Hello, from Child</span>
+
+<span class="k">class</span> <span class="n">Loud</span> <span class="k">is</span> <span class="n">Base</span> {
+    <span class="k">method</span> <span class="n">greet</span> { <span class="n">nextsame</span> }          <span class="c1"># defer entirely to Base.greet</span>
+}
+<span class="nb">say</span> <span class="n">Loud</span>.<span class="nb">new</span>.<span class="n">greet</span>;                    <span class="c1"># Hello</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<ul>
+<li><code>callsame</code> — call the next candidate with the same
+arguments, get the result. This is the everyday
+<code>SUPER::method(@_)</code>.</li>
+<li><code>nextsame</code> — like <code>callsame</code> but
+<em>tail-calls</em>: control never returns to your method. Handy when
+your override only wants to run before deciding to bow out.</li>
+<li><code>callwith(...)</code> — call the next candidate with
+<strong>different</strong> arguments. This is
+<code>SUPER::method(...)</code> with a fresh argument list.</li>
+</ul>
+<p>There is also <code>nextwith</code>, the hand-off form of
+<code>callwith</code>. The four names cover every combination of “come
+back or not” and “same args or not”, which is more than
+<code>SUPER::</code> gave you, and it works uniformly across
+inheritance, roles, and multiple dispatch.</p>
+<h2 id="multiple-inheritance-and-the-c3-mro">Multiple inheritance and
+the C3 MRO</h2>
+<p>Raku lets a class have more than one parent — stack the
+<code>is</code> traits:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">A2</span> { <span class="k">method</span> <span class="n">who</span> { <span class="s">&quot;A2&quot;</span> } }
+<span class="k">class</span> <span class="n">B2</span> <span class="k">is</span> <span class="n">A2</span> { }
+<span class="k">class</span> <span class="n">C2</span> <span class="k">is</span> <span class="n">A2</span> { <span class="k">method</span> <span class="n">who</span> { <span class="s">&quot;C2&quot;</span> } }
+<span class="k">class</span> <span class="n">D2</span> <span class="k">is</span> <span class="n">B2</span> <span class="k">is</span> <span class="n">C2</span> { }</pre></div>
+
+<p>This is the classic diamond: <code>D2</code> inherits from both
+<code>B2</code> and <code>C2</code>, which both inherit from
+<code>A2</code>. Which <code>who</code> does <code>D2</code> get? Perl’s
+default resolution was depth-first, which handled diamonds badly (it
+could reach <code>A2</code> before <code>C2</code>). Raku uses the
+<strong>C3 linearisation</strong> — the same algorithm Perl opts into
+with <code>use mro 'c3'</code> — and you can inspect the resulting
+order:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="n">D2</span>.^<span class="n">mro</span>;              <span class="c1"># ((D2) (B2) (C2) (A2) (Any) (Mu))</span>
+<span class="nb">say</span> <span class="n">D2</span>.<span class="nb">new</span>.<span class="n">who</span>;           <span class="c1"># C2</span></pre></div>
+
+<p>The metaobject call <code>.^mro</code> returns the method resolution
+order as a list of types. Reading it left to right: <code>D2</code>,
+then <code>B2</code>, then <code>C2</code>, then their shared
+<code>A2</code>, then Raku’s universal ancestors <code>Any</code> and
+<code>Mu</code>. Because <code>C2</code> comes before <code>A2</code>,
+<code>D2.new.who</code> finds <code>C2</code>’s override — the diamond
+resolves sensibly.</p>
+<p>Multiple inheritance works, but it is rarely the right tool. The
+moment two base classes want to contribute behaviour to the same child,
+you are usually reaching for a role.</p>
+<h2 id="roles-composition-over-inheritance">Roles: composition over
+inheritance</h2>
+<p>A <strong>role</strong> is a bundle of methods (and attributes) meant
+to be <em>mixed into</em> a class rather than inherited from. You
+declare it with <code>role</code> and compose it with
+<code>does</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">role</span> <span class="n">Comparable</span> {
+    <span class="k">method</span> <span class="n">compare</span>(<span class="nv">$other</span>) { ... }               <span class="c1"># required (a stub)</span>
+    <span class="k">method</span> <span class="n">greater</span>(<span class="nv">$other</span>) { <span class="nb">self</span>.<span class="n">compare</span>(<span class="nv">$other</span>) &gt; <span class="mi">0</span> }
+}
+
+<span class="k">class</span> <span class="n">Weight</span> <span class="k">does</span> <span class="n">Comparable</span> {
+    <span class="k">has</span> <span class="nv">$.kg</span>;
+    <span class="k">method</span> <span class="n">compare</span>(<span class="nv">$other</span>) { <span class="nv">$.kg</span> &lt;=&gt; <span class="nv">$other</span>.<span class="n">kg</span> }
+}
+
+<span class="k">my</span> <span class="nv">$a</span> = <span class="n">Weight</span>.<span class="nb">new</span>(<span class="n">kg</span> =&gt; <span class="mi">70</span>);
+<span class="k">my</span> <span class="nv">$b</span> = <span class="n">Weight</span>.<span class="nb">new</span>(<span class="n">kg</span> =&gt; <span class="mi">60</span>);
+<span class="nb">say</span> <span class="nv">$a</span>.<span class="n">greater</span>(<span class="nv">$b</span>);       <span class="c1"># True</span>
+<span class="nb">say</span> <span class="nv">$a</span> ~~ <span class="n">Comparable</span>;     <span class="c1"># True</span></pre></div>
+
+<p><code>Comparable</code> supplies <code>greater</code> for free but
+insists that any consumer provide <code>compare</code>.
+<code>Weight does Comparable</code> pulls in <code>greater</code> and
+satisfies the requirement. The role is not a parent —
+<code>Weight</code>’s only ancestor is still the default — yet
+<code>$a ~~ Comparable</code> is <code>True</code>, because doing a role
+makes you a kind of it.</p>
+<p>The <code>{ ... }</code> in the role body is Raku’s
+<strong>stub</strong>: the “yada-yada” operator, declaring a method that
+<em>must</em> be implemented by whoever composes the role. Fail to
+provide it and composition fails loudly at compile time:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">role</span> <span class="n">Drawable</span> { <span class="k">method</span> <span class="n">draw</span> { ... } }
+<span class="k">class</span> <span class="n">Bad</span> <span class="k">does</span> <span class="n">Drawable</span> { }        <span class="c1"># no draw</span>
+<span class="c1"># Compile-time error:</span>
+<span class="c1"># Method 'draw' must be implemented by Bad</span>
+<span class="c1"># because it is required by roles: Drawable.</span></pre></div>
+
+<p>That compile-time guarantee is the whole point of a required method:
+the role states an interface, and the compiler enforces it before your
+program ever runs.</p>
+<h3 id="why-a-role-and-not-a-base-class">Why a role and not a base
+class?</h3>
+<p>The classic problem with inheritance is that behaviour you want to
+share often does not correspond to an <em>is-a</em> relationship. A
+<code>Serialisable</code> mixin, a <code>Comparable</code> interface, a
+<code>Logger</code> — none of these describe what an object <em>is</em>;
+they describe what it can <em>do</em>. Force them into a base class and
+you get tangled hierarchies and the diamond problems above.</p>
+<p>Roles side-step this. They compose flatly: doing three roles is not a
+chain of three parents but a single class that has all three sets of
+methods poured into it. The rule of thumb:</p>
+<ul>
+<li>Use <strong>inheritance</strong> (<code>is</code>) for a genuine
+<em>is-a</em> specialisation where the child really is a more specific
+kind of the parent, and you want to share state and extend
+behaviour.</li>
+<li>Use a <strong>role</strong> (<code>does</code>) for a capability
+shared across otherwise unrelated classes — an interface with some
+behaviour attached. This should be your default; reach for a base class
+only when you specifically need one.</li>
+</ul>
+<p>If you have written Moose or Moo, this is familiar ground. The
+mapping is almost one-to-one:</p>
+<table>
+<thead>
+<tr>
+<th>Moose / Moo</th>
+<th>Raku</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has</code></td>
+<td><code>has</code></td>
+</tr>
+<tr>
+<td><code>extends 'Base'</code></td>
+<td><code>is Base</code></td>
+</tr>
+<tr>
+<td><code>with 'Role'</code></td>
+<td><code>does Role</code></td>
+</tr>
+<tr>
+<td><code>role { ... }</code> package</td>
+<td><code>role { ... }</code></td>
+</tr>
+<tr>
+<td><code>requires 'method'</code></td>
+<td><code>method m { ... }</code> (stub)</td>
+</tr>
+</tbody>
+</table>
+<p>Moose roles <em>are</em> essentially Raku roles — the design
+travelled from Raku into Moose and back into your muscle memory. The
+main change is syntactic: <code>with</code> becomes <code>does</code>,
+and a required method is a stubbed method rather than a
+<code>requires</code> declaration.</p>
+<h3 id="runtime-mixins-does-and-but">Runtime mixins: <code>does</code>
+and <code>but</code></h3>
+<p>Composition need not happen at compile time. You can mix a role into
+a single <em>object</em>, at run time, leaving every other object of its
+class untouched. The operator is <code>but</code> (for a fresh copy) or
+<code>does</code> (mutating in place):</p>
+<div class="highlight raku"><pre><span></span><span class="k">role</span> <span class="n">Nameable</span> { <span class="k">method</span> <span class="n">label</span> { <span class="s">&quot;&lt;{self.^name}&gt;&quot;</span> } }
+
+<span class="k">my</span> <span class="nv">$x</span> = <span class="mi">42</span>;
+<span class="k">my</span> <span class="nv">$y</span> = <span class="nv">$x</span> <span class="k">but</span> <span class="n">Nameable</span>;
+<span class="nb">say</span> <span class="nv">$y</span>.<span class="n">label</span>;             <span class="c1"># &lt;Int+{Nameable}&gt;</span>
+<span class="nb">say</span> <span class="nv">$y</span> + <span class="mi">1</span>;               <span class="c1"># 43   — still behaves as an Int</span></pre></div>
+
+<p><code>$y</code> is an <code>Int</code> that has additionally gained
+the <code>Nameable</code> role; its type name becomes
+<code>Int+{Nameable}</code>, but it still adds, sorts, and compares like
+any other integer. Perl has nothing this clean — the nearest equivalent
+is re-<code>bless</code>ing into a throwaway subclass, by hand. This is
+the mechanism behind <code>$obj but True</code> tricks and, as Chapter
+26 will show, behind attaching extra data to exceptions and
+failures.</p>
+<h3 id="resolving-conflicts">Resolving conflicts</h3>
+<p>When two roles bring a method of the same name, composition does not
+silently pick one — it is a compile-time error, and you must resolve
+it:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">role</span> <span class="n">A</span> { <span class="k">method</span> <span class="n">hello</span> { <span class="s">&quot;A&quot;</span> } }
+<span class="k">role</span> <span class="n">B</span> { <span class="k">method</span> <span class="n">hello</span> { <span class="s">&quot;B&quot;</span> } }
+
+<span class="k">class</span> <span class="n">C</span> <span class="k">does</span> <span class="n">A</span> <span class="k">does</span> <span class="n">B</span> { }          <span class="c1"># error:</span>
+<span class="c1"># Method 'hello' must be resolved by class C</span>
+<span class="c1"># because it exists in multiple roles (B, A)</span></pre></div>
+
+<p>The class settles the conflict by providing its own
+<code>hello</code>, and it can reach the role versions explicitly with
+the <code>Role::method</code> syntax:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">C</span> <span class="k">does</span> <span class="n">A</span> <span class="k">does</span> <span class="n">B</span> {
+    <span class="k">method</span> <span class="n">hello</span> {
+        <span class="s">&quot;C resolves: &quot;</span> ~ <span class="nb">self</span>.<span class="n">A::hello</span> ~ <span class="s">&quot;/&quot;</span> ~ <span class="nb">self</span>.<span class="n">B::hello</span>;
+    }
+}
+<span class="nb">say</span> <span class="n">C</span>.<span class="nb">new</span>.<span class="n">hello</span>;          <span class="c1"># C resolves: A/B</span></pre></div>
+
+<p>This is the flat-composition model showing its teeth: rather than
+letting one role quietly shadow another (as inheritance order would),
+Raku forces you to decide. Compare this with Perl’s multiple
+inheritance, where the winner is whatever the MRO happens to reach first
+— easy to get wrong, hard to notice.</p>
+<h2 id="a-worked-example">A worked example</h2>
+<p>Putting inheritance and roles together. <code>Describable</code> is a
+role — a capability, requiring <code>area</code> and supplying
+<code>describe</code>. <code>Shape</code> is a small base class holding
+shared state. Concrete shapes inherit the state and compose the
+capability, and <code>Square</code> specialises <code>Rectangle</code>
+through ordinary inheritance:</p>
+<div class="highlight raku"><pre><span></span><span class="k">role</span> <span class="n">Describable</span> {
+    <span class="k">method</span> <span class="n">area</span> { ... }                     <span class="c1"># required</span>
+    <span class="k">method</span> <span class="n">describe</span> {
+        <span class="s">&quot;a {self.^name.lc} of area {self.area.round(0.01)}&quot;</span>
+    }
+}
+
+<span class="k">class</span> <span class="n">Shape</span> {
+    <span class="k">has</span> <span class="nv">$.colour</span> = <span class="s">'black'</span>;
+}
+
+<span class="k">class</span> <span class="n">Circle</span> <span class="k">is</span> <span class="n">Shape</span> <span class="k">does</span> <span class="n">Describable</span> {
+    <span class="k">has</span> <span class="nv">$.radius</span>;
+    <span class="k">method</span> <span class="n">area</span> { <span class="n">pi</span> * <span class="nv">$.radius</span> ** <span class="mi">2</span> }
+}
+
+<span class="k">class</span> <span class="n">Rectangle</span> <span class="k">is</span> <span class="n">Shape</span> <span class="k">does</span> <span class="n">Describable</span> {
+    <span class="k">has</span> <span class="nv">$.width</span>;
+    <span class="k">has</span> <span class="nv">$.height</span>;
+    <span class="k">method</span> <span class="n">area</span> { <span class="nv">$.width</span> * <span class="nv">$.height</span> }
+}
+
+<span class="k">class</span> <span class="n">Square</span> <span class="k">is</span> <span class="n">Rectangle</span> {
+    <span class="k">method</span> <span class="n">new</span>(:<span class="nv">$side</span>, *<span class="nv">%rest</span>) {
+        <span class="nb">self</span>.<span class="nb">bless</span>(<span class="n">width</span> =&gt; <span class="nv">$side</span>, <span class="n">height</span> =&gt; <span class="nv">$side</span>, |<span class="nv">%rest</span>);
+    }
+}
+
+<span class="k">my</span> <span class="nv">@shapes</span> = <span class="n">Circle</span>.<span class="nb">new</span>(<span class="n">radius</span> =&gt; <span class="mi">2</span>),
+             <span class="n">Rectangle</span>.<span class="nb">new</span>(<span class="n">width</span> =&gt; <span class="mi">3</span>, <span class="n">height</span> =&gt; <span class="mi">4</span>),
+             <span class="n">Square</span>.<span class="nb">new</span>(<span class="n">side</span> =&gt; <span class="mi">5</span>, <span class="n">colour</span> =&gt; <span class="s">'red'</span>);
+
+.<span class="n">describe</span>.<span class="nb">say</span> <span class="k">for</span> <span class="nv">@shapes</span>;
+<span class="nb">say</span> <span class="s">'total: '</span>, <span class="nv">@shapes</span>.<span class="nb">map</span>(*.<span class="n">area</span>).<span class="nb">sum</span>.<span class="nb">round</span>(<span class="mf">0.01</span>);
+<span class="nb">say</span> <span class="nv">@shapes</span>[<span class="mi">2</span>].<span class="n">colour</span>;      <span class="c1"># red — inherited from Shape</span></pre></div>
+
+<p>Running it:</p>
+<div class="highlight"><pre>a circle of area 12.57
+a rectangle of area 12
+a square of area 25
+total: 49.57
+red</pre></div>
+<p>Two things are worth pausing on. First, <code>Square</code>’s
+constructor: it writes its own <code>new</code> and calls
+<code>self.bless</code> with the two dimensions, because — a genuine
+gotcha — <strong>private attribute storage is not inherited</strong>.
+<code>Rectangle</code>’s <code>has $.width</code> creates the storage
+<code>$!width</code> <em>in <code>Rectangle</code></em>, and
+<code>Square</code> cannot assign to <code>$!width</code> directly (that
+is a compile-time “attribute not declared” error). The child reaches its
+inherited attributes through the constructor or the accessors, not
+through the parent’s private <code>$!</code> variables. Second,
+<code>describe</code> lives once, in the role, yet works for every shape
+— composition delivering shared behaviour without a shared ancestor
+beyond <code>Shape</code>.</p>
+<p>Between them, <code>class</code>, <code>is</code>, <code>role</code>,
+and <code>does</code> cover the object model you used Moose to reach for
+in Perl — now with none of the module scaffolding. With objects, roles,
+and inheritance in hand, Part IX turns to the larger scale: how to
+package this code into modules, expose it with <code>is export</code>,
+and share it — which Chapter 24 takes up next.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/classes-and-objects">Classes and
+Objects</a>   |   <a
+href="/raku-books/migrating-to-raku/modules-and-the-ecosystem">Modules and the
+Ecosystem</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

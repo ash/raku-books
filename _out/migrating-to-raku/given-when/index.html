@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>given/when and Topicalization — Raku Books</title>
+    <meta property="og:title" content="given/when and Topicalization — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/control-flow">Control
+Flow</a></p>
+<h1 id="givenwhen-and-topicalization">given/when and Topicalization</h1>
+<p>Perl never had a switch statement it was happy with.
+<code>given</code>/<code>when</code> arrived experimentally in 5.10 and
+was later demoted; most code fell back on an
+<code>if</code>/<code>elsif</code> ladder or the well-known
+<code>for</code>-as-switch trick. Raku, by contrast, builds
+<code>given</code>/<code>when</code> into the core of the language and
+wires it into the topic variable <code>$_</code> and the smartmatch
+operator <code>~~</code>. The result is a switch that does far more than
+compare for equality: it dispatches on values, types, ranges, and
+regexes with a single, uniform mechanism.</p>
+<h2 id="the-perl-starting-point">The Perl starting point</h2>
+<p>A chain of <code>elsif</code>s is the honest baseline. It works, but
+it repeats the subject on every line:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+my $x = 5;
+if    ($x == 1) { say 'one' }
+elsif ($x == 5) { say 'five' }
+else            { say 'other' }
+# five</pre></div>
+<p>The other classic idiom localises <code>$_</code> by looping over a
+single value, turning the block into a topicaliser so that regex matches
+and <code>last</code> become available:</p>
+<div class="highlight perl-code"><pre>for ($x) {
+    if (/^\d+$/) { say 'digits'; last }
+    say 'not digits';
+}
+# digits</pre></div>
+<p>That <code>for ($x) { ... }</code> trick — abusing a loop to set the
+topic — is precisely the idea Raku promotes to a first-class
+keyword.</p>
+<h2 id="given-sets-the-topic"><code>given</code> sets the topic</h2>
+<p><code>given</code> takes an expression, makes it the topic
+<code>$_</code>, and runs a block. That is all it does; on its own it is
+just a topicaliser:</p>
+<div class="highlight raku"><pre><span></span><span class="k">given</span> <span class="s">'Hello, World!'</span> {
+    .<span class="nb">say</span>;                <span class="c1"># Hello, World!</span>
+    .<span class="nb">uc</span>.<span class="nb">say</span>;             <span class="c1"># HELLO, WORLD!</span>
+    <span class="nb">say</span> .<span class="nb">chars</span>;          <span class="c1"># 13</span>
+}</pre></div>
+
+<p>Every leading-dot method call operates on <code>$_</code>, exactly as
+we saw in Chapter 3. So <code>given</code> is the explicit, named
+version of “set the topic to this, then act on it” — the honest form of
+the Perl <code>for</code>-with-one-element hack.</p>
+<h2 id="when-smartmatches-against-the-topic"><code>when</code>
+smartmatches against the topic</h2>
+<p>Inside a <code>given</code> (or any block where <code>$_</code> is
+set), <code>when</code> compares the topic against a value using the
+smartmatch operator <code>~~</code> <em>implicitly</em>. When the match
+succeeds, the block runs and then — crucially — automatically
+<code>last</code>s out of the enclosing construct. There is no
+fall-through, so no <code>break</code> is needed:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">grade</span>(<span class="nv">$score</span>) {
+    <span class="k">given</span> <span class="nv">$score</span> {
+        <span class="k">when</span> * &gt;= <span class="mi">90</span> { <span class="s">'A'</span> }
+        <span class="k">when</span> * &gt;= <span class="mi">80</span> { <span class="s">'B'</span> }
+        <span class="k">when</span> * &gt;= <span class="mi">70</span> { <span class="s">'C'</span> }
+        <span class="k">default</span>      { <span class="s">'F'</span> }
+    }
+}
+<span class="nb">say</span> <span class="n">grade</span>(<span class="mi">95</span>);           <span class="c1"># A</span>
+<span class="nb">say</span> <span class="n">grade</span>(<span class="mi">83</span>);           <span class="c1"># B</span>
+<span class="nb">say</span> <span class="n">grade</span>(<span class="mi">50</span>);           <span class="c1"># F</span></pre></div>
+
+<p>The <code>*</code> here is the <em>whatever star</em> (Chapter 17):
+<code>* &gt;= 90</code> builds a little callback that smartmatches true
+when the topic is at least 90. <code>default</code> is the catch-all,
+equivalent to a final <code>else</code>.</p>
+<p>Note that each <code>when</code> block’s value becomes the value of
+the whole <code>given</code> — this <code>grade</code> subroutine has no
+explicit <code>return</code> and needs none.</p>
+<h2 id="matching-on-more-than-equality">Matching on more than
+equality</h2>
+<p>The power of <code>when</code> is that <code>~~</code> means
+different things depending on the right-hand side. One switch can mix
+values, types, ranges, and regexes freely:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">describe</span>(<span class="nv">$x</span>) {
+    <span class="k">given</span> <span class="nv">$x</span> {
+        <span class="k">when</span> <span class="mi">0</span>        { <span class="s">'zero'</span> }
+        <span class="k">when</span> <span class="nb">Int</span>      { <span class="s">'some integer'</span> }
+        <span class="k">when</span> <span class="mi">1</span>.<span class="mf">.10</span>    { <span class="s">'small number'</span> }
+        <span class="k">when</span> /^\<span class="n">d</span>+<span class="nv">$/</span>  { <span class="s">'a string of digits'</span> }
+        <span class="k">default</span>       { <span class="s">'something else'</span> }
+    }
+}
+<span class="nb">say</span> <span class="n">describe</span>(<span class="mi">0</span>);         <span class="c1"># zero</span>
+<span class="nb">say</span> <span class="n">describe</span>(<span class="mi">5</span>);         <span class="c1"># some integer</span>
+<span class="nb">say</span> <span class="n">describe</span>(<span class="mf">3.14</span>);      <span class="c1"># small number</span>
+<span class="nb">say</span> <span class="n">describe</span>(<span class="s">'42abc'</span>);   <span class="c1"># something else</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Read the cases as questions asked of the topic: <em>is it equal to 0?
+is it an Int? is it in the range 1..10? does it match this regex?</em>
+Because matching stops at the first success, <strong>order
+matters</strong>: <code>describe(5)</code> reports “some integer”
+because <code>when Int</code> is tested before <code>when 1..10</code>.
+Put your most specific cases first.</p>
+<h2 id="proceed-and-succeed"><code>proceed</code> and
+<code>succeed</code></h2>
+<p>Automatic <code>last</code> is usually what you want, but
+occasionally you need to override it. Two keywords give you fine
+control.</p>
+<p><code>proceed</code> falls through to the <em>next</em>
+<code>when</code>, deliberately continuing the search after a match:</p>
+<div class="highlight raku"><pre><span></span><span class="k">given</span> <span class="mi">42</span> {
+    <span class="k">when</span> <span class="nb">Int</span>    { <span class="nb">say</span> <span class="s">'an integer'</span>; <span class="k">proceed</span> }
+    <span class="k">when</span> * &gt; <span class="mi">10</span> { <span class="nb">say</span> <span class="s">'and greater than ten'</span> }
+    <span class="k">default</span>     { <span class="nb">say</span> <span class="s">'not reached'</span> }
+}
+<span class="c1"># an integer</span>
+<span class="c1"># and greater than ten</span></pre></div>
+
+<p><code>succeed</code> does the opposite: it leaves the entire
+<code>given</code> block immediately, and may carry a value out with it.
+It is the early-exit you would otherwise write with <code>last</code>,
+but it can also supply the block’s result:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">classify</span>(<span class="nv">$n</span>) {
+    <span class="k">given</span> <span class="nv">$n</span> {
+        <span class="k">when</span> * &lt; <span class="mi">0</span> { <span class="s">'negative'</span> }
+        <span class="k">default</span> {
+            <span class="k">succeed</span> <span class="s">'non-negative'</span> <span class="k">if</span> <span class="nv">$n</span> == <span class="mi">0</span>;
+            <span class="s">'positive'</span>
+        }
+    }
+}
+<span class="nb">say</span> <span class="nb">classify</span>(-<span class="mi">3</span>);        <span class="c1"># negative</span>
+<span class="nb">say</span> <span class="nb">classify</span>(<span class="mi">0</span>);         <span class="c1"># non-negative</span>
+<span class="nb">say</span> <span class="nb">classify</span>(<span class="mi">7</span>);         <span class="c1"># positive</span></pre></div>
+
+<h2 id="when-inside-a-for-loop"><code>when</code> inside a
+<code>for</code> loop</h2>
+<p>Because <code>for</code> already sets the topic on each iteration,
+you can drop <code>when</code> straight into a loop body with no
+<code>given</code> at all — the loop <em>is</em> the topicaliser. This
+is the clean version of the Perl <code>for</code>-as-switch idiom, now
+built from parts that were designed to fit together:</p>
+<div class="highlight raku"><pre><span></span><span class="k">for</span> <span class="mi">1</span>, <span class="s">'two'</span>, <span class="mf">3.0</span>, [<span class="mi">4</span>] {
+    <span class="k">when</span> <span class="nb">Int</span> { <span class="nb">say</span> <span class="s">&quot;$_ is Int&quot;</span> }
+    <span class="k">when</span> <span class="nb">Str</span> { <span class="nb">say</span> <span class="s">&quot;$_ is Str&quot;</span> }
+    <span class="k">default</span>  { <span class="nb">say</span> <span class="s">&quot;$_ is something else&quot;</span> }
+}
+<span class="c1"># 1 is Int</span>
+<span class="c1"># two is Str</span>
+<span class="c1"># 3 is something else</span>
+<span class="c1"># 4 is something else</span></pre></div>
+
+<p>Here the automatic <code>last</code> of a matched <code>when</code>
+is understood as <code>next</code> — it moves on to the following
+iteration rather than leaving the loop.</p>
+<h2 id="given-as-an-expression"><code>given</code> as an expression</h2>
+<p>A <code>given</code> block yields the value of whichever branch ran,
+so it can produce a result directly. As with <code>if</code> in Chapter
+12, using a control keyword in expression position needs the
+<code>do</code> prefix — a bare <code>given</code> on the right of
+<code>=</code> is a compile-time error that tells you exactly what to
+add:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$size</span> = <span class="k">do</span> <span class="k">given</span> <span class="mi">1024</span> {
+    <span class="k">when</span> * &lt; <span class="mi">1000</span>  { <span class="s">'small'</span> }
+    <span class="k">when</span> * &lt; <span class="mi">10000</span> { <span class="s">'medium'</span> }
+    <span class="k">default</span>        { <span class="s">'large'</span> }
+};
+<span class="nb">say</span> <span class="nv">$size</span>;               <span class="c1"># medium</span></pre></div>
+
+<p>This is the shape you will reach for constantly: a table of cases
+collapsed into a single value, no temporary variable, no fall-through,
+no repeated subject. It is what the <code>if</code>/<code>elsif</code>
+ladder always wanted to be.</p>
+<p>Topicalisation and smartmatch are the last pieces of ordinary control
+flow. Next we look at code that runs <em>outside</em> the ordinary flow
+altogether — at compile time, at block entry and exit, around each loop
+iteration — through Raku’s phasers.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/conditionals-and-loops">Conditionals
+and Loops</a>   |   <a href="/raku-books/migrating-to-raku/phasers">Phasers</a>
+→</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

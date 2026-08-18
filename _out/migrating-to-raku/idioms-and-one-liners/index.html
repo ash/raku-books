@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Idioms, Gotchas, and One-liners — Raku Books</title>
+    <meta property="og:title" content="Idioms, Gotchas, and One-liners — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/robust-and-modern-raku">Robust
+and Modern Raku</a></p>
+<h1 id="idioms-gotchas-and-one-liners">Idioms, Gotchas, and
+One-liners</h1>
+<p>We have reached the end of the journey, and it is a good moment to
+gather the small stones that most often trip a Perl programmer crossing
+into Raku — the gotchas that survive even after you have learned the big
+ideas — and then to have some fun with the thing Perl was always best
+at: the command-line one-liner. Keep this chapter close for the first
+few weeks; these are the mistakes everyone makes, and knowing them in
+advance saves a lot of puzzled staring.</p>
+<h2 id="the-space-before-paren-trap">The space-before-paren trap</h2>
+<p>We met this in Chapter 1, and it earns a reminder because it is the
+single most common surprise. A space between a function name and its
+opening parenthesis changes the meaning. Without the space, the
+parentheses are the argument list; with the space, they are a single
+parenthesised argument — a list.</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);        <span class="c1"># (a b)   — one argument: the list (&quot;a&quot;, &quot;b&quot;)</span>
+<span class="nb">say</span>(<span class="s">&quot;a&quot;</span>, <span class="s">&quot;b&quot;</span>);         <span class="c1"># ab      — two arguments</span></pre></div>
+
+<p>The rule: <code>f(...)</code> is a call with those arguments;
+<code>f (...)</code> passes one thing, the value of <code>(...)</code>.
+When in doubt, drop the space.</p>
+<h2 id="the-single-argument-rule">The single-argument rule</h2>
+<p>Related, and just as sneaky: <code>[ ]</code> around a single array
+does <em>not</em> wrap it in an extra layer — but around anything that
+looks like a list, it does. This bites when you build nested
+structures.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="nb">say</span> [<span class="nv">@a</span>];              <span class="c1"># [1 2 3]     — a single array flows straight in</span>
+<span class="nb">say</span> [<span class="mi">1</span>, <span class="nv">@a</span>];           <span class="c1"># [1 [1 2 3]] — now @a is one element among others</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Recall from Chapter 4 that arrays no longer flatten themselves. If
+you meant to merge, use the slip prefix <code>|</code>:
+<code>[1, |@a]</code> gives <code>[1 1 2 3]</code>.</p>
+<h2 id="versus"><code>//</code> versus <code>||</code></h2>
+<p>Both languages have both operators, and the distinction is the same —
+but because Raku code leans on <code>//</code> far more often, it is
+worth stating plainly. <code>||</code> tests <em>truth</em>;
+<code>//</code> tests <em>definedness</em>. The difference shows the
+instant a legitimate value is falsy, such as <code>0</code> or the empty
+string.</p>
+<div class="highlight perl-code"><pre>my $x = 0;
+say $x || 5;           # 5    — 0 is false, so the default wins
+say $x // 5;           # 0    — 0 is defined, so it stays</pre></div>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$x</span> = <span class="mi">0</span>;
+<span class="nb">say</span> <span class="nv">$x</span> || <span class="mi">5</span>;           <span class="c1"># 5</span>
+<span class="nb">say</span> <span class="nv">$x</span> // <span class="mi">5</span>;           <span class="c1"># 0</span></pre></div>
+
+<p>Reach for <code>//</code> when supplying a default for something that
+might be undefined but could legitimately be <code>0</code> or
+<code>''</code> — which is most of the time.</p>
+<h2 id="is-not-perls-smartmatch"><code>~~</code> is not Perl’s
+smartmatch</h2>
+<p>Perl’s smartmatch was famously unpredictable and is now discouraged.
+Raku’s <code>~~</code> is well-defined: it asks “does the left-hand side
+<em>match</em> the right-hand side?”, and the meaning of “match” depends
+on the right operand. Against a type it is a type check; against a
+range, membership; against a regex, a pattern match; against a junction,
+distribution.</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">5</span> ~~ <span class="nb">Int</span>;          <span class="c1"># True</span>
+<span class="nb">say</span> <span class="mi">5</span> ~~ <span class="mi">3</span>.<span class="mf">.10</span>;        <span class="c1"># True</span>
+<span class="nb">say</span> <span class="s">&quot;foo&quot;</span> ~~ <span class="sr">/o/</span>;      <span class="c1"># ｢o｣    — the match object (truthy)</span>
+<span class="nb">say</span> <span class="mi">3</span> ~~ (<span class="mi">1</span>|<span class="mi">2</span>|<span class="mi">3</span>);      <span class="c1"># True</span></pre></div>
+
+<p>This is the engine behind <code>given</code>/<code>when</code>
+(Chapter 13). The key mental shift from Perl: <code>~~</code> is not
+symmetric and not a mystery — the right-hand side decides the kind of
+test.</p>
+<h2 id="return-from-a-pointy-block"><code>return</code> from a pointy
+block</h2>
+<p>In Raku, <code>return</code> always returns from the enclosing
+<em>subroutine or method</em>, never merely from a block. A pointy block
+is transparent to it, which can surprise you inside a
+<code>map</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">find-first</span>(<span class="nv">@list</span>) {
+    <span class="nv">@list</span>.<span class="nb">map</span>(-&gt; <span class="nv">$x</span> { <span class="k">return</span> <span class="nv">$x</span> <span class="k">if</span> <span class="nv">$x</span> &gt; <span class="mi">2</span> });   <span class="c1"># returns from find-first!</span>
+    <span class="k">return</span> -<span class="mi">1</span>;
+}
+<span class="nb">say</span> <span class="n">find-first</span>([<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>, <span class="mi">4</span>]);                   <span class="c1"># 3</span></pre></div>
+
+<p>If you only want the block to <em>produce</em> a value, do not write
+<code>return</code> at all — the block’s last expression is its
+value:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@doubled</span> = (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>).<span class="nb">map</span>(-&gt; <span class="nv">$x</span> { <span class="nv">$x</span> * <span class="mi">2</span> });
+<span class="nb">say</span> <span class="nv">@doubled</span>;                      <span class="c1"># [2 4 6]</span></pre></div>
+
+<p>So: <code>return</code> exits the whole routine; to yield from a
+block, just let the value fall out.</p>
+<h2 id="versus-eq"><code>==</code> versus <code>eq</code></h2>
+<p>The oldest Perl gotcha survives unchanged, but with a sharper edge.
+<code>==</code> compares <em>numerically</em>, <code>eq</code> compares
+<em>as strings</em> — and in Raku, forcing a non-numeric string through
+<code>==</code> is a loud error rather than a silent zero.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="s">&quot;10&quot;</span> == <span class="s">&quot;10.0&quot;</span>;    <span class="c1"># True   — numeric: equal</span>
+<span class="nb">say</span> <span class="s">&quot;10&quot;</span> <span class="n">eq</span> <span class="s">&quot;10.0&quot;</span>;    <span class="c1"># False  — string: different</span>
+<span class="nb">say</span> <span class="s">&quot;abc&quot;</span> == <span class="s">&quot;abd&quot;</span>;    <span class="c1"># error: Cannot convert string to number</span></pre></div>
+
+<p>Perl would quietly treat <code>"abc"</code> as <code>0</code> here;
+Raku refuses to guess. Use <code>==</code> for numbers, <code>eq</code>
+for text, and let the error remind you when you have mixed them up.</p>
+<h2 id="sigil-invariance-slips">Sigil-invariance slips</h2>
+<p>The headline change from Chapter 2 — the sigil never switches —
+produces one recurring slip: fingers trained on Perl still type
+<code>$a[1]</code> to reach an element of <code>@a</code>. In Raku that
+names a <em>different, undeclared</em> variable, and you get a
+compile-time error rather than the value you wanted.</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>;
+<span class="nb">say</span> <span class="nv">@a</span>[<span class="mi">1</span>];             <span class="c1"># 20   — correct: the sigil stays @</span>
+<span class="c1"># say $a[1];           # error: Variable '$a' is not declared</span></pre></div>
+
+<p>The good news is that this is a <em>compile-time</em> error, so it is
+caught instantly, not at three in the morning in production. Retrain the
+reflex: the sigil belongs to the variable, and indexing never changes
+it.</p>
+<h2 id="the-one-liner-cookbook">The one-liner cookbook</h2>
+<p>Now the fun part. Both compilers run a program straight from the
+command line with <code>-e</code>. The line-loop switches are
+deliberately familiar: <code>-n</code> wraps your code in a loop over
+each input line, and <code>-p</code> does the same but prints
+<code>$_</code> at the end of each iteration. Combine them with
+<code>-e</code> as <code>-ne</code> and <code>-pe</code>, exactly as in
+Perl.</p>
+<div class="highlight"><pre>$ raku -e 'say "Hello from a one-liner"'
+$ raku -ne '.say if /pattern/'  file
+$ raku -pe '$_ = .uc'           file</pre></div>
+<p>There are two differences worth internalising. First, in Raku’s
+<code>-n</code>/<code>-p</code> loops the line is <strong>already
+chomped</strong> — <code>$_</code> never carries the trailing newline,
+so you do not sprinkle <code>chomp</code> everywhere as you do in Perl.
+Second, and more surprising: <strong>Raku has no
+<code>-a</code>/<code>-F</code> autosplit switch and no <code>-i</code>
+in-place switch</strong>. Where Perl gives you <code>@F</code> for free,
+in Raku you split explicitly with <code>.words</code>,
+<code>.split</code>, or <code>.comb</code> — which is a small price for
+one obvious idiom instead of a hidden global.</p>
+<div class="highlight perl-code"><pre># Perl: -a splits each line into @F automatically
+perl -lane 'print $F[0]' file</pre></div>
+<div class="highlight raku no-run"><pre><span></span><span class="c1"># Raku: split it yourself with .words</span>
+<span class="nb">raku</span> -<span class="n">ne</span> <span class="s">'say .words[0]'</span> <span class="n">file</span></pre></div>
+
+<p><code>$_</code> is the default topic in a one-liner just as in a
+program, so leading-dot method calls (<code>.say</code>,
+<code>.uc</code>, <code>.words</code>) act on the current line with no
+variable named at all. <code>BEGIN</code> and <code>END</code> blocks
+work inside one-liners too, which is how you initialise and report an
+accumulator.</p>
+<p>Here is a table of everyday tasks, Perl beside Raku:</p>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 40%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Task</th>
+<th>Perl</th>
+<th>Raku</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Print matching lines</td>
+<td><code>perl -ne 'print if /an/'</code></td>
+<td><code>raku -ne '.say if /an/'</code></td>
+</tr>
+<tr>
+<td>Uppercase each line</td>
+<td><code>perl -pe '$_=uc'</code></td>
+<td><code>raku -pe '$_ = .uc'</code></td>
+</tr>
+<tr>
+<td>Sum the 2nd column</td>
+<td><code>perl -lane '$s+=$F[1]; END{print $s}'</code></td>
+<td><code>raku -ne 'state $s=0; $s+=.words[1]; END {say $s}'</code></td>
+</tr>
+<tr>
+<td>Count word frequency</td>
+<td><code>perl -ne 'chomp;$c{$_}++; END{print "$_ $c{$_}\n" for keys %c}'</code></td>
+<td><code>raku -ne 'state %c; %c{$_}++; END {.say for %c.sort}'</code></td>
+</tr>
+<tr>
+<td>Reverse the lines (<code>tac</code>)</td>
+<td><code>perl -e 'print reverse &lt;&gt;'</code></td>
+<td><code>raku -e 'say $*IN.lines.reverse.join("\n")'</code></td>
+</tr>
+<tr>
+<td>In-place edit</td>
+<td><code>perl -i -pe 's/a/b/' file</code></td>
+<td>(no switch — edit in the program,
+e.g. <code>'file'.IO.spurt(...)</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Each of these was run to produce the outputs used throughout this
+book; for example, the column-sum over
+<code>apple 3 / banana 5 / cherry 2</code> prints <code>10</code>, and
+the frequency count over <code>a b a c b a</code> prints
+<code>a =&gt; 3</code>, <code>b =&gt; 2</code>,
+<code>c =&gt; 1</code>.</p>
+<h2 id="where-you-are-now">Where you are now</h2>
+<p>If you have read this far, something has quietly changed. The Raku
+you met in Chapter 1 as a stranger with familiar features is now a
+language you can read at a glance and write without a manual open. You
+know why the sigil stopped shifting, why the dot means “method”, why
+numbers add up and lists stopped flattening; you can reach for
+signatures, roles, grammars, promises, and lazy lists as naturally as
+you once reached for <code>@_</code>, <code>bless</code>, and
+<code>map</code>. The workarounds you carried from Perl — the clever
+<code>@{[...]}</code>, the hand-rolled exception class, the
+<code>fork</code>-and-reap dance — have become one-word built-ins.</p>
+<p>There is much more to explore, and the community is welcoming, but
+you no longer need a translator: you think in Raku now. The appendices
+that follow are a reference to return to — a cheat sheet, the operator
+and special-variable tables, a glossary, and pointers onward. Keep
+writing Raku, and enjoy it. Welcome to the other side.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/concurrency">Concurrency and
+Parallelism</a>   |   <a
+href="/raku-books/migrating-to-raku/appendices">Appendices</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

@@ -156,3 +156,29 @@ books:
       publisher: DeepText, Amsterdam
       isbn: 978-90-821568-9-8
       pages: 93
+
+  migrating-to-raku:
+    # Written as Markdown, not recovered from a PDF: the manuscript in
+    # github.com/ash/migrating-to-raku is the source, and `manifest.txt` there
+    # gives the reading order. `pdf:` is used only to render the cover.
+    source: markdown
+    md_root: "~/Books/Migrating to Raku"
+    pdf: "~/Books/Migrating to Raku/_build/migrating-to-raku.pdf"
+    # No cover artwork yet — page 1 is the typeset title page, so keep the whole
+    # page rather than trimming to the text block.
+    cover_trim: false
+    slug: migrating-to-raku
+    # Reachable by URL, but not shown on the home page, in the book switcher,
+    # in the search index, or in the tested-programs register. Flip to false to
+    # announce the book.
+    unlisted: true
+    title: Migrating to Raku
+    date: "2026-08-18"
+    long_title: "Migrating to Raku: An Easy Transition from Perl"
+    description: >-
+      A recipe guide for fluent Perl programmers moving to Raku: every section
+      takes a pattern you already know, shows the idiomatic Raku equivalent
+      beside it, and explains what changed and why.
+    meta:
+      author: Andrew Shitov
+      pages: 272

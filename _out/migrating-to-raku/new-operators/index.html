@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>New Operators and Meta-operators — Raku Books</title>
+    <meta property="og:title" content="New Operators and Meta-operators — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a
+href="/raku-books/migrating-to-raku/operators-and-expressions">Operators and
+Expressions</a></p>
+<h1 id="new-operators-and-meta-operators">New Operators and
+Meta-operators</h1>
+<p>This is the chapter with no Perl equivalents. Everything so far had a
+counterpart you could point to; here Raku gives you operators that fold
+entire loops — sum this, pair those, compare all of these — into a
+single expression. Some are ordinary operators with new jobs; the more
+powerful ones are <em>meta-operators</em>: little modifiers that take an
+operator you already know and build a new one out of it. Learn the
+handful of meta-operators and you get a combinatorial number of
+operators for free.</p>
+<p>Throughout, each example is paired with the Perl loop it
+replaces.</p>
+<h2 id="the-equality-family">The equality family</h2>
+<p>Perl has <code>==</code> and <code>eq</code> and, for references, the
+fact that two references are equal only if they point to the same thing.
+Raku teases apart four distinct questions that all hid behind that, and
+gives each its own operator.</p>
+<p><code>eqv</code> asks whether two things are <em>structurally
+equivalent</em> — same type, same contents, all the way down. It is what
+you actually wanted whenever you reached for a deep-comparison
+module:</p>
+<div class="highlight perl-code"><pre># Perl: needs a module for a deep compare
+use Test::More;
+is_deeply([1, 2, 3], [1, 2, 3]);   # pass</pre></div>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> [<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>] <span class="n">eqv</span> [<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>];       <span class="c1"># True</span>
+<span class="nb">say</span> (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>) <span class="n">eqv</span> (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>);       <span class="c1"># True</span></pre></div>
+
+<p><code>===</code> asks whether two things are <em>the same value</em>
+(value identity). Two immutable values like <code>42</code> or
+<code>"abc"</code> are always the same value; two freshly built arrays
+are not, even if their contents match:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">42</span> === <span class="mi">42</span>;             <span class="c1"># True</span>
+<span class="nb">say</span> <span class="s">&quot;abc&quot;</span> === <span class="s">&quot;abc&quot;</span>;       <span class="c1"># True</span>
+<span class="nb">say</span> [<span class="mi">1</span>, <span class="mi">2</span>] === [<span class="mi">1</span>, <span class="mi">2</span>];     <span class="c1"># False   (two distinct arrays)</span></pre></div>
+
+<p><code>=:=</code> asks the strictest question of all: do two names
+refer to <em>the very same container</em>? This is the closest thing to
+Perl’s “same reference” test, but at the level of the variable’s storage
+box (see Chapter 8 on containers):</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$x</span> = <span class="mi">5</span>;
+<span class="k">my</span> <span class="nv">$y</span> = <span class="mi">5</span>;
+<span class="nb">say</span> <span class="nv">$x</span> =:= <span class="nv">$y</span>;             <span class="c1"># False  (different containers)</span>
+<span class="k">my</span> <span class="nv">$z</span> := <span class="nv">$x</span>;               <span class="c1"># bind: $z is an alias for $x</span>
+<span class="nb">say</span> <span class="nv">$z</span> =:= <span class="nv">$x</span>;             <span class="c1"># True   (same container)</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Finally <code>=~=</code> is <em>approximate</em> equality — a godsend
+for floating-point work, where exact <code>==</code> is a trap. It
+treats two numbers as equal if they are within a tiny relative
+tolerance:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="nb">sqrt</span>(<span class="mi">2</span>) ** <span class="mi">2</span> == <span class="mi">2</span>;     <span class="c1"># False   (it is 2.0000000000000004)</span>
+<span class="nb">say</span> <span class="nb">sqrt</span>(<span class="mi">2</span>) ** <span class="mi">2</span> =~= <span class="mi">2</span>;    <span class="c1"># True</span>
+<span class="nb">say</span> <span class="mf">0.1</span> + <span class="mf">0.2</span> =~= <span class="mf">0.3</span>;     <span class="c1"># True</span></pre></div>
+
+<h2 id="the-reduction-meta-operator">The reduction meta-operator:
+<code>[ ]</code></h2>
+<p>Wrap any infix operator in square brackets and it becomes a
+<em>reduction</em> — it inserts that operator between all the elements
+of a list. This single meta-operator replaces a whole category of
+accumulator loops.</p>
+<p>The classic sum. In Perl you write the loop (or reach for
+<code>List::Util</code>):</p>
+<div class="highlight perl-code"><pre>use List::Util 'sum';
+my @a = (1, 2, 3, 4, 5);
+my $total = 0;
+$total += $_ for @a;      # 15</pre></div>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>, <span class="mi">4</span>, <span class="mi">5</span>;
+<span class="nb">say</span> [+] <span class="nv">@a</span>;               <span class="c1"># 15</span></pre></div>
+
+<p>The same trick works for any operator, which is the point — you are
+not learning <code>sum</code>, <code>product</code>, <code>max</code>,
+and <code>join</code> as separate functions, you are applying one
+idea:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> [*] <span class="mi">1</span>.<span class="mf">.5</span>;             <span class="c1"># 120   (factorial of 5)</span>
+<span class="nb">say</span> [<span class="nb">max</span>] <span class="mi">3</span>, <span class="mi">1</span>, <span class="mi">4</span>, <span class="mi">1</span>, <span class="mi">5</span>;  <span class="c1"># 5</span>
+<span class="nb">say</span> [~] &lt;<span class="n">a</span> <span class="n">b</span> <span class="n">c</span>&gt;;          <span class="c1"># abc   (like join with no separator)</span></pre></div>
+
+<p>Reduce with a comparison and you get a chained comparison over a
+whole list — “is this list strictly ascending?” collapses to five
+characters:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> [&lt;] <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;          <span class="c1"># True</span>
+<span class="nb">say</span> [&lt;] <span class="mi">1</span>, <span class="mi">3</span>, <span class="mi">2</span>;          <span class="c1"># False</span></pre></div>
+
+<p>A reduction over an empty list returns the operator’s identity value,
+so <code>[+] ()</code> is <code>0</code> and <code>[*] ()</code> is
+<code>1</code> — no special-casing required.</p>
+<h2 id="hyper-operators-and">Hyper operators: <code>»</code> and
+<code>«</code></h2>
+<p>A hyper operator applies an ordinary operator to <em>every
+element</em> of a list at once — a <code>map</code> without the
+ceremony. The pointy quotes aim at the list side (or sides). To add one
+to every element:</p>
+<div class="highlight perl-code"><pre>my @a = (1, 2, 3);
+my @b = map { $_ + 1 } @a;   # (2, 3, 4)</pre></div>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="nb">say</span> <span class="nv">@a</span> »+» <span class="mi">1</span>;                <span class="c1"># [2 3 4]</span></pre></div>
+
+<p>Point quotes on <em>both</em> sides and Raku zips two lists together
+element-by-element:</p>
+<div class="highlight perl-code"><pre>my @x = (1, 2, 3);
+my @y = (10, 20, 30);
+my @sum;
+$sum[$_] = $x[$_] + $y[$_] for 0 .. $#x;   # (11, 22, 33)</pre></div>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>) »+« (<span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>);            <span class="c1"># (11 22 33)</span></pre></div>
+
+<p>The same idea works for <em>method calls</em> — <code>».method</code>
+runs the method on every element and collects the results:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> &lt;<span class="n">hello</span> <span class="n">world</span>&gt;».<span class="nb">tc</span>;       <span class="c1"># (Hello World)</span>
+<span class="nb">say</span> (-<span class="mi">1</span>, -<span class="mi">2</span>, <span class="mi">3</span>)».<span class="nb">abs</span>;        <span class="c1"># (1 2 3)</span></pre></div>
+
+<p>Besides being concise, hyper operations are explicitly
+parallelisable: you are promising Raku the elements do not depend on one
+another, which is why the brackets point outward like arrows.</p>
+<h2 id="the-cross-operator-x">The cross operator: <code>X</code></h2>
+<p><code>X</code> produces the <em>cross product</em> of two or more
+lists — every combination, in order. In Perl that is a nested loop:</p>
+<div class="highlight perl-code"><pre>my @pairs;
+for my $l ('a', 'b') {
+    for my $n (1, 2) {
+        push @pairs, "$l$n";
+    }
+}
+# a1 a2 b1 b2</pre></div>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> &lt;<span class="n">a</span> <span class="n">b</span>&gt; <span class="n">X</span> &lt;<span class="mi">1</span> <span class="mi">2</span>&gt;;           <span class="c1"># ((a 1) (a 2) (b 1) (b 2))</span></pre></div>
+
+<p>By itself <code>X</code> pairs the elements up. Glue an operator onto
+it — <code>Xoperator</code> — and it <em>combines</em> each pair with
+that operator instead. <code>X~</code> concatenates, <code>X*</code>
+multiplies:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> &lt;<span class="n">a</span> <span class="n">b</span>&gt; <span class="n">X</span>~ <span class="s">&lt;1 2&gt;</span>;          <span class="c1"># (a1 a2 b1 b2)</span>
+<span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.3</span>) <span class="n">X</span>* (<span class="mi">1</span>.<span class="mf">.3</span>);        <span class="c1"># (1 2 3 2 4 6 3 6 9)  — a times table</span></pre></div>
+
+<p>That last line is a complete multiplication table as one
+expression.</p>
+<h2 id="the-zip-operator-z">The zip operator: <code>Z</code></h2>
+<p>Where <code>X</code> takes <em>every</em> combination, <code>Z</code>
+takes them <em>in lockstep</em> — first with first, second with second —
+stopping when the shortest list runs out. It is the tool for walking two
+parallel arrays:</p>
+<div class="highlight perl-code"><pre>my @names = ('Alice', 'Bob');
+my @ages  = (30, 25);
+for my $i (0 .. $#names) {
+    say "$names[$i] is $ages[$i]";
+}</pre></div>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> &lt;<span class="n">a</span> <span class="n">b</span> <span class="n">c</span>&gt; <span class="n">Z</span> &lt;<span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span>&gt;;       <span class="c1"># ((a 1) (b 2) (c 3))</span></pre></div>
+
+<p>Like <code>X</code>, <code>Z</code> takes an operator suffix.
+<code>Z+</code> adds paired elements; a <code>Z*</code> followed by a
+<code>[+]</code> reduction is the whole of a dot product:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@prices</span> = <span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>;
+<span class="k">my</span> <span class="nv">@qty</span>    = <span class="mi">2</span>, <span class="mi">1</span>, <span class="mi">5</span>;
+<span class="nb">say</span> [+] <span class="nv">@prices</span> <span class="n">Z</span>* <span class="nv">@qty</span>;     <span class="c1"># 190</span></pre></div>
+
+<h2 id="the-sequence-operator-...">The sequence operator:
+<code>...</code></h2>
+<p>The sequence operator builds a list by working out the pattern from
+the elements you give it and continuing until an endpoint. Give it two
+or three terms and it infers an arithmetic or geometric step:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">4</span> ... <span class="mi">256</span>);       <span class="c1"># (1 2 4 8 16 32 64 128 256)</span>
+<span class="nb">say</span> (<span class="mi">1</span> ... <span class="mi">5</span>);               <span class="c1"># (1 2 3 4 5)</span>
+<span class="nb">say</span> (<span class="s">'a'</span> ... <span class="s">'e'</span>);           <span class="c1"># (a b c d e)</span></pre></div>
+
+<p>Its real power is a <em>generator</em>: give it a closure that
+computes the next term from previous ones, and a <code>*</code> (the
+Whatever star, below) as the endpoint to mean “go forever”. The
+Fibonacci sequence, famously, is a one-liner — each term is the sum of
+the previous two:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>, <span class="mi">1</span>, * + * ... *)[^<span class="mi">10</span>];   <span class="c1"># (1 1 2 3 5 8 13 21 34 55)</span></pre></div>
+
+<p>Because the list is lazy it can be infinite; here <code>[^10]</code>
+simply takes the first ten. This replaces the hand-written
+state-carrying loop you would write in Perl to generate such a
+series.</p>
+<h2 id="feed-operators-and">Feed operators: <code>==&gt;</code> and
+<code>&lt;==</code></h2>
+<p>Feed operators pass a list from one processing stage to the next, so
+a pipeline reads in the order the data actually flows — the shell-pipe
+idea, but native. The rightward feed <code>==&gt;</code> sends its left
+side into the <em>last</em> argument of its right side:</p>
+<div class="highlight perl-code"><pre>my @result;
+for (1 .. 10) {
+    next unless $_ % 2 == 0;
+    push @result, $_ ** 2;
+}
+# 4 16 36 64 100</pre></div>
+<div class="highlight raku"><pre><span></span><span class="mi">1</span>.<span class="mf">.10</span> ==&gt; <span class="nb">grep</span>(* %% <span class="mi">2</span>) ==&gt; <span class="nb">map</span>(* ** <span class="mi">2</span>) ==&gt; <span class="k">my</span> <span class="nv">@result</span>;
+<span class="nb">say</span> <span class="nv">@result</span>;                 <span class="c1"># [4 16 36 64 100]</span></pre></div>
+
+<p>Read that left to right: take <code>1..10</code>, keep the even ones,
+square them, land the lot in <code>@result</code>. The leftward
+<code>&lt;==</code> does the same in the opposite direction, so the
+destination comes first:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@result</span>;
+<span class="nv">@result</span> &lt;== <span class="nb">map</span>(* ** <span class="mi">2</span>) &lt;== <span class="nb">grep</span>(* %% <span class="mi">2</span>) &lt;== <span class="mi">1</span>.<span class="mf">.10</span>;
+<span class="nb">say</span> <span class="nv">@result</span>;                 <span class="c1"># [4 16 36 64 100]</span></pre></div>
+
+<p><strong>A gotcha worth its own paragraph.</strong> The
+natural-looking <code>my @result = 1..10 ==&gt; grep(...)</code> does
+<em>not</em> work, because <code>==&gt;</code> binds looser than
+<code>=</code>: Raku assigns <code>1..10</code> to <code>@result</code>
+first and then feeds that away into nothing. Put the destination at the
+<em>end</em> of a rightward feed (<code>... ==&gt; my @result</code>),
+or use the leftward <code>&lt;==</code> form. This trips up almost
+everyone the first time.</p>
+<h2 id="the-whatever-star-and-whatevercode">The Whatever star:
+<code>*</code> and <code>WhateverCode</code></h2>
+<p>You have seen <code>*</code> appearing in the examples above. On its
+own, in a context that wants a value, <code>*</code> is the
+<em>Whatever</em> — a placeholder meaning “everything” or “the obvious
+thing” (as in <code>@a[*]</code> for all elements, or <code>...*</code>
+for “no end”). But the moment you use <code>*</code> inside an
+<em>expression</em>, something clever happens: Raku turns the
+surrounding expression into a small anonymous function, a
+<code>WhateverCode</code>, with the <code>*</code> as its argument.</p>
+<p>So <code>* + 1</code> is not a value — it is a function that adds one
+to whatever you give it. This is the terse closure you will use
+constantly with <code>map</code>, <code>grep</code>, and
+<code>sort</code>:</p>
+<div class="highlight perl-code"><pre>my @plus = map { $_ + 1 } (1, 2, 3);          # (2, 3, 4)
+my @big  = grep { $_ &gt; 2 } (1, 2, 3, 4);      # (3, 4)</pre></div>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>).<span class="nb">map</span>(* + <span class="mi">1</span>);                  <span class="c1"># (2 3 4)</span>
+<span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.4</span>).<span class="nb">grep</span>(* &gt; <span class="mi">2</span>);                    <span class="c1"># (3 4)</span>
+<span class="nb">say</span> &lt;<span class="n">banana</span> <span class="n">apple</span> <span class="n">cherry</span>&gt;.<span class="nb">sort</span>(*.<span class="nb">chars</span>);   <span class="c1"># (apple banana cherry)</span></pre></div>
+
+<p>Each <code>*</code> becomes a parameter, in order, so
+<code>* + *</code> is a two-argument function — which is exactly what
+fed the Fibonacci sequence above. When one <code>*</code> is not enough
+or the logic gets involved, fall back to an explicit block or pointy
+block; Chapter 17 covers the full range of block and closure forms.</p>
+<h2 id="negated-and-reversed-meta-operators">Negated and reversed
+meta-operators</h2>
+<p>Two more meta-operators round things out, each transforming an
+operator you already have.</p>
+<p>The <em>negation</em> meta-operator puts <code>!</code> in front of
+any comparison operator to invert its result. You know <code>!=</code>
+(that is really <code>!</code> applied to <code>==</code>); the same
+trick works on <em>any</em> comparison, including the word-named ones
+and the new ones:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">5</span> != <span class="mi">6</span>;                <span class="c1"># True</span>
+<span class="nb">say</span> <span class="s">'a'</span> !<span class="n">eq</span> <span class="s">'b'</span>;           <span class="c1"># True   (negated eq)</span>
+<span class="nb">say</span> [<span class="mi">1</span>, <span class="mi">2</span>] !<span class="n">eqv</span> [<span class="mi">1</span>, <span class="mi">3</span>];    <span class="c1"># True   (negated eqv)</span></pre></div>
+
+<p>The <em>reverse</em> meta-operator, <code>R</code>, swaps an
+operator’s two operands. <code>R-</code> is “subtract, backwards”,
+<code>R/</code> is “divide, the other way round” — handy when the
+argument order an API hands you is the reverse of what you want:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">10</span> <span class="n">R</span>- <span class="mi">3</span>;               <span class="c1"># -7   (computes 3 - 10)</span>
+<span class="nb">say</span> <span class="mi">2</span> <span class="n">R</span>/ <span class="mi">10</span>;               <span class="c1"># 5    (computes 10 / 2)</span>
+<span class="nb">say</span> [<span class="n">R</span>~] &lt;<span class="n">a</span> <span class="n">b</span> <span class="n">c</span>&gt;;          <span class="c1"># cba  (reduce, concatenating right-to-left)</span></pre></div>
+
+<p>Meta-operators compose, which is where the real economy lies:
+<code>[R-]</code> above is the reduction meta-operator wrapping the
+reversed subtraction operator. One surprise to note — reversing also
+makes the operator right-associative, so <code>[R-] 1, 2, 3</code>
+becomes <code>1 R- (2 R- 3)</code>, which works out to
+<code>1 R- 1</code>, and finally to <code>0</code>. When a meta-operator
+does something unexpected, expanding it by hand like this is the
+quickest way to see why.</p>
+<p>That completes the operator tour. You now have the vocabulary — the
+familiar operators of Chapter 10 and the meta-operators here — to write
+expressions that, in Perl, would have been loops. Next we put those
+expressions to work inside Raku’s control flow, starting with
+conditionals and loops in Chapter 12.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/operators-you-know">Operators You
+Already Know</a>   |   <a href="/raku-books/migrating-to-raku/control-flow">Control
+Flow</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

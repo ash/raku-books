@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Appendix C — Special Variables — Raku Books</title>
+    <meta property="og:title" content="Appendix C — Special Variables — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/appendices">Appendices</a></p>
+<h1 id="appendix-c-special-variables">Appendix C — Special
+Variables</h1>
+<p>Perl’s punctuation variables are one of the things migrating
+programmers miss most sharply — not because they are gone, but because
+most of them have moved. Two ideas explain nearly all of the changes.
+First, the global environment variables now carry the <em>dynamic</em>
+twigil <code>*</code> (<code>$*PID</code>, <code>@*ARGS</code>,
+<code>%*ENV</code>), which is why you can temporarily rebind them
+without global damage (Chapter 3). Second, the match result
+<code>$/</code> is a real <code>Match</code> object, so the capture
+variables are properties of it and are numbered from
+<strong>zero</strong>.</p>
+<p>Everything in the “Raku” column below has been checked under Rakudo
+v2026.07.</p>
+<h2 id="the-topic-and-arguments">The topic and arguments</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$_</code></td>
+<td><code>$_</code></td>
+<td>still the topic; a leading-dot method (<code>.say</code>) acts on
+it</td>
+</tr>
+<tr>
+<td><code>@_</code></td>
+<td>signature params / <code>@_</code></td>
+<td>prefer a real signature; <code>@_</code> still exists in a bare
+block</td>
+</tr>
+<tr>
+<td><code>$a</code>, <code>$b</code> (sort)</td>
+<td><code>$a</code>, <code>$b</code> or <code>$^a</code>,
+<code>$^b</code></td>
+<td>placeholder parameters work in any block</td>
+</tr>
+<tr>
+<td><code>wantarray</code></td>
+<td>— (gone)</td>
+<td>context is decided by the container, not queried; no
+<code>want</code> builtin</td>
+</tr>
+</tbody>
+</table>
+<h2 id="program-and-process">Program and process</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@ARGV</code></td>
+<td><code>@*ARGS</code></td>
+<td>command-line arguments</td>
+</tr>
+<tr>
+<td><code>%ENV</code></td>
+<td><code>%*ENV</code></td>
+<td>environment; <code>%*ENV&lt;HOME&gt;</code></td>
+</tr>
+<tr>
+<td><code>$0</code> (program name)</td>
+<td><code>$*PROGRAM-NAME</code></td>
+<td>the string name; <code>-e</code> for <code>-e</code> one-liners</td>
+</tr>
+<tr>
+<td><code>$0</code> (program name)</td>
+<td><code>$*PROGRAM</code></td>
+<td>the same thing as an <code>IO::Path</code> object</td>
+</tr>
+<tr>
+<td><code>$$</code></td>
+<td><code>$*PID</code></td>
+<td>process id</td>
+</tr>
+<tr>
+<td><code>$^X</code></td>
+<td><code>$*EXECUTABLE</code></td>
+<td>the interpreter (<code>IO::Path</code>);
+<code>$*EXECUTABLE-NAME</code> for the name</td>
+</tr>
+<tr>
+<td><code>%SIG</code></td>
+<td><code>%*SIG</code> / <code>signal(...)</code></td>
+<td>signal handling (also the <code>signal</code> Supply)</td>
+</tr>
+<tr>
+<td><code>$^O</code></td>
+<td><code>$*KERNEL.name</code> / <code>$*DISTRO</code></td>
+<td>OS and distribution introspection</td>
+</tr>
+</tbody>
+</table>
+<h2 id="standard-handles">Standard handles</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>STDIN</code></td>
+<td><code>$*IN</code></td>
+<td>an <code>IO::Handle</code>; <code>$*IN.lines</code>,
+<code>get</code></td>
+</tr>
+<tr>
+<td><code>STDOUT</code></td>
+<td><code>$*OUT</code></td>
+<td><code>say</code>/<code>print</code> write here</td>
+</tr>
+<tr>
+<td><code>STDERR</code></td>
+<td><code>$*ERR</code></td>
+<td><code>note</code> writes here</td>
+</tr>
+<tr>
+<td><code>&lt;&gt;</code> / <code>&lt;STDIN&gt;</code></td>
+<td><code>$*ARGFILES</code> / <code>lines()</code></td>
+<td>the magic input over <code>@*ARGS</code> or STDIN</td>
+</tr>
+</tbody>
+</table>
+<p>Because these are dynamic variables, redirection is local and tidy —
+rebind <code>$*OUT</code> inside a block and it reverts on the way out,
+no glob juggling:</p>
+<div class="highlight raku"><pre><span></span>{
+    <span class="k">my</span> <span class="nv">$*OUT</span> = <span class="nb">open</span> <span class="s">&quot;/tmp/log.txt&quot;</span>, :<span class="n">w</span>;
+    <span class="nb">say</span> <span class="s">&quot;this goes to the file&quot;</span>;      <span class="c1"># captured by the rebound handle</span>
+    <span class="nv">$*OUT</span>.<span class="nb">close</span>;
+}
+<span class="nb">say</span> <span class="s">&quot;this goes to the screen&quot;</span>;        <span class="c1"># $*OUT is the terminal again</span></pre></div>
+
+<h2 id="separators-and-formatting">Separators and formatting</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$/</code> (input record sep)</td>
+<td><code>$*IN.nl-in</code></td>
+<td>per-handle; a list of accepted line endings</td>
+</tr>
+<tr>
+<td><code>$\</code> (output record sep)</td>
+<td>—</td>
+<td>no global; use <code>say</code>, which adds <code>\n</code></td>
+</tr>
+<tr>
+<td><code>$,</code> (output field sep)</td>
+<td>—</td>
+<td>no global; use <code>.join(",")</code></td>
+</tr>
+<tr>
+<td><code>$"</code> (list separator)</td>
+<td>—</td>
+<td>no global; interpolation joins with a space; use
+<code>.join</code></td>
+</tr>
+<tr>
+<td><code>$;</code> (subscript sep)</td>
+<td>—</td>
+<td>multi-dim subscripts are native: <code>%h{$x; $y}</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="matching">Matching</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$/</code> (after a match)</td>
+<td><code>$/</code></td>
+<td>now a <code>Match</code> object, not the input separator</td>
+</tr>
+<tr>
+<td><code>$1</code>, <code>$2</code>, <code>$3</code> …</td>
+<td><code>$0</code>, <code>$1</code>, <code>$2</code> …</td>
+<td>captures are <strong>0-based</strong> aliases of <code>$/[0]</code>,
+<code>$/[1]</code> …</td>
+</tr>
+<tr>
+<td><code>$+{name}</code></td>
+<td><code>$&lt;name&gt;</code></td>
+<td>named capture; alias of <code>$/&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td><code>$&amp;</code> (whole match)</td>
+<td><code>$/</code> / <code>$/.Str</code></td>
+<td>the <code>Match</code> stringifies to the matched text</td>
+</tr>
+<tr>
+<td><code>$`</code> / <code>$'</code></td>
+<td><code>$/.prematch</code> / <code>$/.postmatch</code></td>
+<td>before/after the match</td>
+</tr>
+<tr>
+<td><code>@-</code> / <code>@+</code></td>
+<td><code>$/.from</code> / <code>$/.to</code></td>
+<td>match offsets (methods on <code>Match</code>)</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight raku"><pre><span></span><span class="k">if</span> <span class="s">&quot;John 42&quot;</span> ~~ <span class="sr">/(\w+) \s+ (\d+)/</span> {
+    <span class="nb">say</span> <span class="nv">$0</span>;          <span class="c1"># ｢John｣   captures are numbered from zero</span>
+    <span class="nb">say</span> <span class="nv">$1</span>;          <span class="c1"># ｢42｣</span>
+    <span class="nb">say</span> <span class="nv">$/</span>.<span class="nb">Str</span>;      <span class="c1"># John 42  the whole match</span>
+}</pre></div>
+
+<p>One difference bites in translation: in Perl, a named capture is
+<em>also</em> numbered, so <code>$1</code> and <code>$+{name}</code> are
+the same group. In Raku a name takes the group out of the positional
+numbering altogether, and the groups that remain close the gap:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">if</span> <span class="s">&quot;John 42&quot;</span> ~~ <span class="sr">/$&lt;name&gt;=(\w+) \s+ (\d+)/</span> {
+    <span class="nb">say</span> <span class="nv">$&lt;name&gt;</span>;     <span class="c1"># ｢John｣   the named group</span>
+    <span class="nb">say</span> <span class="nv">$0</span>;          <span class="c1"># ｢42｣     the digits — the only *numbered* group left</span>
+    <span class="nb">say</span> <span class="nv">$/</span>.<span class="nb">Str</span>;      <span class="c1"># John 42</span>
+}</pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<h2 id="errors">Errors</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$@</code> (eval error)</td>
+<td><code>$!</code></td>
+<td>the caught exception object after <code>try</code></td>
+</tr>
+<tr>
+<td><code>$!</code> (errno / OS error)</td>
+<td><code>$!</code></td>
+<td>the same variable holds the last exception; it carries the OS
+error</td>
+</tr>
+<tr>
+<td><code>$?</code> (child exit status)</td>
+<td><code>$!</code> / <code>Proc</code></td>
+<td><code>run</code>/<code>Proc::Async</code> return a <code>Proc</code>
+with <code>.exitcode</code></td>
+</tr>
+</tbody>
+</table>
+<p>The consolidation is deliberate: Perl spread failure information
+across <code>$@</code>, <code>$!</code>, and <code>$?</code>; Raku
+funnels it into one place, the exception in <code>$!</code>, which is a
+full object you can interrogate:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$fh</span> = <span class="k">try</span> <span class="nb">open</span> <span class="s">&quot;/no/such/file&quot;</span>;
+<span class="nb">say</span> <span class="nv">$!</span>.^<span class="n">name</span>;        <span class="c1"># X::AdHoc  (or a more specific X::IO subtype)</span>
+<span class="nb">say</span> <span class="nv">$!</span>.<span class="nb">defined</span>;      <span class="c1"># True</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<h2 id="modules-and-library-paths">Modules and library paths</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@INC</code></td>
+<td><code>$*REPO</code></td>
+<td>a chain of <code>CompUnit::Repository</code> objects, not a plain
+path list</td>
+</tr>
+<tr>
+<td><code>PERL5LIB</code> (env)</td>
+<td><code>RAKULIB</code> (env)</td>
+<td>prepend extra search paths; also <code>-I</code> on the command
+line</td>
+</tr>
+<tr>
+<td><code>%INC</code></td>
+<td>—</td>
+<td>no direct equivalent; loading is tracked by the repository
+chain</td>
+</tr>
+<tr>
+<td><code>__FILE__</code></td>
+<td><code>$?FILE</code></td>
+<td>compile-time source file (a <code>$?</code> twigil, Chapter 3)</td>
+</tr>
+<tr>
+<td><code>__LINE__</code></td>
+<td><code>$?LINE</code></td>
+<td>compile-time line number</td>
+</tr>
+<tr>
+<td><code>__PACKAGE__</code></td>
+<td><code>$?PACKAGE</code> / <code>::?PACKAGE</code></td>
+<td>current package/class at compile time</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">$*REPO</span>.<span class="n">repo-chain</span>;   <span class="c1"># (inst#…/.raku inst#…/site … ap# nqp# perl5#)</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>A last word of comfort: you very rarely <em>need</em> these day to
+day. Signatures replace <code>@_</code>, <code>$*IN.lines</code>
+replaces <code>&lt;STDIN&gt;</code>, and typed exceptions replace the
+<code>$@</code>/<code>$!</code>/<code>$?</code> juggling act. Reach for
+this table when porting old code, not when writing new.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/appendix-b-operator-table">Appendix B —
+Operator Translation Table</a>   |   <a
+href="/raku-books/migrating-to-raku/appendix-d-glossary">Appendix D — Glossary</a>
+→</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

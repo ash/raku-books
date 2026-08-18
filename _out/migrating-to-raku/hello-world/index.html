@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Hello, World! — Raku Books</title>
+    <meta property="og:title" content="Hello, World! — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/getting-started">Getting
+Started</a></p>
+<h1 id="hello-world">Hello, World!</h1>
+<p>In this chapter, we will create the main reference program printing
+“Hello, World!”.</p>
+<p>In Perl, you can do it using either the <code>print</code> or the
+<code>say</code> built-in function. In the pre-Perl 5.10 times, you
+would do it like this:</p>
+<div class="highlight perl-code"><pre>print "Hello, World!\n";</pre></div>
+<p>Since Perl 5.10, the same result can be achieved with more concise
+code (if you do not count the <code>use</code> instruction):</p>
+<div class="highlight perl-code"><pre>use v5.10;
+say 'Hello, World!';</pre></div>
+<p>You may be surprised, but the <code>say</code> function was actually
+back-ported to Perl from Raku. For a historical reference, let me remind
+you that the first version of <code>say</code> implemented in one of the
+very early Raku compilers was called <code>print1</code>.</p>
+<p>OK, now let us move on to modern times, and here is the same program
+in Raku:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'Hello, World!'</span>;</pre></div>
+
+<h2 id="files">Files</h2>
+<p>To run the program, save it in a file and pass it to the interpreter.
+There is no difference between running Perl and Raku programs yet, but
+to distinguish between the versions, we will be using the
+<code>.pl</code> file-name extension for the Perl versions of programs
+and <code>.raku</code> for the Raku code. In principle, the
+specification does not force you to use this extension, and you may
+continue using <code>.pl</code> as before.</p>
+<p>Running a Perl program from the command line:</p>
+<div class="highlight"><pre>$ perl 002-hello-world.pl</pre></div>
+<p>Running a Raku program:</p>
+<div class="highlight"><pre>$ raku 002-hello-world.raku</pre></div>
+<p>Now let us look at a few details that can still be found in the short
+programs above.</p>
+<p>First, in both languages, the semicolon separates different
+statements and can be omitted if there is only one line in the whole
+program. So, the program in Perl can gain one character:</p>
+<div class="highlight perl-code"><pre>print "Hello, World!\n"</pre></div>
+<p>As can the program in Raku:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'Hello, World!'</span></pre></div>
+
+<p>If you want to use <code>say</code> in Perl, you need to tell the
+compiler to activate the features of versions 5.10+:</p>
+<div class="highlight"><pre>$ perl -mfeature=say 002-hello-world.raku</pre></div>
+<p>(Did you notice that we ran the Perl compiler and passed a Raku
+program to it?)</p>
+<p>Of course, for one-liners, there is no need to save programs in
+files. Both compilers support a command-line option to pass the code on
+the command line. With Perl, it is either a traditional <code>-e</code>
+or a more recent <code>-E</code>. You use <code>-E</code> to activate
+the 5.10+ features:</p>
+<div class="highlight"><pre>$ perl -e'print "Hello, World!\n"'
+$ perl -E'say "Hello, World!"'</pre></div>
+<p>In Raku, <code>say</code> is activated by default, so we return to
+the lower-case option:</p>
+<div class="highlight"><pre>$ raku -e'say "Hello, World!"'</pre></div>
+<p>The <code>-E</code> option does not exist and is not supported in
+Raku.</p>
+<h2 id="quotes">Quotes</h2>
+<p>The second thing you may want to dig into right now is the difference
+between single and double quotes. Actually, there is no difference
+between how Perl and Raku treat them in the examples above. :-)</p>
+<p>Double quotes allow string interpolation (which we will cover soon)
+and allow escaped characters such as the newline character
+<code>\n</code>. In the examples above, we needed double quotes in the
+Perl program to add a new line at the end of the output after using the
+<code>print</code> function. In the one-liners with <code>say</code>,
+double quotes were only needed to prevent mixing them up with the outer
+single quotes on the command line.</p>
+<h2 id="introducing-variables">Introducing variables</h2>
+<p>The next step up from the “Hello, World!” program would be to modify
+it to greet a person. Let’s first keep their name in a variable, and
+later we’ll ask the user to enter it from the keyboard.</p>
+<p>Variables in Perl traditionally use <em>sigils</em> — a one-character
+non-alphabetic prefix to indicate the structural type of the variable.
+Both in Perl and Raku there are scalars, arrays, and hashes, and they
+share the same characters — respectively, <code>$</code>,
+<code>@</code>, and <code>%</code>. But there are some important
+differences, and we’ll cover them shortly.</p>
+<p>Two techniques can be illustrated with this greeting program. First,
+to keep a person’s name, a scalar is a good choice. Second, to print it,
+we can choose string interpolation or string concatenation (or simply
+print the text pieces one after another).</p>
+<p>In Perl, the program may look like the following:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+
+my $name = 'John';
+say "Hello, $name!";</pre></div>
+<p>There’s absolutely no difference in the main code when you upgrade
+the program to run under Raku:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$name</span> = <span class="s">'John'</span>;
+<span class="nb">say</span> <span class="s">&quot;Hello, $name!&quot;</span>;</pre></div>
+
+<p>From now on, let us assume that you add <code>use v5.10</code> in all
+Perl programs that use <code>say</code>.</p>
+<h2 id="concatenating-strings">Concatenating strings</h2>
+<p>Another, and probably less Perlish, way to build strings is string
+concatenation. In Perl, the string concatenation operator is a dot:</p>
+<div class="highlight perl-code"><pre>my $name = 'John';
+say 'Hello, ' . $name . '!';</pre></div>
+<p>In Raku, the dot is reserved for method calls. The string
+concatenation operator is a tilde:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$name</span> = <span class="s">'John'</span>;
+<span class="nb">say</span> <span class="s">'Hello, '</span> ~ <span class="nv">$name</span> ~ <span class="s">'!'</span>;</pre></div>
+
+<h2 id="object-oriented-elements">Object-oriented elements</h2>
+<p>We will devote a whole chapter to object-oriented programs, but it is
+useful to know from the very start that in Raku you can treat many
+things as objects. For example, constants, strings, and variables — all
+of these are objects, and you may call a method on them. Method-call
+syntax needs a dot, and that is why string concatenation no longer uses
+it.</p>
+<p>The basic “Hello, World!” program in Raku can be written in the
+following manner:</p>
+<div class="highlight raku"><pre><span></span><span class="s">'Hello, World!'</span>.<span class="nb">say</span>;</pre></div>
+
+<p>You call the <code>say</code> method on a string, and it does the
+same as the built-in function of the same name.</p>
+<p>There are more methods defined on strings; for example, this is how
+you convert the string to uppercase and print it:</p>
+<div class="highlight raku"><pre><span></span><span class="s">'Hello, World!'</span>.<span class="nb">uc</span>.<span class="nb">say</span>;</pre></div>
+
+<h2 id="reading-the-users-input">Reading the user’s input</h2>
+<p>What if you want the user to enter their name rather than hardcoding
+it in the program? Technically speaking, we mean that the name comes
+from <code>STDIN</code>.</p>
+<p>In Perl, you can use the diamond operator to read a line from
+standard input:</p>
+<div class="highlight perl-code"><pre>print 'What is your name? ';
+my $name = &lt;&gt;;
+chomp $name;
+say "Hello, $name!";</pre></div>
+<p>First, you print a prompt with a question, then Perl waits until the
+user types the name and hits the Enter key. The newline character is
+also put into the <code>$name</code> variable, so it is important to
+clean it out by calling <code>chomp</code>. Notice that the built-in
+<code>chomp</code> function modifies its argument.</p>
+<p>In Raku, the same program can be a bit more compact, as the language
+offers the <code>prompt</code> built-in function, which you can use both
+to print the message and to get the input:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$name</span> = <span class="nb">prompt</span>(<span class="s">'What is your name? '</span>);
+<span class="nb">say</span> <span class="s">&quot;Hello, $name!&quot;</span>;</pre></div>
+
+<h2 id="more-interpolation-options">More interpolation options</h2>
+<p>Are there any other options for rewriting the programs above? Of
+course — as always in Perl, there is more than one way to do it. Both
+Perl and Raku demonstrate their flexibility here.</p>
+<p>A couple of tricks have been discovered to embed a piece of code into
+strings in Perl. One of them is to use the following construct:
+<code>@{[...]}</code>. Here is how you can use it (you can, but probably
+you should not):</p>
+<div class="highlight perl-code"><pre>print 'What is your name? ';
+say "Hello, @{[$name = &lt;&gt; and chomp $name and $name]}!";</pre></div>
+<p>For the end user, the program works as before: it asks for the name
+and prints the greeting. For the programmer, it is a mess of characters
+and compromises (such as using the Boolean <code>and</code> to make it
+one big expression rather than using a comma to separate
+statements).</p>
+<p>In Raku, code interpolation is a built-in feature and can be used
+directly with no tricky techniques involved:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;Hello, {prompt('What is your name? ')}!&quot;</span>;</pre></div>
+
+<p>For better readability, apply some formatting:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;Hello, {
+    prompt('What is your name? ')
+}!&quot;</span>;</pre></div>
+
+<h2 id="parentheses-in-function-calls">Parentheses in function
+calls</h2>
+<p>Did you notice that we called functions such as <code>say</code>,
+<code>print</code>, and <code>prompt</code>, passed arguments to them,
+but never used parentheses? In both languages, simple uses such as those
+shown earlier are fine both with and without parentheses. Still, for
+clarity — and if your coding standards demand it — surround the
+arguments with parentheses.</p>
+<p>An updated Perl “Hello, World!” program:</p>
+<div class="highlight perl-code"><pre>say('Hello, World!');</pre></div>
+<p>An updated Raku equivalent looks the same:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span>(<span class="s">'Hello, World!'</span>);</pre></div>
+
+<p>So far so good, but what if you pass more than one string to the
+<code>say</code> routine? It is possible in both Perl and Raku:</p>
+<div class="highlight perl-code"><pre>say('Hello, ', 'World!');</pre></div>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span>(<span class="s">'Hello, '</span>, <span class="s">'World!'</span>);</pre></div>
+
+<p>Why bother you with these examples? There is a big difference if you
+add a space between the function name and the opening parenthesis:</p>
+<div class="highlight perl-code"><pre>say ('Hello, ', 'World!');</pre></div>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="s">'Hello, '</span>, <span class="s">'World!'</span>);</pre></div>
+
+<p>Perl sees here the same function call with two parameters and prints
+the output as expected:</p>
+<div class="highlight"><pre>Hello, World!</pre></div>
+<p>Raku treats this code differently. It passes a <em>single</em>
+argument to the <code>say</code> function, and that argument is a list
+containing two strings. That’s why you will see the list in the output,
+not a plain string:</p>
+<div class="highlight"><pre>(Hello, World!)</pre></div>
+<p>It may be a good idea to always use parentheses — and always keep in
+mind that the space is semantically meaningful in Raku.</p>
+<h2 id="identifiers">Identifiers</h2>
+<p>Identifiers — which include, in the first place, the names of
+variables, functions, and modules — are traditionally built using the
+letters of the English (or Latin, if you prefer) alphabet, digits, and
+the underscore character.</p>
+<p>In Raku, however, you are not limited to the ASCII subset, and can
+use many characters that are recognised as letters in Unicode. For
+example, here’s a “Greek version” of the “Hello, World!” program in
+Raku:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> $όνομα = <span class="s">'John'</span>;
+<span class="nb">say</span> $όνομα;</pre></div>
+
+<p>This is also possible in Perl, but you need to activate the feature
+by adding the <code>utf8</code> pragma:</p>
+<div class="highlight perl-code"><pre>use utf8;
+
+my $όνομα = 'John';
+say $όνομα;</pre></div>
+<p>In Raku, you can go a bit further and use dashes and apostrophes in
+variable names. For example:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$first-name</span> = <span class="s">'John'</span>;
+<span class="nb">say</span> <span class="nv">$first-name</span>;</pre></div>
+
+<p>Or:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$don't</span> = <span class="s">'Do not!'</span>;
+<span class="nb">say</span> <span class="nv">$don't</span>;</pre></div>
+
+<p>In my opinion, dashes are fine, but it is better not to use
+apostrophes — though they are still perfectly valid.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/getting-started">Getting Started</a>
+  |   <a href="/raku-books/migrating-to-raku/big-picture">The Big Picture</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

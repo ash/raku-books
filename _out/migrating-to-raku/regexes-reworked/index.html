@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Regexes Reworked — Raku Books</title>
+    <meta property="og:title" content="Regexes Reworked — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/regular-expressions">Regular
+Expressions</a></p>
+<h1 id="regexes-reworked">Regexes Reworked</h1>
+<p>Here it is — the largest single break from Perl in the whole
+language. Take a breath: nothing you know about regular expressions is
+<em>wrong</em>, but a good deal of the punctuation has moved, and a few
+defaults have been flipped on purpose. The payoff is enormous. Raku’s
+regexes are readable, composable, and they grow smoothly into full
+grammars (Chapter 19). This chapter is deliberately thorough, because
+once these foundations click, the rest is a pleasure.</p>
+<p>The single most important thing to internalise up front: <strong>in a
+Raku regex, whitespace is not significant by default.</strong> It is as
+if Perl’s <code>/x</code> modifier were always switched on. That one
+change explains most of the surface differences you are about to
+see.</p>
+<h2 id="whitespace-no-longer-matches-whitespace">Whitespace no longer
+matches whitespace</h2>
+<p>In Perl, a space in a pattern matches a space in the string:</p>
+<div class="highlight perl-code"><pre>"the cat sat" =~ / cat /;      # matches " cat "</pre></div>
+<p>In Raku, the spaces are just there to help <em>you</em> read the
+pattern. They match nothing. So you can pad a pattern out for clarity
+and it means the same thing:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;the cat sat&quot;</span> ~~ <span class="sr">/ cat /</span>;      <span class="c1"># ｢cat｣  — the spaces are ignored</span></pre></div>
+
+<p>Because spaces are free, you write a literal string by
+<em>quoting</em> it. Single or double quotes both work, and a quoted
+string matches exactly, spaces and all:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;the cat sat&quot;</span> ~~ <span class="sr">/ &quot;cat sat&quot; /</span>;   <span class="c1"># ｢cat sat｣</span></pre></div>
+
+<p>A single unquoted alphanumeric run is still a literal, so
+<code>/ cat /</code> finds <code>cat</code>. But the moment you put
+spaces <em>between</em> letters, Raku assumes you meant them as
+separators and warns you:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;the cat sat&quot;</span> ~~ <span class="sr">/ c a t /</span>;
+<span class="c1"># Space is not significant here; please use quotes or :s ...</span></pre></div>
+
+<p>The fix is to quote the literal (<code>/ "cat" /</code>) or to turn
+significant whitespace back on with the <code>:s</code> adverb, covered
+below. This feels alien for about a day, then you never want to go back
+— patterns stop being a wall of backslashes.</p>
+<h2 id="matching-m...-and-.match">Matching: <code>~~</code>,
+<code>m/.../</code>, and <code>.match</code></h2>
+<p>Perl binds a pattern to a string with <code>=~</code>:</p>
+<div class="highlight perl-code"><pre>if ($str =~ /(\d+)/) { print "found $1\n" }</pre></div>
+<p>Raku uses the smartmatch operator <code>~~</code>, and the capture is
+in <code>$0</code>, not <code>$1</code> (more on numbering shortly):</p>
+<div class="highlight raku"><pre><span></span><span class="k">if</span> <span class="s">&quot;abc123&quot;</span> ~~ <span class="sr">m/(\d+)/</span> { <span class="nb">say</span> <span class="s">&quot;found $0&quot;</span> }    <span class="c1"># found 123</span></pre></div>
+
+<p>The bare <code>/.../</code> form is a regex literal, and
+<code>m/.../</code> is the matching form; in a smartmatch they behave
+the same. There is also a method, <code>.match</code>, which is handy in
+a chain and takes the same adverbs as named arguments:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$m</span> = <span class="s">&quot;hello world&quot;</span>.<span class="n">match</span>(<span class="sr">/(\w+) \s (\w+)/</span>);
+<span class="nb">say</span> <span class="nv">$m</span>.<span class="nb">Str</span>;  <span class="c1"># hello world</span>
+<span class="nb">say</span> <span class="nv">$0</span>;      <span class="c1"># ｢hello｣</span>
+<span class="nb">say</span> <span class="nv">$1</span>;      <span class="c1"># ｢world｣</span></pre></div>
+
+<p>Notice <code>\s</code> there: the <em>predefined</em> character
+classes like <code>\d</code>, <code>\w</code>, and <code>\s</code>
+survive unchanged and are the idiomatic way to match “some whitespace”
+now that a plain space matches nothing.</p>
+<h2 id="the-match-object-and-its-captures">The <code>$/</code> Match
+object and its captures</h2>
+<p>Every match populates the special variable <code>$/</code>, the
+<em>Match object</em>. This is the Raku descendant of Perl’s
+<code>$&amp;</code>, <code>$1</code>, <code>%+</code> and friends, all
+folded into one tidy object. It stringifies to the matched text and
+carries the captures inside it:</p>
+<div class="highlight raku"><pre><span></span><span class="k">if</span> <span class="s">&quot;abcdef&quot;</span> ~~ <span class="sr">/cd/</span> {
+    <span class="nb">say</span> <span class="nv">$/</span>.<span class="nb">Str</span>;        <span class="c1"># cd</span>
+    <span class="nb">say</span> <span class="nv">$/</span>.<span class="n">prematch</span>;   <span class="c1"># ab</span>
+    <span class="nb">say</span> <span class="nv">$/</span>.<span class="n">postmatch</span>;  <span class="c1"># ef</span>
+}</pre></div>
+
+<p>Positional captures live at <code>$0</code>, <code>$1</code>,
+<code>$2</code> … — these are simply shortcuts for <code>$/[0]</code>,
+<code>$/[1]</code>, and so on. Raku counts capturing groups <strong>from
+zero</strong>, which is the change most likely to catch a Perl
+reflex:</p>
+<div class="highlight raku"><pre><span></span><span class="k">if</span> <span class="s">&quot;2026-07-09&quot;</span> ~~ <span class="sr">/(\d+)\-(\d+)\-(\d+)/</span> {
+    <span class="nb">say</span> <span class="s">&quot;$0 $1 $2&quot;</span>;    <span class="c1"># 2026 07 09</span>
+}</pre></div>
+
+<p>Named captures use a different, clearer syntax. Instead of
+<code>(?&lt;name&gt;...)</code>, you write
+<code>$&lt;name&gt;=(...)</code>, and you read the result as
+<code>$&lt;name&gt;</code> (short for <code>$/&lt;name&gt;</code>):</p>
+<div class="highlight raku"><pre><span></span><span class="k">if</span> <span class="s">&quot;John Smith&quot;</span> ~~ <span class="sr">/ $&lt;first&gt;=(\w+) \s $&lt;last&gt;=(\w+) /</span> {
+    <span class="nb">say</span> <span class="nv">$&lt;first&gt;</span>;     <span class="c1"># ｢John｣</span>
+    <span class="nb">say</span> <span class="nv">$&lt;last&gt;</span>;      <span class="c1"># ｢Smith｣</span>
+    <span class="nb">say</span> <span class="nv">$/</span><span class="s">&lt;last&gt;</span>;     <span class="c1"># ｢Smith｣  — the long form</span>
+}</pre></div>
+
+<h2 id="character-classes">Character classes</h2>
+<p>A bracketed character class in Perl is <code>[...]</code>. In Raku
+the enumerated class gets an angle-bracket wrapper so that
+<code>[...]</code> can be reused for grouping (it is Raku’s
+non-capturing group). A positive class is <code>&lt;[...]&gt;</code>, a
+negated one is <code>&lt;-[...]&gt;</code>, and ranges use
+<code>..</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;hello&quot;</span> ~~ <span class="sr">/&lt;[a..z]&gt;+/</span>;      <span class="c1"># ｢hello｣</span>
+<span class="nb">say</span> <span class="s">&quot;hello5&quot;</span> ~~ <span class="sr">/&lt;-[a..z]&gt;/</span>;     <span class="c1"># ｢5｣    — first non-lowercase char</span>
+<span class="nb">say</span> <span class="s">&quot;abc&quot;</span> ~~ <span class="sr">/&lt;[a..c d e]&gt;+/</span>;    <span class="c1"># ｢abc｣  — spaces inside are just separators</span></pre></div>
+
+<p>Alongside the backslash classes, Raku offers a family of
+<em>named</em> character classes you call like subrules:
+<code>&lt;digit&gt;</code>, <code>&lt;alpha&gt;</code>,
+<code>&lt;alnum&gt;</code>, <code>&lt;space&gt;</code>,
+<code>&lt;upper&gt;</code>, <code>&lt;lower&gt;</code>, and the
+composite <code>&lt;ident&gt;</code> (a valid identifier) and
+<code>&lt;ws&gt;</code> (whitespace, used everywhere internally):</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="s">&quot;abc123&quot;</span> ~~ <span class="sr">/&lt;digit&gt;+/</span>).<span class="nb">Str</span>;      <span class="c1"># 123</span>
+<span class="nb">say</span> (<span class="s">&quot;foo_bar123&quot;</span> ~~ <span class="sr">/^&lt;ident&gt;$/</span>).<span class="nb">Str</span>; <span class="c1"># foo_bar123</span></pre></div>
+
+<p>One surprise worth flagging: <code>&lt;alpha&gt;</code> matches the
+underscore as well as letters, because it follows the identifier
+convention. If you want letters only, spell out
+<code>&lt;[a..z A..Z]&gt;</code>.</p>
+<h2 id="quantifiers-and-separators">Quantifiers and separators</h2>
+<p>The old quantifiers <code>*</code>, <code>+</code>, and
+<code>?</code> are unchanged. What replaces the clumsy
+<code>{2,4}</code> is a spelled-out operator, <code>**</code>, which
+reads almost like English:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;aaa&quot;</span>  ~~ <span class="sr">/a ** 2/</span>;       <span class="c1"># ｢aa｣    — exactly two</span>
+<span class="nb">say</span> <span class="s">&quot;aaaa&quot;</span> ~~ <span class="sr">/a ** 2..3/</span>;    <span class="c1"># ｢aaa｣   — a range, two to three</span></pre></div>
+
+<p>The genuinely new tool is the <em>separator</em> quantifier. Matching
+a list of things separated by commas is such a common chore that Raku
+builds it in with <code>%</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;1,2,3&quot;</span>  ~~ <span class="sr">/\d+ % &quot;,&quot;/</span>;    <span class="c1"># ｢1,2,3｣   — items separated by commas</span>
+<span class="nb">say</span> <span class="s">&quot;1,2,3,&quot;</span> ~~ <span class="sr">/\d+ %% &quot;,&quot;/</span>;   <span class="c1"># ｢1,2,3,｣  — %% also allows a trailing one</span></pre></div>
+
+<p><code>%</code> means “separated by”; <code>%%</code> means “separated
+or terminated by”. No more writing <code>\d+ (?: , \d+ )*</code> by
+hand.</p>
+<h2 id="alternation-versus">Alternation: <code>|</code> versus
+<code>||</code></h2>
+<p>Perl’s <code>|</code> tries the branches left to right and takes the
+first that matches. Raku splits that into two operators. The double
+<code>||</code> keeps the old <em>ordered</em> behaviour:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;foobar&quot;</span> ~~ <span class="sr">/ foo || foobar /</span>;   <span class="c1"># ｢foo｣  — first branch wins</span></pre></div>
+
+<p>The single <code>|</code> is new: it uses <strong>longest-token
+matching</strong>, picking whichever branch matches the most text
+regardless of order — the same rule Raku’s own grammar engine uses:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;foobar&quot;</span> ~~ <span class="sr">/ foo | foobar /</span>;    <span class="c1"># ｢foobar｣  — longest wins</span></pre></div>
+
+<p>When in doubt, <code>||</code> behaves like the Perl <code>|</code>
+you already know.</p>
+<h2 id="anchors">Anchors</h2>
+<p>The workhorses carry over, and a couple are added. <code>^</code> and
+<code>$</code> anchor to the start and end of the <em>string</em>;
+<code>^^</code> and <code>$$</code> anchor to the start and end of a
+<em>line</em> (the counterparts of Perl’s <code>/m</code> behaviour, but
+always available). Word boundaries, once the cryptic <code>\b</code>,
+become the readable <code>&lt;&lt;</code> and <code>&gt;&gt;</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;cat&quot;</span>     ~~ <span class="sr">/^ cat $/</span>;        <span class="c1"># ｢cat｣</span>
+<span class="nb">say</span> <span class="s">&quot;the cat&quot;</span> ~~ <span class="sr">/ &lt;&lt; cat &gt;&gt; /</span>;    <span class="c1"># ｢cat｣  — left and right word boundaries</span></pre></div>
+
+<h2 id="adverbs-the-modifiers">Adverbs (the modifiers)</h2>
+<p>Modifiers move from trailing letters to <em>adverbs</em> written
+after the <code>m</code> or <code>s</code>, each introduced by a colon.
+The common ones:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;HELLO&quot;</span>  ~~ <span class="sr">m:i/hello/</span>;         <span class="c1"># ｢HELLO｣          — :i, case-insensitive</span>
+<span class="nb">say</span> <span class="s">&quot;a1b2c3&quot;</span> ~~ <span class="sr">m:g/\d/</span>;            <span class="c1"># (｢1｣ ｢2｣ ｢3｣)    — :g, global, returns a list</span>
+<span class="nb">say</span> <span class="s">&quot;the cat sat&quot;</span> ~~ <span class="sr">m:s/the cat/</span>;  <span class="c1"># ｢the cat｣    — :s, spaces are significant</span></pre></div>
+
+<p><code>:s</code> (or its long name <code>:sigspace</code>) is how you
+opt back in to Perl’s rule that spaces in the pattern match runs of
+whitespace in the text — useful for free-form input. Two more you will
+meet: <code>:ratchet</code>, which switches off backtracking (the match
+never gives characters back once it has taken them), and
+<code>:ex</code> (<code>:exhaustive</code>), which finds every possible
+match, including overlapping ones:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="s">&quot;aaa&quot;</span> ~~ <span class="sr">m:ex/a+/</span>).<span class="nb">elems</span>;  <span class="c1"># 6   — every match, overlaps included</span></pre></div>
+
+<p>Ratcheting matters more than it first appears, and Chapter 19 leans
+on it heavily.</p>
+<h2 id="substitution">Substitution</h2>
+<p>Perl’s <code>s///</code> becomes Raku’s <code>s///</code>, and it
+still modifies the variable in place through <code>~~</code>. The
+<code>/g</code> flag becomes the <code>:g</code> adverb:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$s</span> = <span class="s">&quot;hello world&quot;</span>;
+<span class="nv">$s</span> ~~ <span class="sr">s/world/Raku/</span>;        <span class="c1"># $s is now &quot;hello Raku&quot;</span>
+<span class="k">my</span> <span class="nv">$t</span> = <span class="s">&quot;a-b-c&quot;</span>;
+<span class="nv">$t</span> ~~ <span class="sr">s:g/\-/_/</span>;            <span class="c1"># $t is now &quot;a_b_c&quot;</span></pre></div>
+
+<p>If you want a <em>copy</em> rather than an in-place edit, the capital
+<code>S///</code> returns the transformed string and leaves the original
+alone:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$orig</span> = <span class="s">&quot;hello&quot;</span>;
+<span class="k">my</span> <span class="nv">$new</span>  = <span class="sr">S/l/L/</span> <span class="k">given</span> <span class="nv">$orig</span>;   <span class="c1"># $new is &quot;heLlo&quot;, $orig untouched</span></pre></div>
+
+<p>And because everything is an object (Chapter 2), there is a method
+form, <code>.subst</code>, which takes a plain string or a regex and the
+usual adverbs as named arguments:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;hello world&quot;</span>.<span class="n">subst</span>(<span class="s">&quot;world&quot;</span>, <span class="s">&quot;Raku&quot;</span>);   <span class="c1"># hello Raku</span>
+<span class="nb">say</span> <span class="s">&quot;aXbXc&quot;</span>.<span class="n">subst</span>(<span class="sr">/X/</span>, <span class="s">&quot;-&quot;</span>, :<span class="n">g</span>);            <span class="c1"># a-b-c</span></pre></div>
+
+<h2 id="lookahead-assertions">Lookahead assertions</h2>
+<p>Zero-width lookahead loses its <code>(?=...)</code> and
+<code>(?!...)</code> spelling in favour of the readable
+<code>&lt;?before ...&gt;</code> and
+<code>&lt;!before ...&gt;</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;foobar&quot;</span> ~~ <span class="sr">/ foo &lt;?before bar&gt; /</span>;   <span class="c1"># ｢foo｣  — foo, only if bar follows</span>
+<span class="nb">say</span> <span class="s">&quot;foobaz&quot;</span> ~~ <span class="sr">/ foo &lt;!before bar&gt; /</span>;   <span class="c1"># ｢foo｣  — foo, only if bar does NOT</span></pre></div>
+
+<p>(There are <code>&lt;?after&gt;</code> and
+<code>&lt;!after&gt;</code> for lookbehind, too.)</p>
+<h2 id="naming-pieces-regex-token-and-rule">Naming pieces:
+<code>regex</code>, <code>token</code>, and <code>rule</code></h2>
+<p>Here is where Raku pulls decisively ahead. You can name a pattern and
+reuse it, exactly as you name a subroutine. Declare it with
+<code>my regex</code>, then call it inside another pattern by its name
+in angle brackets:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="k">regex</span> <span class="n">word</span> { \<span class="n">w</span>+ }
+<span class="k">my</span> <span class="nv">$m</span> = <span class="s">&quot;hello&quot;</span> ~~ <span class="sr">/&lt;word&gt;/</span>;
+<span class="nb">say</span> <span class="nv">$m</span>.<span class="nb">Str</span>;                 <span class="c1"># hello</span>
+<span class="nb">say</span> <span class="nv">$&lt;word&gt;</span>;                <span class="c1"># ｢hello｣  — the subrule captures under its name</span></pre></div>
+
+<p>There are two specialised cousins. A <code>token</code> is a regex
+with <code>:ratchet</code> built in (no backtracking), and a
+<code>rule</code> is a <code>token</code> with <code>:sigspace</code>
+built in as well. The ratchet difference is real and worth seeing:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="k">regex</span> <span class="n">r</span> { \<span class="n">d</span>+ <span class="mi">5</span> }
+<span class="nb">say</span> (<span class="s">&quot;12345&quot;</span> ~~ <span class="sr">/&lt;r&gt;/</span>).<span class="nb">Str</span>;   <span class="c1"># 12345  — backtracks: \d+ gives back the 5</span>
+
+<span class="k">my</span> <span class="k">token</span> <span class="n">t</span> { \<span class="n">d</span>+ <span class="mi">5</span> }
+<span class="nb">say</span> <span class="s">&quot;12345&quot;</span> ~~ <span class="sr">/&lt;t&gt;/</span>;         <span class="c1"># Nil    — no backtrack: \d+ ate the 5, match fails</span></pre></div>
+
+<p>For most parsing work you want <code>token</code> (fast, predictable)
+or <code>rule</code> (when whitespace between pieces matters). These
+three declarators are the whole bridge to grammars.</p>
+<h2 id="interpolating-a-variable-literal-versus-regex">Interpolating a
+variable: literal versus regex</h2>
+<p>A subtle but important distinction. Interpolating a scalar with
+<code>$var</code> inserts its contents as a <strong>literal</strong>
+string — metacharacters lose their power:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$var</span> = <span class="s">&quot;c.t&quot;</span>;
+<span class="nb">say</span> <span class="s">&quot;cat&quot;</span> ~~ <span class="sr">/$var/</span>;    <span class="c1"># Nil          — the dot is a literal dot</span>
+<span class="nb">say</span> <span class="s">&quot;c.t&quot;</span> ~~ <span class="sr">/$var/</span>;    <span class="c1"># ｢c.t｣        — matches the literal text</span></pre></div>
+
+<p>To interpolate a variable’s contents as an actual
+<strong>regex</strong>, wrap it as an assertion with
+<code>&lt;$var&gt;</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$pat</span> = <span class="s">&quot;c.t&quot;</span>;
+<span class="nb">say</span> <span class="s">&quot;cat&quot;</span> ~~ <span class="sr">/&lt;$pat&gt;/</span>;  <span class="c1"># ｢cat｣        — now the dot matches any character</span></pre></div>
+
+<p>This is the safe default Perl never had: user input dropped into
+<code>/$var/</code> cannot accidentally inject metacharacters, because
+it is treated as plain text unless you deliberately ask otherwise.</p>
+<p>Named tokens that call each other, longest-token alternation,
+ratcheting by default — you have quietly assembled every ingredient of a
+grammar. In the next chapter we gather these named pieces under a single
+<code>grammar</code> keyword and let them parse structured text into a
+tree.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/regular-expressions">Regular
+Expressions</a>   |   <a href="/raku-books/migrating-to-raku/grammars">From Regexes
+to Grammars</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

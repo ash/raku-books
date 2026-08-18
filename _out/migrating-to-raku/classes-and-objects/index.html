@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Classes and Objects — Raku Books</title>
+    <meta property="og:title" content="Classes and Objects — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a
+href="/raku-books/migrating-to-raku/object-oriented-programming">Object-Oriented
+Programming</a></p>
+<h1 id="classes-and-objects">Classes and Objects</h1>
+<p>Object orientation is the part of Perl that most obviously grew by
+accretion. For most of its life there was no <code>class</code> keyword:
+you build a class out of a package, a data structure, and the
+<code>bless</code> function, and you write the accessors yourself (or
+reach for Moose, Moo, or <code>Class::Accessor</code> to write them for
+you). It works, and it is more flexible than it has any right to be, but
+it is boilerplate all the way down. Modern Perl has since added a native
+<code>class</code> syntax of its own — with <code>class</code>,
+<code>field</code>, and <code>method</code> — but it is recent, still
+settling in, and deliberately narrower than what you are about to see.
+The <code>bless</code>-based style below is still the one you will meet
+in the overwhelming majority of existing code, so it is worth
+recognising.</p>
+<p>Raku bakes objects into the language. There is a <code>class</code>
+keyword, attributes declare their own accessors, and <code>new</code> is
+generated for you. If you have used Moose or Moo, most of this chapter
+will feel like coming home — Raku’s object model was a direct influence
+on Moose, so the resemblance is not a coincidence. We will point out the
+correspondences as we go.</p>
+<h2 id="from-bless-to-class">From <code>bless</code> to
+<code>class</code></h2>
+<p>Here is a small, hand-rolled Perl class — a two-dimensional point
+with read-only accessors and a stringifier:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+
+package Point;
+
+sub new {
+    my ($class, %args) = @_;
+    my $self = { x =&gt; $args{x} // 0, y =&gt; $args{y} // 0 };
+    return bless $self, $class;
+}
+
+sub x { $_[0]{x} }
+sub y { $_[0]{y} }
+
+sub to_string {
+    my $self = shift;
+    return "($self-&gt;{x}, $self-&gt;{y})";
+}
+
+package main;
+
+my $p = Point-&gt;new(x =&gt; 3, y =&gt; 4);
+say $p-&gt;x;              # 3
+say $p-&gt;to_string;      # (3, 4)</pre></div>
+<p>Everything is explicit: <code>new</code> blesses a hash reference
+into the package, each accessor is a one-line sub reaching into that
+hash, and the method invocant arrives as the first argument.</p>
+<p>The same class in Raku:</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">Point</span> {
+    <span class="k">has</span> <span class="nv">$.x</span> = <span class="mi">0</span>;
+    <span class="k">has</span> <span class="nv">$.y</span> = <span class="mi">0</span>;
+
+    <span class="k">method</span> <span class="n">to-string</span> {
+        <span class="k">return</span> <span class="s">&quot;($.x, $.y)&quot;</span>;
+    }
+}
+
+<span class="k">my</span> <span class="nv">$p</span> = <span class="n">Point</span>.<span class="nb">new</span>(<span class="n">x</span> =&gt; <span class="mi">3</span>, <span class="n">y</span> =&gt; <span class="mi">4</span>);
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">x</span>;              <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">to-string</span>;      <span class="c1"># (3, 4)</span></pre></div>
+
+<p>No <code>bless</code>, no hand-written <code>new</code>, no
+hand-written accessors. The <code>has</code> declarations create both
+the storage and the accessor; <code>Point.new</code> is generated and
+accepts each attribute as a named argument; and <code>method</code>
+gives you the invocant as <code>self</code> without your having to shift
+it off <code>@_</code>. Note also the dots: <code>Point.new</code> and
+<code>$p.x</code> — method calls use <code>.</code>, as everywhere in
+Raku (Chapter 1 explained why <code>~</code> took over concatenation to
+free up the dot).</p>
+<p>The <code>to-string</code> method here is an ordinary method, named
+to mirror the Perl version. Raku also has a <em>built-in</em>
+stringification hook: define a <code>Str</code> method and the prefix
+<code>~</code> operator and string interpolation will call it
+automatically. We use that idiomatic form at the end of the chapter.</p>
+<p>Modern Perl’s own <code>class</code> feature reaches for the same
+shape, if you are on a recent enough release (it is still marked
+experimental):</p>
+<div class="highlight perl-code"><pre>use feature 'class';
+
+class Point {
+    field $x :param :reader = 0;
+    field $y :param :reader = 0;
+    method to_string { "($x, $y)" }
+}
+
+my $p = Point-&gt;new(x =&gt; 3, y =&gt; 4);</pre></div>
+<p>The family resemblance is real. What follows in this chapter — roles,
+submethods, <code>multi</code> methods,
+<code>BUILD</code>/<code>TWEAK</code>, definite-vs-optional typing on
+attributes — is where Raku’s older, more complete object model still
+goes well beyond it.</p>
+<h2 id="attributes-and-the-.-versus-twigil">Attributes and the
+<code>.</code> versus <code>!</code> twigil</h2>
+<p>Chapter 3 introduced twigils and promised that <code>$!name</code>
+and <code>$.name</code> would make sense once we reached classes. Here
+they are.</p>
+<p>An attribute is declared with <code>has</code>. The twigil you choose
+controls what the outside world can do with it:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">Account</span> {
+    <span class="k">has</span> <span class="nv">$.owner</span>;              <span class="c1"># public: read-only accessor generated</span>
+    <span class="k">has</span> <span class="nv">$.balance</span> <span class="k">is</span> <span class="n">rw</span> = <span class="mi">0</span>;  <span class="c1"># public: read-write accessor generated</span>
+    <span class="k">has</span> <span class="nv">$!pin</span>;                <span class="c1"># private: no accessor at all</span>
+}</pre></div>
+
+<ul>
+<li><code>has $.owner</code> — the <code>.</code> twigil declares a
+<strong>public</strong> attribute. Raku generates a read-only accessor
+method <code>owner</code>. This is the common case.</li>
+<li><code>has $.balance is rw</code> — the same, but <code>is rw</code>
+makes the accessor return a writable container, so
+<code>$obj.balance = 250</code> works.</li>
+<li><code>has $!pin</code> — the <code>!</code> twigil declares a
+<strong>private</strong> attribute. No accessor is generated; only code
+inside the class can touch it.</li>
+</ul>
+<p>The mental model is the one from Chapter 3: <code>$!pin</code> is the
+<em>real</em> storage, always accessible from inside the class.
+<code>$.owner</code> is sugar — it declares the same private
+<code>$!owner</code> storage <em>plus</em> a public method
+<code>owner</code>. So even for a public attribute, <code>$!owner</code>
+is the direct variable and <code>$.owner</code> is a method call on
+<code>self</code>. This matters more than it first appears; we return to
+it under <code>BUILD</code>.</p>
+<p>Watching each of these in action:</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">Account</span> {
+    <span class="k">has</span> <span class="nv">$.owner</span>;
+    <span class="k">has</span> <span class="nv">$.balance</span> <span class="k">is</span> <span class="n">rw</span> = <span class="mi">0</span>;
+    <span class="k">has</span> <span class="nv">$!pin</span>;
+
+    <span class="k">method</span> <span class="n">set-pin</span>(<span class="nv">$p</span>)   { <span class="nv">$!pin</span> = <span class="nv">$p</span> }
+    <span class="k">method</span> <span class="n">check-pin</span>(<span class="nv">$p</span>) { <span class="nv">$!pin</span> <span class="n">eqv</span> <span class="nv">$p</span> }
+}
+
+<span class="k">my</span> <span class="nv">$a</span> = <span class="n">Account</span>.<span class="nb">new</span>(<span class="n">owner</span> =&gt; <span class="s">'Alice'</span>, <span class="n">balance</span> =&gt; <span class="mi">100</span>);
+<span class="nb">say</span> <span class="nv">$a</span>.<span class="n">owner</span>;             <span class="c1"># Alice</span>
+<span class="nb">say</span> <span class="nv">$a</span>.<span class="n">balance</span>;           <span class="c1"># 100</span>
+<span class="nv">$a</span>.<span class="n">balance</span> = <span class="mi">250</span>;         <span class="c1"># allowed: balance is rw</span>
+<span class="nb">say</span> <span class="nv">$a</span>.<span class="n">balance</span>;           <span class="c1"># 250</span>
+<span class="nv">$a</span>.<span class="n">set-pin</span>(<span class="mi">1234</span>);
+<span class="nb">say</span> <span class="nv">$a</span>.<span class="n">check-pin</span>(<span class="mi">1234</span>);   <span class="c1"># True</span></pre></div>
+
+<p>Try to write a read-only attribute and Raku stops you at run
+time:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$p</span> = <span class="n">Point</span>.<span class="nb">new</span>(<span class="n">x</span> =&gt; <span class="mi">3</span>, <span class="n">y</span> =&gt; <span class="mi">4</span>);
+<span class="nv">$p</span>.<span class="n">x</span> = <span class="mi">99</span>;               <span class="c1"># dies: Cannot modify an immutable Int</span>
+                         <span class="c1"># (X::Assignment::RO)</span></pre></div>
+
+<p>And the private attribute genuinely has no accessor — asking for it
+from outside is a method-not-found error:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nv">$a</span>.<span class="n">pin</span>;                  <span class="c1"># dies: X::Method::NotFound</span></pre></div>
+
+<p>For the Moose/Moo crowd, the mapping is direct. Moose’s
+<code>has 'owner' =&gt; (is =&gt; 'ro')</code> is
+<code>has $.owner</code>; <code>is =&gt; 'rw'</code> is
+<code>has $.owner is rw</code>; and a private attribute (no reader) is
+<code>has $!owner</code>. What Moose spells out in an options hash, Raku
+encodes in a sigil and a twigil.</p>
+<p>Arrays and hashes are attributes too, with their natural sigils.
+Inside the class you reach for the <code>!</code> form to mutate
+them:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">Bag</span> {
+    <span class="k">has</span> <span class="nv">@.items</span>;
+    <span class="k">has</span> <span class="nv">%.tags</span>;
+    <span class="k">method</span> <span class="n">add</span>(<span class="nv">$x</span>) { <span class="nv">@!items</span>.<span class="nb">push</span>: <span class="nv">$x</span> }
+}
+
+<span class="k">my</span> <span class="nv">$b</span> = <span class="nb">Bag</span>.<span class="nb">new</span>(<span class="n">items</span> =&gt; [<span class="mi">1</span>, <span class="mi">2</span>], <span class="n">tags</span> =&gt; {<span class="n">a</span> =&gt; <span class="mi">1</span>});
+<span class="nv">$b</span>.<span class="n">add</span>(<span class="mi">3</span>);
+<span class="nb">say</span> <span class="nv">$b</span>.<span class="n">items</span>;            <span class="c1"># [1 2 3]</span>
+<span class="nb">say</span> <span class="nv">$b</span>.<span class="n">tags</span>;             <span class="c1"># {a =&gt; 1}</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<h2 id="the-generated-constructor">The generated constructor</h2>
+<p>You never wrote <code>new</code> above, yet
+<code>Point.new(x =&gt; 3, y =&gt; 4)</code> worked. Every class
+inherits a <code>new</code> that accepts each public attribute as a
+<strong>named</strong> argument and fills in the matching storage. The
+named-only rule is deliberate — it is the reason a Perl
+<code>Point-&gt;new(3, 4)</code> has no direct equivalent; you pass
+<code>x =&gt; 3, y =&gt; 4</code>, and the mapping from name to
+attribute is unambiguous.</p>
+<p>Ask a fresh object to describe itself and you can see what
+<code>new</code> captured:</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">Point</span> { <span class="k">has</span> <span class="nv">$.x</span>; <span class="k">has</span> <span class="nv">$.y</span>; }
+<span class="k">my</span> <span class="nv">$p</span> = <span class="n">Point</span>.<span class="nb">new</span>(<span class="n">x</span> =&gt; <span class="mi">1</span>, <span class="n">y</span> =&gt; <span class="mi">2</span>);
+<span class="nb">say</span> <span class="nv">$p</span>;                  <span class="c1"># Point.new(x =&gt; 1, y =&gt; 2)</span>
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">WHAT</span>;             <span class="c1"># (Point)</span></pre></div>
+
+<p>That default representation —
+<code>Point.new(x =&gt; 1, y =&gt; 2)</code> — is the class’s
+<code>gist</code>, which we come back to at the end of the chapter.</p>
+<h3 id="default-values-and-is-required">Default values and
+<code>is required</code></h3>
+<p>An attribute with <code>= …</code> gets that default when the
+constructor is not given a value (we used <code>has $.x = 0</code>
+earlier). When, instead, a value must always be supplied, mark it
+<code>is required</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">Temperature</span> {
+    <span class="k">has</span> <span class="nv">$.celsius</span> <span class="k">is</span> <span class="n">required</span>;
+    <span class="k">has</span> <span class="nv">$.fahrenheit</span>;
+}
+
+<span class="n">Temperature</span>.<span class="nb">new</span>;         <span class="c1"># dies: X::Attribute::Required</span>
+                         <span class="c1"># &quot;The attribute '$!celsius' is required...&quot;</span></pre></div>
+
+<p>This replaces the hand-written <code>die "celsius required"</code>
+guard you would put at the top of a Perl <code>new</code>. In Moose
+terms, <code>is required</code> is exactly Moose’s
+<code>required =&gt; 1</code>, and <code>= 0</code> is Moose’s
+<code>default =&gt; 0</code>.</p>
+<h3 id="build-and-tweak"><code>BUILD</code> and <code>TWEAK</code></h3>
+<p>Defaults and required checks cover most construction. When you need
+to <em>compute</em> something at construction time — derive one
+attribute from another, validate a combination, normalise input — Raku
+gives you two hooks that run inside <code>new</code>: <code>BUILD</code>
+and <code>TWEAK</code>. Both are <strong>submethods</strong> (more on
+that word shortly), which means they are not inherited as ordinary
+methods; each class runs its own.</p>
+<p><code>TWEAK</code> runs <em>after</em> the object’s attributes have
+been initialised, so it is the one you want for derived values:</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">Temperature</span> {
+    <span class="k">has</span> <span class="nv">$.celsius</span> <span class="k">is</span> <span class="n">required</span>;
+    <span class="k">has</span> <span class="nv">$.fahrenheit</span>;
+
+    <span class="k">submethod</span> <span class="n">TWEAK</span> {
+        <span class="nv">$!fahrenheit</span> = <span class="nv">$!celsius</span> * <span class="mi">9</span>/<span class="mi">5</span> + <span class="mi">32</span>;
+    }
+}
+
+<span class="k">my</span> <span class="nv">$t</span> = <span class="n">Temperature</span>.<span class="nb">new</span>(<span class="n">celsius</span> =&gt; <span class="mi">100</span>);
+<span class="nb">say</span> <span class="nv">$t</span>.<span class="n">fahrenheit</span>;       <span class="c1"># 212</span></pre></div>
+
+<p>Notice <code>$!celsius</code>, not <code>$.celsius</code>. Inside
+<code>TWEAK</code> the object is still being built, and Raku will not
+let you call an accessor method on a partially constructed object — try
+<code>$.celsius</code> here and you get a compile-time error (“Virtual
+method call <code>$.celsius</code> may not be used on partially
+constructed object”). This is the practical payoff of the
+<code>$!</code>/<code>$.</code> distinction: in constructor code, always
+use the direct <code>$!</code> form.</p>
+<p><code>BUILD</code> runs <em>earlier</em>, before default
+initialisation, and receives the constructor’s named arguments. Use it
+when you want to take control of how arguments map onto attributes:</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">Person</span> {
+    <span class="k">has</span> <span class="nv">$.name</span>;
+    <span class="k">has</span> <span class="nv">$.age</span>;
+
+    <span class="k">submethod</span> <span class="n">BUILD</span>(:<span class="nv">$name</span>, :<span class="nv">$age</span> = <span class="mi">0</span>) {
+        <span class="nv">$!name</span> = <span class="nv">$name</span>.<span class="nb">tc</span>;      <span class="c1"># normalise: title-case the name</span>
+        <span class="nv">$!age</span>  = <span class="nv">$age</span>;
+    }
+}
+
+<span class="k">my</span> <span class="nv">$p</span> = <span class="n">Person</span>.<span class="nb">new</span>(<span class="n">name</span> =&gt; <span class="s">'alice'</span>, <span class="n">age</span> =&gt; <span class="mi">30</span>);
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">name</span>;                         <span class="c1"># Alice</span>
+<span class="nb">say</span> <span class="n">Person</span>.<span class="nb">new</span>(<span class="n">name</span> =&gt; <span class="s">'bob'</span>).<span class="n">age</span>;   <span class="c1"># 0</span></pre></div>
+
+<p>Reach for <code>TWEAK</code> by default; it is the simpler tool. Drop
+to <code>BUILD</code> only when you need to intercept the raw arguments.
+If you have written a Moose <code>BUILD</code> or a
+<code>BUILDARGS</code>, the roles are similar — <code>TWEAK</code> is
+the everyday post-construction hook, <code>BUILD</code> the lower-level
+argument-handling one.</p>
+<h2 id="methods-self-and-the-two-ways-to-reach-an-attribute">Methods,
+<code>self</code>, and the two ways to reach an attribute</h2>
+<p>A <code>method</code> is like a <code>sub</code>, but with an
+implicit invocant available as <code>self</code>. Inside a method you
+have two ways to name an attribute, and they are the same two forms from
+the twigil discussion:</p>
+<ul>
+<li><code>$!attr</code> — direct access to this object’s storage. Fast,
+and the only form allowed during construction.</li>
+<li><code>$.attr</code> — a method call, short for
+<code>self.attr</code>. It goes through the accessor, which means a
+subclass can override it (Chapter 23) and it respects
+<code>is rw</code>.</li>
+</ul>
+<p>For reading a value either works; <code>$.attr</code> is the
+idiomatic choice in ordinary methods because it dispatches politely
+through the accessor. You call other methods on <code>self</code> with
+the dot:</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">Greeter</span> {
+    <span class="k">has</span> <span class="nv">$.name</span>;
+    <span class="k">method</span> <span class="n">greet</span> { <span class="s">&quot;Hello, {$.name}, from {self.^name}&quot;</span> }
+}
+<span class="nb">say</span> <span class="n">Greeter</span>.<span class="nb">new</span>(<span class="n">name</span> =&gt; <span class="s">'Bob'</span>).<span class="n">greet</span>;
+<span class="c1"># Hello, Bob, from Greeter</span></pre></div>
+
+<p><code>self.^name</code> uses the metaobject call <code>.^</code> —
+the same introspection dot from Chapter 2 — to ask the object its class
+name.</p>
+<h3 id="private-methods-method">Private methods:
+<code>!method</code></h3>
+<p>Just as <code>$!</code> marks private storage, a leading
+<code>!</code> marks a private method. It is defined with
+<code>method !name</code> and called with <code>self!name</code>, and it
+is invisible from outside the class:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">Greeter</span> {
+    <span class="k">has</span> <span class="nv">$.name</span>;
+    <span class="k">method</span> !<span class="n">decorate</span>(<span class="nv">$s</span>) { <span class="s">&quot;*** $s ***&quot;</span> }
+    <span class="k">method</span> <span class="n">greet</span> { <span class="nb">self</span>!<span class="n">decorate</span>(<span class="s">&quot;Hello, $.name&quot;</span>) }
+}
+
+<span class="k">my</span> <span class="nv">$g</span> = <span class="n">Greeter</span>.<span class="nb">new</span>(<span class="n">name</span> =&gt; <span class="s">'Bob'</span>);
+<span class="nb">say</span> <span class="nv">$g</span>.<span class="n">greet</span>;            <span class="c1"># *** Hello, Bob ***</span>
+<span class="nv">$g</span>.<span class="n">decorate</span>(<span class="s">&quot;x&quot;</span>);        <span class="c1"># dies: X::Method::NotFound</span></pre></div>
+
+<p>In Perl a “private” method is a convention — a sub whose name starts
+with an underscore that you politely agree not to call. In Raku it is
+enforced: there is no public <code>decorate</code> at all.</p>
+<h3 id="submethod"><code>submethod</code></h3>
+<p>A <strong>submethod</strong> is a method that is <em>not</em>
+inherited: it belongs to the class that declares it and does not show up
+in subclasses. <code>BUILD</code> and <code>TWEAK</code> are submethods
+for exactly this reason — each class must run its own construction logic
+rather than silently inheriting a parent’s. You will occasionally
+declare your own submethods for the same “this class only” reason, but
+most of the time you meet them as
+<code>BUILD</code>/<code>TWEAK</code>.</p>
+<h3 id="multi-method"><code>multi method</code></h3>
+<p>Methods can be multis, dispatching on the number and types of their
+arguments just like the <code>multi sub</code>s of Chapter 16:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">class</span> <span class="n">Formatter</span> {
+    <span class="k">multi</span> <span class="k">method</span> <span class="n">show</span>(<span class="nb">Int</span> <span class="nv">$n</span>) { <span class="s">&quot;number $n&quot;</span> }
+    <span class="k">multi</span> <span class="k">method</span> <span class="n">show</span>(<span class="nb">Str</span> <span class="nv">$s</span>) { <span class="s">&quot;string $s&quot;</span> }
+}
+
+<span class="k">my</span> <span class="nv">$f</span> = <span class="n">Formatter</span>.<span class="nb">new</span>;
+<span class="nb">say</span> <span class="nv">$f</span>.<span class="n">show</span>(<span class="mi">42</span>);         <span class="c1"># number 42</span>
+<span class="nb">say</span> <span class="nv">$f</span>.<span class="n">show</span>(<span class="s">&quot;hi&quot;</span>);       <span class="c1"># string hi</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>This is how you replace the Perl pattern of a single method that
+inspects <code>ref</code>/<code>Scalar::Util::looks_like_number</code>
+and branches by hand: let the dispatcher choose the right body by
+type.</p>
+<h2 id="stringification-str-and-gist">Stringification: <code>Str</code>
+and <code>gist</code></h2>
+<p>In Perl you make an object stringify by overloading <code>""</code>
+(via the <code>overload</code> pragma). Raku splits the job in two, and
+both are just methods you define.</p>
+<ul>
+<li><code>Str</code> is the value’s string form — what the prefix
+<code>~</code> operator, string interpolation, and
+<code>print</code>/<code>put</code> use.</li>
+<li><code>gist</code> is the value’s <em>human-readable</em> form — what
+<code>say</code> and the REPL use. It is allowed to be lossy and
+friendly.</li>
+</ul>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">Temperature</span> {
+    <span class="k">has</span> <span class="nv">$.celsius</span>;
+    <span class="k">method</span> <span class="n">Str</span>  { <span class="s">&quot;$!celsius°C&quot;</span> }
+    <span class="k">method</span> <span class="n">gist</span> { <span class="s">&quot;Temperature({$!celsius}°C)&quot;</span> }
+}
+
+<span class="k">my</span> <span class="nv">$t</span> = <span class="n">Temperature</span>.<span class="nb">new</span>(<span class="n">celsius</span> =&gt; <span class="mi">100</span>);
+<span class="nb">say</span> ~<span class="nv">$t</span>;                 <span class="c1"># 100°C                — prefix ~ calls Str</span>
+<span class="nb">say</span> <span class="nv">$t</span>;                  <span class="c1"># Temperature(100°C)   — say uses gist</span>
+<span class="nb">say</span> <span class="s">&quot;It is $t&quot;</span>;          <span class="c1"># It is 100°C          — interpolation uses Str</span></pre></div>
+
+<p>That prefix <code>~</code> is worth pausing on: it is Raku’s explicit
+“stringify this” operator, the unary sibling of the <code>~</code> you
+already use to concatenate. <code>~$obj</code> means exactly
+<code>$obj.Str</code>, so defining a <code>Str</code> method is what
+makes an object behave like a string everywhere — under <code>~</code>,
+inside <code>"..."</code>, and in <code>print</code>. This is the
+idiomatic replacement for the ad-hoc <code>to-string</code> method we
+wrote at the start of the chapter: give the class a real
+<code>Str</code> method and the whole language stringifies it for
+you.</p>
+<p>If you define neither, you get the default we saw earlier —
+<code>Temperature.new(celsius =&gt; 100)</code> — which is Raku’s
+out-of-the-box <code>gist</code> for any object, and a genuinely useful
+default for debugging. Define <code>Str</code> when the object has a
+natural textual value; add <code>gist</code> when you want
+<code>say</code> output to read differently from that value.</p>
+<p>With a single class understood — its attributes, its constructor
+hooks, its methods — the next question is how classes relate to one
+another. Chapter 23 takes up inheritance and, more importantly, roles:
+the composable unit of behaviour that, for most designs, you should
+reach for before a base class.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a
+href="/raku-books/migrating-to-raku/object-oriented-programming">Object-Oriented
+Programming</a>   |   <a
+href="/raku-books/migrating-to-raku/roles-and-inheritance">Roles and
+Inheritance</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

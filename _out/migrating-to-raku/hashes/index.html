@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Hashes — Raku Books</title>
+    <meta property="og:title" content="Hashes — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/variables-and-data">Variables
+and Data</a></p>
+<h1 id="hashes">Hashes</h1>
+<p>Hashes survive the move to Raku almost intact: they are still
+unordered collections of key–value pairs, still declared with
+<code>%</code>, still the natural way to count things and look things
+up. The changes are small but constant — the sigil stays <code>%</code>
+when you index, angle brackets give you a shorthand for string keys, and
+the pair itself is promoted to a first-class object. And at the end of
+the chapter we meet three immutable cousins — <code>Set</code>,
+<code>Bag</code>, and <code>Mix</code> — that Perl never had.</p>
+<h2 id="subscripting-and">Subscripting: <code>{…}</code> and
+<code>&lt;…&gt;</code></h2>
+<p>In Perl you switch the sigil to <code>$</code> and use braces,
+quoting or barewording the key:</p>
+<div class="highlight perl-code"><pre>my %ages = (Alice =&gt; 30, Bob =&gt; 25);
+say $ages{Alice};        # 30   — bareword key
+my $name = 'Bob';
+say $ages{$name};        # 25   — key from a variable</pre></div>
+<p>In Raku the sigil stays <code>%</code>, and there are two bracket
+styles. Braces <code>{…}</code> take an arbitrary expression as the key
+— a variable, a computation, anything:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">%ages</span> = <span class="n">Alice</span> =&gt; <span class="mi">30</span>, <span class="n">Bob</span> =&gt; <span class="mi">25</span>;
+<span class="k">my</span> <span class="nv">$name</span> = <span class="s">'Bob'</span>;
+<span class="nb">say</span> <span class="nv">%ages</span>{<span class="nv">$name</span>};        <span class="c1"># 25</span>
+<span class="nb">say</span> <span class="nv">%ages</span>{<span class="s">'Alice'</span>};      <span class="c1"># 30</span></pre></div>
+
+<p>Angle brackets <code>&lt;…&gt;</code> are the shorthand for a
+<em>constant</em> string key. They quote for you, just like Perl’s
+<code>qw//</code>, so there are no quotes and no comma:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">%ages</span><span class="s">&lt;Alice&gt;</span>;        <span class="c1"># 30</span></pre></div>
+
+<p>The rule of thumb: use <code>&lt;…&gt;</code> for literal keys you
+type in the source, and <code>{…}</code> when the key comes from a
+variable or expression. It is the exact analogue of the array split
+between <code>@a[…]</code> for computed indices and the constant
+case.</p>
+<h2 id="building-hashes">Building hashes</h2>
+<p>The fat arrow <code>=&gt;</code> works as before, and — a nice bonus
+— it also auto-quotes the word on its left, so you rarely need quotes
+around keys:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">%ages</span> = <span class="n">Alice</span> =&gt; <span class="mi">30</span>, <span class="n">Bob</span> =&gt; <span class="mi">25</span>;</pre></div>
+
+<p>You can be explicit with the <code>%()</code> hash constructor,
+useful when you want a hash literal in the middle of an expression:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">%h</span> = %(<span class="n">one</span> =&gt; <span class="mi">1</span>, <span class="n">two</span> =&gt; <span class="mi">2</span>);
+<span class="nb">say</span> <span class="nv">%h</span>;                  <span class="c1"># {one =&gt; 1, two =&gt; 2}</span></pre></div>
+
+<p>And you can still build a hash from a flat list of alternating keys
+and values, exactly as in Perl:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">%from</span> = <span class="s">&lt;a 1 b 2 c 3&gt;</span>;
+<span class="nb">say</span> <span class="nv">%from</span>.<span class="nb">elems</span>;         <span class="c1"># 3</span></pre></div>
+
+<h2 id="keys-are-unordered-and-pair-is-an-object">Keys are unordered,
+and <code>Pair</code> is an object</h2>
+<p>As in Perl, a hash has no inherent order — do not rely on the
+sequence in which keys come back. What is new is that each key–value
+coupling is a real object, a <code>Pair</code>, which you can create and
+pass around on its own:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$p</span> = <span class="s">'x'</span> =&gt; <span class="mi">10</span>;
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">WHAT</span>;             <span class="c1"># (Pair)</span>
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">key</span>;              <span class="c1"># x</span>
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">value</span>;            <span class="c1"># 10</span></pre></div>
+
+<p>A hash, then, is essentially a collection of <code>Pair</code>s, and
+much of the iteration vocabulary below hands them back to you.</p>
+<h2 id="iterating">Iterating</h2>
+<p>The familiar <code>keys</code> and <code>values</code> return lists
+(here sorted for a stable display):</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">%h</span> = <span class="n">apple</span> =&gt; <span class="mi">3</span>, <span class="n">banana</span> =&gt; <span class="mi">5</span>, <span class="n">cherry</span> =&gt; <span class="mi">2</span>;
+<span class="nb">say</span> <span class="nv">%h</span>.<span class="nb">keys</span>.<span class="nb">sort</span>;        <span class="c1"># (apple banana cherry)</span>
+<span class="nb">say</span> <span class="nv">%h</span>.<span class="nb">values</span>.<span class="nb">sort</span>;      <span class="c1"># (2 3 5)</span></pre></div>
+
+<p>The idiomatic way to walk a whole hash is <code>kv</code>, which
+yields keys and values alternately, unpacked into two loop variables by
+a pointy block:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">for</span> <span class="nv">%h</span>.<span class="nb">kv</span> -&gt; <span class="nv">$k</span>, <span class="nv">$v</span> {
+    <span class="nb">say</span> <span class="s">&quot;$k: $v&quot;</span>;
+}</pre></div>
+
+<div class="highlight"><pre>apple: 3
+cherry: 2
+banana: 5</pre></div>
+<p>Alternatively, <code>pairs</code> gives you <code>Pair</code> objects
+directly, which you can sort and print whole:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">for</span> <span class="nv">%h</span>.<span class="nb">pairs</span>.<span class="nb">sort</span> -&gt; <span class="nv">$pair</span> {
+    <span class="nb">say</span> <span class="nv">$pair</span>;           <span class="c1"># e.g. apple =&gt; 3</span>
+}</pre></div>
+
+<h2 id="existence-deletion-and-slicing-by-adverb">Existence, deletion,
+and slicing by adverb</h2>
+<p>Perl uses the functions <code>exists</code> and
+<code>delete</code>:</p>
+<div class="highlight perl-code"><pre>my %h = (apple =&gt; 3, banana =&gt; 5);
+say exists $h{apple};    # 1
+delete $h{apple};</pre></div>
+<p>Raku turns these into <em>adverbs</em> on the subscript — a
+colon-word suffix that modifies what the subscript returns.
+<code>:exists</code> and <code>:delete</code> do what their names say,
+and <code>:delete</code> returns the value it removed:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">%h</span> = <span class="n">apple</span> =&gt; <span class="mi">3</span>, <span class="n">banana</span> =&gt; <span class="mi">5</span>, <span class="n">cherry</span> =&gt; <span class="mi">2</span>;
+<span class="nb">say</span> <span class="nv">%h</span><span class="s">&lt;apple&gt;</span>:<span class="n">exists</span>;    <span class="c1"># True</span>
+<span class="nb">say</span> <span class="nv">%h</span><span class="s">&lt;grape&gt;</span>:<span class="n">exists</span>;    <span class="c1"># False</span>
+<span class="nb">say</span> <span class="nv">%h</span><span class="s">&lt;apple&gt;</span>:<span class="n">delete</span>;    <span class="c1"># 3     — and apple is now gone</span>
+<span class="nb">say</span> <span class="nv">%h</span>.<span class="nb">keys</span>.<span class="nb">sort</span>;        <span class="c1"># (banana cherry)</span></pre></div>
+
+<p>Two more adverbs round out the family: <code>:v</code> returns the
+value (the default behaviour of a subscript), and <code>:k</code>
+returns the key when it exists:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">%h</span><span class="s">&lt;banana&gt;</span>:<span class="n">v</span>;        <span class="c1"># 5</span>
+<span class="nb">say</span> <span class="nv">%h</span><span class="s">&lt;banana&gt;</span>:<span class="n">k</span>;        <span class="c1"># banana</span></pre></div>
+
+<p>The adverb syntax composes with slices too, so
+<code>%h&lt;a b c&gt;:delete</code> removes and returns several entries
+at once — a tidy replacement for a hand-written loop.</p>
+<h2 id="defaults-and-autovivification">Defaults and
+autovivification</h2>
+<p>Autovivification works as in Perl: reaching into a nested key springs
+the intermediate hashes into being:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">%tree</span>;
+<span class="nv">%tree</span><span class="s">&lt;a&gt;</span><span class="s">&lt;b&gt;</span><span class="s">&lt;c&gt;</span> = <span class="mi">1</span>;
+<span class="nb">say</span> <span class="nv">%tree</span>;               <span class="c1"># {a =&gt; {b =&gt; {c =&gt; 1}}}</span></pre></div>
+
+<p>The classic counting idiom needs nothing special — a missing key
+reads as undefined, and <code>++</code> treats that as zero:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">%count</span>;
+<span class="nv">%count</span>{<span class="nv">$_</span>}++ <span class="k">for</span> &lt;<span class="n">a</span> <span class="n">b</span> <span class="n">a</span> <span class="n">c</span> <span class="n">a</span>&gt;;
+<span class="nb">say</span> <span class="nv">%count</span>.<span class="nb">sort</span>;         <span class="c1"># (a =&gt; 3 b =&gt; 1 c =&gt; 1)</span></pre></div>
+
+<p>If you want a missing key to read as some other value, declare the
+hash with <code>is default</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">%h</span> <span class="k">is</span> <span class="k">default</span>(<span class="mi">0</span>);
+<span class="nb">say</span> <span class="nv">%h</span><span class="s">&lt;missing&gt;</span>;         <span class="c1"># 0</span></pre></div>
+
+<h2 id="typed-hashes">Typed hashes</h2>
+<p>Raku lets you constrain a hash’s keys to a particular type by naming
+it in braces after the variable — a guarantee Perl could not make.
+<code>my %h{Str}</code> is the default (string keys); more interesting
+is constraining to another type:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">%scores</span>{<span class="nb">Str</span>};
+<span class="nb">say</span> <span class="nv">%scores</span>.<span class="n">WHAT</span>;        <span class="c1"># (Hash[Any,Str])</span>
+
+<span class="k">my</span> <span class="nv">%byint</span>{<span class="nb">Int</span>};
+<span class="nv">%byint</span>{<span class="mi">1</span>} = <span class="s">'one'</span>;
+<span class="nb">say</span> <span class="nv">%byint</span>{<span class="mi">1</span>};           <span class="c1"># one</span></pre></div>
+
+<p>Feed such a hash a key of the wrong type and you get a type-check
+error at the point of use, rather than a silent stringification — one
+more class of bug caught early.</p>
+<h2 id="set-bag-and-mix-the-hash-like-cousins">Set, Bag, and Mix: the
+hash-like cousins</h2>
+<p>Perl programmers routinely fake a set with a hash whose values are
+all <code>1</code>. Raku gives you the real thing. A <code>Set</code> is
+an immutable, unordered collection of distinct elements; a
+<code>Bag</code> adds integer counts (a multiset); a <code>Mix</code>
+allows fractional weights.</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$s</span> = <span class="s">&lt;apple banana cherry&gt;</span>.<span class="nb">Set</span>;
+<span class="nb">say</span> <span class="nv">$s</span>.<span class="n">WHAT</span>;             <span class="c1"># (Set)</span>
+
+<span class="k">my</span> <span class="nv">$bag</span> = <span class="s">&lt;a a b c c c&gt;</span>.<span class="nb">Bag</span>;
+<span class="nb">say</span> <span class="nv">$bag</span><span class="s">&lt;c&gt;</span>;             <span class="c1"># 3     — how many c's</span>
+<span class="nb">say</span> <span class="nv">$bag</span><span class="s">&lt;a&gt;</span>;             <span class="c1"># 2</span>
+
+<span class="k">my</span> <span class="nv">$m</span> = (<span class="n">apple</span> =&gt; <span class="mf">0.5</span>, <span class="n">banana</span> =&gt; <span class="mf">2.5</span>).<span class="nb">Mix</span>;
+<span class="nb">say</span> <span class="nv">$m</span><span class="s">&lt;banana&gt;</span>;          <span class="c1"># 2.5</span></pre></div>
+
+<p>The payoff is a set of operators that read like mathematics.
+Membership is <code>∈</code> (or the ASCII <code>(elem)</code>); union
+is <code>∪</code> (<code>(|)</code>), intersection is <code>∩</code>
+(<code>(&amp;)</code>):</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$a</span> = <span class="s">&lt;a b c&gt;</span>.<span class="nb">Set</span>;
+<span class="k">my</span> <span class="nv">$b</span> = <span class="s">&lt;b c d&gt;</span>.<span class="nb">Set</span>;
+<span class="nb">say</span> <span class="s">'apple'</span> ∈ <span class="nv">$s</span>;        <span class="c1"># True</span>
+<span class="nb">say</span> <span class="nv">$a</span> ∪ <span class="nv">$b</span>;             <span class="c1"># Set(a b c d)</span>
+<span class="nb">say</span> <span class="nv">$a</span> ∩ <span class="nv">$b</span>;             <span class="c1"># Set(b c)</span>
+<span class="nb">say</span> <span class="nv">$a</span> (|) <span class="nv">$b</span>;           <span class="c1"># Set(a b c d)   — ASCII form</span>
+<span class="nb">say</span> <span class="nv">$a</span> (&amp;) <span class="nv">$b</span>;           <span class="c1"># Set(b c)</span></pre></div>
+
+<p>These types are immutable, so they suit exactly the jobs where a
+hash-as-set was always a slightly awkward fit: deduplication, membership
+tests, counting occurrences, and set arithmetic without a single manual
+loop.</p>
+<p>Hashes and their cousins map keys to values; next we look more
+closely at the values themselves, starting with Raku’s numeric tower in
+Chapter 6.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/arrays-and-lists">Arrays and Lists</a>
+  |   <a href="/raku-books/migrating-to-raku/numbers">Numbers</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

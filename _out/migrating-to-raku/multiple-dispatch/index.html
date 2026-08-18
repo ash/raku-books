@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Multiple Dispatch — Raku Books</title>
+    <meta property="og:title" content="Multiple Dispatch — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a
+href="/raku-books/migrating-to-raku/subroutines-and-functions">Subroutines and
+Functions</a></p>
+<h1 id="multiple-dispatch">Multiple Dispatch</h1>
+<p>You have written this subroutine many times. It takes an argument
+that might be several different things, and its first job is to work out
+<em>which</em> thing, so it can decide what to do:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+
+sub describe {
+    my ($arg) = @_;
+    if    (ref $arg eq 'ARRAY') { return "array of "  . scalar(@$arg) }
+    elsif (ref $arg eq 'HASH')  { return "hash of "   . scalar(keys %$arg) }
+    elsif (!ref $arg)           { return "scalar: $arg" }
+}
+say describe([1, 2, 3]);   # array of 3
+say describe({a =&gt; 1});    # hash of 1
+say describe(42);          # scalar: 42</pre></div>
+<p>The branching by <code>ref</code>, by <code>@_ == 1</code> versus
+<code>@_ == 2</code>, by whether an argument is defined — all of it is
+dispatch logic done by hand. Raku pulls that logic out of the body and
+into the signatures. You write one routine <em>per case</em>, mark each
+with <code>multi</code>, and the compiler picks the matching one by
+looking at the arguments. This is <em>multiple dispatch</em>.</p>
+<h2 id="multi-many-routines-one-name"><code>multi</code>: many routines,
+one name</h2>
+<p>Declare more than one routine with the same name, each a
+<code>multi</code>, each with a different signature. Raku chooses a
+<em>candidate</em> at every call:</p>
+<div class="highlight raku"><pre><span></span><span class="k">multi</span> <span class="n">greet</span>(<span class="nb">Str</span> <span class="nv">$s</span>) { <span class="s">&quot;string: $s&quot;</span> }
+<span class="k">multi</span> <span class="n">greet</span>(<span class="nb">Int</span> <span class="nv">$n</span>) { <span class="s">&quot;int: $n&quot;</span> }
+<span class="nb">say</span> <span class="n">greet</span>(<span class="s">&quot;hi&quot;</span>);      <span class="c1"># string: hi</span>
+<span class="nb">say</span> <span class="n">greet</span>(<span class="mi">42</span>);        <span class="c1"># int: 42</span></pre></div>
+
+<p>There is no <code>if</code>, no <code>ref</code>, no dispatch code
+you maintain. The signatures <em>are</em> the dispatch table. Add a new
+case later by adding a new <code>multi</code>; nothing else needs to
+change. This works for methods too — <code>multi method</code>
+dispatches on the invocant’s arguments in exactly the same way.</p>
+<h2 id="dispatch-by-arity">Dispatch by arity</h2>
+<p>Candidates can differ purely in how many arguments they take. This
+replaces the <code>@_ == 1</code> counting:</p>
+<div class="highlight raku"><pre><span></span><span class="k">multi</span> <span class="n">describe</span>(<span class="nv">$a</span>)     { <span class="s">&quot;one: $a&quot;</span> }
+<span class="k">multi</span> <span class="n">describe</span>(<span class="nv">$a</span>, <span class="nv">$b</span>) { <span class="s">&quot;two: $a, $b&quot;</span> }
+<span class="nb">say</span> <span class="n">describe</span>(<span class="mi">1</span>);      <span class="c1"># one: 1</span>
+<span class="nb">say</span> <span class="n">describe</span>(<span class="mi">1</span>, <span class="mi">2</span>);   <span class="c1"># two: 1, 2</span></pre></div>
+
+<p>Arity and type combine freely: you can have a one-argument
+<code>Int</code> candidate and a two-argument <code>Str, Str</code>
+candidate side by side, and Raku sorts them out.</p>
+<h2 id="dispatch-by-type">Dispatch by type</h2>
+<p>Type-based dispatch is the direct replacement for the
+<code>ref</code>-testing chain we started with. Here is that first Perl
+example, rebuilt:</p>
+<div class="highlight raku"><pre><span></span><span class="k">multi</span> <span class="n">describe</span>(<span class="nb">Array</span> <span class="nv">$a</span>) { <span class="s">&quot;array of {$a.elems}&quot;</span> }
+<span class="k">multi</span> <span class="n">describe</span>(<span class="nb">Hash</span>  <span class="nv">$h</span>) { <span class="s">&quot;hash of {$h.elems}&quot;</span> }
+<span class="k">multi</span> <span class="n">describe</span>(<span class="nv">$x</span>)       { <span class="s">&quot;scalar: $x&quot;</span> }
+<span class="nb">say</span> <span class="n">describe</span>([<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>]);   <span class="c1"># array of 3</span>
+<span class="nb">say</span> <span class="n">describe</span>({<span class="n">a</span> =&gt; <span class="mi">1</span>});    <span class="c1"># hash of 1</span>
+<span class="nb">say</span> <span class="n">describe</span>(<span class="mi">42</span>);          <span class="c1"># scalar: 42</span></pre></div>
+
+<p>The last candidate has no type, so it accepts anything the others
+turned down — a natural catch-all.</p>
+<h2 id="proto-one-umbrella-declaration"><code>proto</code>: one umbrella
+declaration</h2>
+<p>For a family of <code>multi</code>s you may want a single place that
+describes the shared shape and, optionally, wraps every call. That is a
+<code>proto</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">proto</span> <span class="n">process</span>(|) {*}
+<span class="k">multi</span> <span class="n">process</span>(<span class="nb">Int</span> <span class="nv">$n</span>) { <span class="s">&quot;number $n&quot;</span> }
+<span class="k">multi</span> <span class="n">process</span>(<span class="nb">Str</span> <span class="nv">$s</span>) { <span class="s">&quot;text $s&quot;</span> }
+<span class="nb">say</span> <span class="n">process</span>(<span class="mi">7</span>);       <span class="c1"># number 7</span>
+<span class="nb">say</span> <span class="n">process</span>(<span class="s">&quot;x&quot;</span>);     <span class="c1"># text x</span></pre></div>
+
+<p>The <code>(|)</code> signature means “accept any arguments”, and the
+<code>{*}</code> body means “dispatch to a candidate here”. You do not
+need a <code>proto</code> — Raku creates one implicitly — but writing
+your own lets you document the group and, if you put real code around
+the <code>{*}</code>, run shared logic (validation, logging) on every
+call.</p>
+<h2 id="narrowing-with-where">Narrowing with <code>where</code></h2>
+<p>Types are not the only way to distinguish candidates. A
+<code>where</code> clause attaches an arbitrary test, so you can
+dispatch on a <em>value</em>, not just a type. Two candidates that
+differ only by a <code>where</code> are perfectly valid, and the more
+specific one wins:</p>
+<div class="highlight raku"><pre><span></span><span class="k">multi</span> <span class="n">tag</span>(<span class="nb">Int</span> <span class="nv">$n</span>)             { <span class="s">&quot;any int: $n&quot;</span> }
+<span class="k">multi</span> <span class="n">tag</span>(<span class="nb">Int</span> <span class="nv">$n</span> <span class="k">where</span> * &gt; <span class="mi">0</span>) { <span class="s">&quot;positive: $n&quot;</span> }
+<span class="nb">say</span> <span class="n">tag</span>(<span class="mi">5</span>);           <span class="c1"># positive: 5</span>
+<span class="nb">say</span> <span class="n">tag</span>(-<span class="mi">3</span>);          <span class="c1"># any int: -3</span></pre></div>
+
+<p>The <code>* &gt; 0</code> is a <code>Whatever</code> expression — a
+little anonymous test, “is it greater than zero?” (Chapter 17 covers
+<code>*</code> closures in full.) A literal works as a
+<code>where</code> too, which gives beautifully direct base cases:</p>
+<div class="highlight raku"><pre><span></span><span class="k">multi</span> <span class="n">fact</span>(<span class="mi">0</span>)      { <span class="mi">1</span> }
+<span class="k">multi</span> <span class="n">fact</span>(<span class="nb">Int</span> <span class="nv">$n</span>) { <span class="nv">$n</span> * <span class="n">fact</span>(<span class="nv">$n</span> - <span class="mi">1</span>) }
+<span class="nb">say</span> <span class="n">fact</span>(<span class="mi">5</span>);          <span class="c1"># 120</span></pre></div>
+
+<h2 id="a-worked-example-fib">A worked example: <code>fib</code></h2>
+<p>The classic recursion reads almost like its mathematical definition
+when the base cases become their own candidates:</p>
+<div class="highlight raku"><pre><span></span><span class="k">multi</span> <span class="n">fib</span>(<span class="mi">0</span>)      { <span class="mi">0</span> }
+<span class="k">multi</span> <span class="n">fib</span>(<span class="mi">1</span>)      { <span class="mi">1</span> }
+<span class="k">multi</span> <span class="n">fib</span>(<span class="nb">Int</span> <span class="nv">$n</span>) { <span class="n">fib</span>(<span class="nv">$n</span> - <span class="mi">1</span>) + <span class="n">fib</span>(<span class="nv">$n</span> - <span class="mi">2</span>) }
+<span class="nb">say</span> <span class="n">fib</span>(<span class="mi">10</span>);          <span class="c1"># 55</span></pre></div>
+
+<p>There is no <code>if $n &lt; 2</code> guard inside the body; the
+guards <em>are</em> the two literal candidates. The recursive case never
+sees <code>0</code> or <code>1</code>, because a more specific candidate
+always claims them first.</p>
+<h2 id="definiteness-d-and-u">Definiteness: <code>:D</code> and
+<code>:U</code></h2>
+<p>Raku can dispatch on whether an argument is a <em>defined value</em>
+or an <em>undefined type object</em> — the distinction between
+<code>42</code> and the bare type <code>Int</code>. Append
+<code>:D</code> (defined) or <code>:U</code> (undefined) to a type:</p>
+<div class="highlight raku"><pre><span></span><span class="k">multi</span> <span class="n">handle</span>(<span class="nb">Int</span>:<span class="n">D</span> <span class="nv">$n</span>) { <span class="s">&quot;defined int $n&quot;</span> }
+<span class="k">multi</span> <span class="n">handle</span>(<span class="nb">Int</span>:<span class="n">U</span> <span class="nv">$t</span>) { <span class="s">&quot;undefined int of type {$t.^name}&quot;</span> }
+<span class="nb">say</span> <span class="n">handle</span>(<span class="mi">5</span>);        <span class="c1"># defined int 5</span>
+<span class="nb">say</span> <span class="n">handle</span>(<span class="nb">Int</span>);      <span class="c1"># undefined int of type Int</span></pre></div>
+
+<p>This is the clean way to say “give me a real number here, not an
+uninitialised one” — a check that in Perl you would write as
+<code>defined $n or die</code>.</p>
+<h2 id="is-default-for-ties"><code>is default</code> for ties</h2>
+<p>When two candidates are equally good matches, you can nominate one as
+the tie-breaker with <code>is default</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">multi</span> <span class="nb">pick</span>(<span class="nb">Int</span> <span class="nv">$n</span>)      { <span class="s">&quot;int $n&quot;</span> }
+<span class="k">multi</span> <span class="nb">pick</span>(<span class="nv">$x</span>) <span class="k">is</span> <span class="k">default</span> { <span class="s">&quot;other $x&quot;</span> }
+<span class="nb">say</span> <span class="nb">pick</span>(<span class="mi">3</span>);          <span class="c1"># int 3</span>
+<span class="nb">say</span> <span class="nb">pick</span>(<span class="s">&quot;q&quot;</span>);        <span class="c1"># other q</span></pre></div>
+
+<h2 id="how-the-winner-is-chosen">How the winner is chosen</h2>
+<p>The rule is: <strong>the most specific matching candidate
+wins.</strong> A candidate that constrains more — a narrower type, an
+added <code>where</code>, a definiteness marker — beats a looser one.
+<code>Int</code> beats the untyped <code>$x</code>;
+<code>Int where * &gt; 0</code> beats plain <code>Int</code>; a literal
+<code>0</code> beats <code>Int</code>.</p>
+<p>If two candidates are equally specific and neither is
+<code>is default</code>, Raku refuses to guess. It raises an ambiguity
+error rather than pick arbitrarily:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">multi</span> <span class="n">f</span>(<span class="nb">Int</span> <span class="nv">$a</span>, <span class="nv">$b</span>) { <span class="s">&quot;a&quot;</span> }
+<span class="k">multi</span> <span class="n">f</span>(<span class="nv">$a</span>, <span class="nb">Int</span> <span class="nv">$b</span>) { <span class="s">&quot;b&quot;</span> }
+<span class="nb">say</span> (<span class="k">try</span> <span class="n">f</span>(<span class="mi">1</span>, <span class="mi">2</span>)) // <span class="s">&quot;ambiguous dispatch&quot;</span>;   <span class="c1"># ambiguous dispatch</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Here <code>f(1, 2)</code> matches both — the first argument fits
+candidate one’s <code>Int</code>, the second fits candidate two’s
+<code>Int</code> — and neither is more specific overall. The fix is to
+add a candidate that resolves the overlap, or to mark one
+<code>is default</code>.</p>
+<h2 id="putting-it-together">Putting it together</h2>
+<p>A small geometry example shows how naturally this scales. Each shape
+is a class (Chapter 22 covers classes properly), and each gets its own
+<code>area</code> candidate:</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">Circle</span>    { <span class="k">has</span> <span class="nv">$.r</span> }
+<span class="k">class</span> <span class="n">Rectangle</span> { <span class="k">has</span> <span class="nv">$.w</span>; <span class="k">has</span> <span class="nv">$.h</span> }
+
+<span class="k">multi</span> <span class="n">area</span>(<span class="n">Circle</span> <span class="nv">$c</span>)    { <span class="n">pi</span> * <span class="nv">$c</span>.<span class="n">r</span> ** <span class="mi">2</span> }
+<span class="k">multi</span> <span class="n">area</span>(<span class="n">Rectangle</span> <span class="nv">$r</span>) { <span class="nv">$r</span>.<span class="n">w</span> * <span class="nv">$r</span>.<span class="n">h</span> }
+
+<span class="nb">say</span> <span class="n">area</span>(<span class="n">Circle</span>.<span class="nb">new</span>(<span class="n">r</span> =&gt; <span class="mi">2</span>)).<span class="nb">round</span>(<span class="mf">0.01</span>);   <span class="c1"># 12.57</span>
+<span class="nb">say</span> <span class="n">area</span>(<span class="n">Rectangle</span>.<span class="nb">new</span>(<span class="n">w</span> =&gt; <span class="mi">3</span>, <span class="n">h</span> =&gt; <span class="mi">4</span>));    <span class="c1"># 12</span></pre></div>
+
+<p>Adding a <code>Triangle</code> later means adding one
+<code>multi area(Triangle $t)</code> — and no existing code is touched.
+That open-ended extensibility is the real payoff: where Perl’s
+<code>if</code>/<code>elsif</code> chain is a closed structure you must
+edit, a set of <code>multi</code>s is an open one you extend.</p>
+<p>Dispatch decides <em>which</em> block of code runs. The next chapter
+looks at blocks themselves — how Raku turns anonymous subs, closures,
+and the humble <code>{ ... }</code> into first-class, composable
+values.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/signatures">From <span class="citation"
+data-cites="_">@_</span> to Signatures</a>   |   <a
+href="/raku-books/migrating-to-raku/closures-and-blocks">Closures and Blocks</a>
+→</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

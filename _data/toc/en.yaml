@@ -3,6 +3,174 @@
 "toc": 
   - 
     "covers": 
+      - "migrating-to-raku"
+    "description": "A recipe guide for fluent Perl programmers moving to Raku: every section takes a pattern you already know, shows the idiomatic Raku equivalent beside it, and explains what changed and why."
+    "items": 
+      - 
+        "items": 
+          - 
+            "title": "Preface"
+            "url": "preface"
+          - 
+            "title": "How This Book Works"
+            "url": "how-this-book-works"
+        "title": "Front matter"
+        "url": "front-matter"
+      - 
+        "items": 
+          - 
+            "title": "Hello, World!"
+            "url": "hello-world"
+          - 
+            "title": "The Big Picture"
+            "url": "big-picture"
+        "title": "Getting Started"
+        "url": "getting-started"
+      - 
+        "items": 
+          - 
+            "title": "Scalars and Sigils"
+            "url": "scalars-and-sigils"
+          - 
+            "title": "Arrays and Lists"
+            "url": "arrays-and-lists"
+          - 
+            "title": "Hashes"
+            "url": "hashes"
+          - 
+            "title": "Numbers"
+            "url": "numbers"
+          - 
+            "title": "Strings"
+            "url": "strings"
+          - 
+            "title": "References, Containers, and Context"
+            "url": "references-and-context"
+          - 
+            "title": "Types and the Type System"
+            "url": "types"
+        "title": "Variables and Data"
+        "url": "variables-and-data"
+      - 
+        "items": 
+          - 
+            "title": "Operators You Already Know"
+            "url": "operators-you-know"
+          - 
+            "title": "New Operators and Meta-operators"
+            "url": "new-operators"
+        "title": "Operators and Expressions"
+        "url": "operators-and-expressions"
+      - 
+        "items": 
+          - 
+            "title": "Conditionals and Loops"
+            "url": "conditionals-and-loops"
+          - 
+            "title": "given/when and Topicalization"
+            "url": "given-when"
+          - 
+            "title": "Phasers"
+            "url": "phasers"
+        "title": "Control Flow"
+        "url": "control-flow"
+      - 
+        "items": 
+          - 
+            "title": "From @_ to Signatures"
+            "url": "signatures"
+          - 
+            "title": "Multiple Dispatch"
+            "url": "multiple-dispatch"
+          - 
+            "title": "Closures and Blocks"
+            "url": "closures-and-blocks"
+        "title": "Subroutines and Functions"
+        "url": "subroutines-and-functions"
+      - 
+        "items": 
+          - 
+            "title": "Regexes Reworked"
+            "url": "regexes-reworked"
+          - 
+            "title": "From Regexes to Grammars"
+            "url": "grammars"
+        "title": "Regular Expressions"
+        "url": "regular-expressions"
+      - 
+        "items": 
+          - 
+            "title": "Text Processing"
+            "url": "text-processing"
+          - 
+            "title": "Files and I/O"
+            "url": "files-and-io"
+        "title": "Text and I/O"
+        "url": "text-and-i-o"
+      - 
+        "items": 
+          - 
+            "title": "Classes and Objects"
+            "url": "classes-and-objects"
+          - 
+            "title": "Roles and Inheritance"
+            "url": "roles-and-inheritance"
+        "title": "Object-Oriented Programming"
+        "url": "object-oriented-programming"
+      - 
+        "items": 
+          - 
+            "title": "Modules, Packages, and Exporting"
+            "url": "modules-and-exporting"
+          - 
+            "title": "CPAN to zef, and Mixing Languages"
+            "url": "cpan-to-zef"
+        "title": "Modules and the Ecosystem"
+        "url": "modules-and-the-ecosystem"
+      - 
+        "items": 
+          - 
+            "title": "Errors, Exceptions, and Failures"
+            "url": "exceptions-and-failures"
+          - 
+            "title": "Functional Raku"
+            "url": "functional-raku"
+          - 
+            "title": "Concurrency and Parallelism"
+            "url": "concurrency"
+          - 
+            "title": "Idioms, Gotchas, and One-liners"
+            "url": "idioms-and-one-liners"
+        "title": "Robust and Modern Raku"
+        "url": "robust-and-modern-raku"
+      - 
+        "items": 
+          - 
+            "title": "Appendix A — Perl to Raku Cheat Sheet"
+            "url": "appendix-a-cheat-sheet"
+          - 
+            "title": "Appendix B — Operator Translation Table"
+            "url": "appendix-b-operator-table"
+          - 
+            "title": "Appendix C — Special Variables"
+            "url": "appendix-c-special-variables"
+          - 
+            "title": "Appendix D — Glossary"
+            "url": "appendix-d-glossary"
+          - 
+            "title": "Appendix E — Further Reading"
+            "url": "appendix-e-further-reading"
+        "title": "Appendices"
+        "url": "appendices"
+    "long_title": "Migrating to Raku: An Easy Transition from Perl"
+    "meta": 
+      "author": "Andrew Shitov"
+      "pages": 272
+    "title": "Migrating to Raku"
+    "unlisted": true
+    "url": "migrating-to-raku"
+  - 
+    "covers": 
       - "the-raku-course"
     "description": "The complete, hands-on course of the Raku programming language — five parts of theory and practice with hundreds of quizzes and exercises, hosted online at course.raku.org."
     "link-list": 

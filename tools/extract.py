@@ -295,6 +295,7 @@ class Node:
         self.slug = slug
         self.lines = []             # content lines (PDF source)
         self.blocks = []            # (kind, text) blocks (DOCX source)
+        self.md = None              # raw Markdown body (Markdown source)
         self.thumb = None           # thumbnail image path (gallery landings)
         self.children = []
 
@@ -390,6 +391,124 @@ def build(cfg):
     if pending:
         open_heading(pending[0], pending[1])
 
+    return book
+
+
+# ─────────────────────────── Markdown source ───────────────────────────
+#
+# A book written as Markdown needs no recovery at all: the manuscript already
+# has the structure the site wants. `book/manifest.txt` gives the reading order
+# —
+#     front: FILE.md     unnumbered front-matter chapter
+#     part:  Title       a part divider
+#     FILE.md            a chapter inside the current part
+#
+# — which maps straight onto the generator's levels: the book is the Part, each
+# book part becomes a subpart (a grouping in the TOC, no source page of its
+# own), and each chapter becomes one section page. Chapter `##` headings stay
+# inside the page rather than splitting it: a chapter is one recipe, and the
+# site's in-page navigation already lists its headings.
+
+def read_manifest(path):
+    """Yield ('front'|'part'|'chapter', value) in reading order."""
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if line.startswith("front:"):
+                yield "front", line.split(":", 1)[1].strip()
+            elif line.startswith("part:"):
+                yield "part", line.split(":", 1)[1].strip()
+            else:
+                yield "chapter", line
+
+
+def md_chapter(path):
+    """Split a chapter file into its `# Title` and the body below it."""
+    text = open(path, encoding="utf-8").read()
+    lines = text.splitlines()
+    title, start = os.path.basename(path), 0
+    for i, l in enumerate(lines):
+        if l.startswith("# "):
+            title, start = clean_heading(l[2:]), i + 1
+            break
+    return title, "\n".join(lines[start:]).strip()
+
+
+def render_markdown(body, cfg, label="", url=""):
+    """Pass a chapter's Markdown through, re-fencing its code blocks.
+
+    Prose, headings, lists and tables are already exactly what the site wants.
+    Only the fences change: each ```raku block goes through fenced_code, so it
+    earns (or does not earn) a Run button on the same terms as every other book;
+    ```perl blocks are marked as Perl for the reader; a bare fence is program
+    output or a shell transcript and stays plain."""
+    out, i, lines = [], 0, body.splitlines()
+    while i < len(lines):
+        line = lines[i]
+        m = re.match(r"^```(\S*)\s*$", line)
+        if not m:
+            out.append(line)
+            i += 1
+            continue
+        lang = m.group(1).lower()
+        j = i + 1
+        chunk = []
+        while j < len(lines) and not lines[j].startswith("```"):
+            chunk.append(lines[j])
+            j += 1
+        code = "\n".join(chunk).rstrip()
+        if lang == "raku":
+            out.append(fenced_code("code", code, cfg, label, url))
+        elif lang == "perl":
+            # Never runnable in a Raku playground, but it is the book's other
+            # half — keep the language so the page can label and colour it.
+            out.append(f"```perl\n{code}\n```")
+        else:
+            out.append(fenced_code("output", code, cfg, label, url))
+        i = j + 1
+    return "\n".join(out).strip()
+
+
+def build_markdown(cfg):
+    """Build the node tree from a Markdown manuscript."""
+    root = os.path.expanduser(cfg["md_root"])
+    book_dir = os.path.join(root, cfg.get("md_dir", "book"))
+    manifest = os.path.join(book_dir, cfg.get("manifest", "manifest.txt"))
+    if not os.path.isfile(manifest):
+        sys.exit(f"no manifest at {manifest}")
+
+    book = Node("book", cfg["title"], cfg["slug"])
+    part = None          # current subpart
+    front_title = cfg.get("front_title", "Front matter")
+
+    for kind, value in read_manifest(manifest):
+        if kind == "part":
+            part = Node("chapter", clean_heading(value), slugify(value))
+            book.children.append(part)
+            continue
+        if part is None or (kind == "front" and part.title != front_title):
+            part = Node("chapter", front_title, slugify(front_title))
+            book.children.append(part)
+        path = os.path.join(book_dir, value)
+        if not os.path.isfile(path):
+            sys.exit(f"manifest lists {value}, which is missing from {book_dir}")
+        title, body = md_chapter(path)
+        # The URL comes from the file name, not the title: `ch21-files-and-io.md`
+        # gives /files-and-io, where the title would give the clumsier
+        # /files-and-i-o, and `ch15-signatures.md` keeps its short slug even
+        # though the chapter is called "From @_ to Signatures".
+        stem = re.sub(r"^(ch)?\d+-", "", os.path.splitext(value)[0])
+        sec = Node("section", title, slugify(stem))
+        sec.md = body
+        part.children.append(sec)
+
+    slugs = [s.slug for p in book.children for s in p.children] \
+          + [p.slug for p in book.children]
+    dupes = {s for s in slugs if slugs.count(s) > 1}
+    if dupes:
+        sys.exit(f"slug collision between pages: {', '.join(sorted(dupes))}")
     return book
 
 
@@ -684,6 +803,8 @@ def render_blocks(blocks, cfg, label="", url=""):
 
 
 def node_body(node, cfg, url=""):
+    if node.md is not None:
+        return render_markdown(node.md, cfg, label=node.title, url=url)
     if node.blocks:
         return render_blocks(node.blocks, cfg, label=node.title, url=url)
     return blocks_to_md(node.lines, cfg, label=node.title, url=url)
@@ -754,6 +875,10 @@ def emit(book, cfg):
         book_entry["get_url"] = cfg["get_url"]
     if cfg.get("gallery"):
         book_entry["gallery"] = True
+    if cfg.get("unlisted"):
+        # Reachable by URL, but kept out of the home page, the book switcher,
+        # the search index, and the tested-programs register.
+        book_entry["unlisted"] = True
     book_entry["items"] = toc_items
 
     frag = os.path.join(ROOT, "tools", f"toc-{slug}.yaml")
@@ -820,14 +945,16 @@ def main():
     books_root = os.path.expanduser(conf["books_root"])
     cfg = books[args.book]
     cfg["verify"] = args.verify
-    cfg["_pdfpath"] = cfg["pdf"] if os.path.isabs(cfg["pdf"]) \
-        else os.path.join(books_root, cfg["pdf"])
+    pdf = os.path.expanduser(cfg["pdf"])
+    cfg["_pdfpath"] = pdf if os.path.isabs(pdf) else os.path.join(books_root, pdf)
 
     if args.probe:
         probe(cfg)
         return
 
-    if cfg.get("source") == "calendar":
+    if cfg.get("source") == "markdown":
+        book = build_markdown(cfg)
+    elif cfg.get("source") == "calendar":
         book = build_calendar(cfg)
     elif cfg["_pdfpath"].lower().endswith(".docx"):
         book = build_docx(cfg)

@@ -27,10 +27,15 @@ def trim_white(img, thresh=12):
     return img.crop(bbox) if bbox else img
 
 
-def cover_image(doc, page):
+def cover_image(doc, page, trim=True):
     """The cover artwork. Prefer the page's embedded image — it has the cover's
     true bounds (trimming the rendered page fails on covers whose own background
-    is white, like Raku One-Liners). Fall back to render + trim-white."""
+    is white, like Raku One-Liners). Fall back to render + trim-white.
+
+    `trim=False` renders the whole page instead (`cover_trim: false` in
+    books.yaml): a book typeset from Markdown has no cover artwork, only a
+    typeset title page, and trimming it to the text block loses the page shape
+    that makes the card read as a book."""
     imgs = page.get_images(full=True)
     if imgs:
         # the largest image on the page is the cover
@@ -39,7 +44,8 @@ def cover_image(doc, page):
         data = doc.extract_image(xref)["image"]
         return Image.open(io.BytesIO(data)).convert("RGB")
     pix = page.get_pixmap(matrix=fitz.Matrix(ZOOM, ZOOM))
-    return trim_white(Image.frombytes("RGB", (pix.width, pix.height), pix.samples))
+    img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
+    return trim_white(img) if trim else img
 
 def main():
     with open(os.path.join(ROOT, "tools", "books.yaml")) as f:
@@ -59,10 +65,11 @@ def main():
         img.convert("RGB").save(dst, format="JPEG", quality=85)
         print(f"  {name}.jpg  {img.width}x{img.height}  ({os.path.getsize(dst)//1024} KB)")
 
-    def render_pdf(pdf_rel, name, cover_page=1):
+    def render_pdf(pdf_rel, name, cover_page=1, trim=True):
+        pdf_rel = os.path.expanduser(pdf_rel)
         pdf = pdf_rel if os.path.isabs(pdf_rel) else os.path.join(root, pdf_rel)
         doc = fitz.open(pdf)
-        save(cover_image(doc, doc[cover_page - 1]), name)
+        save(cover_image(doc, doc[cover_page - 1], trim=trim), name)
 
     def render_file(path, name):
         save(Image.open(os.path.expanduser(path)), name)
@@ -74,7 +81,8 @@ def main():
         if cfg.get("cover_image"):                # a ready-made cover image file
             render_file(cfg["cover_image"], cfg["slug"])
         else:                                     # render from a PDF page
-            render_pdf(cfg.get("cover_pdf", cfg["pdf"]), cfg["slug"], cfg.get("cover_page", 1))
+            render_pdf(cfg.get("cover_pdf", cfg["pdf"]), cfg["slug"],
+                       cfg.get("cover_page", 1), cfg.get("cover_trim", True))
         for extra in cfg.get("extra_covers", []):
             render_pdf(extra["pdf"], extra["name"], extra.get("cover_page", 1))
 

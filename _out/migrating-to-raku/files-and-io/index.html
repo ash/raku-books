@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Files and I/O — Raku Books</title>
+    <meta property="og:title" content="Files and I/O — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/text-and-i-o">Text and
+I/O</a></p>
+<h1 id="files-and-io">Files and I/O</h1>
+<p>The Perl file-handling ritual is muscle memory by now:</p>
+<div class="highlight perl-code"><pre>open(my $fh, '&lt;', $file) or die "Cannot open $file: $!";
+while (my $line = &lt;$fh&gt;) {
+    chomp $line;
+    say uc $line;
+}
+close $fh;</pre></div>
+<p>Raku can do all of this, and the three-argument <code>open</code>
+even survives in spirit. But most of the time you will not open a handle
+at all. Raku puts the common operations — read the whole file, read it
+line by line, write a string out — directly on the <em>path</em>, so the
+boilerplate above collapses to a single expression. This chapter starts
+from the path-centric style you will use daily, then drops down to
+explicit handles for the cases that need them.</p>
+<h2 id="the-path-is-the-object-iopath">The path is the object:
+<code>IO::Path</code></h2>
+<p>In Raku, a filename becomes a first-class object by calling
+<code>.IO</code> on the string. That gives you an <code>IO::Path</code>,
+and every file operation hangs off it. The whole Perl loop above
+becomes:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">for</span> <span class="nv">$file</span>.<span class="nb">IO</span>.<span class="nb">lines</span> -&gt; <span class="nv">$line</span> {
+    <span class="nb">say</span> <span class="nv">$line</span>.<span class="nb">uc</span>;
+}</pre></div>
+
+<p>Two things vanished. There is no <code>open</code> and no
+<code>close</code> — <code>.lines</code> opens the file, hands you the
+lines lazily, and closes it when the sequence is exhausted. And there is
+no <code>chomp</code>: <strong><code>.lines</code> strips the line
+terminator for you</strong>, so <code>$line</code> never carries a
+trailing newline. That single default removes one of the most forgotten
+steps in Perl.</p>
+<h2 id="reading-a-whole-file-.slurp-.lines-.words-.comb">Reading a whole
+file: <code>.slurp</code>, <code>.lines</code>, <code>.words</code>,
+<code>.comb</code></h2>
+<p>The examples that follow read a small <code>data.txt</code> — three
+lines, six words:</p>
+<div class="highlight"><pre>alpha beta
+gamma delta
+epsilon zeta</pre></div>
+<p>For the “give me everything” cases, the methods read like plain
+English:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$text</span>  = <span class="s">'data.txt'</span>.<span class="nb">IO</span>.<span class="nb">slurp</span>;      <span class="c1"># the whole file as one string</span>
+<span class="k">my</span> <span class="nv">@lines</span> = <span class="s">'data.txt'</span>.<span class="nb">IO</span>.<span class="nb">lines</span>;      <span class="c1"># a list of chomped lines</span>
+<span class="k">my</span> <span class="nv">@words</span> = <span class="s">'data.txt'</span>.<span class="nb">IO</span>.<span class="nb">words</span>;      <span class="c1"># whitespace-separated tokens</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p><code>.slurp</code> is the counterpart of Perl’s
+<code>local $/; &lt;$fh&gt;</code> trick, but without the incantation.
+<code>.lines</code> and <code>.words</code> are the streaming readers.
+And because a path is just an object, the text methods from Chapter 20
+apply directly — <code>.comb</code>, for instance, pulls matching pieces
+straight out of a file:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="s">'data.txt'</span>.<span class="nb">IO</span>.<span class="nb">lines</span>.<span class="nb">elems</span>;        <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="s">'data.txt'</span>.<span class="nb">IO</span>.<span class="nb">comb</span>(<span class="sr">/\w+/</span>).<span class="nb">elems</span>;  <span class="c1"># 6   (all the words, by regex)</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>The crucial property of <code>.lines</code> is that it is
+<strong>lazy</strong>. It does not read the file into memory; it yields
+lines one at a time as you consume them. That is why the same method
+serves both a tiny config file and a multi-gigabyte log:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="c1"># Never loads the whole file — safe on huge inputs.</span>
+<span class="k">for</span> <span class="s">'huge.log'</span>.<span class="nb">IO</span>.<span class="nb">lines</span> -&gt; <span class="nv">$line</span> {
+    .<span class="nb">say</span> <span class="k">if</span> <span class="nv">$line</span>.<span class="n">contains</span>(<span class="s">'ERROR'</span>) <span class="k">given</span> <span class="nv">$line</span>;
+}</pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>Assigning to a <code>my @array</code>, as in
+<code>my @lines = ....lines</code>, <em>does</em> pull everything into
+memory, because the array has to be filled. Keep the result in the
+<code>for</code> loop (or use <code>.grep</code>/<code>.map</code>) when
+the file is large, and reify it into an array only when it is small
+enough to hold.</p>
+<h2 id="writing-a-whole-file-.spurt">Writing a whole file:
+<code>.spurt</code></h2>
+<p>The mirror image of <code>.slurp</code> is <code>.spurt</code>, which
+writes a string (or a <code>Blob</code>) to a file, creating or
+truncating it. It replaces the open-print-close dance entirely:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">spurt</span> <span class="s">'out.txt'</span>, <span class="s">&quot;line one\nline two\n&quot;</span>;
+<span class="s">'out.txt'</span>.<span class="nb">IO</span>.<span class="nb">spurt</span>(<span class="s">&quot;via method\n&quot;</span>);        <span class="c1"># method form</span>
+<span class="nb">spurt</span> <span class="s">'out.txt'</span>, <span class="s">&quot;appended\n&quot;</span>, :<span class="nb">append</span>;    <span class="c1"># add instead of overwrite</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>Both <code>spurt</code> and <code>slurp</code> exist as a bare
+subroutine and as a method on <code>IO::Path</code>; use whichever reads
+better in context.</p>
+<h2 id="file-tests-and-path-parts">File tests and path parts</h2>
+<p>Perl’s file-test operators (<code>-e</code>, <code>-f</code>,
+<code>-d</code>, <code>-r</code>, <code>-s</code>) become methods on the
+path. The letters are the same, so the translation is nearly
+mechanical:</p>
+<div class="highlight perl-code"><pre>if (-e $file &amp;&amp; -f $file) { ... }
+my $size = -s $file;</pre></div>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$p</span> = <span class="s">'data.txt'</span>.<span class="nb">IO</span>;
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">e</span>;          <span class="c1"># True   — exists          (-e)</span>
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">f</span>;          <span class="c1"># True   — is a plain file  (-f)</span>
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">d</span>;          <span class="c1"># False  — is a directory   (-d)</span>
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">r</span>;          <span class="c1"># True   — is readable      (-r)</span>
+<span class="nb">say</span> <span class="nv">$p</span>.<span class="n">s</span>;          <span class="c1"># 36     — size in bytes     (-s)</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>The modification time comes back as an <code>Instant</code>, which
+you can turn into a <code>DateTime</code> for display:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">$p</span>.<span class="n">modified</span>.<span class="nb">DateTime</span>;      <span class="c1"># 2026-07-08T...Z</span></pre></div>
+
+<p>Splitting a path into pieces no longer needs
+<code>File::Basename</code>; the methods are built in:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$f</span> = <span class="s">'/home/ash/notes.txt'</span>.<span class="nb">IO</span>;
+<span class="nb">say</span> <span class="nv">$f</span>.<span class="n">basename</span>;                     <span class="c1"># notes.txt</span>
+<span class="nb">say</span> <span class="nv">$f</span>.<span class="n">extension</span>;                    <span class="c1"># txt</span>
+<span class="nb">say</span> <span class="nv">$f</span>.<span class="n">parent</span>;                       <span class="c1"># &quot;/home/ash&quot;.IO</span>
+<span class="nb">say</span> <span class="s">'archive.tar.gz'</span>.<span class="nb">IO</span>.<span class="n">extension</span>;   <span class="c1"># gz</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<h2 id="directories-and-file-management">Directories and file
+management</h2>
+<p>Listing a directory, making one, and moving files around are all
+plain routines. In Perl you would
+<code>opendir</code>/<code>readdir</code>/<code>closedir</code>; in
+Raku, <code>dir</code> returns a lazy list of <code>IO::Path</code>
+objects:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">mkdir</span> <span class="s">'sub'</span>;
+<span class="s">'sub/a.txt'</span>.<span class="nb">IO</span>.<span class="nb">spurt</span>(<span class="s">&quot;hello\n&quot;</span>);
+<span class="s">'sub/b.raku'</span>.<span class="nb">IO</span>.<span class="nb">spurt</span>(<span class="s">&quot;say 42\n&quot;</span>);
+
+<span class="nb">say</span> <span class="n">dir</span>(<span class="s">'sub'</span>).<span class="nb">sort</span>;                    <span class="c1"># (&quot;sub/a.txt&quot;.IO &quot;sub/b.raku&quot;.IO)</span>
+<span class="nb">say</span> <span class="n">dir</span>(<span class="s">'sub'</span>, <span class="n">test</span> =&gt; <span class="sr">/'.txt' $/</span>);     <span class="c1"># (&quot;sub/a.txt&quot;.IO) — only the .txt files</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>The <code>test</code> named argument filters the entries with a
+smartmatch, so a regex, a string, or any matcher works. The remaining
+housekeeping routines mirror their Perl namesakes:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="n">copy</span>   <span class="s">'sub/a.txt'</span>, <span class="s">'sub/c.txt'</span>;   <span class="c1"># like File::Copy's copy</span>
+<span class="n">rename</span> <span class="s">'sub/c.txt'</span>, <span class="s">'sub/d.txt'</span>;   <span class="c1"># rename / move</span>
+<span class="nb">unlink</span> <span class="s">'sub/d.txt'</span>;                <span class="c1"># delete</span>
+<span class="nb">say</span> <span class="s">'sub/d.txt'</span>.<span class="nb">IO</span>.<span class="n">e</span>;              <span class="c1"># False — it is gone</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<h2 id="explicit-handles-with-open">Explicit handles with
+<code>open</code></h2>
+<p>When you need to keep a handle open — interleaving reads and writes,
+or holding a file across several operations — <code>open</code> gives
+you an <code>IO::Handle</code>. The mode is a named adverb rather than a
+string: <code>:r</code> to read, <code>:w</code> to write (truncating),
+<code>:a</code> to append.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$fh</span> = <span class="nb">open</span> <span class="s">'data.txt'</span>, :<span class="n">r</span>;
+<span class="nb">say</span> <span class="nv">$fh</span>.<span class="n">get</span>;             <span class="c1"># alpha beta   — .get reads one chomped line</span>
+<span class="nb">say</span> <span class="nv">$fh</span>.<span class="nb">lines</span>.<span class="nb">elems</span>;     <span class="c1"># 2            — .lines reads the rest, lazily</span>
+<span class="nv">$fh</span>.<span class="nb">close</span>;</pre></div>
+
+<p>Note how error handling changed. Perl leans on
+<code>open(...) or die "...: $!"</code>. In Raku, a failed
+<code>open</code> returns a <code>Failure</code> — a lazy, unthrown
+exception (Chapter 26). You can still write <code>or die</code>, but you
+rarely need to: if you simply <em>use</em> the handle, the
+<code>Failure</code> throws itself with a full, helpful message:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$fh</span> = <span class="nb">open</span> <span class="s">'nope.txt'</span>, :<span class="n">r</span>;   <span class="c1"># returns a Failure</span>
+<span class="nv">$fh</span>.<span class="n">get</span>;                        <span class="c1"># throws here:</span>
+<span class="c1"># Failed to open file .../nope.txt: No such file or directory</span></pre></div>
+
+<p>So the <code>or die</code> guard becomes optional rather than
+obligatory. When you do want to react rather than crash, wrap it in a
+<code>try</code>/<code>CATCH</code>, which Chapter 26 covers in
+full.</p>
+<h3 id="writing-through-a-handle">Writing through a handle</h3>
+<p><code>print</code>, <code>put</code>, and <code>say</code> all exist
+as methods on a handle. Choose by how you want the value rendered and
+whether you want a trailing newline:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$out</span> = <span class="nb">open</span> <span class="s">'out.txt'</span>, :<span class="n">w</span>;
+<span class="nv">$out</span>.<span class="nb">say</span>(<span class="s">'written with say'</span>);    <span class="c1"># adds a newline, uses .gist</span>
+<span class="nv">$out</span>.<span class="nb">print</span>(<span class="s">&quot;no newline&quot;</span>);        <span class="c1"># no newline</span>
+<span class="nv">$out</span>.<span class="nb">put</span>(<span class="s">'put adds a newline'</span>);  <span class="c1"># adds a newline, uses .Str</span>
+<span class="nv">$out</span>.<span class="nb">close</span>;</pre></div>
+
+<p>The <code>put</code> routine is the one most like Perl’s
+<code>say</code>: it appends a newline but stringifies with
+<code>.Str</code> rather than the display-oriented <code>.gist</code>.
+The difference shows on lists — <code>say (1,2,3)</code> prints
+<code>(1 2 3)</code>, whereas <code>put (1,2,3)</code> prints
+<code>1 2 3</code>. Always <code>close</code> a handle you opened for
+writing, so buffered output is flushed.</p>
+<h2 id="standard-handles-in-out-err">Standard handles:
+<code>$*IN</code>, <code>$*OUT</code>, <code>$*ERR</code></h2>
+<p>Perl’s <code>STDIN</code>, <code>STDOUT</code>, and
+<code>STDERR</code> become the dynamic variables <code>$*IN</code>,
+<code>$*OUT</code>, and <code>$*ERR</code> — the <code>$*</code> twigil
+we met in Chapter 3. They are ordinary <code>IO::Handle</code>s, so the
+same methods apply:</p>
+<div class="highlight raku"><pre><span></span><span class="nv">$*OUT</span>.<span class="nb">say</span>(<span class="s">'to standard output'</span>);
+<span class="nv">$*ERR</span>.<span class="nb">say</span>(<span class="s">'to standard error'</span>);
+
+<span class="k">for</span> <span class="nv">$*IN</span>.<span class="nb">lines</span> -&gt; <span class="nv">$line</span> {         <span class="c1"># read stdin, line by line, chomped</span>
+    <span class="nb">say</span> <span class="nv">$line</span>.<span class="nb">tc</span>;
+}</pre></div>
+
+<p>Because they are <em>dynamic</em> variables rather than global
+barewords, you can temporarily rebind them for a scope — redirecting
+output without touching the rest of the program — which the
+special-variables appendix (Appendix C) revisits. Plain
+<code>say</code>, <code>put</code>, and <code>print</code> without a
+handle simply write to <code>$*OUT</code>, exactly as their Perl
+counterparts write to the currently selected handle.</p>
+<h2 id="reading-whole-versus-line-by-line">Reading whole versus line by
+line</h2>
+<p>To close, a rule of thumb that Raku makes easy to follow. If a file
+is small and you want it all, <code>.slurp</code> or
+<code>my @lines = ....lines</code> is the clearest thing you can write.
+If a file is large — or unbounded, like a growing log or a pipe —
+iterate the lazy sequence directly and let Raku stream it:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="c1"># Small file: fine to hold in memory.</span>
+<span class="k">my</span> <span class="nv">@config</span> = <span class="s">'settings.ini'</span>.<span class="nb">IO</span>.<span class="nb">lines</span>;
+
+<span class="c1"># Large file: process one line at a time, constant memory.</span>
+<span class="k">my</span> <span class="nv">$errors</span> = <span class="s">'huge.log'</span>.<span class="nb">IO</span>.<span class="nb">lines</span>.<span class="nb">grep</span>(*.<span class="n">contains</span>(<span class="s">'ERROR'</span>)).<span class="nb">elems</span>;</pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>The laziness is the default, so the memory-safe choice is also the
+natural one. With files, paths, and handles in hand, we have covered how
+Raku programs talk to the outside world. Part VIII turns inward, to how
+you structure the programs themselves — starting with classes and
+objects in Chapter 22.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/text-processing">Text Processing</a>
+  |   <a
+href="/raku-books/migrating-to-raku/object-oriented-programming">Object-Oriented
+Programming</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

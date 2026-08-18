@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Concurrency and Parallelism — Raku Books</title>
+    <meta property="og:title" content="Concurrency and Parallelism — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/robust-and-modern-raku">Robust
+and Modern Raku</a></p>
+<h1 id="concurrency-and-parallelism">Concurrency and Parallelism</h1>
+<p>Concurrency in Perl is a patchwork. You can <code>fork</code> and
+juggle process ids and <code>waitpid</code>; you can use
+<code>threads</code>, with all the caveats that entails; or you can pull
+in an event framework such as <code>AnyEvent</code> or
+<code>IO::Async</code> and adopt its whole world-view. Each works, but
+each is a bolt-on with its own conventions. Raku folds concurrency into
+the core language and gives it a single, coherent model:
+<code>Promise</code> for “a value that will arrive later”,
+<code>Channel</code> and <code>Supply</code> for streams of values, and
+a couple of one-word switches for data parallelism. Nothing in this
+chapter needs a module.</p>
+<h2 id="fork-becomes-start"><code>fork</code> becomes
+<code>start</code></h2>
+<p>The Perl way to do three things at once is to fork three children and
+reap them:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+my @pids;
+for my $n (1..3) {
+    my $pid = fork // die "cannot fork";
+    if ($pid == 0) {
+        say "child $n computed ", $n * $n;
+        exit;
+    }
+    push @pids, $pid;
+}
+waitpid($_, 0) for @pids;
+say "all children done";</pre></div>
+<p>In Raku you write <code>start</code>, which schedules a block on the
+thread pool and immediately hands you back a <code>Promise</code> — an
+object standing in for the result that is not ready yet. You retrieve
+the result with <code>await</code>.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$p</span> = <span class="k">start</span> { <span class="mi">2</span> ** <span class="mi">10</span> };
+<span class="nb">say</span> <span class="nb">await</span> <span class="nv">$p</span>;                 <span class="c1"># 1024</span></pre></div>
+
+<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>
+<p><code>await</code> on a list of promises waits for all of them and
+returns all their results, in order:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@promises</span> = (<span class="mi">1</span>.<span class="mf">.3</span>).<span class="nb">map</span>: -&gt; <span class="nv">$n</span> { <span class="k">start</span> { <span class="nv">$n</span> * <span class="nv">$n</span> } };
+<span class="nb">say</span> <span class="nb">await</span> <span class="nv">@promises</span>;          <span class="c1"># (1 4 9)</span></pre></div>
+
+<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>
+<p>No process ids, no manual reaping, and the value comes straight back
+rather than having to be printed by a child or shuttled through a pipe.
+The thread pool sizes itself; you just describe the work.</p>
+<h2 id="combining-and-chaining-promises">Combining and chaining
+promises</h2>
+<p>Two class methods combine promises. <code>Promise.allof</code> yields
+a promise that is kept when <em>all</em> the given promises finish;
+<code>Promise.anyof</code> when the <em>first</em> one does. After an
+<code>allof</code>, read the individual results with
+<code>.result</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@jobs</span> = (<span class="mi">1</span>.<span class="mf">.3</span>).<span class="nb">map</span>: -&gt; <span class="nv">$n</span> { <span class="k">start</span> { <span class="nv">$n</span> * <span class="mi">10</span> } };
+<span class="nb">await</span> <span class="nb">Promise</span>.<span class="n">allof</span>(<span class="nv">@jobs</span>);
+<span class="nb">say</span> <span class="nv">@jobs</span>&gt;&gt;.<span class="n">result</span>;           <span class="c1"># [10 20 30]</span></pre></div>
+
+<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>
+<p>To do something <em>when</em> a promise finishes rather than blocking
+on it, use <code>.then</code>, which chains a follow-on computation:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$p</span> = <span class="k">start</span> { <span class="mi">42</span> };
+<span class="k">my</span> <span class="nv">$q</span> = <span class="nv">$p</span>.<span class="n">then</span>({ .<span class="n">result</span> + <span class="mi">1</span> });
+<span class="nb">say</span> <span class="nb">await</span> <span class="nv">$q</span>;                 <span class="c1"># 43</span></pre></div>
+
+<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>
+<p>This is the same idea as a callback in an event loop, but expressed
+as an ordinary value you can pass around, store, and combine.</p>
+<h2 id="channel-a-producerconsumer-queue"><code>Channel</code>: a
+producer/consumer queue</h2>
+<p>When one part of the program produces items and another consumes
+them, a <code>Channel</code> is the thread-safe queue between them. The
+producer calls <code>.send</code> and finally <code>.close</code>; the
+consumer iterates with <code>.list</code>, which blocks for items and
+ends when the channel closes.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$ch</span> = <span class="nb">Channel</span>.<span class="nb">new</span>;
+<span class="k">my</span> <span class="nv">$producer</span> = <span class="k">start</span> {
+    <span class="nv">$ch</span>.<span class="n">send</span>(<span class="nv">$_</span>) <span class="k">for</span> <span class="mi">1</span>.<span class="mf">.5</span>;
+    <span class="nv">$ch</span>.<span class="nb">close</span>;
+}
+<span class="k">my</span> <span class="nv">@received</span>;
+<span class="k">for</span> <span class="nv">$ch</span>.<span class="nb">list</span> -&gt; <span class="nv">$item</span> { <span class="nv">@received</span>.<span class="nb">push</span>: <span class="nv">$item</span> * <span class="mi">2</span> }
+<span class="nb">await</span> <span class="nv">$producer</span>;
+<span class="nb">say</span> <span class="nv">@received</span>;                <span class="c1"># [2 4 6 8 10]</span></pre></div>
+
+<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>
+<p>This is the pattern you would build by hand with a shared array, a
+lock, and a condition variable in threaded Perl — here it is one
+built-in class with no locking on your part.</p>
+<h2 id="supply-react-and-whenever"><code>Supply</code>,
+<code>react</code>, and <code>whenever</code></h2>
+<p>A <code>Channel</code> is pulled by its consumer; a
+<code>Supply</code> is <em>pushed</em> — it is Raku’s reactive stream,
+an asynchronous sequence of values that arrive over time (events, ticks,
+lines from a socket). You consume a supply inside a <code>react</code>
+block, declaring <code>whenever</code> handlers that fire for each
+emitted value. The <code>react</code> block runs until all its supplies
+are done.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$supply</span> = <span class="nb">Supply</span>.<span class="n">from-list</span>(<span class="mi">1</span>.<span class="mf">.5</span>);
+<span class="k">my</span> <span class="nv">@squares</span>;
+<span class="k">react</span> {
+    <span class="k">whenever</span> <span class="nv">$supply</span> -&gt; <span class="nv">$v</span> {
+        <span class="nv">@squares</span>.<span class="nb">push</span>: <span class="nv">$v</span> * <span class="nv">$v</span>;
+    }
+}
+<span class="nb">say</span> <span class="nv">@squares</span>;                 <span class="c1"># [1 4 9 16 25]</span></pre></div>
+
+<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>
+<p>A single <code>react</code> block can hold several
+<code>whenever</code>s — one per input stream — which is how you write
+an event loop that watches a timer, a socket, and a signal at once,
+without any callback pyramid. <code>Supply</code> is the piece that
+replaces <code>AnyEvent</code>, and it is part of the language.</p>
+<h2 id="data-parallelism-.hyper-and-.race">Data parallelism:
+<code>.hyper</code> and <code>.race</code></h2>
+<p>The examples above are about <em>concurrency</em> — overlapping
+tasks. For <em>parallelism</em> — spreading one big computation across
+cores — Raku offers two drop-in methods. Insert <code>.hyper</code> into
+a chain and the <code>map</code>/<code>grep</code> that follows runs in
+parallel across worker threads, <strong>preserving order</strong>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@out</span> = (<span class="mi">1</span>.<span class="mf">.10</span>).<span class="nb">hyper</span>.<span class="nb">map</span>(* ** <span class="mi">2</span>);
+<span class="nb">say</span> <span class="nv">@out</span>;                     <span class="c1"># [1 4 9 16 25 36 49 64 81 100]</span></pre></div>
+
+<p><code>.race</code> does the same but does <strong>not</strong>
+promise to keep the original order, which lets it be a touch faster when
+order does not matter:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.1000</span>).<span class="nb">race</span>.<span class="nb">grep</span>(*.<span class="n">is-prime</span>).<span class="nb">elems</span>;   <span class="c1"># 168</span></pre></div>
+
+<p>These help when the per-element work is substantial and the list is
+large; for cheap operations the coordination overhead outweighs the
+gain, so measure before reaching for them. The beauty is that turning a
+sequential pipeline into a parallel one is a single word.</p>
+<h2 id="atomics">Atomics</h2>
+<p>When several threads update the same integer, ordinary
+<code>++</code> can lose updates. Declare the variable as
+<code>atomicint</code> and increment it atomically — either with the
+<code>atomic-fetch-inc</code> routine or the <code>⚛</code> (U+269B)
+operator forms:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="n">atomicint</span> <span class="nv">$counter</span> = <span class="mi">0</span>;
+<span class="k">my</span> <span class="nv">@workers</span> = (<span class="mi">1</span>.<span class="mf">.10</span>).<span class="nb">map</span>: {
+    <span class="k">start</span> { <span class="n">atomic-fetch-inc</span>(<span class="nv">$counter</span>) <span class="k">for</span> <span class="mi">1</span>.<span class="mf">.1000</span>; }
+}
+<span class="nb">await</span> <span class="nv">@workers</span>;
+<span class="nb">say</span> <span class="nv">$counter</span>;                 <span class="c1"># 10000</span></pre></div>
+
+<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>
+<p>The <code>⚛</code> operators are the concise spelling of the same
+operations:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="n">atomicint</span> <span class="nv">$x</span> = <span class="mi">0</span>;
+<span class="nv">$x</span>⚛++;
+<span class="nv">$x</span>⚛++;
+<span class="nb">say</span> <span class="nv">$x</span>;                       <span class="c1"># 2</span></pre></div>
+
+<p>For anything more elaborate than a counter, prefer a
+<code>Channel</code> or <code>Supply</code> to shared mutable state —
+message passing sidesteps whole classes of race conditions.</p>
+<h2 id="external-processes-procasync">External processes:
+<code>Proc::Async</code></h2>
+<p>For running and interacting with external programs asynchronously,
+<code>Proc::Async</code> gives you their output as supplies, so you can
+react to lines as they appear:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$proc</span> = <span class="n">Proc::Async</span>.<span class="nb">new</span>(<span class="s">'echo'</span>, <span class="s">'hello from a child'</span>);
+<span class="k">my</span> <span class="nv">@lines</span>;
+<span class="k">react</span> {
+    <span class="k">whenever</span> <span class="nv">$proc</span>.<span class="n">stdout</span>.<span class="nb">lines</span> { <span class="nv">@lines</span>.<span class="nb">push</span>: <span class="nv">$_</span> }
+    <span class="k">whenever</span> <span class="nv">$proc</span>.<span class="nb">start</span>        { <span class="n">done</span> }
+}
+<span class="nb">say</span> <span class="nv">@lines</span>;                   <span class="c1"># [hello from a child]</span></pre></div>
+
+<p class="run-note">🧵 This program uses concurrency (promises, threads). The in-browser engine (Raku.js) is single-threaded and can’t run it yet — try it on your own computer.</p>
+<p><code>whenever $proc.start</code> gives a promise that is kept when
+the process exits; calling <code>done</code> then finishes the
+<code>react</code> block. This is the asynchronous counterpart to
+backticks and <code>open</code>-to-a-pipe, and it composes with
+everything else in this chapter.</p>
+<p>That is the whole model: <code>start</code> and <code>await</code>
+for tasks, <code>Channel</code> and <code>Supply</code> for streams,
+<code>.hyper</code>/<code>.race</code> for parallel data, atomics for
+the rare shared counter — all built in. With robustness and concurrency
+behind us, the final chapter is a grab-bag of idioms, gotchas, and the
+one-liners that make Raku a joy at the command line.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/functional-raku">Functional Raku</a>
+  |   <a href="/raku-books/migrating-to-raku/idioms-and-one-liners">Idioms,
+Gotchas, and One-liners</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

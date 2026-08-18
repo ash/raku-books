@@ -115,8 +115,10 @@ sub MAIN() {
         } else {
             say "  (skip {$p.key}: no fragment yet)";
         }
+        # An unlisted book keeps its pages but stays out of the site's indexes —
+        # including the Tested-programs register, which is a public listing.
         my $reg = "$ROOT/tools/register-$slug.json".IO;
-        @regs.push: load-yaml($reg.slurp) if $reg.e;
+        @regs.push: load-yaml($reg.slurp) if $reg.e && !$p.value<unlisted>;
     }
 
     my $body = register-page(@regs);

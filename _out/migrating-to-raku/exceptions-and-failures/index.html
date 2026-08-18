@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Errors, Exceptions, and Failures — Raku Books</title>
+    <meta property="og:title" content="Errors, Exceptions, and Failures — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/robust-and-modern-raku">Robust
+and Modern Raku</a></p>
+<h1 id="errors-exceptions-and-failures">Errors, Exceptions, and
+Failures</h1>
+<p>Error handling in classic Perl is a set of conventions rather than a
+feature: you <code>die</code>, you wrap risky code in <code>eval</code>,
+and you inspect <code>$@</code>. Modern Perl has since grown a native
+<code>try</code>/<code>catch</code> (with <code>finally</code>), so the
+basic shape is now shared ground. Raku takes it further: exceptions are
+proper objects arranged in a hierarchy, <code>try</code> is an
+<em>expression</em>, <code>CATCH</code> does typed dispatch inside any
+block, and there is a genuinely new idea — the soft <em>Failure</em> —
+that lets an error travel quietly until someone actually looks at
+it.</p>
+<h2 id="die-and-eval-become-die-and-try"><code>die</code> and
+<code>eval</code> become <code>die</code> and <code>try</code></h2>
+<p>The Perl pattern is familiar muscle memory: wrap the risky part in
+<code>eval</code>, then test <code>$@</code>.</p>
+<div class="highlight perl-code"><pre>use v5.10;
+my $r = eval { 10 / 0; 1 };
+if (!defined $r) {
+    say "caught: $@";          # caught: Illegal division by zero at ... line 2.
+}</pre></div>
+<p>Modern Perl can tidy this into a native
+<code>try</code>/<code>catch</code>:</p>
+<div class="highlight perl-code"><pre>use feature 'try';
+try  { my $r = 10 / 0 }
+catch ($e) { warn "caught: $e" }</pre></div>
+<p>Raku keeps <code>die</code> for raising an error, and it too spells
+the wrapper <code>try</code> — but with a twist Perl’s does not have:
+<code>try</code> is an <em>expression</em>. It returns the value of the
+block on success, or <code>Nil</code> if the block died.</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$result</span> = <span class="k">try</span> { <span class="mi">10</span> / <span class="mi">2</span> };
+<span class="nb">say</span> <span class="nv">$result</span>;                   <span class="c1"># 5</span>
+
+<span class="k">my</span> <span class="nv">$bad</span> = <span class="k">try</span> { <span class="nb">die</span> <span class="s">&quot;boom&quot;</span> };
+<span class="nb">say</span> <span class="nv">$bad</span>.<span class="nb">defined</span>;              <span class="c1"># False</span></pre></div>
+
+<p>There is no <code>$@</code>. After a <code>try</code>, the exception
+that was caught lives in <code>$!</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$bad</span> = <span class="k">try</span> { <span class="nb">die</span> <span class="s">&quot;boom&quot;</span> };
+<span class="nb">say</span> <span class="nv">$!</span>.<span class="n">message</span>;                <span class="c1"># boom</span></pre></div>
+
+<p>Note the shift in meaning of <code>$!</code>. In Perl <code>$!</code>
+is the OS error string (<code>errno</code>); in Raku that role moves
+elsewhere and <code>$!</code> holds the most recent caught exception. If
+the <code>try</code> block succeeds, <code>$!</code> is undefined.</p>
+<h2 id="the-catch-block">The <code>CATCH</code> block</h2>
+<p><code>eval</code>/<code>$@</code> tests for failure <em>after the
+fact</em>. Raku’s real workhorse is the <code>CATCH</code> block, which
+you place <em>inside</em> any block — not just a <code>try</code>. It
+behaves like a <code>given</code>/<code>when</code> on the thrown
+exception: the exception becomes the topic, and you match it with
+<code>when</code> clauses and a <code>default</code>.</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$x</span> = <span class="k">try</span> {
+    <span class="nb">die</span> <span class="s">&quot;something failed&quot;</span>;
+    <span class="k">CATCH</span> {
+        <span class="k">default</span> {
+            <span class="nb">say</span> <span class="s">&quot;caught: &quot;</span>, .<span class="n">message</span>;    <span class="c1"># caught: something failed</span>
+        }
+    }
+}
+<span class="nb">say</span> <span class="s">&quot;after&quot;</span>;                             <span class="c1"># after</span></pre></div>
+
+<p>The <code>CATCH</code> block does not have to sit in a
+<code>try</code>; drop it into any ordinary block and that block gains
+exception handling. A <code>CATCH</code> whose
+<code>when</code>/<code>default</code> handles the exception
+<em>contains</em> it — control continues after the enclosing block
+rather than unwinding further.</p>
+<h2 id="exceptions-are-objects">Exceptions are objects</h2>
+<p>Every exception in Raku is an object, and they live in a hierarchy
+rooted at <code>Exception</code> whose type names begin with
+<code>X::</code>. When you <code>die</code> with a plain string, Raku
+quietly wraps it in an <code>X::AdHoc</code> for you — the string
+becomes the exception’s <em>payload</em>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">try</span> {
+    <span class="nb">die</span> <span class="s">&quot;plain string death&quot;</span>;
+    <span class="k">CATCH</span> { <span class="k">default</span> { <span class="nb">say</span> .^<span class="n">name</span>, <span class="s">&quot;: &quot;</span>, .<span class="n">message</span> } }
+}
+<span class="c1"># X::AdHoc: plain string death</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>So the string form is not a lesser thing; it is an
+<code>X::AdHoc</code> with syntactic sugar. You can construct one
+explicitly, but note that <code>X::AdHoc</code> carries its text in
+<code>payload</code>, not <code>message</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">try</span> {
+    <span class="n">X::AdHoc</span>.<span class="nb">new</span>(<span class="n">payload</span> =&gt; <span class="s">&quot;adhoc problem&quot;</span>).<span class="n">throw</span>;
+    <span class="k">CATCH</span> { <span class="k">default</span> { <span class="nb">say</span> .^<span class="n">name</span>, <span class="s">&quot;: &quot;</span>, .<span class="n">message</span> } }
+}
+<span class="c1"># X::AdHoc: adhoc problem</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>The wider <code>X::</code> hierarchy is populated by the built-ins.
+Divide by zero throws <code>X::Numeric::DivideByZero</code>; a failed
+type check throws <code>X::TypeCheck</code>; assigning to a read-only
+value throws <code>X::Assignment::RO</code> (you met that one in Chapter
+4). Because they are typed, you can catch precisely the kind you expect
+and let the rest propagate:</p>
+<div class="highlight raku"><pre><span></span><span class="k">try</span> {
+    <span class="n">X::AdHoc</span>.<span class="nb">new</span>(<span class="n">payload</span> =&gt; <span class="s">&quot;adhoc problem&quot;</span>).<span class="n">throw</span>;
+    <span class="k">CATCH</span> {
+        <span class="k">when</span> <span class="n">X::AdHoc</span> { <span class="nb">say</span> <span class="s">&quot;adhoc: &quot;</span>, .<span class="n">message</span> }    <span class="c1"># adhoc: adhoc problem</span>
+        <span class="k">default</span>       { <span class="nb">say</span> <span class="s">&quot;other: &quot;</span>, .<span class="n">message</span> }
+    }
+}
+<span class="nb">say</span> <span class="s">&quot;still going&quot;</span>;                                   <span class="c1"># still going</span></pre></div>
+
+<h2 id="custom-exceptions">Custom exceptions</h2>
+<p>In Perl, a structured exception means <code>die</code>-ing with a
+reference — often a blessed object, often a bare hash — and remembering
+to check <code>ref $@</code>:</p>
+<div class="highlight perl-code"><pre>use v5.10;
+eval { die { code =&gt; 42, msg =&gt; "structured" }; };
+if (ref $@ eq 'HASH') {
+    say "object death: $@-&gt;{msg}";        # object death: structured
+}</pre></div>
+<p>Raku gives you a real class. Subclass <code>Exception</code>, add
+attributes, and provide a <code>message</code> method — that method is
+what <code>.message</code> and the default report use:</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">X::Temperature</span> <span class="k">is</span> <span class="nb">Exception</span> {
+    <span class="k">has</span> <span class="nv">$.degrees</span>;
+    <span class="k">method</span> <span class="n">message</span> { <span class="s">&quot;Temperature $!degrees is out of range&quot;</span> }
+}
+
+<span class="k">try</span> {
+    <span class="n">X::Temperature</span>.<span class="nb">new</span>(<span class="n">degrees</span> =&gt; <span class="mi">200</span>).<span class="n">throw</span>;
+    <span class="k">CATCH</span> {
+        <span class="k">when</span> <span class="n">X::Temperature</span> { <span class="nb">say</span> <span class="s">&quot;caught: &quot;</span>, .<span class="n">message</span> }
+    }
+}
+<span class="c1"># caught: Temperature 200 is out of range</span></pre></div>
+
+<p>Prefixing the class name with <code>X::</code> is a convention, not a
+requirement, but it signals intent and slots your type neatly beside the
+built-in ones. You raise it with <code>.throw</code>; there is no need
+to <code>die</code> an object you have already built.</p>
+<h2 id="resuming">Resuming</h2>
+<p>Some conditions are recoverable: you want to note them, then carry on
+from the point of the throw. That is what <code>.resume</code> does —
+call it inside the handler and execution continues <em>after</em> the
+statement that threw.</p>
+<div class="highlight raku"><pre><span></span><span class="k">class</span> <span class="n">X::Retryable</span> <span class="k">is</span> <span class="nb">Exception</span> {
+    <span class="k">method</span> <span class="n">message</span> { <span class="s">&quot;please resume&quot;</span> }
+}
+{
+    <span class="n">X::Retryable</span>.<span class="nb">new</span>.<span class="n">throw</span>;
+    <span class="nb">say</span> <span class="s">&quot;resumed and continued&quot;</span>;
+    <span class="k">CATCH</span> {
+        <span class="k">when</span> <span class="n">X::Retryable</span> { <span class="nb">say</span> <span class="s">&quot;handling, then resuming&quot;</span>; .<span class="n">resume</span> }
+    }
+}
+<span class="c1"># handling, then resuming</span>
+<span class="c1"># resumed and continued</span></pre></div>
+
+<p>Perl has no equivalent; once you have <code>die</code>d, the stack is
+gone. Resumable exceptions are the machinery behind <code>warn</code>,
+which we meet next.</p>
+<h2 id="warn-and-the-control-block"><code>warn</code> and the
+<code>CONTROL</code> block</h2>
+<p><code>warn</code> in Raku prints to standard error and then
+<em>resumes</em> — it is a resumable control exception, not a fatal
+one:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">risky</span> {
+    <span class="nb">warn</span> <span class="s">&quot;just a warning&quot;</span>;
+    <span class="nb">say</span> <span class="s">&quot;continued after warn&quot;</span>;
+}
+<span class="n">risky</span>();
+<span class="c1"># just a warning       (on STDERR, with a backtrace)</span>
+<span class="c1"># continued after warn</span></pre></div>
+
+<p>Where <code>CATCH</code> intercepts thrown exceptions, its sibling
+<code>CONTROL</code> intercepts <em>control</em> exceptions — the events
+raised by <code>warn</code>, <code>return</code>, <code>next</code>,
+<code>last</code>, and friends. To capture warnings (rather than let
+them reach the screen), match <code>CX::Warn</code> and
+<code>.resume</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">noisy</span> {
+    <span class="nb">warn</span> <span class="s">&quot;disk almost full&quot;</span>;
+    <span class="nb">say</span> <span class="s">&quot;work done&quot;</span>;
+    <span class="k">CONTROL</span> {
+        <span class="k">when</span> <span class="n">CX::Warn</span> { <span class="nb">note</span> <span class="s">&quot;logged warning: {.message}&quot;</span>; .<span class="n">resume</span> }
+    }
+}
+<span class="n">noisy</span>();
+<span class="c1"># logged warning: disk almost full</span>
+<span class="c1"># work done</span></pre></div>
+
+<p>This is the clean replacement for Perl’s <code>$SIG{__WARN__}</code>
+handler: instead of a global signal hook, you scope warning handling to
+exactly the block you care about.</p>
+<h2 id="soft-errors-failure">Soft errors: <code>Failure</code></h2>
+<p>Here is the idea with no Perl counterpart. Sometimes you do not want
+to throw <em>immediately</em> — you want to return an error-shaped value
+that behaves like <code>undef</code> if the caller merely checks it, but
+explodes into a full exception the moment anyone tries to <em>use</em>
+it. That is a <code>Failure</code>, and you produce one with
+<code>fail</code> instead of <code>die</code>.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">get-config</span>(<span class="nv">$file</span>) {
+    <span class="k">return</span> <span class="nb">fail</span> <span class="s">&quot;no such file: $file&quot;</span> <span class="k">unless</span> <span class="nv">$file</span>.<span class="nb">IO</span>.<span class="n">e</span>;
+    <span class="k">return</span> <span class="nv">$file</span>.<span class="nb">IO</span>.<span class="nb">slurp</span>;
+}
+
+<span class="k">my</span> <span class="nv">$c</span> = <span class="n">get-config</span>(<span class="s">&quot;/does/not/exist&quot;</span>);
+<span class="nb">say</span> <span class="nv">$c</span>.<span class="nb">defined</span>;              <span class="c1"># False</span>
+<span class="nb">say</span> <span class="nv">$c</span> ~~ <span class="nb">Failure</span>;           <span class="c1"># True</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>The <code>fail</code> did not throw. <code>$c</code> is an undefined
+<code>Failure</code> you can test calmly. But touch its value — call a
+method, do arithmetic — and the wrapped exception is thrown for
+real:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">try</span> {
+    <span class="k">my</span> <span class="nv">$len</span> = <span class="nv">$c</span>.<span class="nb">chars</span>;
+    <span class="k">CATCH</span> { <span class="k">default</span> { <span class="nb">say</span> <span class="s">&quot;threw when used: &quot;</span>, .<span class="n">message</span> } }
+}
+<span class="c1"># threw when used: no such file: /does/not/exist</span></pre></div>
+
+<p>This gives you the best of both styles. A caller who wants the
+lightweight, check-the-return-value approach can use the defined-or
+operator; a caller who would rather have an exception simply uses the
+value and lets it throw:</p>
+<div class="highlight raku"><pre><span></span><span class="k">sub</span> <span class="n">half</span>(<span class="nv">$n</span>) {
+    <span class="nb">fail</span> <span class="s">&quot;odd number: $n&quot;</span> <span class="k">if</span> <span class="nv">$n</span> % <span class="mi">2</span>;
+    <span class="nv">$n</span> / <span class="mi">2</span>;
+}
+<span class="k">my</span> <span class="nv">$v</span> = <span class="n">half</span>(<span class="mi">7</span>) // <span class="s">'skipped'</span>;           <span class="c1"># never throws</span>
+<span class="nb">say</span> <span class="nv">$v</span>;                                 <span class="c1"># skipped</span>
+<span class="k">with</span> <span class="n">half</span>(<span class="mi">8</span>) -&gt; <span class="nv">$ok</span> { <span class="nb">say</span> <span class="s">&quot;ok: $ok&quot;</span> }   <span class="c1"># ok: 4</span></pre></div>
+
+<p>A <code>Failure</code> also throws automatically if it is
+garbage-collected without ever being examined, so an error you forget to
+handle will not vanish silently. It is Raku’s way of letting an error
+stay soft exactly as long as nobody has looked at it — and no
+longer.</p>
+<p>With errors under control, we can turn to a style of programming
+where values, not side effects, do the work: functional Raku.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/robust-and-modern-raku">Robust and
+Modern Raku</a>   |   <a
+href="/raku-books/migrating-to-raku/functional-raku">Functional Raku</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

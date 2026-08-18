@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>From Regexes to Grammars — Raku Books</title>
+    <meta property="og:title" content="From Regexes to Grammars — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/regular-expressions">Regular
+Expressions</a></p>
+<h1 id="from-regexes-to-grammars">From Regexes to Grammars</h1>
+<p>By the end of Chapter 18 you had named patterns — <code>token</code>,
+<code>rule</code>, <code>regex</code> — that call one another with
+<code>&lt;name&gt;</code>. A <strong>grammar</strong> is simply a named
+collection of those, gathered into one unit the way a class gathers
+methods. If you have ever reached for a parser generator, or worse,
+tried to parse a nested format with a tower of Perl regexes and
+<code>while</code> loops, this is the chapter where Raku earns its keep.
+Grammars are the language’s headline feature, and they are built from
+pieces you already understand.</p>
+<p>This chapter is a <em>teaser</em>, not a reference. The goal is to
+get you parsing something real and to show how the parts fit; the full
+grammar documentation at <code>docs.raku.org</code> goes much
+deeper.</p>
+<h2 id="from-a-bag-of-tokens-to-a-grammar">From a bag of tokens to a
+<code>grammar</code></h2>
+<p>In Perl there is no first-class way to package related regexes. You
+end up with a module full of <code>qr//</code> variables and
+hand-written glue. Raku gives you a keyword:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">grammar</span> <span class="n">NumberList</span> {
+    <span class="k">token</span> <span class="n">TOP</span>    { <span class="s">&lt;number&gt;</span>+ % <span class="s">','</span> }
+    <span class="k">token</span> <span class="n">number</span> { \<span class="n">d</span>+ }
+}</pre></div>
+
+<p>A grammar is declared like a class, and its named patterns are like
+methods. One of them is special: the rule named <code>TOP</code> is the
+entry point, the pattern the whole input must match. You start a parse
+by calling <code>.parse</code> on the grammar:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$m</span> = <span class="n">NumberList</span>.<span class="n">parse</span>(<span class="s">&quot;1,22,333&quot;</span>);
+<span class="nb">say</span> <span class="nv">$m</span><span class="s">&lt;number&gt;</span>;         <span class="c1"># [｢1｣ ｢22｣ ｢333｣]</span>
+<span class="nb">say</span> <span class="nv">$m</span><span class="s">&lt;number&gt;</span>[<span class="mi">1</span>];      <span class="c1"># ｢22｣</span>
+<span class="nb">say</span> <span class="nv">$m</span><span class="s">&lt;number&gt;</span>[<span class="mi">1</span>].<span class="nb">Int</span>;  <span class="c1"># 22</span></pre></div>
+
+<p>The result is a Match object — the same <code>$/</code> object from
+Chapter 18 — but now it is a <em>tree</em>. Each subrule that matched
+hangs off it under its own name, and a quantified subrule like
+<code>&lt;number&gt;+</code> gives you a list you can index. That tree
+is the whole point: instead of one flat match, you get structure.</p>
+<p>If the input does not match <code>TOP</code> from start to finish,
+<code>.parse</code> returns <code>Nil</code>. When you only want to
+match a <em>prefix</em> and not insist on consuming everything, use
+<code>.subparse</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">grammar</span> <span class="n">G</span> { <span class="k">token</span> <span class="n">TOP</span> { \<span class="n">d</span>+ } }
+<span class="nb">say</span> <span class="n">G</span>.<span class="n">subparse</span>(<span class="s">&quot;42 and more&quot;</span>);   <span class="c1"># ｢42｣  — matches as far as it can</span></pre></div>
+
+<h2 id="token-rule-and-regex-which-to-use"><code>token</code>,
+<code>rule</code>, and <code>regex</code> — which to use</h2>
+<p>All three declare a named pattern; they differ only in the defaults
+they switch on, which you met as adverbs in Chapter 18:</p>
+<ul>
+<li><strong><code>regex</code></strong> — backtracks like a Perl
+pattern. Flexible, occasionally slow.</li>
+<li><strong><code>token</code></strong> — adds <code>:ratchet</code>, so
+it never backtracks. This is your default for parsing: fast and
+predictable.</li>
+<li><strong><code>rule</code></strong> — a <code>token</code> that also
+adds <code>:sigspace</code>, so whitespace <em>between</em> the pieces
+of the pattern matters and is matched automatically.</li>
+</ul>
+<p>The <code>rule</code> variant is what makes grammars pleasant for
+real text, where tokens are separated by arbitrary spacing. Compare:
+with <code>token</code> you would sprinkle <code>\h*</code> between the
+parts yourself, but with <code>rule</code> the spaces in the pattern do
+that for you. Here <code>rule TOP</code> lets “1, 22, 333” parse despite
+the spaces after each comma:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">grammar</span> <span class="n">NumberList</span> {
+    <span class="k">rule</span>  <span class="n">TOP</span>    { <span class="s">&lt;number&gt;</span>+ % <span class="s">','</span> }
+    <span class="k">token</span> <span class="n">number</span> { \<span class="n">d</span>+ }
+}
+<span class="nb">say</span> <span class="n">NumberList</span>.<span class="n">parse</span>(<span class="s">&quot;1, 22, 333&quot;</span>)<span class="s">&lt;number&gt;</span>;   <span class="c1"># [｢1｣ ｢22｣ ｢333｣]</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<h2 id="calling-subrules-and-quantifying-them">Calling subrules, and
+quantifying them</h2>
+<p>A subrule call <code>&lt;number&gt;</code> inside another pattern
+both <em>matches</em> using that rule and <em>captures</em> the result
+under that name. Quantify it — <code>&lt;number&gt;+</code>,
+<code>&lt;thing&gt;*</code>, <code>&lt;item&gt;+ % ','</code> — and the
+capture becomes a list, exactly as you saw above with
+<code>$m&lt;number&gt;[1]</code>. This composability is what replaces
+the nested loops: a grammar for a nested structure is just rules that
+call rules that call rules, all the way down, and the tree mirrors the
+nesting for free.</p>
+<h2 id="proto-and-multi-tokens-one-name-several-shapes">Proto and multi
+tokens: one name, several shapes</h2>
+<p>Sometimes a single conceptual thing has several forms — a number
+might be an integer or a float, a value might be quoted or bare. Raku
+lets several tokens share one name through a <code>proto</code>
+declaration and <code>multi</code>-style <code>:sym&lt;...&gt;</code>
+variants:</p>
+<div class="highlight raku"><pre><span></span><span class="k">grammar</span> <span class="n">Num</span> {
+    <span class="k">token</span> <span class="n">TOP</span> { <span class="s">&lt;number&gt;</span> }
+    <span class="k">proto</span> <span class="k">token</span> <span class="n">number</span> {*}
+    <span class="k">token</span> <span class="n">number</span>:<span class="n">sym</span><span class="s">&lt;int&gt;</span>   { \<span class="n">d</span>+ }
+    <span class="k">token</span> <span class="n">number</span>:<span class="n">sym</span><span class="s">&lt;float&gt;</span> { \<span class="n">d</span>+ <span class="s">'.'</span> \<span class="n">d</span>+ }
+}
+<span class="nb">say</span> <span class="nb">Num</span>.<span class="n">parse</span>(<span class="s">&quot;42&quot;</span>)<span class="s">&lt;number&gt;</span>;     <span class="c1"># ｢42｣</span>
+<span class="nb">say</span> <span class="nb">Num</span>.<span class="n">parse</span>(<span class="s">&quot;3.14&quot;</span>)<span class="s">&lt;number&gt;</span>;   <span class="c1"># ｢3.14｣</span></pre></div>
+
+<p>The <code>proto</code> says “there is a token called
+<code>number</code>, defined in pieces”; each variant handles one case.
+Thanks to longest-token matching (Chapter 18), Raku automatically
+prefers <code>float</code> for <code>3.14</code> because it matches more
+text. This is the same multiple-dispatch idea you met for subroutines in
+Chapter 16, applied to parsing.</p>
+<h2 id="actions-turning-a-parse-tree-into-a-result">Actions: turning a
+parse tree into a result</h2>
+<p>Matching tells you the input is <em>valid</em>. Usually you also want
+to <em>do</em> something with it — build a data structure, compute a
+value, translate to another format. For that you attach an
+<strong>actions class</strong>: a plain class whose method names match
+the grammar’s rule names. As each rule matches, Raku calls the method of
+the same name, handing it that rule’s Match object as
+<code>$/</code>.</p>
+<p>Inside an action you call <code>make</code> to attach a result to the
+current match, and you read a child’s result back with
+<code>.made</code>. Think of <code>make</code> as “this is what this
+piece <em>means</em>”, flowing bottom-up: leaves make simple values, and
+the rules above them combine those into bigger ones. Here is a grammar
+that sums a list of numbers:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">grammar</span> <span class="n">NumberList</span> {
+    <span class="k">rule</span>  <span class="n">TOP</span>    { <span class="s">&lt;number&gt;</span>+ % <span class="s">','</span> }
+    <span class="k">token</span> <span class="n">number</span> { \<span class="n">d</span>+ }
+}
+
+<span class="k">class</span> <span class="n">Sum</span> {
+    <span class="k">method</span> <span class="n">number</span>(<span class="nv">$/</span>) { <span class="k">make</span> <span class="nv">$/</span>.<span class="nb">Int</span> }                     <span class="c1"># a leaf: its value</span>
+    <span class="k">method</span> <span class="n">TOP</span>(<span class="nv">$/</span>)    { <span class="k">make</span> <span class="nv">$&lt;number&gt;</span>.<span class="nb">map</span>(*.<span class="n">made</span>).<span class="nb">sum</span> }  <span class="c1"># combine the leaves</span>
+}
+
+<span class="k">my</span> <span class="nv">$r</span> = <span class="n">NumberList</span>.<span class="n">parse</span>(<span class="s">&quot;1, 22, 333, 4&quot;</span>, <span class="n">actions</span> =&gt; <span class="n">Sum</span>);
+<span class="nb">say</span> <span class="nv">$r</span><span class="s">&lt;number&gt;</span>;   <span class="c1"># [｢1｣ ｢22｣ ｢333｣ ｢4｣]</span>
+<span class="nb">say</span> <span class="nv">$r</span>.<span class="n">made</span>;      <span class="c1"># 360</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>You pass the actions class with the <code>actions</code> named
+argument, and the final result is on <code>.made</code> of the top-level
+match. The grammar describes <em>shape</em>; the actions class describes
+<em>meaning</em>. Keeping them apart means one grammar can drive several
+different actions classes — one to evaluate, another to pretty-print, a
+third to build an AST.</p>
+<h2 id="a-complete-worked-example-a-config-parser">A complete worked
+example: a config parser</h2>
+<p>Let us tie it all together with something you might actually reach
+for: parsing a simple <code>key = value</code> configuration file into a
+hash. This runs exactly as shown.</p>
+<div class="highlight raku"><pre><span></span><span class="k">grammar</span> <span class="n">Config</span> {
+    <span class="k">token</span> <span class="n">TOP</span>    { <span class="s">&lt;line&gt;</span>+ %% \<span class="n">n</span> }
+    <span class="k">token</span> <span class="n">line</span>   { <span class="s">&lt;key&gt;</span> \<span class="n">h</span>* <span class="s">'='</span> \<span class="n">h</span>* <span class="s">&lt;value&gt;</span> }
+    <span class="k">token</span> <span class="n">key</span>    { \<span class="n">w</span>+ }
+    <span class="k">token</span> <span class="n">value</span>  { \<span class="n">N</span>+ }
+}
+
+<span class="k">class</span> <span class="n">ConfigActions</span> {
+    <span class="k">method</span> <span class="n">line</span>(<span class="nv">$/</span>) { <span class="k">make</span> ~<span class="nv">$&lt;key&gt;</span> =&gt; ~<span class="nv">$&lt;value&gt;</span> }   <span class="c1"># ~ stringifies the match</span>
+    <span class="k">method</span> <span class="n">TOP</span>(<span class="nv">$/</span>)  { <span class="k">make</span> <span class="nv">$&lt;line&gt;</span>.<span class="nb">map</span>({ .<span class="n">made</span> }).<span class="nb">Hash</span> }
+}
+
+<span class="k">my</span> <span class="nv">$text</span> = <span class="s">q:to/END/</span>;
+<span class="n">name</span> = <span class="n">Andrew</span>
+<span class="n">lang</span> = <span class="n">Raku</span>
+<span class="n">year</span> = <span class="mi">2026</span>
+<span class="k">END</span>
+
+<span class="k">my</span> <span class="nv">%config</span> = <span class="n">Config</span>.<span class="n">parse</span>(<span class="nv">$text</span>, <span class="n">actions</span> =&gt; <span class="n">ConfigActions</span>).<span class="n">made</span>;
+<span class="nb">say</span> <span class="nv">%config</span>;         <span class="c1"># {lang =&gt; Raku, name =&gt; Andrew, year =&gt; 2026}</span>
+<span class="nb">say</span> <span class="nv">%config</span><span class="s">&lt;lang&gt;</span>;   <span class="c1"># Raku</span></pre></div>
+
+<p>Read it top-down and it is almost self-documenting. <code>TOP</code>
+is one-or-more lines separated (or terminated, thanks to
+<code>%%</code>) by newlines. Each <code>line</code> is a
+<code>key</code>, an <code>=</code>, and a <code>value</code>, with
+optional horizontal whitespace around the equals sign. The actions class
+turns each line into a <code>Pair</code> and collects them into a
+<code>Hash</code>. No manual <code>split</code>, no line-by-line loop,
+no fragile chained regexes — the structure of the format <em>is</em> the
+code.</p>
+<p>This is only the doorway. Grammars support inheritance (one grammar
+can extend another), error reporting, and full recursive descent capable
+of parsing entire programming languages — Rakudo parses Raku itself with
+a grammar. The official documentation is the place to go next when you
+need those depths.</p>
+<p>With regexes reworked and grammars in hand, you have the tools to
+take structured text apart. Part VII turns to the everyday flip side of
+that skill: putting text together and moving it around. Chapter 20 opens
+it with text processing — <code>sprintf</code>, <code>split</code>,
+<code>join</code>, heredocs, and the Unicode niceties that make Raku a
+joy for wrangling strings.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/regexes-reworked">Regexes Reworked</a>
+  |   <a href="/raku-books/migrating-to-raku/text-and-i-o">Text and I/O</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

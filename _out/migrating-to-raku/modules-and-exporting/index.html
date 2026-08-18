@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Modules, Packages, and Exporting — Raku Books</title>
+    <meta property="og:title" content="Modules, Packages, and Exporting — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a
+href="/raku-books/migrating-to-raku/modules-and-the-ecosystem">Modules and the
+Ecosystem</a></p>
+<h1 id="modules-packages-and-exporting">Modules, Packages, and
+Exporting</h1>
+<p>Sooner or later a program outgrows a single file. In Perl you reach
+for <code>package</code>, a <code>use</code> here and there, and
+<code>Exporter</code> to push names into the caller’s namespace. Raku
+keeps the same shape — you still declare a namespace, still say
+<code>use</code>, still choose what leaks out — but the machinery is
+cleaner and, for once, built into the language rather than bolted on
+with a module. This chapter is the recipe for taking a Perl
+<code>.pm</code> file apart and putting it back together as a Raku
+module.</p>
+<h2 id="loading-code-use-need-require">Loading code: <code>use</code>,
+<code>need</code>, <code>require</code></h2>
+<p>In Perl, <code>use</code> loads a module at compile time and runs its
+<code>import</code>; <code>require</code> loads at run time and does not
+import:</p>
+<div class="highlight perl-code"><pre>use List::Util qw(sum);      # compile-time, imports sum
+require Some::Heavy::Thing;  # run-time, no import</pre></div>
+<p>Raku splits the same territory across three keywords.
+<code>use</code> is the everyday one: it loads at compile time
+<em>and</em> imports whatever the module exports.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Some::Module</span>;            <span class="c1"># compile-time load + import</span></pre></div>
+
+<p><code>need</code> loads a module at compile time but imports
+<em>nothing</em>. You then reach its symbols through the fully-qualified
+package name — the moral equivalent of a Perl <code>require</code> that
+you know will succeed at compile time:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">need</span> <span class="n">Greeting</span>;
+<span class="nb">say</span> <span class="n">Greeting::visible-via-our</span>();   <span class="c1"># reach in by full name</span></pre></div>
+
+<p><code>require</code> is the genuinely run-time form. Because it runs
+when execution reaches it, the module name can be computed, and you can
+guard it in a conditional — the classic “load this plug-in only if we
+need it” pattern:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$class</span> = <span class="s">'Shape'</span>;
+<span class="k">require</span> ::(<span class="nv">$class</span>);                         <span class="c1"># load a name known only at run time</span>
+<span class="k">my</span> <span class="nv">$obj</span> = ::(<span class="nv">$class</span>).<span class="nb">new</span>(<span class="n">name</span> =&gt; <span class="s">'square'</span>);
+<span class="nb">say</span> <span class="nv">$obj</span>.<span class="n">describe</span>;                          <span class="c1"># a shape called square</span></pre></div>
+
+<p class="run-note">🖥 This program reads the local environment (files, directories, or the command line), so it runs on your own computer but not in the sandboxed in-browser engine.</p>
+<p>The <code>::(...)</code> syntax is <em>indirect name lookup</em>: it
+turns a string into a symbol. You can also import specific symbols at
+run time by listing them:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">require</span> <span class="n">Greeting</span> &lt;<span class="nv">&amp;hello</span>&gt;;    <span class="c1"># load now, bring in just &amp;hello</span>
+<span class="nb">say</span> <span class="n">hello</span>(<span class="s">'Runtime'</span>);         <span class="c1"># Hello, Runtime!</span></pre></div>
+
+<h2 id="declaring-a-namespace-package-and-its-kinds">Declaring a
+namespace: <code>package</code> and its kinds</h2>
+<p>A Perl <code>.pm</code> file starts with <code>package</code>:</p>
+<div class="highlight perl-code"><pre>package Greeting;
+# ... subs ...
+1;</pre></div>
+<p>Raku has <code>package</code> too, but you almost never write it.
+Instead you pick the <em>kind</em> of package that matches what you are
+building — and the most common kind for a module file is,
+unsurprisingly, <code>module</code>. Save this as
+<code>Greeting.rakumod</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">unit</span> <span class="k">module</span> <span class="n">Greeting</span>;
+
+<span class="k">sub</span> <span class="n">hello</span>(<span class="nv">$name</span>) <span class="k">is</span> <span class="n">export</span> {
+    <span class="k">return</span> <span class="s">&quot;Hello, $name!&quot;</span>;
+}</pre></div>
+
+<p>The <code>unit</code> prefix means “the rest of the file is inside
+this declaration”, so you do not have to wrap everything in braces — the
+direct counterpart of a Perl file-scoped <code>package</code>. Note also
+that Raku modules need no trailing <code>1;</code>; the
+<code>.pm</code>-era ritual of returning a true value is gone.</p>
+<p><code>module</code> is only one of several package kinds, and they
+all follow the same <code>unit</code>-or-braces pattern. You already
+know two of the others from earlier chapters:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Declares</th>
+<th>Covered in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>module</code></td>
+<td>a plain namespace of subs/vars</td>
+<td>this chapter</td>
+</tr>
+<tr>
+<td><code>class</code></td>
+<td>an object type</td>
+<td>Chapter 22</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td>a reusable behaviour</td>
+<td>Chapter 23</td>
+</tr>
+<tr>
+<td><code>grammar</code></td>
+<td>a namespace of named regexes</td>
+<td>Chapter 19</td>
+</tr>
+</tbody>
+</table>
+<p>So <code>unit class Shape;</code> and <code>unit grammar INI;</code>
+are the same idea as <code>unit module Greeting;</code>, differing only
+in what kind of thing they introduce. A file can even hold several of
+them if you use the brace form rather than <code>unit</code>.</p>
+<h2 id="what-is-visible-our-versus-my">What is visible: <code>our</code>
+versus <code>my</code></h2>
+<p>Inside a package, the choice between <code>my</code> and
+<code>our</code> decides reachability, exactly as it did in Perl —
+<code>my</code> is lexical and private to the file, <code>our</code> is
+a package variable visible through the namespace:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">unit</span> <span class="k">module</span> <span class="n">Greeting</span>;
+
+<span class="k">our</span> <span class="k">sub</span> <span class="n">visible-via-our</span>() { <span class="s">&quot;reached through the package name&quot;</span> }
+<span class="k">my</span>  <span class="k">sub</span> <span class="n">hidden</span>()          { <span class="s">&quot;you cannot see me&quot;</span> }</pre></div>
+
+<p>From outside, <code>Greeting::visible-via-our()</code> works and
+<code>Greeting::hidden()</code> does not. This is the same distinction
+Perl draws between an <code>our</code>/fully-qualified sub and a
+<code>my</code> lexical one. But note the key difference from Perl
+habit: making a sub reachable through the package name is <em>not</em>
+the same as exporting it. Reaching in by full name always works for
+<code>our</code>; exporting is a separate, opt-in act.</p>
+<h2 id="exporting-is-export-instead-of-exporter">Exporting:
+<code>is export</code> instead of <code>Exporter</code></h2>
+<p>Here is where the Perl boilerplate melts away. The traditional
+incantation —</p>
+<div class="highlight perl-code"><pre>package Greeting;
+use Exporter 'import';
+our @EXPORT_OK = qw(hello goodbye);
+our @EXPORT    = qw(hello);</pre></div>
+<p>— becomes a single trait on the sub itself. Mark a routine
+<code>is export</code> and it is imported by default when someone says
+<code>use Greeting</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">hello</span>(<span class="nv">$name</span>) <span class="k">is</span> <span class="n">export</span> { <span class="s">&quot;Hello, $name!&quot;</span> }</pre></div>
+
+<p>To put a sub behind a named tag — the equivalent of
+<code>@EXPORT_OK</code>, an export the caller must ask for — give
+<code>export</code> an argument:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">goodbye</span>(<span class="nv">$name</span>) <span class="k">is</span> <span class="n">export</span>(:<span class="n">formal</span>) { <span class="s">&quot;Farewell, $name.&quot;</span> }</pre></div>
+
+<p>A sub can belong to several tags at once, and a plain
+<code>is export</code> is shorthand for the built-in
+<code>:DEFAULT</code> tag:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">a</span>() <span class="k">is</span> <span class="n">export</span>(:<span class="n">one</span>)       { <span class="s">'a'</span> }
+<span class="k">sub</span> <span class="n">b</span>() <span class="k">is</span> <span class="n">export</span>(:<span class="n">two</span>)       { <span class="s">'b'</span> }
+<span class="k">sub</span> <span class="n">c</span>() <span class="k">is</span> <span class="n">export</span>(:<span class="n">one</span>, :<span class="n">two</span>) { <span class="s">'c'</span> }</pre></div>
+
+<h2 id="importing-selectively">Importing selectively</h2>
+<p>The caller controls what arrives. With no arguments, <code>use</code>
+brings in the <code>:DEFAULT</code> set:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Greeting</span>;
+<span class="nb">say</span> <span class="n">hello</span>(<span class="s">'Ada'</span>);         <span class="c1"># Hello, Ada!</span></pre></div>
+
+<p>Naming a tag imports that group instead (and defaults are then
+<em>not</em> pulled in unless you also ask for them):</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Greeting</span> :<span class="n">formal</span>;
+<span class="nb">say</span> <span class="n">goodbye</span>(<span class="s">'Ada'</span>);       <span class="c1"># Farewell, Ada.</span></pre></div>
+
+<p>You can ask for several tags in one go:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Multi</span> :<span class="n">one</span>, :<span class="n">two</span>;
+<span class="nb">say</span> <span class="n">a</span>(), <span class="n">b</span>(), <span class="n">c</span>();        <span class="c1"># abc</span></pre></div>
+
+<p>This tag system is Raku’s answer to the
+<code>use Module qw(...)</code> import list: instead of the module
+author listing individual names, related exports are grouped, and the
+caller opts into groups. It scales far better than a flat
+<code>@EXPORT_OK</code>.</p>
+<h2 id="the-sub-export-alternative">The <code>sub EXPORT</code>
+alternative</h2>
+<p>For full control — when what you export depends on the arguments to
+<code>use</code>, or must be computed — define a
+<code>sub EXPORT</code>. It receives the positional arguments from the
+<code>use</code> statement and returns a map from symbol name to value.
+This is the Raku parallel of writing a custom <code>import</code> in
+Perl:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">sub</span> <span class="n">EXPORT</span>(*<span class="nv">@names</span>) {
+    <span class="k">my</span> <span class="nv">%exports</span>;
+    <span class="k">for</span> <span class="nv">@names</span> -&gt; <span class="nv">$n</span> {
+        <span class="nv">%exports</span>{<span class="s">'&amp;'</span> ~ <span class="nv">$n</span>} = <span class="k">sub</span> { <span class="s">&quot;you asked for $n&quot;</span> };
+    }
+    <span class="k">return</span> <span class="nv">%exports</span>;
+}</pre></div>
+
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Dynamic</span> &lt;<span class="n">foo</span> <span class="n">bar</span>&gt;;
+<span class="nb">say</span> <span class="n">foo</span>();                <span class="c1"># you asked for foo</span>
+<span class="nb">say</span> <span class="n">bar</span>();                <span class="c1"># you asked for bar</span></pre></div>
+
+<p>The <code>&amp;</code> sigil in the key marks the exported symbol as
+a subroutine. Reach for <code>sub EXPORT</code> only when
+<code>is export</code> cannot express what you need; for the vast
+majority of modules, tags are enough.</p>
+<h2 id="versions-and-authority">Versions and authority</h2>
+<p>Perl modules carry a <code>$VERSION</code> string that the toolchain
+reads. Raku bakes version — and <em>authority</em>, meaning who
+published it — into the language, both on the declaration and on the
+<code>use</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">unit</span> <span class="k">module</span> <span class="n">Widget</span>:<span class="n">ver</span>&lt;<span class="mf">1.2</span>.<span class="mi">3</span>&gt;:<span class="n">auth</span>&lt;<span class="n">zef</span>:<span class="n">andrew</span>&gt;;</pre></div>
+
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Widget</span>:<span class="n">ver</span>&lt;<span class="mf">1.2</span>.<span class="mi">3</span>&gt;;</pre></div>
+
+<p><code>:ver</code> is a version, <code>:auth</code> an authority
+string (commonly <code>zef:username</code> for the modern ecosystem).
+When several versions of a distribution are installed, the
+<code>:ver</code> on your <code>use</code> selects which one loads — so
+two programs on the same machine can depend on incompatible versions
+without conflict, something Perl handles only awkwardly. Version
+selection is enforced for <em>installed</em> distributions; loose files
+found via <code>-I</code> (below) are matched by name only, so a
+<code>:ver</code> constraint against a bare file is not checked.</p>
+<h2 id="where-modules-live-the-search-path">Where modules live: the
+search path</h2>
+<p>Perl searches <code>@INC</code>, which you extend with
+<code>-I</code>, <code>PERL5LIB</code>, or <code>use lib</code>. Raku
+has the exact same three levers, renamed:</p>
+<div class="highlight"><pre>$ raku -I lib program.raku          # add ./lib to the search path
+$ RAKULIB=lib raku program.raku     # the PERL5LIB counterpart</pre></div>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">lib</span> <span class="s">'lib'</span>;                       <span class="c1"># the use lib counterpart</span>
+<span class="k">use</span> <span class="n">Greeting</span>;</pre></div>
+
+<p>Under the hood the search path is a chain of <em>repositories</em>
+(you can inspect it with <code>raku -e 'say $*REPO.repo-chain'</code>),
+but for day-to-day work the three forms above are all you need.</p>
+<p>Putting it together, here is a complete, runnable module and program.
+Save the first as <code>lib/Greeting.rakumod</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">unit</span> <span class="k">module</span> <span class="n">Greeting</span>;
+<span class="k">sub</span> <span class="n">hello</span>(<span class="nv">$name</span>) <span class="k">is</span> <span class="n">export</span> { <span class="s">&quot;Hello, $name!&quot;</span> }</pre></div>
+
+<p>and the second as <code>use-it.raku</code>:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Greeting</span>;
+<span class="nb">say</span> <span class="n">hello</span>(<span class="s">'World'</span>);</pre></div>
+
+<p>then run it with the library path pointed at <code>lib</code>:</p>
+<div class="highlight"><pre>$ raku -I lib use-it.raku
+Hello, World!</pre></div>
+<p>That <code>-I lib</code> is fine while developing, but the moment you
+want to <em>share</em> a module — or pull one down that someone else
+wrote — you need the ecosystem and its installer. That is
+<code>zef</code>, and it is where the next chapter begins.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/modules-and-the-ecosystem">Modules and
+the Ecosystem</a>   |   <a href="/raku-books/migrating-to-raku/cpan-to-zef">CPAN to
+zef, and Mixing Languages</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

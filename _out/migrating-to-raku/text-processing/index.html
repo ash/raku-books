@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Text Processing — Raku Books</title>
+    <meta property="og:title" content="Text Processing — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/text-and-i-o">Text and
+I/O</a></p>
+<h1 id="text-processing">Text Processing</h1>
+<p>Text is where Perl earned its reputation, so it is reassuring that
+most of your string-wrangling instincts carry straight over.
+<code>sprintf</code> is still <code>sprintf</code>, <code>split</code>
+is still <code>split</code>, and <code>join</code> still glues a list
+together. What has changed is mostly <em>additive</em>: the same jobs
+are now also available as methods you can chain, a few sharp edges
+(character ranges, Unicode counting) have been filed off, and a couple
+of new tools — <code>.comb</code>, <code>.trans</code>,
+<code>.subst</code> — round out the toolkit. This chapter walks the
+common text operations one at a time.</p>
+<h2 id="formatted-output-sprintf-and-printf">Formatted output:
+<code>sprintf</code> and <code>printf</code></h2>
+<p>The two format-string workhorses need no translation at all.
+<code>printf</code> and <code>sprintf</code> take the same
+<code>%</code>-directives you already know:</p>
+<div class="highlight perl-code"><pre>printf "%-10s|%5d\n", 'left', 42;      # left      |   42
+my $s = sprintf '%05.2f', 3.14159;     # 03.14</pre></div>
+<div class="highlight raku"><pre><span></span><span class="nb">printf</span> <span class="s">&quot;%-10s|%5d\n&quot;</span>, <span class="s">'left'</span>, <span class="mi">42</span>;      <span class="c1"># left      |   42</span>
+<span class="k">my</span> <span class="nv">$s</span> = <span class="nb">sprintf</span> <span class="s">'%05.2f'</span>, <span class="mf">3.14159</span>;     <span class="c1"># 03.14</span></pre></div>
+
+<p>What Raku adds is a method form, <code>.fmt</code>, so you can format
+a value in the middle of a method chain without breaking out to
+<code>sprintf</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">255</span>.<span class="n">fmt</span>(<span class="s">'%04x'</span>);           <span class="c1"># 00ff</span>
+<span class="nb">say</span> <span class="mf">3.14159</span>.<span class="n">fmt</span>(<span class="s">'%.2f'</span>);       <span class="c1"># 3.14</span></pre></div>
+
+<p>On a list, <code>.fmt</code> formats each element and — with an
+optional second argument — joins them with a separator, which is often
+exactly what you want:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>).<span class="n">fmt</span>(<span class="s">'%02d'</span>, <span class="s">', '</span>);   <span class="c1"># 01, 02, 03</span>
+<span class="nb">say</span> &lt;<span class="n">a</span> <span class="n">b</span> <span class="n">c</span>&gt;.<span class="n">fmt</span>(<span class="s">'[%s]'</span>);           <span class="c1"># [a] [b] [c]</span></pre></div>
+
+<h2 id="splitting-and-joining">Splitting and joining</h2>
+<p><code>split</code> and <code>join</code> survive with their meaning
+intact, but <code>split</code> gains the sigil-free method form and a
+few tidier defaults. In Perl:</p>
+<div class="highlight perl-code"><pre>my @parts = split /,/, 'a,b,c';    # ('a', 'b', 'c')
+my $csv   = join ',', @parts;      # a,b,c</pre></div>
+<p>In Raku, <code>split</code> takes either a string or a regex as its
+separator, and reads naturally as a method. Note that a plain string
+separator is treated <em>literally</em> — you do not need to quote
+metacharacters:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'a,b,c'</span>.<span class="nb">split</span>(<span class="s">','</span>);            <span class="c1"># (a b c)</span>
+<span class="nb">say</span> <span class="s">'a1b2c3'</span>.<span class="nb">split</span>(<span class="sr">/\d/</span>);          <span class="c1"># (a b c )   ← trailing empty piece</span>
+<span class="nb">say</span> <span class="s">'a-b_c'</span>.<span class="nb">split</span>(<span class="sr">/&lt;[-_]&gt;/</span>);       <span class="c1"># (a b c)</span></pre></div>
+
+<p>A numeric third argument is the limit, as before:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'a,b,c,d'</span>.<span class="nb">split</span>(<span class="s">','</span>, <span class="mi">2</span>);       <span class="c1"># (a b,c,d)</span></pre></div>
+
+<p><code>join</code> works both as a function and as a method, and the
+separator comes first in the function form just as in Perl:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="nb">join</span>(<span class="s">'-'</span>, <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>);            <span class="c1"># 1-2-3</span>
+<span class="nb">say</span> (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>).<span class="nb">join</span>(<span class="s">'-'</span>);           <span class="c1"># 1-2-3</span></pre></div>
+
+<p>One habit to drop: Perl’s magic <code>split ' '</code> (the
+single-space string that also strips leading whitespace and splits on
+runs) has a clearer replacement in <code>.words</code>, which we meet
+below. In Raku, <code>.split(' ')</code> splits on a single literal
+space and keeps empty fields, so reach for <code>.words</code> when you
+mean “tokens”.</p>
+<h2 id="finding-and-slicing-index-rindex-substr">Finding and slicing:
+<code>index</code>, <code>rindex</code>, <code>substr</code></h2>
+<p><code>index</code> and <code>rindex</code> return the position of a
+substring, searching forwards and backwards respectively:</p>
+<div class="highlight perl-code"><pre>my $pos = index('hello world', 'o');     # 4
+my $end = rindex('hello world', 'o');    # 7
+my $no  = index('hello', 'z');           # -1</pre></div>
+<p>Raku offers the same as methods. The important difference is the “not
+found” result: Perl returns <code>-1</code>, but Raku returns
+<code>Nil</code>, which plays nicely with the defined-or operator
+<code>//</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'hello world'</span>.<span class="nb">index</span>(<span class="s">'o'</span>);      <span class="c1"># 4</span>
+<span class="nb">say</span> <span class="s">'hello world'</span>.<span class="nb">rindex</span>(<span class="s">'o'</span>);     <span class="c1"># 7</span>
+<span class="nb">say</span> <span class="s">'hello'</span>.<span class="nb">index</span>(<span class="s">'z'</span>);            <span class="c1"># Nil</span>
+<span class="nb">say</span> <span class="s">'hello'</span>.<span class="nb">index</span>(<span class="s">'z'</span>) // -<span class="mi">1</span>;      <span class="c1"># -1   (if you really want the old sentinel)</span></pre></div>
+
+<p><code>substr</code> reads a slice out of a string. As a method it
+takes a start and an optional length, and it understands the
+<code>*-n</code> “from the end” form we saw in Chapter 4:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$s</span> = <span class="s">'Hello, World'</span>;
+<span class="nb">say</span> <span class="nv">$s</span>.<span class="nb">substr</span>(<span class="mi">7</span>);          <span class="c1"># World</span>
+<span class="nb">say</span> <span class="nv">$s</span>.<span class="nb">substr</span>(<span class="mi">0</span>, <span class="mi">5</span>);       <span class="c1"># Hello</span>
+<span class="nb">say</span> <span class="nv">$s</span>.<span class="nb">substr</span>(*-<span class="mi">5</span>);        <span class="c1"># World   (last five characters)</span></pre></div>
+
+<h3 id="read-write-substr-substr-rw">Read-write <code>substr</code>:
+<code>substr-rw</code></h3>
+<p>In Perl, <code>substr</code> is famously an lvalue — you can assign
+<em>through</em> it to splice a string in place:</p>
+<div class="highlight perl-code"><pre>my $t = 'Hello, World';
+substr($t, 0, 5) = 'HELLO';    # $t is now 'HELLO, World'</pre></div>
+<p>Raku separates the two jobs. Plain <code>substr</code> is read-only,
+and the writable variant is a distinct routine, <code>substr-rw</code>,
+which returns a container you can assign to or bind:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$t</span> = <span class="s">'Hello, World'</span>;
+<span class="n">substr-rw</span>(<span class="nv">$t</span>, <span class="mi">0</span>, <span class="mi">5</span>) = <span class="s">'HELLO'</span>;
+<span class="nb">say</span> <span class="nv">$t</span>;                        <span class="c1"># HELLO, World</span>
+
+<span class="k">my</span> <span class="nv">$u</span> = <span class="s">'abcdef'</span>;
+<span class="k">my</span> <span class="nv">$r</span> := <span class="nv">$u</span>.<span class="n">substr-rw</span>(<span class="mi">2</span>, <span class="mi">2</span>);   <span class="c1"># bind to the slice</span>
+<span class="nv">$r</span> = <span class="s">'XY'</span>;
+<span class="nb">say</span> <span class="nv">$u</span>;                        <span class="c1"># abXYef</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Splitting mutable and immutable into two names means the common,
+read-only case cannot surprise you by accidentally becoming an
+assignment target.</p>
+<h2 id="comb-and-.words-the-inverse-of-split"><code>.comb</code> and
+<code>.words</code>: the inverse of split</h2>
+<p>Where <code>split</code> says “chop this string wherever the
+separator matches”, <code>.comb</code> says the opposite: “give me the
+pieces that <em>do</em> match”. It is often the more natural tool when
+you know what the tokens look like rather than what lies between
+them:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'a1b2c3'</span>.<span class="nb">comb</span>(<span class="sr">/\d/</span>);           <span class="c1"># (1 2 3)</span>
+<span class="nb">say</span> <span class="s">'2025-07-08'</span>.<span class="nb">comb</span>(<span class="sr">/\d+/</span>);      <span class="c1"># (2025 07 08)</span>
+<span class="nb">say</span> <span class="s">'hello world foo'</span>.<span class="nb">comb</span>(<span class="sr">/\w+/</span>); <span class="c1"># (hello world foo)</span></pre></div>
+
+<p>With no argument, <code>.comb</code> returns the individual
+characters (graphemes); with a number, it returns fixed-size chunks:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'hello'</span>.<span class="nb">comb</span>;                  <span class="c1"># (h e l l o)</span>
+<span class="nb">say</span> <span class="s">'abcdef'</span>.<span class="nb">comb</span>(<span class="mi">2</span>);              <span class="c1"># (ab cd ef)</span></pre></div>
+
+<p><code>.words</code> is the specialised tool for whitespace-separated
+tokens — the honest replacement for Perl’s <code>split ' '</code>. It
+splits on runs of whitespace and drops the empty edges:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'the  quick   brown'</span>.<span class="nb">words</span>;         <span class="c1"># (the quick brown)</span>
+<span class="nb">say</span> <span class="s">'the quick brown'</span>.<span class="nb">words</span>.<span class="nb">elems</span>;      <span class="c1"># 3</span></pre></div>
+
+<h2 id="translating-characters-tr-and-.trans">Translating characters:
+<code>tr///</code> and <code>.trans</code></h2>
+<p>Perl’s transliteration operator changes individual characters in
+place:</p>
+<div class="highlight perl-code"><pre>my $t = 'hello world';
+$t =~ tr/a-z/A-Z/;             # HELLO WORLD</pre></div>
+<p>Raku keeps <code>tr///</code>, but binds it with the smartmatch
+operator <code>~~</code> rather than <code>=~</code>, and — this catches
+everyone once — character ranges use <code>..</code>, not
+<code>-</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$t</span> = <span class="s">'hello world'</span>;
+<span class="nv">$t</span> ~~ <span class="sr">tr/a..z/A..Z/</span>;
+<span class="nb">say</span> <span class="nv">$t</span>;                        <span class="c1"># HELLO WORLD</span></pre></div>
+
+<p>If you write <code>tr/a-z/.../</code> you get a compile-time error
+telling you to use <code>..</code>; believe it. There is also a
+non-destructive <code>TR///</code> that leaves the topic alone and
+<em>returns</em> the translated string:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nv">$_</span> = <span class="s">'hello'</span>;
+<span class="k">my</span> <span class="nv">$v</span> = <span class="sr">TR/a..z/A..Z/</span>;
+<span class="nb">say</span> <span class="nv">$_</span>;                        <span class="c1"># hello   (unchanged)</span>
+<span class="nb">say</span> <span class="nv">$v</span>;                        <span class="c1"># HELLO</span></pre></div>
+
+<p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>The result of a <code>tr///</code> numifies to the number of
+characters it changed, which is handy for counting:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$s</span> = <span class="s">'hello'</span>;
+<span class="k">my</span> <span class="nv">$n</span> = +(<span class="nv">$s</span> ~~ <span class="sr">tr/l/L/</span>);      <span class="c1"># 2</span></pre></div>
+
+<p>The method form is <code>.trans</code>, which is strictly more
+powerful than <code>tr///</code> because it accepts full strings, not
+just single characters, on each side. Pass it one or more
+<code>from =&gt; to</code> pairs:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'Hello'</span>.<span class="n">trans</span>(<span class="s">'a..z'</span> =&gt; <span class="s">'A..Z'</span>);            <span class="c1"># HELLO</span>
+<span class="nb">say</span> <span class="s">'hello'</span>.<span class="n">trans</span>(<span class="s">'el'</span> =&gt; <span class="s">'ip'</span>);                <span class="c1"># hippo</span>
+<span class="nb">say</span> <span class="s">'hello'</span>.<span class="n">trans</span>([<span class="s">'ll'</span>, <span class="s">'o'</span>] =&gt; [<span class="s">'LL'</span>, <span class="s">'O'</span>]);  <span class="c1"># heLLO   (multi-char keys)</span></pre></div>
+
+<h2 id="substitution-as-a-method-.subst">Substitution as a method:
+<code>.subst</code></h2>
+<p>You will still write <code>s///</code> inside regex-heavy code
+(Chapter 18), but when you want a substitution as an expression —
+something that <em>returns</em> the new string instead of mutating in
+place — reach for the <code>.subst</code> method. In Perl you would copy
+first, then substitute:</p>
+<div class="highlight perl-code"><pre>(my $out = $in) =~ s/the/a/g;</pre></div>
+<p>In Raku, <code>.subst</code> does it in one step and leaves the
+original untouched:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$s</span> = <span class="s">'the cat sat on the mat'</span>;
+<span class="nb">say</span> <span class="nv">$s</span>.<span class="n">subst</span>(<span class="s">'the'</span>, <span class="s">'a'</span>);          <span class="c1"># a cat sat on the mat   (first only)</span>
+<span class="nb">say</span> <span class="nv">$s</span>.<span class="n">subst</span>(<span class="s">'the'</span>, <span class="s">'a'</span>, :<span class="n">g</span>);      <span class="c1"># a cat sat on a mat     (global)</span>
+<span class="nb">say</span> <span class="nv">$s</span>;                            <span class="c1"># the cat sat on the mat (unchanged)</span></pre></div>
+
+<p>The replacement may be a closure, so you can transform each
+match:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'the cat sat'</span>.<span class="n">subst</span>(<span class="sr">/\w+/</span>, *.<span class="nb">uc</span>, :<span class="n">g</span>);   <span class="c1"># THE CAT SAT</span></pre></div>
+
+<p>If you <em>do</em> want in-place mutation, the sister method is
+<code>.subst-mutate</code>. The <code>:g</code> (global),
+<code>:i</code> (ignore-case) and friends are the same adverbs
+<code>s///</code> takes.</p>
+<h2 id="heredocs">Heredocs</h2>
+<p>Perl’s heredocs come in a quoted and unquoted flavour and, since
+5.26, an indented <code>&lt;&lt;~</code> form. Raku folds all of that
+into the <code>:to</code> adverb on a quote: <code>q:to/END/</code> is
+non-interpolating, <code>qq:to/END/</code> interpolates, and both strip
+the indentation of the closing marker from every line automatically.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$name</span> = <span class="s">'Ada'</span>;
+
+<span class="k">my</span> <span class="nv">$plain</span> = <span class="s">q:to/END/</span>;
+    <span class="n">Plain</span> <span class="n">heredoc</span>, <span class="k">no</span> <span class="nv">$interpolation</span> <span class="n">here</span>.
+    <span class="n">Indentation</span> <span class="k">is</span> <span class="n">stripped</span> <span class="n">to</span> <span class="n">the</span> <span class="n">closing</span> <span class="k">END</span>.
+    <span class="n">END</span>
+
+<span class="k">my</span> <span class="nv">$greet</span> = <span class="s">qq:to/END/</span>;
+    <span class="n">Hello</span>, <span class="nv">$name</span>!
+    <span class="n">Two</span> <span class="n">plus</span> <span class="n">two</span> <span class="k">is</span> {<span class="mi">2</span> + <span class="mi">2</span>}.
+    <span class="n">END</span></pre></div>
+
+<p>The <code>$greet</code> block prints:</p>
+<div class="highlight"><pre>Hello, Ada!
+Two plus two is 4.</pre></div>
+<p>Because the closing <code>END</code> is indented four spaces, four
+spaces are trimmed from the front of every line — so you can indent the
+heredoc to match the surrounding code without those spaces leaking into
+the string. Note too that <code>qq</code> heredocs interpolate arbitrary
+code in <code>{ }</code>, exactly as double-quoted strings do (Chapter
+1).</p>
+<h2 id="the-quoting-menagerie">The quoting menagerie</h2>
+<p>Perl has <code>q//</code>, <code>qq//</code>, and <code>qw//</code>.
+Raku keeps all three and adds <code>Q//</code> for a completely raw
+string plus a set of <em>adverbs</em> that let you dial interpolation up
+or down one feature at a time. The three base forms are:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$x</span> = <span class="mi">42</span>;
+<span class="nb">say</span> <span class="s">q/no $x interpolation/</span>;        <span class="c1"># no $x interpolation</span>
+<span class="nb">say</span> <span class="s">qq/with $x/</span>;                   <span class="c1"># with 42</span>
+<span class="nb">say</span> <span class="s">Q/raw: $x and \n stay literal/</span>;<span class="c1"># raw: $x and \n stay literal</span></pre></div>
+
+<p><code>q</code> escapes backslashes but does not interpolate
+variables; <code>qq</code> interpolates; <code>Q</code> does nothing at
+all — no escapes, no interpolation. Adverbs then toggle individual
+behaviours. Two you will actually reach for are <code>:c</code>
+(interpolate <code>{ }</code> closures only) and <code>:w</code> (split
+the result on words, like <code>qw</code>):</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">Q:c/closure {1 + 2} only, but not $x/</span>;     <span class="c1"># closure 3 only, but not $x</span>
+<span class="nb">say</span> <span class="s">Q:w/one two three/</span>;                        <span class="c1"># (one two three)</span></pre></div>
+
+<p>The familiar <code>qw//</code> is really <code>Q:w//</code> under the
+hood, and Raku’s angle-bracket list <code>&lt;...&gt;</code> is the
+everyday shorthand for it:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> &lt;<span class="n">foo</span> <span class="n">bar</span> <span class="n">baz</span>&gt;;                 <span class="c1"># (foo bar baz)</span></pre></div>
+
+<h2 id="unicode-aware-operations">Unicode-aware operations</h2>
+<p>Here is the change that quietly fixes a decade of bugs. In Perl,
+string length depends on whether <code>use utf8</code> is in scope and
+whether you are counting bytes or characters:</p>
+<div class="highlight perl-code"><pre>say length("café");            # 5   without use utf8 (bytes)
+use utf8;
+say length("café");            # 4   with use utf8 (characters)</pre></div>
+<p>Raku strings are sequences of <em>graphemes</em> — what a human calls
+a character — regardless of how many codepoints or bytes encode them.
+<code>.chars</code> counts graphemes, always:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;café&quot;</span>.<span class="nb">chars</span>;              <span class="c1"># 4   (even if é is e + combining accent)</span>
+
+<span class="k">my</span> <span class="nv">$flag</span> = <span class="s">&quot;\c[REGIONAL INDICATOR SYMBOL LETTER G]&quot;</span>
+         ~ <span class="s">&quot;\c[REGIONAL INDICATOR SYMBOL LETTER B]&quot;</span>;
+<span class="nb">say</span> <span class="nv">$flag</span>.<span class="nb">chars</span>;               <span class="c1"># 1   a flag is a single grapheme…</span>
+<span class="nb">say</span> <span class="nv">$flag</span>.<span class="nb">codes</span>;               <span class="c1"># 2   …built from two codepoints</span></pre></div>
+
+<p>Case-mapping is Unicode-correct too, including the tricky cases where
+one letter maps to two:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;naïve&quot;</span>.<span class="nb">uc</span>;                <span class="c1"># NAÏVE</span>
+<span class="nb">say</span> <span class="s">&quot;STRASSE&quot;</span>.<span class="nb">lc</span>;              <span class="c1"># strasse</span>
+<span class="nb">say</span> <span class="s">&quot;ﬁle&quot;</span>.<span class="nb">uc</span>;                  <span class="c1"># FILE   (the fi ligature expands)</span></pre></div>
+
+<p>To move between characters and their codepoint numbers, use
+<code>.ords</code> and <code>.chrs</code> (the plural cousins of
+<code>ord</code> and <code>chr</code>):</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;ABC&quot;</span>.<span class="nb">ords</span>;                <span class="c1"># (65 66 67)</span>
+<span class="nb">say</span> (<span class="mi">72</span>, <span class="mi">105</span>).<span class="nb">chrs</span>;            <span class="c1"># Hi</span></pre></div>
+
+<p>When you need bytes — to write to a socket or a binary file —
+<code>.encode</code> turns a string into a <code>Blob</code> of bytes,
+and <code>.decode</code> turns it back:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$buf</span> = <span class="s">&quot;café&quot;</span>.<span class="n">encode</span>(<span class="s">'UTF-8'</span>);
+<span class="nb">say</span> <span class="nv">$buf</span>.<span class="nb">bytes</span>;                <span class="c1"># 5   (é is two bytes in UTF-8)</span>
+<span class="nb">say</span> <span class="nv">$buf</span>.<span class="n">decode</span>(<span class="s">'UTF-8'</span>);      <span class="c1"># café</span></pre></div>
+
+<p>Finally, normalisation. The same visible text can be stored as a
+single precomposed codepoint (<code>é</code>) or as a base letter plus a
+combining mark (<code>e</code> + <code>◌́</code>). This is the classic
+source of “these two strings look identical but compare unequal” bugs.
+Raku normalises to NFC on the way in, so equality just works, and
+exposes <code>.NFC</code> / <code>.NFD</code> when you need a specific
+form:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$decomposed</span> = <span class="s">&quot;cafe\c[COMBINING ACUTE ACCENT]&quot;</span>;
+<span class="k">my</span> <span class="nv">$composed</span>   = <span class="s">&quot;café&quot;</span>;
+<span class="nb">say</span> <span class="nv">$decomposed</span> <span class="n">eq</span> <span class="nv">$composed</span>;  <span class="c1"># True   (both normalised)</span>
+<span class="nb">say</span> <span class="nv">$composed</span>.<span class="n">NFC</span>.<span class="nb">codes</span>;       <span class="c1"># 4      (precomposed é)</span>
+<span class="nb">say</span> <span class="nv">$decomposed</span>.<span class="n">NFD</span>.<span class="nb">codes</span>;     <span class="c1"># 5      (decomposed é)</span></pre></div>
+
+<p>That grapheme-by-default model is why the string operations in this
+chapter “just work” on international text without a pragma or a second
+thought. With the in-memory side of text handled, the next chapter turns
+to where text usually comes from and goes to: files and I/O.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/text-and-i-o">Text and I/O</a>   |   <a
+href="/raku-books/migrating-to-raku/files-and-io">Files and I/O</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

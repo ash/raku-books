@@ -671,6 +671,31 @@ html[data-theme-active="dark"] .book-select:hover { color: #e6edf3; border-color
    they are easy to spot during review. Invisible impact on a normal build. */
 .highlight.raku.code-flagged { border-left: 3px solid #e3a008; }
 
+/* Perl 5 blocks (```perl) — the "before" half of a migration book. They are
+   never runnable in a Raku playground, so they carry no Run button; a steel-blue
+   left rule and a small label keep them from reading as Raku or as output,
+   the same distinction the printed book draws. */
+.highlight.perl-code {
+    position: relative;
+    border-left: 3px solid #4682b4;
+    padding-top: 1.15em;
+}
+.highlight.perl-code::before {
+    content: "Perl";
+    position: absolute;
+    top: 2px;
+    left: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #4682b4;
+    opacity: .85;
+}
+html[data-theme-active="dark"] .highlight.perl-code { border-left-color: #6aa5d6; }
+html[data-theme-active="dark"] .highlight.perl-code::before { color: #6aa5d6; }
+
 /* Note under a program the in-browser engine can't run yet (```raku-nobrowser).
    Sits directly beneath its code block, quiet and informative. */
 .run-note {

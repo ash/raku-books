@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Operators You Already Know — Raku Books</title>
+    <meta property="og:title" content="Operators You Already Know — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a
+href="/raku-books/migrating-to-raku/operators-and-expressions">Operators and
+Expressions</a></p>
+<h1 id="operators-you-already-know">Operators You Already Know</h1>
+<p>Most of Perl’s operators survive the move to Raku unchanged, or
+nearly so. You can add with <code>+</code>, multiply with
+<code>*</code>, and take a remainder with <code>%</code> exactly as
+before. This chapter is the reassuring one: it walks the operators you
+already carry in your fingers, points out the handful that were renamed
+or tightened, and flags the gotchas that catch Perl programmers out of
+habit. The genuinely new machinery — reductions, hypers, cross and zip —
+waits for Chapter 11.</p>
+<h2 id="arithmetic">Arithmetic</h2>
+<p>The five arithmetic operators are identical in spelling in both
+languages — <code>+</code>, <code>-</code>, <code>*</code>,
+<code>**</code> (exponentiation), and <code>%</code> (remainder):</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">2</span> + <span class="mi">3</span>;      <span class="c1"># 5</span>
+<span class="nb">say</span> <span class="mi">6</span> * <span class="mi">7</span>;      <span class="c1"># 42</span>
+<span class="nb">say</span> <span class="mi">2</span> ** <span class="mi">10</span>;    <span class="c1"># 1024</span>
+<span class="nb">say</span> <span class="mi">17</span> % <span class="mi">5</span>;     <span class="c1"># 2</span></pre></div>
+
+<p>The one to watch is division. In Perl, <code>/</code> gives you a
+floating-point number. In Raku, dividing two integers gives you a
+<code>Rat</code> — an exact fraction — so the result prints as you would
+write it by hand and never drifts:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">7</span> / <span class="mi">2</span>;          <span class="c1"># 3.5</span>
+<span class="nb">say</span> (<span class="mi">7</span> / <span class="mi">2</span>).<span class="n">WHAT</span>;   <span class="c1"># (Rat)</span></pre></div>
+
+<p>Chapter 6 covers the numeric tower in full; here it is enough to know
+that <code>+</code>, <code>-</code>, <code>*</code>, and <code>**</code>
+behave as you expect, and <code>/</code> is quietly more honest.</p>
+<h2 id="string-concatenation-.-becomes">String concatenation:
+<code>.</code> becomes <code>~</code></h2>
+<p>You met this in Chapter 1, but it belongs in any list of operators.
+Perl joins strings with a dot:</p>
+<div class="highlight perl-code"><pre>say 'Hello, ' . 'World!';    # Hello, World!</pre></div>
+<p>In Raku the dot means <em>call a method</em> — uniformly, on
+everything — so concatenation had to move out of the way. It moved to
+the tilde:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'Hello, '</span> ~ <span class="s">'World!'</span>;    <span class="c1"># Hello, World!</span></pre></div>
+
+<p>Think of <code>~</code> as “the string operator” and the association
+will pay off later: the whole string-flavoured family (<code>~=</code>,
+and the bitwise <code>~&amp;</code>, <code>~|</code>, <code>~^</code>
+below) is built on it.</p>
+<h2 id="repetition-x-for-strings-xx-for-lists">Repetition:
+<code>x</code> for strings, <code>xx</code> for lists</h2>
+<p>Perl overloads <code>x</code> for both jobs — repeat a string, or
+repeat a list in list context:</p>
+<div class="highlight perl-code"><pre>say 'ab' x 3;              # ababab
+my @three = (1, 2) x 3;    # (1,2,1,2,1,2)</pre></div>
+<p>Raku splits the two jobs into two operators, which removes the
+context guessing. <code>x</code> always repeats a <em>string</em>;
+<code>xx</code> repeats a <em>list</em>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'ab'</span> <span class="n">x</span> <span class="mi">3</span>;             <span class="c1"># ababab</span>
+<span class="nb">say</span> (<span class="mi">1</span>, <span class="mi">2</span>) <span class="n">xx</span> <span class="mi">3</span>;          <span class="c1"># ((1 2) (1 2) (1 2))</span></pre></div>
+
+<p>Note that <code>xx</code> keeps the structure — you get a list of
+three lists, not a flattened one. That is deliberate; flattening in Raku
+is something you ask for, not something that happens behind your
+back.</p>
+<h2 id="comparison-numeric-versus-string">Comparison: numeric versus
+string</h2>
+<p>The split between numeric and string comparison is exactly as in
+Perl, and the spellings are identical. Numeric: <code>==</code>,
+<code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>,
+<code>&gt;</code>, <code>&gt;=</code>. String: <code>eq</code>,
+<code>ne</code>, <code>lt</code>, <code>le</code>, <code>gt</code>,
+<code>ge</code>.</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">10</span> == <span class="mf">10.0</span>;            <span class="c1"># True</span>
+<span class="nb">say</span> <span class="s">'10'</span> <span class="n">eq</span> <span class="s">'10.0'</span>;        <span class="c1"># False</span>
+<span class="nb">say</span> <span class="s">'apple'</span> <span class="n">lt</span> <span class="s">'banana'</span>;   <span class="c1"># True</span></pre></div>
+
+<p>The one difference you can feel is what a comparison
+<em>returns</em>. Perl hands back <code>1</code> or the empty string;
+Raku returns a proper <code>Bool</code>, either <code>True</code> or
+<code>False</code>.</p>
+<h3 id="three-way-comparison-cmp-and-leg">Three-way comparison:
+<code>&lt;=&gt;</code>, <code>cmp</code>, and <code>leg</code></h3>
+<p>Perl has two spaceships: <code>&lt;=&gt;</code> for numbers and
+<code>cmp</code> for strings, each returning <code>-1</code>,
+<code>0</code>, or <code>1</code>. Raku keeps both names and adds a
+third, <code>leg</code> (mnemonic:
+<strong>l</strong>ess/<strong>e</strong>qual/<strong>g</strong>reater),
+which forces string comparison. The important change is the return
+value: instead of a bare number you get an <code>Order</code> enum —
+<code>Less</code>, <code>Same</code>, or <code>More</code>:</p>
+<div class="highlight perl-code"><pre>say 3 &lt;=&gt; 5;        # -1
+say 'a' cmp 'b';    # -1</pre></div>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">3</span> &lt;=&gt; <span class="mi">5</span>;        <span class="c1"># Less</span>
+<span class="nb">say</span> <span class="s">'a'</span> <span class="n">cmp</span> <span class="s">'b'</span>;    <span class="c1"># Less</span>
+<span class="nb">say</span> <span class="s">'a'</span> <span class="n">leg</span> <span class="s">'b'</span>;    <span class="c1"># Less</span></pre></div>
+
+<p>Here <code>cmp</code> is the smart one — it compares numbers
+numerically and strings as strings — while <code>&lt;=&gt;</code>
+coerces to number and <code>leg</code> coerces to string. The enum sorts
+and stringifies sensibly, so most code that fed a spaceship into
+<code>sort</code> keeps working; only code that did arithmetic on the
+raw <code>-1</code>/<code>0</code>/<code>1</code> needs a second
+look.</p>
+<h2 id="the-ternary-changes-shape">The ternary changes shape:
+<code>?? !!</code></h2>
+<p>This is a pure re-spelling, but a compulsory one. Perl’s
+<code>?:</code> becomes <code>?? !!</code>:</p>
+<div class="highlight perl-code"><pre>my $n = 7;
+say $n % 2 ? 'odd' : 'even';     # odd   (Perl: ? and :)</pre></div>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$n</span> = <span class="mi">7</span>;
+<span class="nb">say</span> <span class="nv">$n</span> % <span class="mi">2</span> ?? <span class="s">'odd'</span> !! <span class="s">'even'</span>;   <span class="c1"># odd</span></pre></div>
+
+<p>Why the doubling? The single <code>?</code> and <code>:</code> were
+needed elsewhere — <code>:</code> in particular now introduces adverbs
+and named arguments — so the conditional operator was given a
+distinctive spelling of its own. Read <code>??</code> as “then” and
+<code>!!</code> as “else”.</p>
+<h2 id="ranges-and-how-to-exclude-an-endpoint">Ranges, and how to
+exclude an endpoint</h2>
+<p>The range operator is still <code>..</code>, and still builds a range
+from both endpoints inclusive:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span> .. <span class="mi">5</span>);       <span class="c1"># 1..5</span>
+<span class="nb">say</span> (<span class="mi">1</span> .. <span class="mi">5</span>).<span class="nb">list</span>;  <span class="c1"># (1 2 3 4 5)</span></pre></div>
+
+<p>What is new is a family of variants that exclude one or both
+endpoints. Put a <code>^</code> on the side you want to drop:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span> ^.. <span class="mi">5</span>).<span class="nb">list</span>;    <span class="c1"># (2 3 4 5)   — exclude the low end</span>
+<span class="nb">say</span> (<span class="mi">1</span> ..^ <span class="mi">5</span>).<span class="nb">list</span>;    <span class="c1"># (1 2 3 4)   — exclude the high end</span>
+<span class="nb">say</span> (<span class="mi">1</span> ^..^ <span class="mi">5</span>).<span class="nb">list</span>;   <span class="c1"># (2 3 4)     — exclude both</span></pre></div>
+
+<p>And a <code>^</code> as a <em>prefix</em> gives you the extremely
+common “zero up to but not including N” range, perfect for indexing:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (^<span class="mi">5</span>).<span class="nb">list</span>;         <span class="c1"># (0 1 2 3 4)</span>
+.<span class="nb">say</span> <span class="k">for</span> ^<span class="mi">3</span>;           <span class="c1"># 0 1 2  (each on its own line)</span></pre></div>
+
+<p><code>^5</code> is Raku’s answer to Perl’s
+<code>for (0 .. $#array)</code> and <code>for (0 .. @a - 1)</code> — the
+off-by-one bookkeeping disappears.</p>
+<h2 id="chained-comparisons">Chained comparisons</h2>
+<p>Older Perl read <code>1 &lt; $x &lt; 10</code> the wrong way: it
+evaluated <code>1 &lt; $x</code> first, got a boolean, then compared
+<em>that</em> to <code>10</code>. Modern Perl chains comparisons the way
+mathematics does:</p>
+<div class="highlight perl-code"><pre>use v5.32;
+
+my $x = 5;
+say "in range" if 1 &lt; $x &lt; 10;      # in range</pre></div>
+<p>and so does Raku:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$x</span> = <span class="mi">5</span>;
+<span class="nb">say</span> <span class="mi">1</span> &lt; <span class="nv">$x</span> &lt; <span class="mi">10</span>;      <span class="c1"># True</span>
+<span class="nb">say</span> <span class="mi">1</span> &lt; <span class="mi">20</span> &lt; <span class="mi">10</span>;      <span class="c1"># False</span></pre></div>
+
+<p>Each term is evaluated once and each neighbouring pair is compared,
+with an implicit <code>and</code> between them. You can mix operators
+too: <code>0 &lt;= $i &lt; @a.elems</code> reads exactly as intended.
+This alone retires a lot of fiddly two-part conditions.</p>
+<h2 id="increment-decrement-and-magic-strings">Increment, decrement, and
+magic strings</h2>
+<p><code>++</code> and <code>--</code> work as before, in both prefix
+and postfix positions. Raku also keeps Perl’s delightful <em>magic
+string increment</em>, where <code>++</code> on an alphanumeric string
+carries like an odometer:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$s</span> = <span class="s">'aa'</span>;  <span class="nv">$s</span>++;  <span class="nb">say</span> <span class="nv">$s</span>;    <span class="c1"># ab</span>
+<span class="k">my</span> <span class="nv">$s2</span> = <span class="s">'Az'</span>; <span class="nv">$s2</span>++; <span class="nb">say</span> <span class="nv">$s2</span>;   <span class="c1"># Ba</span>
+<span class="k">my</span> <span class="nv">$s3</span> = <span class="s">'a9'</span>; <span class="nv">$s3</span>++; <span class="nb">say</span> <span class="nv">$s3</span>;   <span class="c1"># b0</span>
+<span class="k">my</span> <span class="nv">$s4</span> = <span class="s">'zz'</span>; <span class="nv">$s4</span>++; <span class="nb">say</span> <span class="nv">$s4</span>;   <span class="c1"># aaa</span></pre></div>
+
+<p>The rules match Perl: it increments within <code>a-z</code>,
+<code>A-Z</code>, and <code>0-9</code>, carrying into the next position
+and growing the string when the leftmost character rolls over.</p>
+<h2 id="assignment-operators">Assignment operators</h2>
+<p>Every binary operator gets a matching assignment form, just as in
+Perl, and they compose from the operators above. The only ones that
+<em>look</em> different are the ones whose base operator was
+renamed:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$a</span> = <span class="mi">10</span>;  <span class="nv">$a</span> += <span class="mi">5</span>;   <span class="nb">say</span> <span class="nv">$a</span>;    <span class="c1"># 15</span>
+<span class="k">my</span> <span class="nv">$s</span> = <span class="s">'x'</span>; <span class="nv">$s</span> ~= <span class="s">'y'</span>; <span class="nb">say</span> <span class="nv">$s</span>;    <span class="c1"># xy   (was .= in Perl)</span>
+<span class="k">my</span> <span class="nv">$m</span> = <span class="mi">2</span>;   <span class="nv">$m</span> **= <span class="mi">3</span>;  <span class="nb">say</span> <span class="nv">$m</span>;    <span class="c1"># 8</span>
+<span class="k">my</span> <span class="nv">$p</span> = <span class="mi">3</span>;   <span class="nv">$p</span> <span class="n">x</span>= <span class="mi">3</span>;   <span class="nb">say</span> <span class="nv">$p</span>;    <span class="c1"># 333</span></pre></div>
+
+<p>If you catch yourself typing <code>.=</code> for string append, that
+is muscle memory from Perl; the Raku form is <code>~=</code>.</p>
+<h2 id="defined-or">Defined-or: <code>//</code></h2>
+<p>The defined-or operator survives intact — indeed it was another idea
+Perl borrowed back from the Raku design. It returns its left operand if
+that operand is defined, and the right one otherwise:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$config</span>;
+<span class="nb">say</span> <span class="nv">$config</span> // <span class="s">'default'</span>;    <span class="c1"># default</span></pre></div>
+
+<p>Its assignment form <code>//=</code> is just as useful for “set this
+only if it has no value yet”. Because Raku distinguishes defined from
+merely-false values cleanly, <code>//</code> is usually what you want
+over <code>||</code> when a legitimate <code>0</code> or <code>''</code>
+must survive.</p>
+<h2 id="boolean-logic">Boolean logic</h2>
+<p>Both the symbolic operators (<code>&amp;&amp;</code>,
+<code>||</code>, <code>!</code>) and the low-precedence word forms
+(<code>and</code>, <code>or</code>, <code>not</code>, <code>xor</code>)
+carry over unchanged. As in Perl they short-circuit and return the
+deciding operand, not a coerced boolean:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="n">True</span> &amp;&amp; <span class="n">False</span>;   <span class="c1"># False</span>
+<span class="nb">say</span> <span class="mi">0</span> || <span class="mi">7</span>;          <span class="c1"># 7   (returns the operand, not just True)</span>
+<span class="nb">say</span> (<span class="mi">5</span> <span class="k">and</span> <span class="mi">6</span>);       <span class="c1"># 6</span></pre></div>
+
+<p>The precedence relationship is the same trap it always was:
+<code>and</code>/<code>or</code> bind looser than <code>=</code>, which
+is exactly why they are handy for flow control and dangerous in
+assignments.</p>
+<h2 id="bitwise-operators-are-renamed-and-typed">Bitwise operators are
+renamed and typed</h2>
+<p>Here is the one family that changed spelling wholesale. In Perl the
+bitwise operators are <code>&amp;</code>, <code>|</code>,
+<code>^</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code>, and they
+quietly switch between numeric and string behaviour depending on their
+operands — a long-standing source of subtle bugs. Raku removes the
+guesswork by giving each <em>type</em> its own prefixed set.</p>
+<p>Numeric bitwise operators take a <code>+</code> prefix:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">5</span> +&amp; <span class="mi">3</span>;     <span class="c1"># 1</span>
+<span class="nb">say</span> <span class="mi">5</span> +| <span class="mi">2</span>;     <span class="c1"># 7</span>
+<span class="nb">say</span> <span class="mi">5</span> +^ <span class="mi">1</span>;     <span class="c1"># 4    (xor)</span>
+<span class="nb">say</span> <span class="mi">1</span> +&lt; <span class="mi">4</span>;     <span class="c1"># 16   (left shift)</span>
+<span class="nb">say</span> <span class="mi">16</span> +&gt; <span class="mi">2</span>;    <span class="c1"># 4    (right shift)</span></pre></div>
+
+<p>String bitwise operators take a <code>~</code> prefix (the string
+sigil again), operating on characters:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">'a'</span> ~| <span class="s">'b'</span>;   <span class="c1"># c</span></pre></div>
+
+<p>And boolean bitwise operators take a <code>?</code> prefix, returning
+a <code>Bool</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="n">True</span> ?&amp; <span class="n">False</span>;   <span class="c1"># False</span>
+<span class="nb">say</span> <span class="n">True</span> ?| <span class="n">False</span>;   <span class="c1"># True</span>
+<span class="nb">say</span> <span class="n">True</span> ?^ <span class="n">True</span>;    <span class="c1"># False</span></pre></div>
+
+<p>You will not reach for these often, but when you do, the prefix tells
+you — and the reader — exactly which interpretation you meant. No more
+<code>use integer</code> or accidental string-wise
+<code>&amp;</code>.</p>
+<h2 id="a-first-look-at-smartmatch">A first look at smartmatch:
+<code>~~</code></h2>
+<p>Perl’s smartmatch was famously unpredictable and ended up marked
+experimental. Raku rebuilt it on a clear rule: <code>$x ~~ $y</code>
+asks “does <code>$x</code> match <code>$y</code>?”, and it is <em>the
+right operand</em> that decides what “match” means. Against a type it is
+a type check; against a range, membership; against a regex, a pattern
+match:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">5</span> ~~ <span class="nb">Int</span>;        <span class="c1"># True</span>
+<span class="nb">say</span> <span class="mi">5</span> ~~ <span class="mi">1</span>.<span class="mf">.10</span>;      <span class="c1"># True</span>
+<span class="nb">say</span> <span class="s">'foo'</span> ~~ <span class="sr">/o/</span>;    <span class="c1"># ｢o｣   (the matched text)</span>
+<span class="nb">say</span> <span class="mi">5</span> ~~ <span class="mi">6</span>;          <span class="c1"># False</span></pre></div>
+
+<p>That is only a taste — smartmatch is the engine behind
+<code>given</code>/<code>when</code>, and it gets its full treatment in
+Chapter 13.</p>
+<p>With the familiar operators behind us — the ones you mostly already
+know — we can turn to the part of Raku that has no Perl equivalent at
+all: the meta-operators and the new operators built on top of everything
+here. That is Chapter 11.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/operators-and-expressions">Operators
+and Expressions</a>   |   <a href="/raku-books/migrating-to-raku/new-operators">New
+Operators and Meta-operators</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

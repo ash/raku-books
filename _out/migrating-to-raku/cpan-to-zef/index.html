@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>CPAN to zef, and Mixing Languages — Raku Books</title>
+    <meta property="og:title" content="CPAN to zef, and Mixing Languages — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a
+href="/raku-books/migrating-to-raku/modules-and-the-ecosystem">Modules and the
+Ecosystem</a></p>
+<h1 id="cpan-to-zef-and-mixing-languages">CPAN to zef, and Mixing
+Languages</h1>
+<p>Perl’s greatest asset was never the language — it was CPAN, and the
+<code>cpan</code> and <code>cpanm</code> clients that made “there is a
+module for that” a reflex. Raku has its own ecosystem, its own
+installer, and its own distribution format. This chapter maps the muscle
+memory across: where the modules live, how you install them, what a
+distribution looks like on disk, and how you publish your own. Then,
+because you do not have to throw CPAN away, it shows how to call Perl —
+and C — straight from Raku.</p>
+<h2 id="the-installer-cpanm-becomes-zef">The installer:
+<code>cpanm</code> becomes <code>zef</code></h2>
+<p>Where you reach for <code>cpanm</code> in Perl, you reach for
+<code>zef</code> in Raku. It ships with Rakudo Star and the common
+distributions, so <code>which zef</code> should already find it. The
+verbs line up almost one for one:</p>
+<div class="highlight"><pre>$ cpanm Some::Module           # Perl
+$ zef install Some::Module     # Raku</pre></div>
+<p><code>zef</code> does rather more than install. The subcommands you
+will use most:</p>
+<div class="highlight"><pre>$ zef install Cro::HTTP        # download, build, test, and install
+$ zef uninstall Cro::HTTP      # remove it again
+$ zef test .                   # run the tests of the distribution in .
+$ zef search JSON              # find distributions matching a term
+$ zef info JSON::Fast          # show metadata for one distribution
+$ zef upgrade                  # upgrade installed distributions
+$ zef update                   # refresh the package indexes (like cpan's index)</pre></div>
+<p>Unlike <code>cpanm</code>, <code>zef</code> runs a distribution’s
+full test suite by default before installing, and refuses to install if
+the tests fail — so a green install really means “it passed its tests on
+your machine”.</p>
+<h2 id="where-the-modules-live">Where the modules live</h2>
+<p>CPAN is a single index served by many mirrors. The Raku world
+settled, after some history, on a different arrangement. Modules are
+published to the <strong><code>fez</code>/zef ecosystem</strong> (the
+<code>fez</code> uploader pushes to a service that <code>zef</code>
+reads), and you browse the whole catalogue at
+<strong>raku.land</strong>, the modern equivalent of MetaCPAN. Older
+modules still resolve through the CPAN-backed and GitHub-backed indexes,
+and <code>zef</code> knows how to search all of them, so from your side
+it is one command regardless of where a given module physically
+lives.</p>
+<p>One point of reassurance for the Perl programmer: <strong>CPAN itself
+is not off limits.</strong> Later in this chapter we call Perl modules
+directly, so the tens of thousands of mature CPAN distributions remain
+within reach from Raku.</p>
+<h2 id="a-distribution-on-disk">A distribution on disk</h2>
+<p>A Perl distribution is described by a <code>Makefile.PL</code> or
+<code>dist.ini</code> and a <code>MANIFEST</code>. A Raku distribution
+is described by a single JSON file,
+<strong><code>META6.json</code></strong>, at the root. A minimal one
+looks like this:</p>
+<div class="highlight"><pre>{
+  "name"       : "Greeting",
+  "version"    : "1.0.0",
+  "auth"       : "zef:andrew",
+  "description": "A friendly greeter",
+  "provides"   : {
+    "Greeting" : "lib/Greeting.rakumod"
+  },
+  "depends"    : [ "JSON::Fast" ],
+  "license"    : "Artistic-2.0"
+}</pre></div>
+<p>The important fields:</p>
+<ul>
+<li><strong><code>name</code></strong> and
+<strong><code>version</code></strong> — the identity of the
+distribution, matching the <code>:ver</code> machinery from Chapter
+24.</li>
+<li><strong><code>provides</code></strong> — a map from each module’s
+<em>name</em> to the <em>file</em> that implements it. This is what lets
+<code>use Greeting;</code> find <code>lib/Greeting.rakumod</code>. There
+is no separate <code>MANIFEST</code> to keep in sync;
+<code>provides</code> is the manifest.</li>
+<li><strong><code>depends</code></strong> — the list of other
+distributions to install first, the counterpart of
+<code>PREREQ_PM</code> / <code>requires</code>.</li>
+</ul>
+<p>The surrounding directory layout will feel entirely familiar, because
+it mirrors CPAN convention:</p>
+<div class="highlight"><pre>Greeting/
+├── META6.json
+├── lib/
+│   └── Greeting.rakumod      # the module(s), named per provides
+├── t/
+│   └── 01-basic.rakutest     # tests, run by `zef test .`
+└── bin/
+    └── greet                 # installable command-line scripts</pre></div>
+<p><code>lib/</code> holds modules, <code>t/</code> holds tests
+(<code>zef test .</code> runs them), and anything in <code>bin/</code>
+is installed onto the user’s <code>PATH</code> — the equivalent of a
+Perl distribution’s <code>script/</code> or <code>bin/</code>.</p>
+<h2 id="publishing-with-fez">Publishing with <code>fez</code></h2>
+<p>Uploading is deliberately undramatic. Install the uploader, register
+a username once, then push from the distribution root:</p>
+<div class="highlight"><pre>$ zef install fez
+$ fez register        # one-time: claim a username (your :auth)
+$ fez login
+$ fez upload          # from the directory containing META6.json</pre></div>
+<p><code>fez upload</code> bundles the files listed by
+<code>provides</code> (and the rest of the distribution), checks the
+<code>META6.json</code>, and publishes to the ecosystem, where
+<code>zef</code> users can find it within minutes. The username you
+registered becomes your <code>auth</code> string,
+<code>zef:yourname</code> — the authority we met in Chapter 24. Compared
+with the PAUSE/CPAN upload dance, there is markedly less ceremony.</p>
+<h2 id="mixing-languages-calling-perl-from-raku">Mixing languages:
+calling Perl from Raku</h2>
+<p>You do not have to port a working Perl module to use it from Raku.
+The <code>Inline::Perl5</code> module embeds a real Perl interpreter in
+your Raku process and bridges values across the boundary:</p>
+<div class="highlight"><pre>$ zef install Inline::Perl5</pre></div>
+<p>Once installed, you can load a Perl module by name and call it as
+though it were Raku. Here we borrow <code>Text::Wrap</code> straight off
+CPAN:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Text::Wrap</span>:<span class="n">from</span><span class="s">&lt;Perl5&gt;</span>;             <span class="c1"># a Perl module, used from Raku</span>
+
+<span class="k">my</span> <span class="nv">$wrapped</span> = <span class="n">Text::Wrap::wrap</span>(<span class="s">''</span>, <span class="s">''</span>, <span class="s">'a rather long line to fold'</span>);
+<span class="nb">say</span> <span class="nv">$wrapped</span>;</pre></div>
+
+<p>The <code>:from&lt;Perl5&gt;</code> adverb on <code>use</code> is the
+whole trick: it tells Raku to route the load through the embedded Perl
+rather than the Raku ecosystem. Object-oriented CPAN modules work too —
+methods, constructors and all:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">DBI</span>:<span class="n">from</span><span class="s">&lt;Perl5&gt;</span>;
+
+<span class="k">my</span> <span class="nv">$dbh</span> = <span class="n">DBI</span>.<span class="n">connect</span>(<span class="s">'dbi:SQLite:dbname=test.db'</span>, <span class="s">''</span>, <span class="s">''</span>);
+<span class="nv">$dbh</span>.<span class="n">do</span>(<span class="s">'CREATE TABLE IF NOT EXISTS t (n INT)'</span>);</pre></div>
+
+<p>You can also run Perl source inline, which is handy for a one-off
+helper without its own file:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">use</span> <span class="n">Inline::Perl5</span>;
+
+<span class="k">my</span> <span class="nv">$p5</span> = <span class="n">Inline::Perl5</span>.<span class="nb">new</span>;
+<span class="nv">$p5</span>.<span class="nb">run</span>(<span class="s">q:to/PERL/</span>);
+    <span class="k">sub</span> <span class="n">add</span> { <span class="nv">$_</span>[<span class="mi">0</span>] + <span class="nv">$_</span>[<span class="mi">1</span>] }
+    <span class="n">PERL</span>
+<span class="nb">say</span> <span class="nv">$p5</span>.<span class="n">call</span>(<span class="s">'add'</span>, <span class="mi">20</span>, <span class="mi">22</span>);    <span class="c1"># 42</span></pre></div>
+
+<p>Values cross the bridge automatically: Raku strings and numbers
+arrive as Perl scalars, Perl return values come back as Raku objects. It
+is not free — every call hops between two runtimes — but for reusing a
+battle-tested CPAN module while you migrate, it is often exactly the
+right trade.</p>
+<h2 id="a-teaser-calling-c-with-nativecall">A teaser: calling C with
+<code>NativeCall</code></h2>
+<p>When the library you want is not Perl at all but a plain C shared
+library, Raku has a second bridge built into the core:
+<code>NativeCall</code>. There is no glue code to compile — you declare
+the C function’s signature in Raku and mark it
+<code>is native</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">use</span> <span class="n">NativeCall</span>;
+
+<span class="k">sub</span> <span class="n">strlen</span>(<span class="nb">Str</span> <span class="k">is</span> <span class="n">encoded</span>(<span class="s">'utf8'</span>) --&gt; <span class="n">size_t</span>) <span class="k">is</span> <span class="n">native</span> {*}
+<span class="nb">say</span> <span class="n">strlen</span>(<span class="s">&quot;hello&quot;</span>);     <span class="c1"># 5</span></pre></div>
+
+<p>The empty <code>{*}</code> body means “the real implementation lives
+in the native library”. Types such as <code>int32</code>,
+<code>num64</code>, <code>size_t</code>, <code>Pointer</code>, and
+<code>CArray</code> map Raku values onto their C counterparts, so you
+can bind to <code>libc</code>, <code>libssl</code>, or your own
+<code>.so</code> / <code>.dylib</code> without writing a line of XS.
+This is Raku’s replacement for the whole XS toolchain — a big topic, and
+one worth a book of its own; here it is enough to know the door exists
+and is easy to open.</p>
+<p>Between <code>zef</code> for pure-Raku modules,
+<code>Inline::Perl5</code> for the CPAN back-catalogue, and
+<code>NativeCall</code> for C, very little is genuinely out of reach.
+With the ecosystem behind us, Part X turns to writing <em>robust</em>
+Raku — starting, in Chapter 26, with how errors, exceptions, and
+failures work once <code>die</code>/<code>eval</code> give way to
+<code>try</code> and typed exceptions.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/modules-and-exporting">Modules,
+Packages, and Exporting</a>   |   <a
+href="/raku-books/migrating-to-raku/robust-and-modern-raku">Robust and Modern
+Raku</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

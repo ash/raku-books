@@ -1,0 +1,3072 @@
+{
+ "book": "Migrating to Raku",
+ "slug": "migrating-to-raku",
+ "verdicts": [
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "How This Book Works",
+   "url": "/migrating-to-raku/how-this-book-works",
+   "first": "say 'Hello, World!';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "say 'Hello, World!';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "say 'Hello, World!'"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "my $name = 'John';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "my $name = 'John';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "'Hello, World!'.say;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "'Hello, World!'.uc.say;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "my $name = prompt('What is your name? ');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "say \"Hello, {prompt('What is your name? ')}!\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "say \"Hello, {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "say('Hello, World!');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "say('Hello, ', 'World!');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "say ('Hello, ', 'World!');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "my $\u03cc\u03bd\u03bf\u03bc\u03b1 = 'John';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "my $first-name = 'John';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hello, World!",
+   "url": "/migrating-to-raku/hello-world",
+   "first": "my $don't = 'Do not!';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The Big Picture",
+   "url": "/migrating-to-raku/big-picture",
+   "first": "my @colours = 'red', 'green', 'blue';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The Big Picture",
+   "url": "/migrating-to-raku/big-picture",
+   "first": "say 42.sqrt;              # 6.48074069840786"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The Big Picture",
+   "url": "/migrating-to-raku/big-picture",
+   "first": "say 42.WHAT;              # (Int)"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "The Big Picture",
+   "url": "/migrating-to-raku/big-picture",
+   "first": "my $x = 5;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "The Big Picture",
+   "url": "/migrating-to-raku/big-picture",
+   "first": "my Int $count = 5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The Big Picture",
+   "url": "/migrating-to-raku/big-picture",
+   "first": "say 0.1 + 0.2;                  # 0.3"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The Big Picture",
+   "url": "/migrating-to-raku/big-picture",
+   "first": "say 2 ** 100;                   # 1267650600228229401496703205376"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "The Big Picture",
+   "url": "/migrating-to-raku/big-picture",
+   "first": "say 'Hello, World!';"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Scalars and Sigils",
+   "url": "/migrating-to-raku/scalars-and-sigils",
+   "first": "my  $x = 10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Scalars and Sigils",
+   "url": "/migrating-to-raku/scalars-and-sigils",
+   "first": "sub counter {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Scalars and Sigils",
+   "url": "/migrating-to-raku/scalars-and-sigils",
+   "first": "my $a = 5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Scalars and Sigils",
+   "url": "/migrating-to-raku/scalars-and-sigils",
+   "first": "my $number = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Scalars and Sigils",
+   "url": "/migrating-to-raku/scalars-and-sigils",
+   "first": "my $*greeting = 'Hi';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Scalars and Sigils",
+   "url": "/migrating-to-raku/scalars-and-sigils",
+   "first": "say $?FILE;     # /path/to/your/program.raku"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Scalars and Sigils",
+   "url": "/migrating-to-raku/scalars-and-sigils",
+   "first": "constant PI = 3.14159;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Scalars and Sigils",
+   "url": "/migrating-to-raku/scalars-and-sigils",
+   "first": "my \\answer = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Scalars and Sigils",
+   "url": "/migrating-to-raku/scalars-and-sigils",
+   "first": "for 1, 2, 3 { .say }        # .say means $_.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "say (1, 2, 3).WHAT;      # (List)"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my $list = (1, 2, 3);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @a = 10, 20, 30, 40, 50;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "say @a[*-2];             # 40"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @a = 10, 20, 30, 40, 50;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @s = 1..10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "say (@a, @b).flat.elems;     # 6"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @flat = 1, |@a, 5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my $sl = slip(4, 5);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @a = 10, 20, 30, 40, 50;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @n = 3, 11, 2, 100, 1;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "say @n.sort: { $^b <=> $^a };    # (100 11 3 2 1)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @n = 3, 11, 2, 100, 1;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "say (1..5).map(* * 2).WHAT;      # (Seq)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "say (1..Inf).head(3);            # (1 2 3)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %ages = Alice => 30, Bob => 25;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "say %ages<Alice>;        # 30"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %ages = Alice => 30, Bob => 25;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %h = %(one => 1, two => 2);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %from = <a 1 b 2 c 3>;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my $p = 'x' => 10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %h = apple => 3, banana => 5, cherry => 2;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "for %h.kv -> $k, $v {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "for %h.pairs.sort -> $pair {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %h = apple => 3, banana => 5, cherry => 2;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "say %h<banana>:v;        # 5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %tree;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %count;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %h is default(0);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my %scores{Str};"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my $s = <apple banana cherry>.Set;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Hashes",
+   "url": "/migrating-to-raku/hashes",
+   "first": "my $a = <a b c>.Set;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 2 ** 100;             # 1267650600228229401496703205376"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 0.1 + 0.2;            # 0.3"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "my $r = 1 / 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 1 / 3;               # 0.333333"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 7 / 2;               # 3.5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 7 div 2;             # 3"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 1e10;                # 10000000000"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 2.sqrt;              # 1.4142135623730951"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 2 + 3i;              # 2+3i"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "my $f = 1.FatRat / 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 0xff;                # 255"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say :16<dead_beef>;      # 3735928559"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 1_000_000;           # 1000000"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say (1 / 3 + 1 / 6).nude;   # (1 2)   \u2014 exactly one half"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say \"3.14\".Rat;          # 3.14"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say +\"42\";               # 42"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say +\"0xff\";             # 255      (Perl's 0 + \"0xff\" is 0)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 5 ~ 3;               # 53   (string context)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say (-5).abs;            # 5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Numbers",
+   "url": "/migrating-to-raku/numbers",
+   "first": "say 10 ** -3;            # 0.001"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "my $greeting = 'Hello, ' ~ 'World!';   # Hello, World!"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say '-' x 10;            # ----------"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"caf\u00e9\".chars;        # 4"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"Hello\".substr(1, 3);    # ell"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"hello world\".comb(/\\w+/);   # (hello world)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"h\u00c9LLo\".uc;          # H\u00c9LLO"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"STRASSE\".fc eq \"stra\u00dfe\".fc;   # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"  hi  \".trim;                 # hi"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"hello\".index(\"l\");      # 2"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"hello\".contains(\"ell\");     # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"a,b,c\".split(\",\");      # (a b c)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"hello\".subst(\"l\", \"L\");         # heLlo   (first only)"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say q{it's a 'test'};                # it's a 'test'"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"Sum is { 1 + 2 + 3 }\";          # Sum is 6"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "my $name = \"alice\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "my $g = \"q\\x[323]\\x[301]\";   # q\u0323\u0301  \u2014 one grapheme, three codepoints"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"abc\".ords;          # (97 98 99)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"apple\" lt \"banana\";     # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Strings",
+   "url": "/migrating-to-raku/strings",
+   "first": "say \"apple\" leg \"banana\";    # Less"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my $x = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my $arr  = [1, 2, 3];"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my $a = 5;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my $c := 10;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my $c = \\(1, 2, foo => 3);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "for (1, 2, 3) { .say }    # three lines: 1, 2, 3"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "say ((1, 2), (3, 4)).flat;   # (1 2 3 4)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my @d = 1, Empty, 2;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "sub items { 1, 2, 3 }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my @a = 10, 20, 30;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "References, Containers, and Context",
+   "url": "/migrating-to-raku/references-and-context",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "my $x = 5;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "my Int $n = 5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "my Int $n;  say $n.raku;    # Int"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "say Int.WHAT;         # (Int)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "my Int $x;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "my Int:U $t = Int;    # a type object, fine"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "my Int:D $y;          # compile error:"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "say Int.^mro;         # ((Int) (Cool) (Any) (Mu))"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "say 42 ~~ Any;        # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "my Int $z = 5;"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "my $j = 1 | 2 | 3;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "subset Even of Int where * %% 2;    # %% is \"divisible by\""
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "subset Positive of Real where * > 0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "my Int(Str) $n = '42';"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "sub floorish(--> Int()) { 3.7 }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "say 42   ~~ Int;      # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "enum Suit <hearts diamonds clubs spades>;"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "constant PI = 3.14159;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "sub factorial(Int $n where * >= 0) { [*] 1 .. $n }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Types and the Type System",
+   "url": "/migrating-to-raku/types",
+   "first": "multi greet(Int $x) { \"an integer: $x\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say 2 + 3;      # 5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say 7 / 2;          # 3.5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say 'Hello, ' ~ 'World!';    # Hello, World!"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say 'ab' x 3;             # ababab"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say 10 == 10.0;            # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say 3 <=> 5;        # Less"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "my $n = 7;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say (1 .. 5);       # 1..5"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say (1 ^.. 5).list;    # (2 3 4 5)   \u2014 exclude the low end"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say (^5).list;         # (0 1 2 3 4)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "my $x = 5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "my $s = 'aa';  $s++;  say $s;    # ab"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "my $a = 10;  $a += 5;   say $a;    # 15"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "my $config;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say True && False;   # False"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say 5 +& 3;     # 1"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say 'a' ~| 'b';   # c"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say True ?& False;   # False"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Operators You Already Know",
+   "url": "/migrating-to-raku/operators-you-know",
+   "first": "say 5 ~~ Int;        # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say [1, 2, 3] eqv [1, 2, 3];       # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say 42 === 42;             # True"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "my $x = 5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say sqrt(2) ** 2 == 2;     # False   (it is 2.0000000000000004)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "my @a = 1, 2, 3, 4, 5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say [*] 1..5;             # 120   (factorial of 5)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say [<] 1, 2, 3;          # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say (1, 2, 3) \u00bb+\u00ab (10, 20, 30);            # (11 22 33)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say <hello world>\u00bb.tc;       # (Hello World)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say <a b> X <1 2>;           # ((a 1) (a 2) (b 1) (b 2))"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say <a b> X~ <1 2>;          # (a1 a2 b1 b2)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say <a b c> Z <1 2 3>;       # ((a 1) (b 2) (c 3))"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "my @prices = 10, 20, 30;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say (1, 2, 4 ... 256);       # (1 2 4 8 16 32 64 128 256)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say (1, 1, * + * ... *)[^10];   # (1 1 2 3 5 8 13 21 34 55)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "1..10 ==> grep(* %% 2) ==> map(* ** 2) ==> my @result;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "my @result;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say (1, 2, 3).map(* + 1);                  # (2 3 4)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say 5 != 6;                # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "New Operators and Meta-operators",
+   "url": "/migrating-to-raku/new-operators",
+   "first": "say 10 R- 3;               # -7   (computes 3 - 10)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $n = 7;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "unless $n > 10 { say 'not big' }   # not big"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "unless 1 > 2 { say 'ok' } else { say 'never' }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $i = 0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $i = 0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $i = 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "loop (my $j = 0; $j < 3; $j++) { print $j }  # 012"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $count = 0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my @a = 10, 20, 30;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "for 1..3 { .say }        # .say means $_.say"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my @a = 10, 20, 30;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "for @a <-> $x { $x++ }   # each element aliased read-write"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my @pairs = 1, 2, 3, 4;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $tries = 0;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "LINES: for @matrix -> @row {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": ".say for 1..3;           # 1 2 3, each on its own line"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $r = do { my $t = 2 + 3; $t * 2 };"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $x = 5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my @squares = do for 1..3 { $_ * $_ };"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $k = 5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my $m = 0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "given/when and Topicalization",
+   "url": "/migrating-to-raku/given-when",
+   "first": "given 'Hello, World!' {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "given/when and Topicalization",
+   "url": "/migrating-to-raku/given-when",
+   "first": "sub grade($score) {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "given/when and Topicalization",
+   "url": "/migrating-to-raku/given-when",
+   "first": "sub describe($x) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "given/when and Topicalization",
+   "url": "/migrating-to-raku/given-when",
+   "first": "given 42 {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "given/when and Topicalization",
+   "url": "/migrating-to-raku/given-when",
+   "first": "sub classify($n) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "given/when and Topicalization",
+   "url": "/migrating-to-raku/given-when",
+   "first": "for 1, 'two', 3.0, [4] {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "given/when and Topicalization",
+   "url": "/migrating-to-raku/given-when",
+   "first": "my $size = do given 1024 {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Phasers",
+   "url": "/migrating-to-raku/phasers",
+   "first": "say 'program body starts';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Phasers",
+   "url": "/migrating-to-raku/phasers",
+   "first": "sub work {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Phasers",
+   "url": "/migrating-to-raku/phasers",
+   "first": "sub risky($ok) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Phasers",
+   "url": "/migrating-to-raku/phasers",
+   "first": "for 1..3 {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Phasers",
+   "url": "/migrating-to-raku/phasers",
+   "first": "sub sqrt-positive($n) {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Phasers",
+   "url": "/migrating-to-raku/phasers",
+   "first": "BEGIN say 'BEGIN  compile time';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub add($a, $b) { $a + $b }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub square(Int $n) { $n * $n }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub maybe($x?) { $x.defined ?? \"got $x\" !! \"nothing\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub greet($name, $greeting = 'Hello') { \"$greeting, $name!\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub connect(:$host!, :$port = 80) { \"$host:$port\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "my $port = 22;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub log-it(:message($text)) { \"LOG: $text\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub total(*@nums) { [+] @nums }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub flat(*@a)     { @a.elems }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub incr($x is rw) { $x++ }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub tweak($x is copy) { $x++; $x }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub pi(--> Rat) { 3.14 }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub bad(--> Int) { \"x\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub first-rest(@a [$first, *@rest]) { \"first=$first rest=@rest[]\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub point(:$x, :$y) { \"($x, $y)\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub inspect(|c) { c.list.elems ~ \" pos, \" ~ c.hash.elems ~ \" named\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub inner($a, $b) { $a + $b }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From @_ to Signatures",
+   "url": "/migrating-to-raku/signatures",
+   "first": "sub old-style { @_.join(\", \").say }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "multi greet(Str $s) { \"string: $s\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "multi describe($a)     { \"one: $a\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "multi describe(Array $a) { \"array of {$a.elems}\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "proto process(|) {*}"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "multi tag(Int $n)             { \"any int: $n\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "multi fact(0)      { 1 }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "multi fib(0)      { 0 }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "multi handle(Int:D $n) { \"defined int $n\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "multi pick(Int $n)      { \"int $n\" }"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "multi f(Int $a, $b) { \"a\" }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Multiple Dispatch",
+   "url": "/migrating-to-raku/multiple-dispatch",
+   "first": "class Circle    { has $.r }"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "sub make-counter($start) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "my $add = -> $a, $b { $a + $b };"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "my $sq = { $_ ** 2 };"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "my $combine = { \"$^first-$^second\" };"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "my &double = -> $n { $n * 2 };"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "sub apply(&code, $val) { code($val) }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "my $inc = * + 1;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "say (1..5).map(* ** 2).join(',');   # 1,4,9,16,25"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "sub power($base, $exp) { $base ** $exp }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "my $ticker = { state $n = 0; ++$n };"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Closures and Blocks",
+   "url": "/migrating-to-raku/closures-and-blocks",
+   "first": "say (1..10).grep(* %% 2).join(',');           # 2,4,6,8,10"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"the cat sat\" ~~ / cat /;      # \uff62cat\uff63  \u2014 the spaces are ignored"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"the cat sat\" ~~ / \"cat sat\" /;   # \uff62cat sat\uff63"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"the cat sat\" ~~ / c a t /;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "if \"abc123\" ~~ m/(\\d+)/ { say \"found $0\" }    # found 123"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "my $m = \"hello world\".match(/(\\w+) \\s (\\w+)/);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "if \"abcdef\" ~~ /cd/ {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "if \"2026-07-09\" ~~ /(\\d+)\\-(\\d+)\\-(\\d+)/ {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "if \"John Smith\" ~~ / $<first>=(\\w+) \\s $<last>=(\\w+) / {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"hello\" ~~ /<[a..z]>+/;      # \uff62hello\uff63"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say (\"abc123\" ~~ /<digit>+/).Str;      # 123"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"aaa\"  ~~ /a ** 2/;       # \uff62aa\uff63    \u2014 exactly two"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"1,2,3\"  ~~ /\\d+ % \",\"/;    # \uff621,2,3\uff63   \u2014 items separated by comma"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"foobar\" ~~ / foo || foobar /;   # \uff62foo\uff63  \u2014 first branch wins"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"foobar\" ~~ / foo | foobar /;    # \uff62foobar\uff63  \u2014 longest wins"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"cat\"     ~~ /^ cat $/;        # \uff62cat\uff63"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"HELLO\"  ~~ m:i/hello/;         # \uff62HELLO\uff63          \u2014 :i, case-inse"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say (\"aaa\" ~~ m:ex/a+/).elems;  # 6   \u2014 every match, overlaps included"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "my $s = \"hello world\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "my $orig = \"hello\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"hello world\".subst(\"world\", \"Raku\");   # hello Raku"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "say \"foobar\" ~~ / foo <?before bar> /;   # \uff62foo\uff63  \u2014 foo, only if bar f"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "my regex word { \\w+ }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "my regex r { \\d+ 5 }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "my $var = \"c.t\";"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Regexes Reworked",
+   "url": "/migrating-to-raku/regexes-reworked",
+   "first": "my $pat = \"c.t\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "From Regexes to Grammars",
+   "url": "/migrating-to-raku/grammars",
+   "first": "grammar NumberList {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "From Regexes to Grammars",
+   "url": "/migrating-to-raku/grammars",
+   "first": "my $m = NumberList.parse(\"1,22,333\");"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From Regexes to Grammars",
+   "url": "/migrating-to-raku/grammars",
+   "first": "grammar G { token TOP { \\d+ } }"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "From Regexes to Grammars",
+   "url": "/migrating-to-raku/grammars",
+   "first": "grammar NumberList {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From Regexes to Grammars",
+   "url": "/migrating-to-raku/grammars",
+   "first": "grammar Num {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "From Regexes to Grammars",
+   "url": "/migrating-to-raku/grammars",
+   "first": "grammar NumberList {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "From Regexes to Grammars",
+   "url": "/migrating-to-raku/grammars",
+   "first": "grammar Config {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "printf \"%-10s|%5d\\n\", 'left', 42;      # left      |   42"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say 255.fmt('%04x');           # 00ff"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say (1, 2, 3).fmt('%02d', ', ');   # 01, 02, 03"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say 'a,b,c'.split(',');            # (a b c)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say 'a,b,c,d'.split(',', 2);       # (a b,c,d)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say join('-', 1, 2, 3);            # 1-2-3"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say 'hello world'.index('o');      # 4"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "my $s = 'Hello, World';"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "my $t = 'Hello, World';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say 'a1b2c3'.comb(/\\d/);           # (1 2 3)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say 'hello'.comb;                  # (h e l l o)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say 'the  quick   brown'.words;         # (the quick brown)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "my $t = 'hello world';"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "$_ = 'hello';"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "my $s = 'hello';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say 'Hello'.trans('a..z' => 'A..Z');            # HELLO"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "my $s = 'the cat sat on the mat';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say 'the cat sat'.subst(/\\w+/, *.uc, :g);   # THE CAT SAT"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "my $name = 'Ada';"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "my $x = 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say Q:c/closure {1 + 2} only, but not $x/;     # closure 3 only, but n"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say <foo bar baz>;                 # (foo bar baz)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say \"caf\u00e9\".chars;              # 4   (even if \u00e9 is e + combining accen"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say \"na\u00efve\".uc;                # NA\u00cfVE"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "say \"ABC\".ords;                # (65 66 67)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "my $buf = \"caf\u00e9\".encode('UTF-8');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Text Processing",
+   "url": "/migrating-to-raku/text-processing",
+   "first": "my $decomposed = \"cafe\\c[COMBINING ACUTE ACCENT]\";"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "for $file.IO.lines -> $line {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "my $text  = 'data.txt'.IO.slurp;      # the whole file as one string"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "say 'data.txt'.IO.lines.elems;        # 3"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "# Never loads the whole file \u2014 safe on huge inputs."
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "spurt 'out.txt', \"line one\\nline two\\n\";"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "my $p = 'data.txt'.IO;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "say $p.modified.DateTime;      # 2026-07-08T...Z"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "my $f = '/home/ash/notes.txt'.IO;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "mkdir 'sub';"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "copy   'sub/a.txt', 'sub/c.txt';   # like File::Copy's copy"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "my $fh = open 'data.txt', :r;"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "my $fh = open 'nope.txt', :r;   # returns a Failure"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "my $out = open 'out.txt', :w;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "$*OUT.say('to standard output');"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Files and I/O",
+   "url": "/migrating-to-raku/files-and-io",
+   "first": "# Small file: fine to hold in memory."
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Point {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Account {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Account {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "my $p = Point.new(x => 3, y => 4);"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "$a.pin;                  # dies: X::Method::NotFound"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Bag {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Point { has $.x; has $.y; }"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Temperature {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Temperature {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Person {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Greeter {"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Greeter {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Formatter {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Classes and Objects",
+   "url": "/migrating-to-raku/classes-and-objects",
+   "first": "class Temperature {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "class Animal {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "class Base {"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "class A2 { method who { \"A2\" } }"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "say D2.^mro;              # ((D2) (B2) (C2) (A2) (Any) (Mu))"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "role Comparable {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "role Drawable { method draw { ... } }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "role Nameable { method label { \"<{self.^name}>\" } }"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "role A { method hello { \"A\" } }"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "class C does A does B {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Roles and Inheritance",
+   "url": "/migrating-to-raku/roles-and-inheritance",
+   "first": "role Describable {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "use Some::Module;            # compile-time load + import"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "need Greeting;"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "my $class = 'Shape';"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "require Greeting <&hello>;    # load now, bring in just &hello"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "unit module Greeting;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "unit module Greeting;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "sub hello($name) is export { \"Hello, $name!\" }"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "sub goodbye($name) is export(:formal) { \"Farewell, $name.\" }"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "sub a() is export(:one)       { 'a' }"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "use Greeting;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "use Greeting :formal;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "use Multi :one, :two;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "sub EXPORT(*@names) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "use Dynamic <foo bar>;"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "unit module Widget:ver<1.2.3>:auth<zef:andrew>;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "use Widget:ver<1.2.3>;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "use lib 'lib';                       # the use lib counterpart"
+  },
+  {
+   "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "unit module Greeting;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "use Greeting;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "CPAN to zef, and Mixing Languages",
+   "url": "/migrating-to-raku/cpan-to-zef",
+   "first": "use Text::Wrap:from<Perl5>;             # a Perl module, used from Rak"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "CPAN to zef, and Mixing Languages",
+   "url": "/migrating-to-raku/cpan-to-zef",
+   "first": "use DBI:from<Perl5>;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "CPAN to zef, and Mixing Languages",
+   "url": "/migrating-to-raku/cpan-to-zef",
+   "first": "use Inline::Perl5;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "CPAN to zef, and Mixing Languages",
+   "url": "/migrating-to-raku/cpan-to-zef",
+   "first": "use NativeCall;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "my $result = try { 10 / 2 };"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "my $bad = try { die \"boom\" };"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "my $x = try {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "try {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "try {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "try {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "class X::Temperature is Exception {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "class X::Retryable is Exception {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "sub risky {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "sub noisy {"
+  },
+  {
+   "state": "env",
+   "reason": "reads the local environment",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "sub get-config($file) {"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "try {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Errors, Exceptions, and Failures",
+   "url": "/migrating-to-raku/exceptions-and-failures",
+   "first": "sub half($n) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "my @n = 3, 11, 2, 100, 1;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "say (-3, 1, -2, 5).sort(*.abs);        # (1 -2 -3 5)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "my @n = 3, 11, 2, 100, 1;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "say @n.reduce(* + *);                  # 117"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "say (1..5).produce(* + *);             # (1 3 6 10 15)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "my @evens = gather for 1..10 { take $_ if $_ %% 2 };"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "my $fib = gather {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "say (1..Inf).map(* ** 2).head(5);       # (1 4 9 16 25)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "my @squares = (1..Inf).map(* ** 2);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "say so 3 == (1|2|3);                    # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "say (1|2|3) + 10;                        # any(11, 12, 13)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "my @a = 4, 8, 15, 16, 23, 42;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "my &inc    = * + 1;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "sub power($base, $exp) { $base ** $exp }"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "(1..10)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Functional Raku",
+   "url": "/migrating-to-raku/functional-raku",
+   "first": "my @r2 <== sort() <== map(* + 1) <== (5, 3, 1);"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my $p = start { 2 ** 10 };"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my @promises = (1..3).map: -> $n { start { $n * $n } };"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my @jobs = (1..3).map: -> $n { start { $n * 10 } };"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my $p = start { 42 };"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my $ch = Channel.new;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my $supply = Supply.from-list(1..5);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my @out = (1..10).hyper.map(* ** 2);"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "say (1..1000).race.grep(*.is-prime).elems;   # 168"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my atomicint $counter = 0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my atomicint $x = 0;"
+  },
+  {
+   "state": "concurrent",
+   "reason": "uses concurrency (promises/threads)",
+   "label": "Concurrency and Parallelism",
+   "url": "/migrating-to-raku/concurrency",
+   "first": "my $proc = Proc::Async.new('echo', 'hello from a child');"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Idioms, Gotchas, and One-liners",
+   "url": "/migrating-to-raku/idioms-and-one-liners",
+   "first": "say (\"a\", \"b\");        # (a b)   \u2014 one argument: the list (\"a\", \"b\")"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Idioms, Gotchas, and One-liners",
+   "url": "/migrating-to-raku/idioms-and-one-liners",
+   "first": "my @a = 1, 2, 3;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Idioms, Gotchas, and One-liners",
+   "url": "/migrating-to-raku/idioms-and-one-liners",
+   "first": "my $x = 0;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Idioms, Gotchas, and One-liners",
+   "url": "/migrating-to-raku/idioms-and-one-liners",
+   "first": "say 5 ~~ Int;          # True"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Idioms, Gotchas, and One-liners",
+   "url": "/migrating-to-raku/idioms-and-one-liners",
+   "first": "sub find-first(@list) {"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Idioms, Gotchas, and One-liners",
+   "url": "/migrating-to-raku/idioms-and-one-liners",
+   "first": "my @doubled = (1, 2, 3).map(-> $x { $x * 2 });"
+  },
+  {
+   "state": "fragment",
+   "reason": "Rakudo runtime error",
+   "label": "Idioms, Gotchas, and One-liners",
+   "url": "/migrating-to-raku/idioms-and-one-liners",
+   "first": "say \"10\" == \"10.0\";    # True   \u2014 numeric: equal"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Idioms, Gotchas, and One-liners",
+   "url": "/migrating-to-raku/idioms-and-one-liners",
+   "first": "my @a = 10, 20, 30;"
+  },
+  {
+   "state": "fragment",
+   "reason": "does not compile (Rakudo -c)",
+   "label": "Idioms, Gotchas, and One-liners",
+   "url": "/migrating-to-raku/idioms-and-one-liners",
+   "first": "# Raku: split it yourself with .words"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Appendix B \u2014 Operator Translation Table",
+   "url": "/migrating-to-raku/appendix-b-operator-table",
+   "first": "say 6 +& 3;                # 2     (numeric AND)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Appendix B \u2014 Operator Translation Table",
+   "url": "/migrating-to-raku/appendix-b-operator-table",
+   "first": "say 1 <=> 2;       # Less"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Appendix B \u2014 Operator Translation Table",
+   "url": "/migrating-to-raku/appendix-b-operator-table",
+   "first": "say (1..5).map(* ** 2);   # (1 4 9 16 25)"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Appendix C \u2014 Special Variables",
+   "url": "/migrating-to-raku/appendix-c-special-variables",
+   "first": "{"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Appendix C \u2014 Special Variables",
+   "url": "/migrating-to-raku/appendix-c-special-variables",
+   "first": "if \"John 42\" ~~ /(\\w+) \\s+ (\\d+)/ {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Appendix C \u2014 Special Variables",
+   "url": "/migrating-to-raku/appendix-c-special-variables",
+   "first": "if \"John 42\" ~~ /$<name>=(\\w+) \\s+ (\\d+)/ {"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Appendix C \u2014 Special Variables",
+   "url": "/migrating-to-raku/appendix-c-special-variables",
+   "first": "my $fh = try open \"/no/such/file\";"
+  },
+  {
+   "state": "rakupp",
+   "reason": "Raku++ output differs",
+   "label": "Appendix C \u2014 Special Variables",
+   "url": "/migrating-to-raku/appendix-c-special-variables",
+   "first": "say $*REPO.repo-chain;   # (inst#\u2026/.raku inst#\u2026/site \u2026 ap# nqp# perl5#"
+  }
+ ]
+}

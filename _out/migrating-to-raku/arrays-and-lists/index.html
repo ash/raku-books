@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Arrays and Lists — Raku Books</title>
+    <meta property="og:title" content="Arrays and Lists — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/variables-and-data">Variables
+and Data</a></p>
+<h1 id="arrays-and-lists">Arrays and Lists</h1>
+<p>In Perl there is one flat idea of a list and one kind of array, and
+the two blur together constantly: a list in list context spills its
+elements into whatever surrounds it. Raku keeps arrays and lists close
+but draws one sharp new line between them — a <code>List</code> is
+<em>immutable</em>, an <code>Array</code> is <em>mutable</em> — and it
+stops flattening things behind your back. Those two changes explain most
+of what feels different here, so let us take them in order.</p>
+<h2 id="list-versus-array"><code>List</code> versus
+<code>Array</code></h2>
+<p>In Perl, parentheses and square brackets do quite different jobs:
+<code>(1, 2, 3)</code> is a list, <code>[1, 2, 3]</code> is an anonymous
+array <em>reference</em>. Raku keeps both literals, and the distinction
+is now about mutability rather than references.</p>
+<p>Round brackets build an immutable <code>List</code>. Square brackets
+build a mutable <code>Array</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>).<span class="n">WHAT</span>;      <span class="c1"># (List)</span>
+<span class="nb">say</span> [<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>].<span class="n">WHAT</span>;      <span class="c1"># (Array)</span></pre></div>
+
+<p>You cannot assign to an element of a <code>List</code> — it is
+read-only:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">$list</span> = (<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>);
+<span class="nv">$list</span>[<span class="mi">0</span>] = <span class="mi">99</span>;           <span class="c1"># dies: Cannot modify an immutable Int (X::Assignment::RO)</span></pre></div>
+
+<p>An <code>Array</code>, whether written with <code>[…]</code> or held
+in a <code>@</code> variable, is mutable in the way you expect:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="nv">@a</span>[<span class="mi">0</span>] = <span class="mi">99</span>;
+<span class="nb">say</span> <span class="nv">@a</span>;                  <span class="c1"># [99 2 3]</span></pre></div>
+
+<p>Note that the right-hand side needs no parentheses:
+<code>my @a = 1, 2, 3;</code> is the idiomatic form. The commas build a
+list, and assigning it to a <code>@</code> variable copies the elements
+into a fresh, mutable array.</p>
+<h2 id="indexing-keeps-the-sigil">Indexing keeps the sigil</h2>
+<p>Chapter 2 introduced the headline rule and it is worth seeing it in
+full here. In Perl you switch the sigil to <code>$</code> to reach one
+element; in Raku the sigil stays <code>@</code>, and the brackets alone
+say “one element”:</p>
+<div class="highlight perl-code"><pre>my @a = (10, 20, 30, 40, 50);
+say $a[0];               # 10   — sigil switched to $
+say $a[-1];              # 50   — negative index</pre></div>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>, <span class="mi">40</span>, <span class="mi">50</span>;
+<span class="nb">say</span> <span class="nv">@a</span>[<span class="mi">0</span>];               <span class="c1"># 10   — sigil stays @</span>
+<span class="nb">say</span> <span class="nv">@a</span>[*-<span class="mi">1</span>];             <span class="c1"># 50   — the last element</span></pre></div>
+
+<p>Negative indices are the one habit to unlearn. In Raku,
+<code>@a[-1]</code> is an error; you write <code>@a[*-1]</code>, where
+<code>*</code> stands for “the number of elements” and <code>*-1</code>
+is therefore “one before the end”. It reads oddly at first, but it
+composes: <code>@a[*-2]</code> is the second-to-last, and so on.</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">@a</span>[*-<span class="mi">2</span>];             <span class="c1"># 40</span></pre></div>
+
+<h2 id="slices">Slices</h2>
+<p>A slice pulls several elements at once. Give the subscript a list of
+indices, or a range:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>, <span class="mi">40</span>, <span class="mi">50</span>;
+<span class="nb">say</span> <span class="nv">@a</span>[<span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>];         <span class="c1"># (20 30 40)</span>
+<span class="nb">say</span> <span class="nv">@a</span>[<span class="mi">1</span>.<span class="mf">.3</span>];            <span class="c1"># (20 30 40)</span></pre></div>
+
+<p>This is exactly Perl’s <code>@a[1, 2, 3]</code>, except that — you
+guessed it — the sigil no longer changes from <code>@</code> to anything
+else, because a slice is already a <code>@</code> thing. The result is a
+<code>List</code> of the selected elements.</p>
+<h2 id="adding-and-removing-elements">Adding and removing elements</h2>
+<p>The familiar quartet — <code>push</code>, <code>pop</code>,
+<code>shift</code>, <code>unshift</code> — plus <code>splice</code> are
+all present. The novelty is that each one is available both as a
+function and as a method, and the method form reads left to right:</p>
+<div class="highlight perl-code"><pre>my @a = (1, 2, 3);
+push @a, 4;
+my $last = pop @a;</pre></div>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="nv">@a</span>.<span class="nb">push</span>(<span class="mi">4</span>);              <span class="c1"># method form</span>
+<span class="nb">push</span> <span class="nv">@a</span>, <span class="mi">5</span>;              <span class="c1"># function form — same effect</span>
+<span class="nb">say</span> <span class="nv">@a</span>;                  <span class="c1"># [1 2 3 4 5]</span>
+<span class="nb">say</span> <span class="nv">@a</span>.<span class="nb">pop</span>;              <span class="c1"># 5</span>
+<span class="nb">say</span> <span class="nv">@a</span>.<span class="nb">shift</span>;            <span class="c1"># 1</span>
+<span class="nv">@a</span>.<span class="nb">unshift</span>(<span class="mi">0</span>);
+<span class="nb">say</span> <span class="nv">@a</span>;                  <span class="c1"># [0 2 3 4]</span></pre></div>
+
+<p><code>splice</code> behaves as before — remove a run of elements,
+optionally inserting others in their place — and returns what it
+removed:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@s</span> = <span class="mi">1</span>.<span class="mf">.10</span>;
+<span class="nb">say</span> <span class="nv">@s</span>.<span class="nb">splice</span>(<span class="mi">2</span>, <span class="mi">3</span>);     <span class="c1"># [3 4 5]   — the removed elements, as an Array</span>
+<span class="nb">say</span> <span class="nv">@s</span>;                  <span class="c1"># [1 2 6 7 8 9 10]</span>
+<span class="nv">@s</span>.<span class="nb">splice</span>(<span class="mi">1</span>, <span class="mi">0</span>, <span class="s">'x'</span>, <span class="s">'y'</span>);
+<span class="nb">say</span> <span class="nv">@s</span>;                  <span class="c1"># [1 x y 2 6 7 8 9 10]</span></pre></div>
+
+<h2 id="the-big-flattening-change">The big flattening change</h2>
+<p>This is the difference most likely to catch a Perl programmer out. In
+Perl, lists flatten automatically and deeply: put an array inside
+another list and its elements dissolve into the surrounding one.</p>
+<div class="highlight perl-code"><pre>my @a = (1, 2, 3);
+my @b = (4, 5, 6);
+my @nested = (@a, @b);
+say scalar @nested;      # 6      — flattened to one long list</pre></div>
+<p>Raku does <em>not</em> do this. An array assigned inside another
+array stays a single element:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="k">my</span> <span class="nv">@b</span> = <span class="mi">4</span>, <span class="mi">5</span>, <span class="mi">6</span>;
+<span class="k">my</span> <span class="nv">@nested</span> = <span class="nv">@a</span>, <span class="nv">@b</span>;
+<span class="nb">say</span> <span class="nv">@nested</span>.<span class="nb">elems</span>;       <span class="c1"># 2</span>
+<span class="nb">say</span> <span class="nv">@nested</span>;             <span class="c1"># [[1 2 3] [4 5 6]]</span>
+<span class="nb">say</span> <span class="nv">@nested</span>[<span class="mi">0</span>];          <span class="c1"># [1 2 3]</span></pre></div>
+
+<p>This is a deliberate change. Perl’s automatic flattening is
+convenient until the day it silently destroys the structure you meant to
+keep — passing an array and a hash to a subroutine and watching them
+merge into one list. Raku preserves structure by default and asks you to
+flatten <em>explicitly</em>.</p>
+<p>When you do want the old behaviour, you have three tools. The
+<code>.flat</code> method flattens a structure one level:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> (<span class="nv">@a</span>, <span class="nv">@b</span>).<span class="nb">flat</span>.<span class="nb">elems</span>;     <span class="c1"># 6</span></pre></div>
+
+<p>The <code>|</code> prefix (the <em>slip</em> operator) flattens a
+single item into the list it sits in:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="k">my</span> <span class="nv">@flat</span> = <span class="mi">1</span>, |<span class="nv">@a</span>, <span class="mi">5</span>;
+<span class="nb">say</span> <span class="nv">@flat</span>;                   <span class="c1"># [1 1 2 3 5]</span></pre></div>
+
+<p>And <code>Slip</code> is the underlying type — a list that, unlike an
+ordinary array, flattens into its surroundings even through a
+scalar:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$sl</span> = <span class="n">slip</span>(<span class="mi">4</span>, <span class="mi">5</span>);
+<span class="k">my</span> <span class="nv">@b</span> = <span class="mi">1</span>, <span class="nv">$sl</span>, <span class="mi">6</span>;
+<span class="nb">say</span> <span class="nv">@b</span>;                      <span class="c1"># [1 4 5 6]</span></pre></div>
+
+<p>Contrast that with an ordinary array held in a scalar, which stays
+put:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="k">my</span> <span class="nv">@b</span> = <span class="mi">1</span>, <span class="nv">@a</span>, <span class="mi">5</span>;
+<span class="nb">say</span> <span class="nv">@b</span>.<span class="nb">elems</span>;                <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="nv">@b</span>;                      <span class="c1"># [1 [1 2 3] 5]</span></pre></div>
+
+<p>If you learn one new reflex in this chapter, make it this:
+<strong>arrays no longer flatten themselves — reach for
+<code>.flat</code> or <code>|</code> when you need it.</strong></p>
+<h2 id="inspecting-and-reordering">Inspecting and reordering</h2>
+<p><code>elems</code> gives the length; <code>end</code> gives the index
+of the last element (one less than <code>elems</code>):</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">10</span>, <span class="mi">20</span>, <span class="mi">30</span>, <span class="mi">40</span>, <span class="mi">50</span>;
+<span class="nb">say</span> <span class="nv">@a</span>.<span class="nb">elems</span>;            <span class="c1"># 5</span>
+<span class="nb">say</span> <span class="nv">@a</span>.<span class="nb">end</span>;              <span class="c1"># 4</span>
+<span class="nb">say</span> <span class="nv">@a</span>.<span class="nb">reverse</span>;          <span class="c1"># (50 40 30 20 10)</span></pre></div>
+
+<p><code>sort</code> deserves special attention, because its default
+changed for the better. Perl’s <code>sort</code> compares as
+<em>strings</em> unless you supply a block, which is why numbers come
+out in the wrong order:</p>
+<div class="highlight perl-code"><pre>my @n = (3, 11, 2, 100, 1);
+say join ',', sort @n;   # 1,100,11,2,3   — string order!</pre></div>
+<p>Raku’s default <code>sort</code> uses <code>cmp</code>, which
+compares numbers numerically and strings alphabetically, so numbers just
+sort as numbers:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@n</span> = <span class="mi">3</span>, <span class="mi">11</span>, <span class="mi">2</span>, <span class="mi">100</span>, <span class="mi">1</span>;
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">sort</span>;             <span class="c1"># (1 2 3 11 100)</span></pre></div>
+
+<p>For a custom order, pass a block. Note the colon: <code>sort:</code>
+takes the block as its argument. Here the placeholder parameters
+<code>$^a</code> and <code>$^b</code> (Chapter 17) give a descending
+sort:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">sort</span>: { <span class="nv">$^b</span> &lt;=&gt; <span class="nv">$^a</span> };    <span class="c1"># (100 11 3 2 1)</span></pre></div>
+
+<h2 id="the-list-toolkit">The list toolkit</h2>
+<p>The workhorses you know from Perl are all methods now, and they
+chain. Most take a block, or the <code>*</code> “whatever” shorthand for
+a one-argument block:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@n</span> = <span class="mi">3</span>, <span class="mi">11</span>, <span class="mi">2</span>, <span class="mi">100</span>, <span class="mi">1</span>;
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">grep</span>(* &gt; <span class="mi">3</span>);      <span class="c1"># (11 100)</span>
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">map</span>(* * <span class="mi">2</span>);       <span class="c1"># (6 22 4 200 2)</span>
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">first</span>(* &gt; <span class="mi">10</span>);    <span class="c1"># 11</span>
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">sum</span>;              <span class="c1"># 117</span>
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">min</span>;              <span class="c1"># 1</span>
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">max</span>;              <span class="c1"># 100</span>
+<span class="nb">say</span> <span class="nv">@n</span>.<span class="nb">join</span>(<span class="s">', '</span>);       <span class="c1"># 3, 11, 2, 100, 1</span></pre></div>
+
+<p><code>grep</code> and <code>map</code> no longer return a plain list,
+though — they return a <code>Seq</code>, which brings us to
+laziness.</p>
+<h2 id="seq-and-laziness"><code>Seq</code> and laziness</h2>
+<p>A <code>Seq</code> is a sequence that is computed on demand and can
+be consumed once. Many Raku operations produce one, and ranges are lazy
+too, so you can describe an infinite list without hanging your
+program:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.5</span>).<span class="nb">map</span>(* * <span class="mi">2</span>).<span class="n">WHAT</span>;      <span class="c1"># (Seq)</span>
+<span class="nb">say</span> (<span class="mi">1</span>..<span class="n">Inf</span>).<span class="n">WHAT</span>;               <span class="c1"># (Range)</span></pre></div>
+
+<p><code>1..Inf</code> is a perfectly good value; nothing is computed
+until you ask for elements. Take the first few with <code>.head</code>,
+the last few with <code>.tail</code>, or slice with a range
+subscript:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span>..<span class="n">Inf</span>).<span class="nb">head</span>(<span class="mi">3</span>);            <span class="c1"># (1 2 3)</span>
+<span class="nb">say</span> (<span class="mi">1</span>.<span class="mf">.10</span>).<span class="nb">tail</span>(<span class="mi">3</span>);             <span class="c1"># (8 9 10)</span>
+<span class="k">my</span> <span class="nv">@squares</span> = (<span class="mi">1</span>..<span class="n">Inf</span>).<span class="nb">map</span>(* ** <span class="mi">2</span>);
+<span class="nb">say</span> <span class="nv">@squares</span>[^<span class="mi">5</span>];                <span class="c1"># (1 4 9 16 25)</span></pre></div>
+
+<p>That <code>^5</code> is the range <code>0..^5</code> —
+<code>0, 1, 2, 3, 4</code> — a compact way to take the first five.
+Laziness means the mapping over an infinite range only ever computes the
+five squares you actually read. Chapter 27 returns to lazy lists and
+<code>gather</code>/<code>take</code> in earnest.</p>
+<h2 id="a-variable-versus-a-scalar-holding-an-array">A <code>@</code>
+variable versus a scalar holding an array</h2>
+<p>One last contrast to file away. In Perl you distinguish an array from
+a reference to it with a backslash: <code>my $ref = \@a</code>. In Raku,
+assigning an array to a scalar simply stores the array itself as a
+single item — no backslash, and it dereferences without an arrow:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">@a</span> = <span class="mi">1</span>, <span class="mi">2</span>, <span class="mi">3</span>;
+<span class="k">my</span> <span class="nv">$ref</span> = <span class="nv">@a</span>;
+<span class="nb">say</span> <span class="nv">$ref</span>.<span class="n">WHAT</span>;           <span class="c1"># (Array)</span>
+<span class="nb">say</span> <span class="nv">$ref</span>.<span class="nb">elems</span>;          <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="nv">$ref</span>[<span class="mi">0</span>];             <span class="c1"># 1</span></pre></div>
+
+<p>The <code>@</code> sigil promises “these elements flatten and iterate
+as a list”; a scalar holds the array as <em>one</em> opaque item that
+stays intact in a surrounding list — which is why
+<code>1, $ref, 5</code> had three elements above. Containers,
+itemisation, and how <code>$</code>, <code>@</code>, and <code>%</code>
+relate get their full account in Chapter 8; for now, remember that
+putting an array in a <code>$</code> is Raku’s gentle equivalent of
+taking a reference.</p>
+<p>With ordered collections in hand, we turn to the other great data
+structure — the hash — where the keys, not the positions, do the
+indexing.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/scalars-and-sigils">Scalars and
+Sigils</a>   |   <a href="/raku-books/migrating-to-raku/hashes">Hashes</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

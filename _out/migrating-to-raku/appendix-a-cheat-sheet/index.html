@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Appendix A — Perl to Raku Cheat Sheet — Raku Books</title>
+    <meta property="og:title" content="Appendix A — Perl to Raku Cheat Sheet — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/appendices">Appendices</a></p>
+<h1 id="appendix-a-perl-to-raku-cheat-sheet">Appendix A — Perl to Raku
+Cheat Sheet</h1>
+<p>This is the whole book squeezed onto a few pages. When you know
+<em>what</em> you want to do and just need the Raku spelling of it, look
+here first; the chapter references in each section point you to the full
+story. Every entry has been run through the compiler, but a table cannot
+carry the caveats — treat this as a reminder, not a specification.</p>
+<h2 id="printing-and-output">Printing and output</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>print "hi\n";</code></td>
+<td><code>print "hi\n";</code></td>
+<td><code>print</code> is unchanged</td>
+</tr>
+<tr>
+<td><code>say "hi";</code></td>
+<td><code>say "hi";</code></td>
+<td><code>say</code> is on by default; no <code>use feature</code></td>
+</tr>
+<tr>
+<td><code>printf "%d\n", $n;</code></td>
+<td><code>printf "%d\n", $n;</code></td>
+<td>same format strings</td>
+</tr>
+<tr>
+<td><code>my $s = sprintf "%.2f", $x;</code></td>
+<td><code>my $s = sprintf "%.2f", $x;</code></td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>warn "oops\n";</code></td>
+<td><code>warn "oops";</code></td>
+<td>warns to <code>$*ERR</code>; resumable (Chapter 26)</td>
+</tr>
+<tr>
+<td><code>print STDERR "x\n";</code></td>
+<td><code>note "x";</code> or <code>$*ERR.print("x\n")</code></td>
+<td><code>note</code> adds a newline</td>
+</tr>
+<tr>
+<td><code>$\ = "\n";</code></td>
+<td>—</td>
+<td>no output record separator; use <code>say</code></td>
+</tr>
+<tr>
+<td><code>$, = ",";</code></td>
+<td>—</td>
+<td>no field separator; use <code>.join(",")</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="string-operations">String operations</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$a . $b</code></td>
+<td><code>$a ~ $b</code></td>
+<td>the dot is now method call</td>
+</tr>
+<tr>
+<td><code>$s x 3</code></td>
+<td><code>$s x 3</code></td>
+<td>string repetition unchanged</td>
+</tr>
+<tr>
+<td><code>length $s</code></td>
+<td><code>$s.chars</code></td>
+<td>counts graphemes, not bytes (Chapter 7)</td>
+</tr>
+<tr>
+<td><code>uc $s</code>, <code>lc $s</code></td>
+<td><code>$s.uc</code>, <code>$s.lc</code></td>
+<td>also <code>.tc</code> for title-case</td>
+</tr>
+<tr>
+<td><code>substr($s, 0, 2)</code></td>
+<td><code>$s.substr(0, 2)</code></td>
+<td>function form also exists</td>
+</tr>
+<tr>
+<td><code>index($s, "x")</code></td>
+<td><code>$s.index("x")</code></td>
+<td>returns <code>Nil</code> (not <code>-1</code>) on miss</td>
+</tr>
+<tr>
+<td><code>join ",", @a</code></td>
+<td><code>@a.join(",")</code></td>
+<td>function form also exists</td>
+</tr>
+<tr>
+<td><code>split /,/, $s</code></td>
+<td><code>$s.split(",")</code> or <code>.split(/,/)</code></td>
+<td>returns a <code>List</code>/<code>Seq</code></td>
+</tr>
+<tr>
+<td><code>reverse $s</code></td>
+<td><code>$s.flip</code></td>
+<td><code>reverse</code> reverses lists, not strings</td>
+</tr>
+<tr>
+<td><code>sprintf "%s", $x</code></td>
+<td><code>sprintf "%s", $x</code></td>
+<td>unchanged</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sigils-and-element-access">Sigils and element access</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$array[0]</code></td>
+<td><code>@array[0]</code></td>
+<td>the sigil is invariant (Chapter 2)</td>
+</tr>
+<tr>
+<td><code>$hash{key}</code></td>
+<td><code>%hash{'key'}</code></td>
+<td>braces need a quoted key</td>
+</tr>
+<tr>
+<td><code>$hash{key}</code> (bareword)</td>
+<td><code>%hash&lt;key&gt;</code></td>
+<td><code>&lt;…&gt;</code> is the constant-key subscript</td>
+</tr>
+<tr>
+<td><code>@array[1, 2]</code></td>
+<td><code>@array[1, 2]</code></td>
+<td>slice syntax unchanged</td>
+</tr>
+<tr>
+<td><code>@hash{qw/a b/}</code></td>
+<td><code>%hash&lt;a b&gt;</code></td>
+<td>hash slice via angle brackets</td>
+</tr>
+<tr>
+<td><code>$#array</code></td>
+<td><code>@array.end</code></td>
+<td>index of the last element</td>
+</tr>
+<tr>
+<td><code>scalar @array</code></td>
+<td><code>@array.elems</code></td>
+<td>element count</td>
+</tr>
+<tr>
+<td><code>$array[-1]</code></td>
+<td><code>@array[*-1]</code></td>
+<td><code>*-1</code> is “one from the end”</td>
+</tr>
+</tbody>
+</table>
+<h2 id="arrays">Arrays</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>push @a, $x;</code></td>
+<td><code>@a.push($x);</code> or <code>push @a, $x;</code></td>
+<td>both forms work</td>
+</tr>
+<tr>
+<td><code>pop @a;</code></td>
+<td><code>@a.pop;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>shift @a;</code></td>
+<td><code>@a.shift;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>unshift @a, $x;</code></td>
+<td><code>@a.unshift($x);</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>my @b = sort @a;</code></td>
+<td><code>my @b = @a.sort;</code></td>
+<td>default sort is smart, not string-only</td>
+</tr>
+<tr>
+<td><code>my @b = reverse @a;</code></td>
+<td><code>my @b = @a.reverse;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>grep { $_ &gt; 2 } @a</code></td>
+<td><code>@a.grep(* &gt; 2)</code></td>
+<td><code>*</code> is the Whatever placeholder</td>
+</tr>
+<tr>
+<td><code>map { $_ * 2 } @a</code></td>
+<td><code>@a.map(* * 2)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>join ",", @a</code></td>
+<td><code>@a.join(",")</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>my @c = (@a, @b);</code></td>
+<td><code>my @c = flat @a, @b;</code></td>
+<td>lists do <strong>not</strong> auto-flatten (Chapter 4)</td>
+</tr>
+<tr>
+<td><code>wantarray</code></td>
+<td>—</td>
+<td>gone; see Appendix C</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hashes">Hashes</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>my %h = (a =&gt; 1);</code></td>
+<td><code>my %h = a =&gt; 1;</code></td>
+<td><code>=&gt;</code> autoquotes its left side</td>
+</tr>
+<tr>
+<td><code>$h{k}</code></td>
+<td><code>%h&lt;k&gt;</code> / <code>%h{$k}</code></td>
+<td>angle brackets for constant keys</td>
+</tr>
+<tr>
+<td><code>keys %h</code></td>
+<td><code>%h.keys</code></td>
+<td>order is not insertion order</td>
+</tr>
+<tr>
+<td><code>values %h</code></td>
+<td><code>%h.values</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>while (my ($k,$v) = each %h)</code></td>
+<td><code>for %h.kv -&gt; $k, $v {…}</code></td>
+<td><code>.kv</code> yields key, value, key, value…</td>
+</tr>
+<tr>
+<td><code>exists $h{k}</code></td>
+<td><code>%h&lt;k&gt;:exists</code></td>
+<td><code>:exists</code> adverb</td>
+</tr>
+<tr>
+<td><code>delete $h{k}</code></td>
+<td><code>%h&lt;k&gt;:delete</code></td>
+<td><code>:delete</code> adverb</td>
+</tr>
+<tr>
+<td><code>%h = ()</code></td>
+<td><code>%h = ()</code></td>
+<td>empties the hash</td>
+</tr>
+</tbody>
+</table>
+<h2 id="references-and-dereferencing">References and dereferencing</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>my $ref = \@a;</code></td>
+<td><code>my $ref = @a;</code></td>
+<td>a scalar can just hold the array (Chapter 8)</td>
+</tr>
+<tr>
+<td><code>my $ref = [1, 2, 3];</code></td>
+<td><code>my $ref = [1, 2, 3];</code></td>
+<td><code>[…]</code> makes an itemised array</td>
+</tr>
+<tr>
+<td><code>@$ref</code> / <code>@{$ref}</code></td>
+<td><code>@$ref</code> / <code>$ref[]</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>$ref-&gt;[0]</code></td>
+<td><code>$ref[0]</code></td>
+<td>no arrow needed</td>
+</tr>
+<tr>
+<td><code>$ref-&gt;{k}</code></td>
+<td><code>$ref&lt;k&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>$ref-&gt;()</code></td>
+<td><code>$ref()</code> or <code>$ref.()</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>\&amp;sub</code></td>
+<td><code>&amp;sub</code></td>
+<td><code>&amp;</code> names a routine without calling it</td>
+</tr>
+<tr>
+<td><code>ref $x</code></td>
+<td><code>$x.^name</code> / <code>$x.WHAT</code></td>
+<td>introspection, not a string tag</td>
+</tr>
+</tbody>
+</table>
+<h2 id="control-flow">Control flow</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>if (...) {…}</code></td>
+<td><code>if ... {…}</code></td>
+<td>parentheses optional</td>
+</tr>
+<tr>
+<td><code>unless (...) {…}</code></td>
+<td><code>unless ... {…}</code></td>
+<td>still no <code>elsif</code> on <code>unless</code></td>
+</tr>
+<tr>
+<td><code>... ? ... : ...</code></td>
+<td><code>... ?? ... !! ...</code></td>
+<td>doubled punctuation</td>
+</tr>
+<tr>
+<td><code>while (...) {…}</code></td>
+<td><code>while ... {…}</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>until (...) {…}</code></td>
+<td><code>until ... {…}</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>for my $x (@a) {…}</code></td>
+<td><code>for @a -&gt; $x {…}</code></td>
+<td>pointy block binds the loop variable</td>
+</tr>
+<tr>
+<td><code>foreach (@a) {…}</code></td>
+<td><code>for @a {…}</code></td>
+<td>topic is <code>$_</code></td>
+</tr>
+<tr>
+<td><code>for (my $i=0;$i&lt;10;$i++)</code></td>
+<td><code>loop (my $i=0;$i&lt;10;$i++)</code></td>
+<td>C-style loop is spelled <code>loop</code></td>
+</tr>
+<tr>
+<td><code>last</code> / <code>next</code> / <code>redo</code></td>
+<td><code>last</code> / <code>next</code> / <code>redo</code></td>
+<td>unchanged</td>
+</tr>
+<tr>
+<td><code>given/when</code> (feature)</td>
+<td><code>given ... { when ... {…} }</code></td>
+<td>built in (Chapter 13)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="subroutines-and-arguments">Subroutines and arguments</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sub f { my ($a,$b)=@_; }</code></td>
+<td><code>sub f($a, $b) {…}</code></td>
+<td>real signatures (Chapter 15)</td>
+</tr>
+<tr>
+<td><code>my ($a,$b?) = @_;</code></td>
+<td><code>sub f($a, $b?) {…}</code></td>
+<td><code>?</code> marks a parameter optional</td>
+</tr>
+<tr>
+<td>default via <code>//</code></td>
+<td><code>sub f($a = 42) {…}</code></td>
+<td>default value in the signature</td>
+</tr>
+<tr>
+<td>slurp the rest of <code>@_</code></td>
+<td><code>sub f(*@rest) {…}</code></td>
+<td>slurpy array</td>
+</tr>
+<tr>
+<td>named args by hash</td>
+<td><code>sub f(:$name) {…}</code></td>
+<td>native named parameters</td>
+</tr>
+<tr>
+<td><code>$_[0] = ...</code> (aliasing)</td>
+<td><code>sub f($x is rw) {…}</code></td>
+<td>opt in to writable params</td>
+</tr>
+<tr>
+<td><code>return wantarray ? … : …</code></td>
+<td>multi dispatch / <code>--&gt;</code></td>
+<td>see Chapter 16</td>
+</tr>
+<tr>
+<td>prototype dispatch</td>
+<td><code>multi sub f(...) {…}</code></td>
+<td>dispatch by arity and type</td>
+</tr>
+</tbody>
+</table>
+<h2 id="regexes-and-substitution">Regexes and substitution</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$s =~ /pat/</code></td>
+<td><code>$s ~~ /pat/</code></td>
+<td>smartmatch does the matching</td>
+</tr>
+<tr>
+<td><code>$s !~ /pat/</code></td>
+<td><code>$s !~~ /pat/</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>$s =~ s/a/b/</code></td>
+<td><code>$s ~~ s/a/b/</code></td>
+<td>in-place substitution</td>
+</tr>
+<tr>
+<td><code>$s =~ s/a/b/g</code></td>
+<td><code>$s ~~ s:g/a/b/</code></td>
+<td><code>:g</code> is a leading adverb</td>
+</tr>
+<tr>
+<td><code>$s =~ s/a/b/gi</code></td>
+<td><code>$s ~~ s:g:i/a/b/</code></td>
+<td>adverbs stack</td>
+</tr>
+<tr>
+<td><code>$s =~ tr/a-z/A-Z/</code></td>
+<td><code>$s ~~ tr/a..z/A..Z/</code></td>
+<td>ranges use <code>..</code></td>
+</tr>
+<tr>
+<td><code>my ($x) = /(\w+)/</code></td>
+<td><code>$s ~~ /(\w+)/; say $0</code></td>
+<td>captures are <code>$0, $1, …</code></td>
+</tr>
+<tr>
+<td><code>$1</code>, <code>$2</code></td>
+<td><code>$0</code>, <code>$1</code></td>
+<td>captures are <strong>0-based</strong> (Appendix C)</td>
+</tr>
+<tr>
+<td>named <code>(?&lt;n&gt;…)</code> / <code>$+{n}</code></td>
+<td><code>$&lt;n&gt;=(…)</code> / <code>$&lt;n&gt;</code></td>
+<td>named captures</td>
+</tr>
+<tr>
+<td><code>qr/…/</code></td>
+<td><code>rx/…/</code> or <code>/…/</code></td>
+<td>precompiled pattern</td>
+</tr>
+</tbody>
+</table>
+<h2 id="object-oriented-programming">Object-oriented programming</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>package Foo;</code> + <code>bless</code></td>
+<td><code>class Foo {…}</code></td>
+<td>first-class classes (Chapter 22)</td>
+</tr>
+<tr>
+<td><code>our @ISA = ('Bar');</code></td>
+<td><code>class Foo is Bar {…}</code></td>
+<td>inheritance with <code>is</code></td>
+</tr>
+<tr>
+<td>hash-based fields</td>
+<td><code>has $.x;</code> / <code>has $!y;</code></td>
+<td><code>$.</code> public, <code>$!</code> private</td>
+</tr>
+<tr>
+<td>manual accessor subs</td>
+<td><code>has $.x;</code></td>
+<td>read accessor generated automatically</td>
+</tr>
+<tr>
+<td><code>has $.x is rw</code></td>
+<td><code>has $.x is rw;</code></td>
+<td>writable accessor</td>
+</tr>
+<tr>
+<td><code>Foo-&gt;new(...)</code></td>
+<td><code>Foo.new(...)</code></td>
+<td>dot, not arrow</td>
+</tr>
+<tr>
+<td><code>sub method { my $self = shift; }</code></td>
+<td><code>method m {…}</code></td>
+<td><code>self</code> is implicit</td>
+</tr>
+<tr>
+<td><code>$obj-&gt;method</code></td>
+<td><code>$obj.method</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Role::Tiny</code> / <code>Moose</code> roles</td>
+<td><code>role R {…}</code> + <code>does R</code></td>
+<td>roles are built in (Chapter 23)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="modules">Modules</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>use Foo;</code></td>
+<td><code>use Foo;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>require Foo;</code></td>
+<td><code>require Foo;</code></td>
+<td>runtime load</td>
+</tr>
+<tr>
+<td><code>package Foo;</code></td>
+<td><code>unit module Foo;</code></td>
+<td>or <code>module Foo {…}</code></td>
+</tr>
+<tr>
+<td><code>use Exporter; @EXPORT=…</code></td>
+<td><code>sub f is export {…}</code></td>
+<td><code>is export</code> trait (Chapter 24)</td>
+</tr>
+<tr>
+<td><code>use parent 'Bar';</code></td>
+<td><code>class Foo is Bar</code></td>
+<td></td>
+</tr>
+<tr>
+<td>CPAN + <code>cpan</code>/<code>cpanm</code></td>
+<td>zef + raku.land</td>
+<td><code>zef install Foo</code> (Chapter 25)</td>
+</tr>
+<tr>
+<td><code>$VERSION</code></td>
+<td><code>unit module Foo:ver&lt;1.0&gt;;</code></td>
+<td>version in the declaration</td>
+</tr>
+</tbody>
+</table>
+<h2 id="error-handling">Error handling</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>die "msg\n";</code></td>
+<td><code>die "msg";</code></td>
+<td>throws an <code>X::AdHoc</code> exception</td>
+</tr>
+<tr>
+<td><code>die $object;</code></td>
+<td><code>X::Custom.new(...).throw</code></td>
+<td>typed exceptions (Chapter 26)</td>
+</tr>
+<tr>
+<td><code>eval { … }; if ($@) {…}</code></td>
+<td><code>try { … }; with $! {…}</code></td>
+<td><code>$!</code> holds the exception</td>
+</tr>
+<tr>
+<td><code>eval { … } or …</code></td>
+<td><code>try {…} // …</code></td>
+<td><code>try</code> returns <code>Nil</code> on failure</td>
+</tr>
+<tr>
+<td>—</td>
+<td><code>CATCH { when X::IO {…} }</code></td>
+<td>in-block typed handler</td>
+</tr>
+<tr>
+<td><code>$@</code></td>
+<td><code>$!</code></td>
+<td>the caught exception</td>
+</tr>
+<tr>
+<td><code>Try::Tiny</code></td>
+<td><code>try</code> / <code>CATCH</code></td>
+<td>built in</td>
+</tr>
+<tr>
+<td>—</td>
+<td>soft <code>Failure</code> objects</td>
+<td>unthrown errors (Chapter 26)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="files-and-io">Files and I/O</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Perl</th>
+<th>Raku</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open my $fh, '&lt;', $f</code></td>
+<td><code>my $fh = open $f, :r;</code></td>
+<td>named args for the mode</td>
+</tr>
+<tr>
+<td><code>open my $fh, '&gt;', $f</code></td>
+<td><code>my $fh = open $f, :w;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>while (&lt;$fh&gt;) {…}</code></td>
+<td><code>for $fh.lines {…}</code></td>
+<td>lazy line iteration</td>
+</tr>
+<tr>
+<td><code>my @l = &lt;$fh&gt;;</code></td>
+<td><code>my @l = $fh.lines;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>local $/; my $c = &lt;$fh&gt;;</code></td>
+<td><code>my $c = $f.IO.slurp;</code></td>
+<td>slurp the whole file</td>
+</tr>
+<tr>
+<td><code>print $fh "x";</code></td>
+<td><code>$fh.print("x");</code></td>
+<td></td>
+</tr>
+<tr>
+<td>—</td>
+<td><code>spurt $f, $content;</code></td>
+<td>write a whole file at once</td>
+</tr>
+<tr>
+<td><code>close $fh;</code></td>
+<td><code>$fh.close;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;STDIN&gt;</code></td>
+<td><code>$*IN.lines</code> / <code>get</code></td>
+<td>Appendix C</td>
+</tr>
+<tr>
+<td><code>-e $f</code>, <code>-d $f</code></td>
+<td><code>$f.IO.e</code>, <code>$f.IO.d</code></td>
+<td>file tests are methods</td>
+</tr>
+<tr>
+<td><code>chomp $line;</code></td>
+<td><code>$line.chomp</code></td>
+<td>returns a new string; does not mutate</td>
+</tr>
+</tbody>
+</table>
+<p>The remaining appendices zoom in: Appendix B on operators, Appendix C
+on the special variables, Appendix D on the vocabulary, and Appendix E
+on where to go next.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/appendices">Appendices</a>   |   <a
+href="/raku-books/migrating-to-raku/appendix-b-operator-table">Appendix B —
+Operator Translation Table</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>

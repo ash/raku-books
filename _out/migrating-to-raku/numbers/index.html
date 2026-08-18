@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+    /* Theme switcher: 'system' | 'light' | 'dark'. Runs here in <head> so the
+       resolved theme is applied before first paint (no flash). The dark rules
+       in course.css key on the data-theme-active attribute we set below. */
+    (function () {
+      var KEY = 'raku-theme';
+      var mql = window.matchMedia('(prefers-color-scheme: dark)');
+      function stored() {
+        try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; }
+      }
+      function effective(s) {
+        return (s === 'dark' || (s === 'system' && mql.matches)) ? 'dark' : 'light';
+      }
+      var ICON = { system: '◐', light: '☀', dark: '☾' };
+      function apply(s) {
+        var d = document.documentElement;
+        d.setAttribute('data-theme', s);
+        d.setAttribute('data-theme-active', effective(s));
+        var btn = document.querySelector('.theme-btn');
+        if (btn) btn.textContent = ICON[s] || ICON.system;
+        var items = document.querySelectorAll('.theme-menu [data-theme-set]');
+        for (var i = 0; i < items.length; i++) {
+          items[i].setAttribute('aria-checked',
+            items[i].getAttribute('data-theme-set') === s ? 'true' : 'false');
+        }
+      }
+      apply(stored());
+      mql.addEventListener('change', function () { if (stored() === 'system') apply('system'); });
+      window.__setTheme = function (s) {
+        try { localStorage.setItem(KEY, s); } catch (e) {}
+        apply(s);
+      };
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(stored());
+        var sw = document.querySelector('.theme-switch');
+        if (!sw) return;
+        var btn = sw.querySelector('.theme-btn'), menu = sw.querySelector('.theme-menu');
+        function open(o) {
+          menu.hidden = !o;
+          btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+        }
+        btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+        menu.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-theme-set]');
+          if (b) { window.__setTheme(b.getAttribute('data-theme-set')); open(false); btn.focus(); }
+        });
+        document.addEventListener('click', function (e) { if (!sw.contains(e.target)) open(false); });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && !menu.hidden) { open(false); btn.focus(); }
+        });
+      });
+    })();
+    </script>
+
+    <title>Numbers — Raku Books</title>
+    <meta property="og:title" content="Numbers — Raku Books" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Andrew Shitov’s Raku Books" />
+
+    <link rel="stylesheet" href="/raku-books/assets/main.css">
+    <link rel="stylesheet" href="/raku-books/assets/course.css?v=24">
+    
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/raku-books/assets/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/raku-books/assets/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/raku-books/assets/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/raku-books/assets/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/raku-books/assets/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/raku-books/assets/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/raku-books/assets/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/raku-books/assets/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/raku-books/assets/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/raku-books/assets/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/raku-books/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/raku-books/assets/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/raku-books/assets/favicon-16x16.png">
+    <link rel="manifest" href="/raku-books/assets/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/raku-books/assets/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+  
+  <body>
+    <div class="top-controls">
+      <div class="book-switch">
+<label class="book-switch-label" for="book-select">📚</label>
+<select id="book-select" class="book-select" aria-label="Switch book" onchange="if(this.value)location.href=this.value;">
+<option value="">Jump to a book…</option>
+<option value="/raku-books/the-raku-course">The Raku Course</option>
+<option value="/raku-books/raku-one-liners">Raku One-Liners</option>
+<option value="/raku-books/using-raku">Using Raku</option>
+<option value="/raku-books/creating-a-compiler-in-raku">Creating a Compiler in Raku</option>
+<option value="/raku-books/perl-6-calendar-2019">Perl 6 Calendar 2019</option>
+<option value="/raku-books/perl-6-at-a-glance">Perl 6 at a Glance</option>
+</select>
+</div>
+
+      <div class="site-search">
+        <button class="search-toggle" type="button" aria-label="Search the books" aria-expanded="false" title="Search ( / )"><svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="12.6" y1="12.6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <input type="search" placeholder="Search the books…" aria-label="Search the books" autocomplete="off" spellcheck="false">
+        <div class="ss-results" role="listbox" hidden></div>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Colour theme" title="Colour theme">◐</button>
+        <ul class="theme-menu" role="menu" hidden>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="system"><span class="ti">◐</span> System</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="light"><span class="ti">☀</span> Light</button></li>
+          <li role="none"><button type="button" role="menuitemradio" data-theme-set="dark"><span class="ti">☾</span> Dark</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <main class="page-content" aria-label="Content">
+        <div class="wrapper">
+          <p><a href="/raku-books/">Raku Books</a> / <a href="/raku-books/migrating-to-raku">Migrating
+to Raku</a> / <a href="/raku-books/migrating-to-raku/variables-and-data">Variables
+and Data</a></p>
+<h1 id="numbers">Numbers</h1>
+<p>In Perl, a number is a number. A scalar holds an integer or a float,
+the interpreter decides which as it goes along, and when the integer
+grows too large it silently becomes a float and you quietly lose
+precision. It works, most of the time, and the times it does not —
+money, big factorials, <code>0.1 + 0.2</code> — are a rite of
+passage.</p>
+<p>Raku replaces that single fuzzy notion with a small family of
+cooperating types, the <em>numeric tower</em>: <code>Int</code>,
+<code>Rat</code>, <code>Num</code>, and <code>Complex</code>, with
+<code>FatRat</code> in reserve. You rarely name them by hand — literals
+pick the right type for you — but knowing who is who explains why Raku’s
+arithmetic behaves so much better out of the box.</p>
+<h2 id="integers-are-arbitrary-precision-by-default">Integers are
+arbitrary-precision by default</h2>
+<p>Here is the Perl surprise that every programmer meets sooner or
+later:</p>
+<div class="highlight perl-code"><pre>print 2 ** 100, "\n";     # 1.26765060022823e+30</pre></div>
+<p>The result should be an exact 31-digit integer, but <code>**</code>
+produced a float, so you get scientific notation and a fistful of lost
+digits. The fix in Perl is a module:</p>
+<div class="highlight perl-code"><pre>use bigint;
+print 2 ** 100, "\n";     # 1267650600228229401496703205376</pre></div>
+<p>In Raku there is nothing to switch on. An integer literal is an
+<code>Int</code>, and <code>Int</code> is arbitrary-precision,
+always:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">2</span> ** <span class="mi">100</span>;             <span class="c1"># 1267650600228229401496703205376</span>
+<span class="nb">say</span> (<span class="mi">2</span> ** <span class="mi">100</span>).<span class="n">WHAT</span>;      <span class="c1"># (Int)</span></pre></div>
+
+<p>There is no separate “big integer” type to reach for and no threshold
+at which numbers quietly degrade. <code>2 ** 64</code> is an
+<code>Int</code>, <code>2 ** 1000</code> is an <code>Int</code>, and
+both are exact. This is the single most reassuring difference in the
+whole tower: you can stop thinking about integer overflow.</p>
+<h2 id="rationals-decimals-that-add-up">Rationals: decimals that add
+up</h2>
+<p>The other classic Perl papercut is floating-point decimals:</p>
+<div class="highlight perl-code"><pre>printf "%.17g\n", 0.1 + 0.2;   # 0.30000000000000004</pre></div>
+<p>The literal <code>0.1</code> cannot be represented exactly in binary
+floating point, so the sum drifts. In Raku, a decimal literal is not a
+float at all — it is a <code>Rat</code>, an exact ratio of two integers.
+<code>0.1</code> <em>is</em> the fraction 1/10, stored as numerator and
+denominator, so the arithmetic is exact:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mf">0.1</span> + <span class="mf">0.2</span>;            <span class="c1"># 0.3</span>
+<span class="nb">say</span> <span class="mf">0.1</span> + <span class="mf">0.2</span> == <span class="mf">0.3</span>;     <span class="c1"># True</span></pre></div>
+
+<p>You can look inside a <code>Rat</code>. It knows its own
+<code>.numerator</code> and <code>.denominator</code>, and
+<code>.nude</code>
+(<strong>nu</strong>merator–<strong>de</strong>nominator) hands you both
+at once:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$r</span> = <span class="mi">1</span> / <span class="mi">3</span>;
+<span class="nb">say</span> <span class="nv">$r</span>.<span class="n">WHAT</span>;              <span class="c1"># (Rat)</span>
+<span class="nb">say</span> <span class="nv">$r</span>.<span class="n">numerator</span>;         <span class="c1"># 1</span>
+<span class="nb">say</span> <span class="nv">$r</span>.<span class="n">denominator</span>;       <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="nv">$r</span>.<span class="n">nude</span>;              <span class="c1"># (1 3)</span></pre></div>
+
+<p>There is one thing to watch. When you print a <code>Rat</code>, its
+string form is a decimal rounded for readability, not the exact
+fraction:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">1</span> / <span class="mi">3</span>;               <span class="c1"># 0.333333</span>
+<span class="nb">say</span> (<span class="mi">1</span> / <span class="mi">3</span>).<span class="n">nude</span>;        <span class="c1"># (1 3)   — the real value</span></pre></div>
+
+<p>So <code>1/3</code> is stored exactly and computes exactly; it merely
+<em>displays</em> as a rounded decimal. When you need to see or compare
+the true value, reach for <code>.nude</code> or the numerator and
+denominator.</p>
+<h2 id="division-gives-a-rat-div-stays-integer">Division: <code>/</code>
+gives a Rat, <code>div</code> stays integer</h2>
+<p>This follows directly. In Perl, <code>/</code> is always
+floating-point division and there is no integer-division operator — you
+divide and then call <code>int</code>:</p>
+<div class="highlight perl-code"><pre>my $x = 7 / 2;            # 3.5
+my $q = int(7 / 2);       # 3</pre></div>
+<p>In Raku, <code>/</code> between two integers produces a
+<code>Rat</code>, not a float, so it is exact and it remembers it is
+really a fraction:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">7</span> / <span class="mi">2</span>;               <span class="c1"># 3.5</span>
+<span class="nb">say</span> (<span class="mi">7</span> / <span class="mi">2</span>).<span class="n">WHAT</span>;        <span class="c1"># (Rat)</span></pre></div>
+
+<p>When you actually want integer division, ask for it by name with
+<code>div</code>, and use <code>mod</code> for the integer
+remainder:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">7</span> <span class="n">div</span> <span class="mi">2</span>;             <span class="c1"># 3</span>
+<span class="nb">say</span> (<span class="mi">7</span> <span class="n">div</span> <span class="mi">2</span>).<span class="n">WHAT</span>;      <span class="c1"># (Int)</span>
+<span class="nb">say</span> <span class="mi">7</span> <span class="n">mod</span> <span class="mi">3</span>;             <span class="c1"># 1</span></pre></div>
+
+<p>The <code>%</code> operator still gives a remainder, as in Perl, but
+<code>mod</code> is the integer-only sibling of <code>div</code>. For
+positive operands they agree; the pairing to remember is
+<code>div</code>/<code>mod</code> for integers,
+<code>/</code>/<code>%</code> for the general case.</p>
+<h2 id="num-floating-point-when-you-ask-for-it">Num: floating point when
+you ask for it</h2>
+<p>Floating point has not gone away — it is the right tool for
+scientific computation and anything involving irrational results. In
+Raku it is the <code>Num</code> type, and you summon it with an exponent
+literal or by coercion:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mf">1e10</span>;                <span class="c1"># 10000000000</span>
+<span class="nb">say</span> (<span class="mf">1e10</span>).<span class="n">WHAT</span>;         <span class="c1"># (Num)</span>
+<span class="nb">say</span> (<span class="mi">1</span> / <span class="mi">3</span>).<span class="nb">Num</span>;         <span class="c1"># 0.3333333333333333</span></pre></div>
+
+<p>Functions whose results are inherently irrational return a
+<code>Num</code> even when their input was an integer —
+<code>.sqrt</code> is the everyday example:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">2</span>.<span class="nb">sqrt</span>;              <span class="c1"># 1.4142135623730951</span>
+<span class="nb">say</span> (<span class="mi">2</span>.<span class="nb">sqrt</span>).<span class="n">WHAT</span>;       <span class="c1"># (Num)</span></pre></div>
+
+<p>The mental model: <code>Int</code> and <code>Rat</code> are exact,
+<code>Num</code> is fast-but-approximate. Raku keeps you on the exact
+side by default and only moves to <code>Num</code> when the maths
+genuinely demands it or you explicitly request it.</p>
+<h2 id="complex-and-fatrat">Complex and FatRat</h2>
+<p>Two members of the tower you will meet less often but should
+recognise.</p>
+<p>A <code>Complex</code> number is written with an <code>i</code>
+suffix on the imaginary part, and it behaves like any other number:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">2</span> + <span class="mi">3</span><span class="n">i</span>;              <span class="c1"># 2+3i</span>
+<span class="nb">say</span> (<span class="mi">2</span> + <span class="mi">3</span><span class="n">i</span>).<span class="n">WHAT</span>;       <span class="c1"># (Complex)</span>
+<span class="nb">say</span> (<span class="mi">2</span> + <span class="mi">3</span><span class="n">i</span>).<span class="nb">abs</span>;        <span class="c1"># 3.605551275463989</span></pre></div>
+
+<p>A <code>FatRat</code> is a <code>Rat</code> with no size limit on its
+numerator and denominator. An ordinary <code>Rat</code> keeps its
+denominator within machine-integer range and falls back to
+<code>Num</code> if a calculation would overflow it; a
+<code>FatRat</code> never does, staying exact however big the fraction
+grows:</p>
+<div class="highlight raku"><pre><span></span><span class="k">my</span> <span class="nv">$f</span> = <span class="mi">1</span>.<span class="nb">FatRat</span> / <span class="mi">3</span>;
+<span class="nb">say</span> <span class="nv">$f</span>.<span class="n">WHAT</span>;                          <span class="c1"># (FatRat)</span>
+<span class="nb">say</span> (<span class="mi">10</span> ** <span class="mi">100</span>).<span class="nb">FatRat</span>.<span class="n">denominator</span>;   <span class="c1"># 1</span></pre></div>
+
+<p>You reach for <code>FatRat</code> only when you need
+extreme-precision fractions; the plain <code>Rat</code> covers
+day-to-day decimals.</p>
+<h2 id="literals-radixes-underscores-and-fractions">Literals: radixes,
+underscores, and fractions</h2>
+<p>Perl’s numeric literals mostly carry over, and Raku adds a couple of
+niceties. Hexadecimal, octal, and binary use the familiar prefixes —
+note that octal is <code>0o</code>, not a bare leading zero:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mh">0xff</span>;                <span class="c1"># 255</span>
+<span class="nb">say</span> <span class="mo">0o17</span>;                <span class="c1"># 15</span>
+<span class="nb">say</span> <span class="mb">0b1010</span>;              <span class="c1"># 10</span></pre></div>
+
+<p>For any other base, the general radix form
+<code>:base&lt;digits&gt;</code> does the job:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> :<span class="mi">16</span><span class="s">&lt;dead_beef&gt;</span>;      <span class="c1"># 3735928559</span>
+<span class="nb">say</span> :<span class="mi">2</span><span class="s">&lt;1010&gt;</span>;            <span class="c1"># 10</span></pre></div>
+
+<p>Underscores may be used as digit separators anywhere inside a number,
+exactly as in Perl:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">1_000_000</span>;           <span class="c1"># 1000000</span></pre></div>
+
+<p>And because <code>Rat</code> is a real type, you can write a fraction
+directly as a literal expression and it stays exact:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (<span class="mi">1</span> / <span class="mi">3</span> + <span class="mi">1</span> / <span class="mi">6</span>).<span class="n">nude</span>;   <span class="c1"># (1 2)   — exactly one half</span></pre></div>
+
+<h2 id="coercion-and-numeric-context">Coercion and numeric context</h2>
+<p>Turning a value into a specific type is done with an uppercase
+coercion method named after the type: <code>.Int</code>,
+<code>.Rat</code>, <code>.Num</code>, <code>.Str</code>.</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="s">&quot;3.14&quot;</span>.<span class="nb">Rat</span>;          <span class="c1"># 3.14</span>
+<span class="nb">say</span> <span class="s">&quot;42&quot;</span>.<span class="nb">Int</span>;            <span class="c1"># 42</span>
+<span class="nb">say</span> <span class="mi">42</span>.<span class="nb">Str</span>;              <span class="c1"># 42</span></pre></div>
+
+<p>To force a string into a number the quick way, use the unary
+<code>+</code>, which is the numeric-context operator — the Raku
+spelling of Perl’s <code>0 + $str</code> idiom:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> +<span class="s">&quot;42&quot;</span>;               <span class="c1"># 42</span>
+<span class="nb">say</span> +<span class="s">&quot;5&quot;</span> + <span class="mi">3</span>;            <span class="c1"># 8</span></pre></div>
+
+<p>Here the string parser is noticeably smarter than Perl’s. It
+understands radix prefixes and underscores, where Perl would stop at the
+first non-digit:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> +<span class="s">&quot;0xff&quot;</span>;             <span class="c1"># 255      (Perl's 0 + &quot;0xff&quot; is 0)</span>
+<span class="nb">say</span> +<span class="s">&quot;1_000&quot;</span>;            <span class="c1"># 1000     (Perl's 0 + &quot;1_000&quot; is 1)</span></pre></div>
+
+<p>The mirror image is string context, which you get from <code>~</code>
+(the concatenation operator we met in Chapter 1) or from
+<code>.Str</code>. So <code>~</code> stringifies and <code>+</code>
+numifies, and unlike Perl there is no single operator that guesses which
+you meant:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">5</span> ~ <span class="mi">3</span>;               <span class="c1"># 53   (string context)</span>
+<span class="nb">say</span> <span class="mi">5</span> + <span class="mi">3</span>;               <span class="c1"># 8    (numeric context)</span></pre></div>
+
+<h2 id="useful-methods-on-numbers">Useful methods on numbers</h2>
+<p>Because every number is an object (Chapter 2), the standard
+operations are methods you can chain. A representative handful, all
+verified:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> (-<span class="mi">5</span>).<span class="nb">abs</span>;            <span class="c1"># 5</span>
+<span class="nb">say</span> <span class="mi">17</span>.<span class="n">is-prime</span>;         <span class="c1"># True</span>
+<span class="nb">say</span> <span class="mi">255</span>.<span class="n">base</span>(<span class="mi">16</span>);        <span class="c1"># FF</span>
+<span class="nb">say</span> <span class="mf">3.7</span>.<span class="nb">floor</span>;           <span class="c1"># 3</span>
+<span class="nb">say</span> <span class="mf">3.2</span>.<span class="nb">ceiling</span>;         <span class="c1"># 4</span>
+<span class="nb">say</span> <span class="mf">3.567</span>.<span class="nb">round</span>(<span class="mf">0.01</span>);   <span class="c1"># 3.57</span>
+<span class="nb">say</span> (-<span class="mi">3</span>).<span class="nb">sign</span>;           <span class="c1"># -1</span></pre></div>
+
+<p><code>.round</code> takes an optional unit, so
+<code>.round(0.01)</code> rounds to two decimal places and a bare
+<code>.round</code> rounds to the nearest integer. <code>.sign</code>
+returns <code>-1</code>, <code>0</code>, or <code>1</code>. These read
+naturally in a chain: <code>say (-3.7).abs.ceiling;</code> gives
+<code>4</code>.</p>
+<p>Finally, <code>**</code> deserves one more look, because it is where
+the arbitrary-precision <code>Int</code> earns its keep. A negative
+integer exponent even keeps you in exact-rational territory rather than
+dropping to a float:</p>
+<div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="mi">10</span> ** -<span class="mi">3</span>;            <span class="c1"># 0.001</span>
+<span class="nb">say</span> (<span class="mi">10</span> ** -<span class="mi">3</span>).<span class="n">WHAT</span>;     <span class="c1"># (Rat)</span></pre></div>
+
+<p>That is the numeric tower in one sentence: exact by default,
+approximate only when you ask. With numbers behaving themselves, the
+next chapter turns to the other half of everyday scalars — strings.</p>
+<h2 id="course-navigation">Course navigation</h2>
+<p>← <a href="/raku-books/migrating-to-raku/hashes">Hashes</a>   |   <a
+href="/raku-books/migrating-to-raku/strings">Strings</a> →</p>
+
+        </div>
+      </main>
+      <footer class="site-footer" style="margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid rgba(128,128,128,.25); font-size: 85%; text-align: center; opacity: .75;">
+<p style="margin:.35em 0;"><a href="/raku-books/">Andrew Shitov’s Raku Books</a></p>
+<p style="margin:.35em 0;"><a href="/raku-books/tested-programs">Tested programs</a> · <a href="https://course.raku.org" target="_blank" rel="noopener noreferrer">Raku Course</a> · <a href="https://raku.org" target="_blank" rel="noopener noreferrer">Raku.org</a> · <a href="https://raku.online" target="_blank" rel="noopener noreferrer">Raku Playground</a> · <a href="https://github.com/ash/books" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+<p style="margin:.35em 0;">Books written by <a href="https://andrewshitov.com/">Andrew Shitov</a> · Interactive edition © 2017–2026</p>
+</footer>
+
+    </div>
+    <script src="/raku-books/assets/search.js?v=4" defer></script>
+    <script src="/raku-books/assets/copy-code.js?v=3" defer></script>
+  <script src="https://raku.online/raku.js" data-selector=".highlight.raku:not(.no-run)" defer></script>
+</body>
+</html>
