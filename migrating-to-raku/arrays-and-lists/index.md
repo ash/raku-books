@@ -240,6 +240,97 @@ say @n.max;              # 100
 say @n.join(', ');       # 3, 11, 2, 100, 1
 ```
 
+## Reshaping a list: chunking and grouping
+
+The methods above take a list and give back a value or a shorter list. A second
+family *reshapes* it, and these are the ones with no comfortable Perl spelling —
+in Perl you either pull in `List::MoreUtils` or write an index loop.
+
+Chunking a list into groups of three, in Perl:
+
+```perl
+use v5.36;
+
+my @n = (1, 2, 3, 4, 5, 6, 7);
+
+my @chunks;
+push @chunks, [ @n[$_ .. ($_ + 2 > $#n ? $#n : $_ + 2)] ]
+    for grep { $_ % 3 == 0 } 0 .. $#n;
+
+say join ' ', map { '(' . join(' ', @$_) . ')' } @chunks;
+# (1 2 3) (4 5 6) (7)
+```
+
+In Raku it is one method. `.rotor` chunks, and `.batch` is its forgiving sibling
+that keeps a short final group rather than discarding it:
+
+```raku
+my @n = 1, 2, 3, 4, 5, 6, 7;
+
+say @n.rotor(3);         # ((1 2 3) (4 5 6))          — the odd 7 is dropped
+say @n.batch(3);         # ((1 2 3) (4 5 6) (7))      — the tail is kept
+```
+
+That difference is the whole distinction between them, and it is worth committing
+to memory: `rotor` gives you only complete groups, `batch` gives you everything.
+
+`.rotor` also takes a `key => value` pair, where a negative value overlaps the
+groups and a positive one leaves gaps — a sliding window in one call:
+
+```raku
+my @n = 1, 2, 3, 4, 5, 6, 7;
+say @n.rotor(3 => -1);   # ((1 2 3) (3 4 5) (5 6 7))
+```
+
+Grouping by a property is `.classify`, which returns a hash from each computed key
+to the list of elements that produced it. This is the Perl idiom of building a
+`%by_something` hash in a loop, collapsed:
+
+```perl
+use v5.36;
+
+my @n = (1, 2, 3, 4, 5, 6, 7);
+my (@even, @odd);
+push @{ $_ % 2 ? \@odd : \@even }, $_ for @n;
+say "even: @even";       # even: 2 4 6
+say "odd:  @odd";        # odd:  1 3 5 7
+```
+
+```raku
+my @n = 1, 2, 3, 4, 5, 6, 7;
+say @n.classify(* %% 2);
+# {False => [1 3 5 7], True => [2 4 6]}
+```
+
+Its sibling `.categorize` is for when one element belongs in *several* buckets —
+the block returns a list of keys rather than one:
+
+```raku
+say (1..4).categorize({ ($_ %% 2 ?? 'even' !! 'odd', $_ > 2 ?? 'big' !! 'small') });
+# {big => [3 4], even => [2 4], odd => [1 3], small => [1 2]}
+```
+
+The rest of the family is worth knowing by name, so you recognise the shape of the
+problem when you meet it:
+
+```raku
+my @n = 1, 2, 3, 4, 5, 6, 7;
+
+say @n.minmax;                    # 1..7          — both ends in one pass, as a Range
+say @n.rotate(2);                 # (3 4 5 6 7 1 2)
+say (1, 2, 3).combinations(2);    # ((1 2) (1 3) (2 3))
+say (1, 2, 3).permutations.elems; # 6
+say roundrobin((1, 2), (3, 4, 5));  # ((1 3) (2 4) (5))
+```
+
+And one that is not a list method at all but solves a problem you have certainly
+solved by hand — `.polymod` divides a number by a succession of moduli, which is
+the "seconds into hours, minutes, seconds" loop written once:
+
+```raku
+say 3661.polymod(60, 60);         # (1 1 1)   — 1 h, 1 min, 1 s
+```
+
 `grep` and `map` no longer return a plain list, though — they return a `Seq`,
 which brings us to laziness.
 

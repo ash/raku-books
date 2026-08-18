@@ -467,6 +467,10 @@
 "reason": "does not compile (Rakudo -c)",
 "state": "fragment"
 },
+"12eb9a12bdf8e5dd72cb265a63c4e942e20802fb": {
+"reason": "verified: outputs match",
+"state": "run"
+},
 "12f255bfbe1b3c0f9e3c40afb40160af986df377": {
 "reason": "does not compile (Rakudo -c)",
 "state": "fragment"
@@ -843,6 +847,10 @@
 "state": "run"
 },
 "20f2b0711da69c4edcadcf0af1afff8a0888f192": {
+"reason": "verified: outputs match",
+"state": "run"
+},
+"20f548881b5ce8ff5a13ddb4025ff1ce7c303519": {
 "reason": "verified: outputs match",
 "state": "run"
 },
@@ -2651,6 +2659,10 @@
 "reason": "Rakudo runtime error",
 "state": "fragment"
 },
+"5c9bd24f4038f8bb86952758caf29a88becf78f4": {
+"reason": "verified: outputs match",
+"state": "run"
+},
 "5ca7642822514f4ea5239c6ec9177680f8a5bf2f": {
 "reason": "produces no output to show",
 "state": "fragment"
@@ -2780,6 +2792,10 @@
 "reason": "verified: outputs match",
 "state": "run"
 },
+"62943b9c8c5433041dfb9d96dc7e2fc9686da36e": {
+"reason": "produces no output to show",
+"state": "fragment"
+},
 "62df14acee3b2e029db3186f10e516b6bdf83737": {
 "reason": "does not compile (Rakudo -c)",
 "state": "fragment"
@@ -2799,6 +2815,10 @@
 "6357b89d630c2ff5ae184c0c7c914c6e6da51bd7": {
 "reason": "does not compile (Rakudo -c)",
 "state": "fragment"
+},
+"638106b86371f0a92eb48e8603046b561a427146": {
+"reason": "verified: outputs match",
+"state": "run"
 },
 "6395c613d98eb35d453f4ca4c5f5928cd7083ab4": {
 "reason": "verified: outputs match",
@@ -3124,6 +3144,10 @@
 "6e46f696d3658093a110c2a73bc231e66c81ebd2": {
 "reason": "does not compile (Rakudo -c)",
 "state": "fragment"
+},
+"6e53b503c0629d3e050a39f0368d40da2faa39f6": {
+"reason": "verified: outputs match",
+"state": "run"
 },
 "6e610571356bde64c7d8b52f6b529f482cb40762": {
 "reason": "verified: outputs match",
@@ -5080,6 +5104,10 @@
 "reason": "verified: outputs match",
 "state": "run"
 },
+"b4ef1040371e714ff13033584f5584f64a002852": {
+"reason": "verified: outputs match",
+"state": "run"
+},
 "b4fde29cb1d1cabd4504a4513760919586f9d23a": {
 "reason": "verified: outputs match",
 "state": "run"
@@ -5128,6 +5156,10 @@
 "reason": "does not compile (Rakudo -c)",
 "state": "fragment"
 },
+"b6c26c086617fe70e815537f0789f9428c2a58a5": {
+"reason": "verified: outputs match",
+"state": "run"
+},
 "b6e5b6cc3e2654f85d94529b78c12379f268615d": {
 "reason": "verified: outputs match",
 "state": "run"
@@ -5143,6 +5175,10 @@
 "b77135c03a1cfffe4641084bf902dc41e22384e3": {
 "reason": "does not compile (Rakudo -c)",
 "state": "fragment"
+},
+"b78197185848431e0f0c38ecfc2e044412e886c3": {
+"reason": "verified: outputs match",
+"state": "run"
 },
 "b7b41caffe5fabd2cb14965da70759af6fd9f711": {
 "reason": "does not compile (Rakudo -c)",
@@ -6672,6 +6708,10 @@
 "state": "fragment"
 },
 "ecc5fffd8d6077420b13f9288486de80cbf851fb": {
+"reason": "verified: outputs match",
+"state": "run"
+},
+"ece087da8c48719f15ba9f8bf7e3f4cf76b74b1a": {
 "reason": "verified: outputs match",
 "state": "run"
 },

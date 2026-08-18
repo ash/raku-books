@@ -81,8 +81,27 @@ sub hello($name) is export {
 
 The `unit` prefix means "the rest of the file is inside this declaration", so you
 do not have to wrap everything in braces — the direct counterpart of a Perl
-file-scoped `package`. Note also that Raku modules need no trailing `1;`; the
-`.pm`-era ritual of returning a true value is gone.
+file-scoped `package`. Note also that Raku modules need no trailing `1;`.
+
+That ritual is on its way out in Perl too. A `.pm` had to end in a true value
+because `require` checked the file's return value, and forgetting it produced the
+classic error:
+
+```
+Greeting.pm did not return a true value at ...
+```
+
+Under `use v5.38` (or `use feature 'module_true'`) the check is gone and the
+trailing `1;` is optional:
+
+```perl
+use v5.38;
+package Greeting;
+sub hello { "Hello, $_[0]!" }
+```
+
+So this is a convergence rather than a difference — but the `1;` is still on
+essentially every `.pm` written before 2023, which is most of them.
 
 `module` is only one of several package kinds, and they all follow the same
 `unit`-or-braces pattern. You already know two of the others from earlier
@@ -230,6 +249,83 @@ can depend on incompatible versions without conflict, something Perl handles
 only awkwardly. Version selection is enforced for *installed* distributions;
 loose files found via `-I` (below) are matched by name only, so a `:ver`
 constraint against a bare file is not checked.
+
+## Documenting it: POD becomes Pod6
+
+A Perl module carries its documentation inline, in POD, and `perldoc` renders it:
+
+```perl
+package Greeting;
+
+=head1 NAME
+
+Greeting - a friendly greeter
+
+=head2 hello($name)
+
+Returns a greeting for C<$name>.
+
+=cut
+
+sub hello { "Hello, $_[0]!" }
+1;
+```
+
+Raku's version is **Pod6**, and the family resemblance is deliberate. The
+directives are the same words; what changed is that a block now has an explicit
+beginning and end, so there is no `=cut` and no ambiguity about where prose stops
+and code resumes:
+
+```raku-static
+=begin pod
+
+=head1 Greeting
+
+A friendly greeter.
+
+=end pod
+
+unit module Greeting;
+
+sub hello($name) is export { "Hello, $name!" }
+```
+
+`raku --doc Greeting.rakumod` renders it, the way `perldoc` does:
+
+```
+Greeting
+
+A friendly greeter.
+```
+
+`=head1` through `=head4`, `=item`, `=code`, and `=table` cover most of what you
+used POD for, and the inline formatting codes are the familiar ones — `B<bold>`,
+`I<italic>`, `C<code>`, `L<links>`.
+
+### Documentation attached to the code: `#|` and `.WHY`
+
+Here is the part with no POD equivalent. A comment starting `#|` is a
+**declarator block**: it attaches to the declaration that follows it, and stays
+attached at run time, reachable through the `.WHY` method.
+
+```raku
+#| Returns a greeting for the given name.
+sub hello($name) { "Hello, $name!" }
+
+say &hello.WHY;      # Returns a greeting for the given name.
+```
+
+The `#=` form does the same from *below* the declaration, for the trailing-comment
+style. Because the text is a real object rather than a block of prose the compiler
+skipped over, tooling can read it: this is what lets an editor show a signature
+and its description together, and what documentation generators walk. The whole
+Pod tree of the current file is likewise available as data, in `$=pod`.
+
+The practical upshot for a migrating programmer is that the two habits separate
+cleanly. Reach for `=begin pod` for the module's manual — the part a reader
+consumes with `--doc`. Reach for `#|` for the one-line "what does this routine
+do" note that used to live in an ordinary `#` comment and was invisible to
+everything but a human reading the source.
 
 ## Where modules live: the search path
 

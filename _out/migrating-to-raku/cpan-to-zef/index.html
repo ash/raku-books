@@ -215,6 +215,137 @@ it mirrors CPAN convention:</p>
 (<code>zef test .</code> runs them), and anything in <code>bin/</code>
 is installed onto the user’s <code>PATH</code> — the equivalent of a
 Perl distribution’s <code>script/</code> or <code>bin/</code>.</p>
+<h2 id="writing-the-tests-testmore-becomes-test">Writing the tests:
+<code>Test::More</code> becomes <code>Test</code></h2>
+<p>The <code>t/</code> directory above is not decoration —
+<code>zef</code> runs it before it installs anything, so a distribution
+without tests is a distribution nobody can trust. The good news is that
+the test module you know maps across almost name for name.</p>
+<p>A Perl test file uses <code>Test::More</code>:</p>
+<div class="highlight perl-code"><pre>use v5.36;
+use Test::More tests =&gt; 3;
+
+ok 1 + 1 == 2,              'addition works';
+is 'a' . 'b', 'ab',         'concatenation works';
+is_deeply [1, 2], [1, 2],   'lists compare deeply';</pre></div>
+<div class="highlight"><pre>1..3
+ok 1 - addition works
+ok 2 - concatenation works
+ok 3 - lists compare deeply</pre></div>
+<p>The Raku equivalent is the core <code>Test</code> module — no
+installation, it ships with the compiler. Save this as
+<code>t/01-basic.rakutest</code>:</p>
+<div class="highlight raku"><pre><span></span><span class="k">use</span> <span class="n">Test</span>;
+
+<span class="n">plan</span> <span class="mi">4</span>;
+
+<span class="n">ok</span>  <span class="mi">1</span> + <span class="mi">1</span> == <span class="mi">2</span>,            <span class="s">'addition works'</span>;
+<span class="k">is</span>  <span class="s">'a'</span> ~ <span class="s">'b'</span>, <span class="s">'ab'</span>,       <span class="s">'concatenation works'</span>;
+<span class="n">is-deeply</span> [<span class="mi">1</span>, <span class="mi">2</span>], [<span class="mi">1</span>, <span class="mi">2</span>],  <span class="s">'lists compare deeply'</span>;
+<span class="n">dies-ok</span> { <span class="nb">die</span> <span class="s">'boom'</span> },    <span class="s">'it dies when it should'</span>;</pre></div>
+
+<div class="highlight"><pre>1..4
+ok 1 - addition works
+ok 2 - concatenation works
+ok 3 - lists compare deeply
+ok 4 - it dies when it should</pre></div>
+<p>That is TAP, the same protocol <code>prove</code> has consumed for
+twenty years, so the output should look reassuringly familiar. The
+differences are the ones you would predict by now: hyphens instead of
+underscores in the names, <code>~</code> for concatenation, and a block
+rather than a string for the code that should die.</p>
+<p>The routines line up like this:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th><code>Test::More</code></th>
+<th><code>Test</code></th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ok</code> / <code>nok</code></td>
+<td><code>ok</code> / <code>nok</code></td>
+<td>Perl spells the negative <code>ok !$x</code></td>
+</tr>
+<tr>
+<td><code>is</code> / <code>isnt</code></td>
+<td><code>is</code> / <code>isnt</code></td>
+<td>compares with <code>eq</code>-like semantics</td>
+</tr>
+<tr>
+<td><code>is_deeply</code></td>
+<td><code>is-deeply</code></td>
+<td>structural comparison</td>
+</tr>
+<tr>
+<td><code>like</code> / <code>unlike</code></td>
+<td><code>like</code> / <code>unlike</code></td>
+<td>takes a Raku regex: <code>like $s, /pat/</code></td>
+</tr>
+<tr>
+<td><code>cmp_ok</code></td>
+<td><code>cmp-ok</code></td>
+<td>explicit comparator</td>
+</tr>
+<tr>
+<td><code>isa_ok</code></td>
+<td><code>isa-ok</code></td>
+<td>type check</td>
+</tr>
+<tr>
+<td><code>subtest</code></td>
+<td><code>subtest</code></td>
+<td>same idea, block-scoped <code>plan</code></td>
+</tr>
+<tr>
+<td><code>done_testing</code></td>
+<td><code>done-testing</code></td>
+<td>the alternative to declaring <code>plan</code> up front</td>
+</tr>
+<tr>
+<td><code>plan tests =&gt; N</code></td>
+<td><code>plan N</code></td>
+<td></td>
+</tr>
+<tr>
+<td>—</td>
+<td><code>dies-ok</code> / <code>lives-ok</code></td>
+<td>no <code>Test::Fatal</code> needed</td>
+</tr>
+<tr>
+<td>—</td>
+<td><code>throws-like</code></td>
+<td>asserts the <em>type</em> of the exception, per Chapter 26</td>
+</tr>
+<tr>
+<td><code>diag</code></td>
+<td><code>diag</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>skip</code> / <code>todo</code></td>
+<td><code>skip</code> / <code>todo</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The last two rows are the ones worth noticing. Perl reaches for
+<code>Test::Fatal</code> or <code>Test::Exception</code> to assert that
+something dies; in Raku <code>dies-ok</code>, <code>lives-ok</code>, and
+<code>throws-like</code> are built in, and <code>throws-like</code>
+checks the exception’s <em>type</em> against the <code>X::</code>
+hierarchy rather than matching its message with a regex.</p>
+<p>Run them with <code>zef test .</code> from the distribution root, or
+a single file directly:</p>
+<div class="highlight"><pre>$ raku -I lib t/01-basic.rakutest
+$ zef test .</pre></div>
 <h2 id="publishing-with-fez">Publishing with <code>fez</code></h2>
 <p>Uploading is deliberately undramatic. Install the uploader, register
 a username once, then push from the distribution root:</p>

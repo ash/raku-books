@@ -189,8 +189,20 @@ unsurprisingly, <code>module</code>. Save this as
 <p>The <code>unit</code> prefix means “the rest of the file is inside
 this declaration”, so you do not have to wrap everything in braces — the
 direct counterpart of a Perl file-scoped <code>package</code>. Note also
-that Raku modules need no trailing <code>1;</code>; the
-<code>.pm</code>-era ritual of returning a true value is gone.</p>
+that Raku modules need no trailing <code>1;</code>.</p>
+<p>That ritual is on its way out in Perl too. A <code>.pm</code> had to
+end in a true value because <code>require</code> checked the file’s
+return value, and forgetting it produced the classic error:</p>
+<div class="highlight"><pre>Greeting.pm did not return a true value at ...</pre></div>
+<p>Under <code>use v5.38</code> (or
+<code>use feature 'module_true'</code>) the check is gone and the
+trailing <code>1;</code> is optional:</p>
+<div class="highlight perl-code"><pre>use v5.38;
+package Greeting;
+sub hello { "Hello, $_[0]!" }</pre></div>
+<p>So this is a convergence rather than a difference — but the
+<code>1;</code> is still on essentially every <code>.pm</code> written
+before 2023, which is most of them.</p>
 <p><code>module</code> is only one of several package kinds, and they
 all follow the same <code>unit</code>-or-braces pattern. You already
 know two of the others from earlier chapters:</p>
@@ -334,6 +346,75 @@ without conflict, something Perl handles only awkwardly. Version
 selection is enforced for <em>installed</em> distributions; loose files
 found via <code>-I</code> (below) are matched by name only, so a
 <code>:ver</code> constraint against a bare file is not checked.</p>
+<h2 id="documenting-it-pod-becomes-pod6">Documenting it: POD becomes
+Pod6</h2>
+<p>A Perl module carries its documentation inline, in POD, and
+<code>perldoc</code> renders it:</p>
+<div class="highlight perl-code"><pre>package Greeting;
+
+=head1 NAME
+
+Greeting - a friendly greeter
+
+=head2 hello($name)
+
+Returns a greeting for C&lt;$name&gt;.
+
+=cut
+
+sub hello { "Hello, $_[0]!" }
+1;</pre></div>
+<p>Raku’s version is <strong>Pod6</strong>, and the family resemblance
+is deliberate. The directives are the same words; what changed is that a
+block now has an explicit beginning and end, so there is no
+<code>=cut</code> and no ambiguity about where prose stops and code
+resumes:</p>
+<div class="highlight raku no-run"><pre><span></span><span class="c1">=begin pod
+
+=head1 Greeting
+
+A friendly greeter.
+
+=end pod</span>
+
+<span class="k">unit</span> <span class="k">module</span> <span class="n">Greeting</span>;
+
+<span class="k">sub</span> <span class="n">hello</span>(<span class="nv">$name</span>) <span class="k">is</span> <span class="n">export</span> { <span class="s">&quot;Hello, $name!&quot;</span> }</pre></div>
+
+<p><code>raku --doc Greeting.rakumod</code> renders it, the way
+<code>perldoc</code> does:</p>
+<div class="highlight"><pre>Greeting
+
+A friendly greeter.</pre></div>
+<p><code>=head1</code> through <code>=head4</code>, <code>=item</code>,
+<code>=code</code>, and <code>=table</code> cover most of what you used
+POD for, and the inline formatting codes are the familiar ones —
+<code>B&lt;bold&gt;</code>, <code>I&lt;italic&gt;</code>,
+<code>C&lt;code&gt;</code>, <code>L&lt;links&gt;</code>.</p>
+<h3 id="documentation-attached-to-the-code-and-.why">Documentation
+attached to the code: <code>#|</code> and <code>.WHY</code></h3>
+<p>Here is the part with no POD equivalent. A comment starting
+<code>#|</code> is a <strong>declarator block</strong>: it attaches to
+the declaration that follows it, and stays attached at run time,
+reachable through the <code>.WHY</code> method.</p>
+<div class="highlight raku"><pre><span></span><span class="c1">#| Returns a greeting for the given name.</span>
+<span class="k">sub</span> <span class="n">hello</span>(<span class="nv">$name</span>) { <span class="s">&quot;Hello, $name!&quot;</span> }
+
+<span class="nb">say</span> <span class="nv">&amp;hello</span>.<span class="n">WHY</span>;      <span class="c1"># Returns a greeting for the given name.</span></pre></div>
+
+<p>The <code>#=</code> form does the same from <em>below</em> the
+declaration, for the trailing-comment style. Because the text is a real
+object rather than a block of prose the compiler skipped over, tooling
+can read it: this is what lets an editor show a signature and its
+description together, and what documentation generators walk. The whole
+Pod tree of the current file is likewise available as data, in
+<code>$=pod</code>.</p>
+<p>The practical upshot for a migrating programmer is that the two
+habits separate cleanly. Reach for <code>=begin pod</code> for the
+module’s manual — the part a reader consumes with <code>--doc</code>.
+Reach for <code>#|</code> for the one-line “what does this routine do”
+note that used to live in an ordinary <code>#</code> comment and was
+invisible to everything but a human reading the source.</p>
 <h2 id="where-modules-live-the-search-path">Where modules live: the
 search path</h2>
 <p>Perl searches <code>@INC</code>, which you extend with

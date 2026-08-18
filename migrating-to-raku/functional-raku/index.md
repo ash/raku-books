@@ -124,9 +124,9 @@ read". It turns many loops into a single declarative expression.
 
 ## Junctions
 
-Here is an idea with no Perl equivalent. A *junction* is a single value that
-superimposes several values at once, combined with `any`, `all`, `one`, or
-`none`. You build them with the infix forms `|` (any), `&` (all), and `^` (one):
+Here is an idea Perl has only recently begun to approach. A *junction* is a single
+value that superimposes several values at once, combined with `any`, `all`, `one`,
+or `none`. You build them with the infix forms `|` (any), `&` (all), and `^` (one):
 
 ```raku
 say so 3 == (1|2|3);                    # True
@@ -149,6 +149,28 @@ my @a = 4, 8, 15, 16, 23, 42;
 say so 15 == any(@a);                    # True
 say so all(@a) > 0;                      # True
 ```
+
+Very recent Perl has `any` and `all` keywords that cover exactly these two
+questions:
+
+```perl
+use v5.36;
+use feature qw(keyword_any keyword_all);
+no warnings 'experimental::keyword_any', 'experimental::keyword_all';
+
+my @a = (4, 8, 15, 16, 23, 42);
+say any { $_ == 15 } @a;      # 1
+say all { $_ > 0 } @a;        # 1
+```
+
+The convergence stops there, though, and the difference is worth understanding.
+Perl's `any`/`all` are *block-and-list* functions: they take a predicate, walk the
+list, and return a Boolean immediately. Raku's are *values*. `any(@a)` is a
+`Junction` you can store in a variable, pass to a function, and apply arbitrary
+operators to — the autothreading above is not something a Perl `any` can do,
+because there is nothing left over after it returns. That is why the Raku form
+reads `15 == any(@a)` — comparison against a value — while the Perl form reads
+`any { $_ == 15 }` — a predicate over a list.
 
 Use the named forms `any`/`all`/`one`/`none` for readability over lists, and the
 `|`/`&`/`^` operators for quick inline junctions. One caution: because a junction

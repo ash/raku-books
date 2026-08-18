@@ -203,8 +203,10 @@ stringification hook: define a <code>Str</code> method and the prefix
 automatically. We use that idiomatic form at the end of the chapter.</p>
 <p>Modern Perl’s own <code>class</code> feature reaches for the same
 shape, if you are on a recent enough release (it is still marked
-experimental):</p>
-<div class="highlight perl-code"><pre>use feature 'class';
+experimental, hence the <code>no warnings</code>):</p>
+<div class="highlight perl-code"><pre>use v5.38;
+use feature 'class';
+no warnings 'experimental::class';
 
 class Point {
     field $x :param :reader = 0;
@@ -212,12 +214,22 @@ class Point {
     method to_string { "($x, $y)" }
 }
 
-my $p = Point-&gt;new(x =&gt; 3, y =&gt; 4);</pre></div>
-<p>The family resemblance is real. What follows in this chapter — roles,
-submethods, <code>multi</code> methods,
-<code>BUILD</code>/<code>TWEAK</code>, definite-vs-optional typing on
-attributes — is where Raku’s older, more complete object model still
-goes well beyond it.</p>
+my $p = Point-&gt;new(x =&gt; 3, y =&gt; 4);
+say $p-&gt;x;                 # 3
+say $p-&gt;to_string;         # (3, 4)</pre></div>
+<p>The family resemblance is real, and it is not a coincidence: Perl’s
+<code>class</code> and Raku’s grew from the same conversations.
+<code>field</code> is <code>has</code>, <code>:param</code> makes it a
+constructor argument, <code>:reader</code> generates the accessor, and
+<code>method</code> gives you an invocant without shifting
+<code>@_</code>. Where Raku writes one <code>has $.x</code> and gets
+storage, constructor argument, and reader together, Perl asks you to
+name the three parts — but the shape is the same.</p>
+<p>We will point out the rest of the correspondences as they come up.
+What has no Perl counterpart at all — roles, submethods,
+<code>multi</code> methods, definite-vs-optional typing on attributes —
+is where Raku’s older, more complete object model still goes well beyond
+it.</p>
 <h2 id="attributes-and-the-.-versus-twigil">Attributes and the
 <code>.</code> versus <code>!</code> twigil</h2>
 <p>Chapter 3 introduced twigils and promised that <code>$!name</code>
@@ -299,6 +311,26 @@ them:</p>
 <span class="nb">say</span> <span class="nv">$b</span>.<span class="n">tags</span>;             <span class="c1"># {a =&gt; 1}</span></pre></div>
 
 <p class="run-note">↻ Runs in Rakudo; the in-browser engine (Raku++) doesn’t support this program yet — see the expected output above.</p>
+<p>Modern Perl’s <code>field</code> takes a sigil for the same reason,
+and the array or hash is addressed directly inside the class rather than
+through a reference:</p>
+<div class="highlight perl-code"><pre>use v5.38;
+use feature 'class';
+no warnings 'experimental::class';
+
+class Bag {
+    field @items;
+    method add($x) { push @items, $x }
+    method items   { @items }
+}
+
+my $b = Bag-&gt;new;
+$b-&gt;add(3);
+say join ',', $b-&gt;items;   # 3</pre></div>
+<p>Note what Perl does <em>not</em> do here: <code>field @items</code>
+generates no <code>:param</code>, so there is no way to pass the array
+in at construction. Raku’s <code>has @.items</code> gives you both the
+accessor and the constructor argument in one declaration.</p>
 <h2 id="the-generated-constructor">The generated constructor</h2>
 <p>You never wrote <code>new</code> above, yet
 <code>Point.new(x =&gt; 3, y =&gt; 4)</code> worked. Every class
@@ -390,6 +422,30 @@ If you have written a Moose <code>BUILD</code> or a
 <code>BUILDARGS</code>, the roles are similar — <code>TWEAK</code> is
 the everyday post-construction hook, <code>BUILD</code> the lower-level
 argument-handling one.</p>
+<p>This is the one place where modern Perl’s <code>class</code> lines up
+almost exactly. Perl’s <code>ADJUST</code> block runs after the fields
+have been initialised — the same moment, and the same job, as
+<code>TWEAK</code>:</p>
+<div class="highlight perl-code"><pre>use v5.38;
+use feature 'class';
+no warnings 'experimental::class';
+
+class Temperature {
+    field $celsius    :param :reader;
+    field $fahrenheit :reader;
+    ADJUST { $fahrenheit = $celsius * 9/5 + 32 }
+}
+
+say Temperature-&gt;new(celsius =&gt; 100)-&gt;fahrenheit;   # 212</pre></div>
+<p>Two differences worth carrying across. <code>ADJUST</code> is a
+<em>block</em>, not a method, so it takes no signature — where Raku’s
+<code>BUILD</code> can capture named arguments with
+<code>submethod BUILD(:$name, :$age = 0)</code>, Perl has no
+<code>BUILD</code> counterpart at all and you do that work in
+<code>ADJUST</code> against the already-bound fields. And Perl needs no
+<code>$!</code>-versus-<code>$.</code> care inside it: a field is always
+the plain lexical, so there is no accessor to accidentally call on a
+half-built object.</p>
 <h2 id="methods-self-and-the-two-ways-to-reach-an-attribute">Methods,
 <code>self</code>, and the two ways to reach an attribute</h2>
 <p>A <code>method</code> is like a <code>sub</code>, but with an

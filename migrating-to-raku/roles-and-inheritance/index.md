@@ -63,7 +63,34 @@ say $d ~~ Animal;          # True   — an "isa" test
 `is Animal` is Raku's `use parent 'Animal'`. `Dog` inherits the attribute
 `$.name`, the generated `new`, and `speak`; it overrides `sound`. The smartmatch
 `$d ~~ Animal` is the idiomatic "is this an Animal?" test, replacing Perl's
-`$d->isa('Animal')`.
+`$d->isa('Animal')` — though modern Perl has closed most of that gap too. Its
+`class` feature spells the parent with an `:isa` attribute, and it has an infix
+`isa` operator that reads much like the smartmatch:
+
+```perl
+use v5.38;
+use feature 'class';
+no warnings 'experimental::class';
+
+class Animal {
+    field $name :param :reader;
+    method sound { '...' }
+    method speak { "$name says " . $self->sound }
+}
+
+class Dog :isa(Animal) {
+    method sound { 'Woof' }
+}
+
+my $d = Dog->new(name => 'Rex');
+say $d->speak;             # Rex says Woof
+say 'yes' if $d isa Animal;   # yes
+```
+
+The `isa` operator is older than the `class` feature and works on `bless`ed
+objects too, so `$d isa Animal` is available in ordinary Perl OO from 5.32
+onwards. What comes next in this chapter — roles — is where the two languages
+part company, because Perl has no core equivalent at all.
 
 For the Moose/Moo crowd: `is Animal` is Moose's `extends 'Animal'`. There is no
 separate keyword to import — `is` is built in.

@@ -160,8 +160,19 @@ program with <code>rakupp program.raku</code> exactly as you would with
 implemented yet, fall back to Rakudo, which remains the reference
 throughout.</p>
 <p>In the chapters that follow we work with <strong>both</strong> Perl
-and Raku, so it is assumed you have both installed, and that your Perl
-is no older than 5.12.</p>
+and Raku, so it is assumed you have both installed. The Perl side of the
+comparison is mostly <em>classic</em> Perl — the code you already have —
+and anything from 5.12 onwards will run it.</p>
+<p>Perl has not stood still either, though, and where it has grown a
+feature that closes a gap with Raku the book says so and shows it. Those
+examples are marked by the <code>use v5.36;</code> (or
+<code>use v5.38;</code>) line at the top, and a few of them —
+<code>class</code>, <code>field</code>, <code>ADJUST</code>,
+<code>defer</code>, the <code>builtin::</code> functions — are still
+flagged experimental, hence the <code>no warnings</code> that goes with
+them. To run <em>those</em>, you want a recent Perl; everything in this
+book was checked against <strong>5.44</strong>. If your Perl is older,
+the Raku half still runs and the Perl half still reads.</p>
 <h2 id="course-navigation">Course navigation</h2>
 <p>← <a href="/raku-books/migrating-to-raku/front-matter">Front matter</a>   |   <a
 href="/raku-books/migrating-to-raku/how-this-book-works">How This Book Works</a>

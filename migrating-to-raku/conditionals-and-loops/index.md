@@ -205,6 +205,40 @@ The same technique reads a flat list of key/value data, or steps a grid two rows
 at a time — anywhere you would previously have written `for (my $i = 0; ...; $i
 += 2)`.
 
+It also gives you the index-and-value loop without the `$#a` arithmetic. Raku
+spells it `.kv`, which yields each index followed by its element:
+
+```raku
+my @a = <a b c>;
+for @a.kv -> $i, $v { say "$i: $v" }
+# 0: a
+# 1: b
+# 2: c
+```
+
+Modern Perl pairs its multi-variable `for` with `builtin::indexed` to the same
+effect:
+
+```perl
+use v5.36;
+use builtin qw(indexed);
+no warnings 'experimental::builtin';
+
+my @a = ('a', 'b', 'c');
+for my ($i, $v) (indexed @a) {
+    say "$i: $v";
+}
+# 0: a
+# 1: b
+# 2: c
+```
+
+`indexed` is one of a set of small functions Perl moved into the core `builtin::`
+namespace — `trim`, `blessed`, `reftype`, `ceil`, `floor`, `true`, `false`, and
+`is_bool` are the others you are most likely to want. They replace a scattering of
+`List::Util`, `Scalar::Util`, and `POSIX` imports, much as Raku's equivalents are
+plain methods on the values themselves.
+
 ## `last`, `next`, `redo`, and labels
 
 The loop-control words are unchanged in name and meaning: `last` leaves the loop,

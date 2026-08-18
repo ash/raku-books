@@ -241,6 +241,31 @@ value
 <p>Because <code>LEAVE</code> always runs, you no longer need to
 remember to close a handle or release a lock on every exit path — you
 declare the clean-up once, next to the thing it cleans up.</p>
+<p>Modern Perl has grown the same idea. Alongside <code>finally</code>
+on a <code>try</code> block, it has <code>defer</code>, which is
+<code>LEAVE</code> in all but name — block-scoped, written
+<em>before</em> the body, and run however the block is left:</p>
+<div class="highlight perl-code"><pre>use v5.36;
+use feature 'defer';
+no warnings 'experimental::defer';
+
+sub work {
+    defer { say '  cleanup' }
+    say '  body';
+}
+say 'before';
+work();
+say 'after';
+# before
+#   body
+#   cleanup
+# after</pre></div>
+<p>If you have been reaching for <code>Scope::Guard</code> or a
+<code>DESTROY</code>-based guard object, <code>defer</code> is the
+replacement. What Perl still has no counterpart for is the pair below
+it: <code>KEEP</code> and <code>UNDO</code> discriminate between a
+successful and an unsuccessful exit, and <code>defer</code> — like
+<code>finally</code> — always runs regardless.</p>
 <h2 id="loop-phasers">Loop phasers</h2>
 <p>Loops get three phasers of their own, which fire relative to
 iterations rather than to the whole loop:</p>

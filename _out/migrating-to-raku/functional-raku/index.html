@@ -219,11 +219,12 @@ and only the elements you touch are computed:</p>
 the part you read”. It turns many loops into a single declarative
 expression.</p>
 <h2 id="junctions">Junctions</h2>
-<p>Here is an idea with no Perl equivalent. A <em>junction</em> is a
-single value that superimposes several values at once, combined with
-<code>any</code>, <code>all</code>, <code>one</code>, or
-<code>none</code>. You build them with the infix forms <code>|</code>
-(any), <code>&amp;</code> (all), and <code>^</code> (one):</p>
+<p>Here is an idea Perl has only recently begun to approach. A
+<em>junction</em> is a single value that superimposes several values at
+once, combined with <code>any</code>, <code>all</code>,
+<code>one</code>, or <code>none</code>. You build them with the infix
+forms <code>|</code> (any), <code>&amp;</code> (all), and <code>^</code>
+(one):</p>
 <div class="highlight raku"><pre><span></span><span class="nb">say</span> <span class="k">so</span> <span class="mi">3</span> == (<span class="mi">1</span>|<span class="mi">2</span>|<span class="mi">3</span>);                    <span class="c1"># True</span>
 <span class="nb">say</span> <span class="k">so</span> <span class="mi">5</span> == (<span class="mi">1</span>|<span class="mi">2</span>|<span class="mi">3</span>);                    <span class="c1"># False</span></pre></div>
 
@@ -239,6 +240,26 @@ branch, returning a new junction.</p>
 <span class="nb">say</span> <span class="k">so</span> <span class="mi">15</span> == <span class="n">any</span>(<span class="nv">@a</span>);                    <span class="c1"># True</span>
 <span class="nb">say</span> <span class="k">so</span> <span class="n">all</span>(<span class="nv">@a</span>) &gt; <span class="mi">0</span>;                      <span class="c1"># True</span></pre></div>
 
+<p>Very recent Perl has <code>any</code> and <code>all</code> keywords
+that cover exactly these two questions:</p>
+<div class="highlight perl-code"><pre>use v5.36;
+use feature qw(keyword_any keyword_all);
+no warnings 'experimental::keyword_any', 'experimental::keyword_all';
+
+my @a = (4, 8, 15, 16, 23, 42);
+say any { $_ == 15 } @a;      # 1
+say all { $_ &gt; 0 } @a;        # 1</pre></div>
+<p>The convergence stops there, though, and the difference is worth
+understanding. Perl’s <code>any</code>/<code>all</code> are
+<em>block-and-list</em> functions: they take a predicate, walk the list,
+and return a Boolean immediately. Raku’s are <em>values</em>.
+<code>any(@a)</code> is a <code>Junction</code> you can store in a
+variable, pass to a function, and apply arbitrary operators to — the
+autothreading above is not something a Perl <code>any</code> can do,
+because there is nothing left over after it returns. That is why the
+Raku form reads <code>15 == any(@a)</code> — comparison against a value
+— while the Perl form reads <code>any { $_ == 15 }</code> — a predicate
+over a list.</p>
 <p>Use the named forms
 <code>any</code>/<code>all</code>/<code>one</code>/<code>none</code> for
 readability over lists, and the

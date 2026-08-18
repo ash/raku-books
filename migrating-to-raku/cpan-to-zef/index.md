@@ -101,6 +101,87 @@ Greeting/
 `bin/` is installed onto the user's `PATH` — the equivalent of a Perl
 distribution's `script/` or `bin/`.
 
+## Writing the tests: `Test::More` becomes `Test`
+
+The `t/` directory above is not decoration — `zef` runs it before it installs
+anything, so a distribution without tests is a distribution nobody can trust. The
+good news is that the test module you know maps across almost name for name.
+
+A Perl test file uses `Test::More`:
+
+```perl
+use v5.36;
+use Test::More tests => 3;
+
+ok 1 + 1 == 2,              'addition works';
+is 'a' . 'b', 'ab',         'concatenation works';
+is_deeply [1, 2], [1, 2],   'lists compare deeply';
+```
+
+```
+1..3
+ok 1 - addition works
+ok 2 - concatenation works
+ok 3 - lists compare deeply
+```
+
+The Raku equivalent is the core `Test` module — no installation, it ships with
+the compiler. Save this as `t/01-basic.rakutest`:
+
+```raku
+use Test;
+
+plan 4;
+
+ok  1 + 1 == 2,            'addition works';
+is  'a' ~ 'b', 'ab',       'concatenation works';
+is-deeply [1, 2], [1, 2],  'lists compare deeply';
+dies-ok { die 'boom' },    'it dies when it should';
+```
+
+```
+1..4
+ok 1 - addition works
+ok 2 - concatenation works
+ok 3 - lists compare deeply
+ok 4 - it dies when it should
+```
+
+That is TAP, the same protocol `prove` has consumed for twenty years, so the
+output should look reassuringly familiar. The differences are the ones you would
+predict by now: hyphens instead of underscores in the names, `~` for
+concatenation, and a block rather than a string for the code that should die.
+
+The routines line up like this:
+
+| `Test::More` | `Test` | Notes |
+|---|---|---|
+| `ok` / `nok` | `ok` / `nok` | Perl spells the negative `ok !$x` |
+| `is` / `isnt` | `is` / `isnt` | compares with `eq`-like semantics |
+| `is_deeply` | `is-deeply` | structural comparison |
+| `like` / `unlike` | `like` / `unlike` | takes a Raku regex: `like $s, /pat/` |
+| `cmp_ok` | `cmp-ok` | explicit comparator |
+| `isa_ok` | `isa-ok` | type check |
+| `subtest` | `subtest` | same idea, block-scoped `plan` |
+| `done_testing` | `done-testing` | the alternative to declaring `plan` up front |
+| `plan tests => N` | `plan N` | |
+| — | `dies-ok` / `lives-ok` | no `Test::Fatal` needed |
+| — | `throws-like` | asserts the *type* of the exception, per Chapter 26 |
+| `diag` | `diag` | |
+| `skip` / `todo` | `skip` / `todo` | |
+
+The last two rows are the ones worth noticing. Perl reaches for `Test::Fatal` or
+`Test::Exception` to assert that something dies; in Raku `dies-ok`, `lives-ok`,
+and `throws-like` are built in, and `throws-like` checks the exception's *type*
+against the `X::` hierarchy rather than matching its message with a regex.
+
+Run them with `zef test .` from the distribution root, or a single file directly:
+
+```
+$ raku -I lib t/01-basic.rakutest
+$ zef test .
+```
+
 ## Publishing with `fez`
 
 Uploading is deliberately undramatic. Install the uploader, register a username

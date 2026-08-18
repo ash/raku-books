@@ -357,6 +357,48 @@
    "reason": "verified: outputs match",
    "label": "Arrays and Lists",
    "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @n = 1, 2, 3, 4, 5, 6, 7;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @n = 1, 2, 3, 4, 5, 6, 7;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @n = 1, 2, 3, 4, 5, 6, 7;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "say (1..4).categorize({ ($_ %% 2 ?? 'even' !! 'odd', $_ > 2 ?? 'big' !"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "my @n = 1, 2, 3, 4, 5, 6, 7;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
+   "first": "say 3661.polymod(60, 60);         # (1 1 1)   \u2014 1 h, 1 min, 1 s"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Arrays and Lists",
+   "url": "/migrating-to-raku/arrays-and-lists",
    "first": "say (1..5).map(* * 2).WHAT;      # (Seq)"
   },
   {
@@ -1394,6 +1436,13 @@
    "label": "Conditionals and Loops",
    "url": "/migrating-to-raku/conditionals-and-loops",
    "first": "my @pairs = 1, 2, 3, 4;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Conditionals and Loops",
+   "url": "/migrating-to-raku/conditionals-and-loops",
+   "first": "my @a = <a b c>;"
   },
   {
    "state": "run",
@@ -2622,6 +2671,20 @@
   },
   {
    "state": "fragment",
+   "reason": "produces no output to show",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "=begin pod"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "Modules, Packages, and Exporting",
+   "url": "/migrating-to-raku/modules-and-exporting",
+   "first": "#| Returns a greeting for the given name."
+  },
+  {
+   "state": "fragment",
    "reason": "does not compile (Rakudo -c)",
    "label": "Modules, Packages, and Exporting",
    "url": "/migrating-to-raku/modules-and-exporting",
@@ -2640,6 +2703,13 @@
    "label": "Modules, Packages, and Exporting",
    "url": "/migrating-to-raku/modules-and-exporting",
    "first": "use Greeting;"
+  },
+  {
+   "state": "run",
+   "reason": "verified: outputs match",
+   "label": "CPAN to zef, and Mixing Languages",
+   "url": "/migrating-to-raku/cpan-to-zef",
+   "first": "use Test;"
   },
   {
    "state": "fragment",

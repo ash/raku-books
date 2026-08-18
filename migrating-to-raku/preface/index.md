@@ -38,7 +38,16 @@ run a program with `rakupp program.raku` exactly as you would with `raku`; where
 an example relies on a feature Raku++ has not implemented yet, fall back to
 Rakudo, which remains the reference throughout.
 
-In the chapters that follow we work with **both** Perl and Raku, so it is
-assumed you have both installed, and that your Perl is no older than 5.12.
+In the chapters that follow we work with **both** Perl and Raku, so it is assumed
+you have both installed. The Perl side of the comparison is mostly *classic*
+Perl — the code you already have — and anything from 5.12 onwards will run it.
+
+Perl has not stood still either, though, and where it has grown a feature that
+closes a gap with Raku the book says so and shows it. Those examples are marked
+by the `use v5.36;` (or `use v5.38;`) line at the top, and a few of them —
+`class`, `field`, `ADJUST`, `defer`, the `builtin::` functions — are still flagged
+experimental, hence the `no warnings` that goes with them. To run *those*, you
+want a recent Perl; everything in this book was checked against **5.44**. If your
+Perl is older, the Raku half still runs and the Perl half still reads.
 
 {% include nav.html %}

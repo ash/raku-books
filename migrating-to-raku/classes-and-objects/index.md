@@ -86,10 +86,12 @@ and the prefix `~` operator and string interpolation will call it automatically.
 We use that idiomatic form at the end of the chapter.
 
 Modern Perl's own `class` feature reaches for the same shape, if you are on a
-recent enough release (it is still marked experimental):
+recent enough release (it is still marked experimental, hence the `no warnings`):
 
 ```perl
+use v5.38;
 use feature 'class';
+no warnings 'experimental::class';
 
 class Point {
     field $x :param :reader = 0;
@@ -98,11 +100,21 @@ class Point {
 }
 
 my $p = Point->new(x => 3, y => 4);
+say $p->x;                 # 3
+say $p->to_string;         # (3, 4)
 ```
 
-The family resemblance is real. What follows in this chapter — roles, submethods,
-`multi` methods, `BUILD`/`TWEAK`, definite-vs-optional typing on attributes — is
-where Raku's older, more complete object model still goes well beyond it.
+The family resemblance is real, and it is not a coincidence: Perl's `class` and
+Raku's grew from the same conversations. `field` is `has`, `:param` makes it a
+constructor argument, `:reader` generates the accessor, and `method` gives you an
+invocant without shifting `@_`. Where Raku writes one `has $.x` and gets storage,
+constructor argument, and reader together, Perl asks you to name the three parts —
+but the shape is the same.
+
+We will point out the rest of the correspondences as they come up. What has no
+Perl counterpart at all — roles, submethods, `multi` methods, definite-vs-optional
+typing on attributes — is where Raku's older, more complete object model still
+goes well beyond it.
 
 ## Attributes and the `.` versus `!` twigil
 
@@ -189,6 +201,29 @@ $b.add(3);
 say $b.items;            # [1 2 3]
 say $b.tags;             # {a => 1}
 ```
+
+Modern Perl's `field` takes a sigil for the same reason, and the array or hash is
+addressed directly inside the class rather than through a reference:
+
+```perl
+use v5.38;
+use feature 'class';
+no warnings 'experimental::class';
+
+class Bag {
+    field @items;
+    method add($x) { push @items, $x }
+    method items   { @items }
+}
+
+my $b = Bag->new;
+$b->add(3);
+say join ',', $b->items;   # 3
+```
+
+Note what Perl does *not* do here: `field @items` generates no `:param`, so there
+is no way to pass the array in at construction. Raku's `has @.items` gives you
+both the accessor and the constructor argument in one declaration.
 
 ## The generated constructor
 
@@ -286,6 +321,31 @@ Reach for `TWEAK` by default; it is the simpler tool. Drop to `BUILD` only when
 you need to intercept the raw arguments. If you have written a Moose `BUILD` or a
 `BUILDARGS`, the roles are similar — `TWEAK` is the everyday post-construction
 hook, `BUILD` the lower-level argument-handling one.
+
+This is the one place where modern Perl's `class` lines up almost exactly.
+Perl's `ADJUST` block runs after the fields have been initialised — the same
+moment, and the same job, as `TWEAK`:
+
+```perl
+use v5.38;
+use feature 'class';
+no warnings 'experimental::class';
+
+class Temperature {
+    field $celsius    :param :reader;
+    field $fahrenheit :reader;
+    ADJUST { $fahrenheit = $celsius * 9/5 + 32 }
+}
+
+say Temperature->new(celsius => 100)->fahrenheit;   # 212
+```
+
+Two differences worth carrying across. `ADJUST` is a *block*, not a method, so it
+takes no signature — where Raku's `BUILD` can capture named arguments with
+`submethod BUILD(:$name, :$age = 0)`, Perl has no `BUILD` counterpart at all and
+you do that work in `ADJUST` against the already-bound fields. And Perl needs no
+`$!`-versus-`$.` care inside it: a field is always the plain lexical, so there is
+no accessor to accidentally call on a half-built object.
 
 ## Methods, `self`, and the two ways to reach an attribute
 

@@ -179,7 +179,32 @@ finds <code>Dog</code>’s version. The same design in Raku, using
 generated <code>new</code>, and <code>speak</code>; it overrides
 <code>sound</code>. The smartmatch <code>$d ~~ Animal</code> is the
 idiomatic “is this an Animal?” test, replacing Perl’s
-<code>$d-&gt;isa('Animal')</code>.</p>
+<code>$d-&gt;isa('Animal')</code> — though modern Perl has closed most
+of that gap too. Its <code>class</code> feature spells the parent with
+an <code>:isa</code> attribute, and it has an infix <code>isa</code>
+operator that reads much like the smartmatch:</p>
+<div class="highlight perl-code"><pre>use v5.38;
+use feature 'class';
+no warnings 'experimental::class';
+
+class Animal {
+    field $name :param :reader;
+    method sound { '...' }
+    method speak { "$name says " . $self-&gt;sound }
+}
+
+class Dog :isa(Animal) {
+    method sound { 'Woof' }
+}
+
+my $d = Dog-&gt;new(name =&gt; 'Rex');
+say $d-&gt;speak;             # Rex says Woof
+say 'yes' if $d isa Animal;   # yes</pre></div>
+<p>The <code>isa</code> operator is older than the <code>class</code>
+feature and works on <code>bless</code>ed objects too, so
+<code>$d isa Animal</code> is available in ordinary Perl OO from 5.32
+onwards. What comes next in this chapter — roles — is where the two
+languages part company, because Perl has no core equivalent at all.</p>
 <p>For the Moose/Moo crowd: <code>is Animal</code> is Moose’s
 <code>extends 'Animal'</code>. There is no separate keyword to import —
 <code>is</code> is built in.</p>
