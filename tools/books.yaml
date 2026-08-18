@@ -164,9 +164,10 @@ books:
     source: markdown
     md_root: "~/Books/Migrating to Raku"
     pdf: "~/Books/Migrating to Raku/_build/migrating-to-raku.pdf"
-    # No cover artwork yet — page 1 is the typeset title page, so keep the whole
-    # page rather than trimming to the text block.
-    cover_trim: false
+    # The cover artwork, kept beside the manuscript. `cover_image` takes any
+    # image file (Pillow reads the layered PSD); to use a cover PDF instead,
+    # drop this line and set `cover_pdf:` (plus `cover_page:` if it is not p.1).
+    cover_image: "~/Books/Migrating to Raku/migrating-to-raku.psd"
     slug: migrating-to-raku
     # Reachable by URL, but not shown on the home page, in the book switcher,
     # in the search index, or in the tested-programs register. Flip to false to
